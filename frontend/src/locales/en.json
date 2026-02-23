@@ -1,0 +1,84 @@
+{
+    "app": {
+        "name": "ScholarPath",
+        "tagline": "Your path to scholarship success"
+    },
+    "language": {
+        "en": "English",
+        "mr": "मराठी"
+    },
+    "login": {
+        "title": "Welcome Back",
+        "subtitle": "Sign in to continue your exam prep journey",
+        "email": "Email Address",
+        "emailPlaceholder": "your@email.com",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "submit": "Sign In",
+        "signingIn": "Signing in…",
+        "or": "or continue with",
+        "google": "Continue with Google",
+        "facebook": "Continue with Facebook",
+        "noAccount": "Don't have an account?",
+        "register": "Create Account",
+        "forgotPassword": "Forgot password?"
+    },
+    "register": {
+        "title": "Create Account",
+        "subtitle": "Start your scholarship exam preparation today",
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "email": "Email Address",
+        "emailPlaceholder": "your@email.com",
+        "password": "Password",
+        "passwordPlaceholder": "Create a password (min 6 chars)",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Re-enter your password",
+        "submit": "Create Account",
+        "creating": "Creating account…",
+        "or": "or sign up with",
+        "google": "Sign up with Google",
+        "facebook": "Sign up with Facebook",
+        "hasAccount": "Already have an account?",
+        "login": "Sign In",
+        "checkEmail": "Account created! Please check your email to verify.",
+        "passwordMismatch": "Passwords do not match"
+    },
+    "onboarding": {
+        "title": "Complete Your Profile",
+        "subtitle": "Tell us a bit about yourself so we can personalize your experience",
+        "schoolName": "School Name",
+        "schoolNamePlaceholder": "Enter your school name",
+        "district": "District",
+        "districtPlaceholder": "Enter your district",
+        "stdClass": "Standard / Class",
+        "stdClassPlaceholder": "Select your class",
+        "class5": "5th Standard",
+        "class8": "8th Standard",
+        "medium": "Medium of Study",
+        "mediumPlaceholder": "Select your medium",
+        "mediumEnglish": "English",
+        "mediumMarathi": "Marathi",
+        "mediumSemiEnglish": "Semi-English",
+        "preferredLanguage": "Preferred Language",
+        "languageEn": "English",
+        "languageMr": "Marathi",
+        "submit": "Continue to Dashboard",
+        "saving": "Saving…"
+    },
+    "errors": {
+        "required": "This field is required",
+        "invalidEmail": "Please enter a valid email address",
+        "passwordMin": "Password must be at least 6 characters",
+        "generic": "Something went wrong. Please try again.",
+        "invalidCredentials": "Invalid email or password",
+        "emailTaken": "This email is already registered"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "exams": "Exams",
+        "results": "Results",
+        "profile": "Profile",
+        "logout": "Sign Out"
+    }
+}

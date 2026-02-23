@@ -1,0 +1,84 @@
+{
+    "app": {
+        "name": "स्कॉलरपाथ",
+        "tagline": "शिष्यवृत्ती यशाचा तुमचा मार्ग"
+    },
+    "language": {
+        "en": "English",
+        "mr": "मराठी"
+    },
+    "login": {
+        "title": "पुन्हा स्वागत",
+        "subtitle": "तुमची परीक्षा तयारी सुरू ठेवण्यासाठी साइन इन करा",
+        "email": "ईमेल पत्ता",
+        "emailPlaceholder": "तुमचा@ईमेल.com",
+        "password": "पासवर्ड",
+        "passwordPlaceholder": "तुमचा पासवर्ड टाका",
+        "submit": "साइन इन करा",
+        "signingIn": "साइन इन होत आहे…",
+        "or": "किंवा यासह सुरू ठेवा",
+        "google": "Google सह सुरू ठेवा",
+        "facebook": "Facebook सह सुरू ठेवा",
+        "noAccount": "खाते नाही?",
+        "register": "खाते तयार करा",
+        "forgotPassword": "पासवर्ड विसरलात?"
+    },
+    "register": {
+        "title": "खाते तयार करा",
+        "subtitle": "आजच तुमची शिष्यवृत्ती परीक्षेची तयारी सुरू करा",
+        "fullName": "पूर्ण नाव",
+        "fullNamePlaceholder": "तुमचे पूर्ण नाव टाका",
+        "email": "ईमेल पत्ता",
+        "emailPlaceholder": "तुमचा@ईमेल.com",
+        "password": "पासवर्ड",
+        "passwordPlaceholder": "पासवर्ड तयार करा (किमान ६ अक्षरे)",
+        "confirmPassword": "पासवर्ड पुन्हा टाका",
+        "confirmPasswordPlaceholder": "तुमचा पासवर्ड पुन्हा टाका",
+        "submit": "खाते तयार करा",
+        "creating": "खाते तयार होत आहे…",
+        "or": "किंवा यासह साइन अप करा",
+        "google": "Google सह साइन अप करा",
+        "facebook": "Facebook सह साइन अप करा",
+        "hasAccount": "आधीच खाते आहे?",
+        "login": "साइन इन करा",
+        "checkEmail": "खाते तयार झाले! कृपया सत्यापनासाठी तुमचा ईमेल तपासा.",
+        "passwordMismatch": "पासवर्ड जुळत नाहीत"
+    },
+    "onboarding": {
+        "title": "तुमचे प्रोफाइल पूर्ण करा",
+        "subtitle": "तुमचा अनुभव वैयक्तिकृत करण्यासाठी तुमच्याबद्दल थोडे सांगा",
+        "schoolName": "शाळेचे नाव",
+        "schoolNamePlaceholder": "तुमच्या शाळेचे नाव टाका",
+        "district": "जिल्हा",
+        "districtPlaceholder": "तुमचा जिल्हा टाका",
+        "stdClass": "इयत्ता / वर्ग",
+        "stdClassPlaceholder": "तुमचा वर्ग निवडा",
+        "class5": "इयत्ता ५वी",
+        "class8": "इयत्ता ८वी",
+        "medium": "शिक्षणाचे माध्यम",
+        "mediumPlaceholder": "तुमचे माध्यम निवडा",
+        "mediumEnglish": "इंग्रजी",
+        "mediumMarathi": "मराठी",
+        "mediumSemiEnglish": "सेमी-इंग्रजी",
+        "preferredLanguage": "पसंतीची भाषा",
+        "languageEn": "English",
+        "languageMr": "मराठी",
+        "submit": "डॅशबोर्डवर जा",
+        "saving": "जतन होत आहे…"
+    },
+    "errors": {
+        "required": "हे फील्ड आवश्यक आहे",
+        "invalidEmail": "कृपया वैध ईमेल पत्ता टाका",
+        "passwordMin": "पासवर्ड किमान ६ अक्षरांचा असावा",
+        "generic": "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.",
+        "invalidCredentials": "चुकीचा ईमेल किंवा पासवर्ड",
+        "emailTaken": "हा ईमेल आधीच नोंदणीकृत आहे"
+    },
+    "nav": {
+        "dashboard": "डॅशबोर्ड",
+        "exams": "परीक्षा",
+        "results": "निकाल",
+        "profile": "प्रोफाइल",
+        "logout": "साइन आउट करा"
+    }
+}

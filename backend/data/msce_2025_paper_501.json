@@ -1,0 +1,1325 @@
+{
+  "exam_id": 1,
+  "contexts": [
+    {
+      "context_type": "paragraph",
+      "title_en": "Bal Gandharva",
+      "content_en": "Bal Gandharva, whose real name was Narayan Shripad Rajhans, was born on 26 June 1888 in Narayangaon, Maharashtra. He was a celebrated Marathi theatre actor and singer, famous for playing female roles with extraordinary grace. His melodious voice and exceptional acting skills earned him the title 'Bal Gandharva' — meaning 'Child of the Heavenly Singers'. He was associated with the Kirloskar Natak Company. His performances in plays like 'Sharada', 'Manapman', and 'Saubhadra' are legendary. He is considered one of the greatest artists in the history of Marathi theatre.",
+      "applies_from": 1,
+      "applies_to": 5
+    },
+    {
+      "context_type": "poem",
+      "title_en": "The Brook",
+      "content_en": "Down the mountain, down the hill,\nThe little brook runs never still.\nOver pebbles, stones and sand,\nIt flows to reach the distant land.\nThe birds they sing, the flowers bloom,\nThe little brook dispels all gloom.\nIt waters fields and quenches thirst,\nOf all living things, it serves them first.",
+      "applies_from": 6,
+      "applies_to": 8
+    },
+    {
+      "context_type": "advertisement",
+      "title_en": "Roshan Bags Advertisement",
+      "content_en": "ROSHAN BAGS — Quality You Can Trust!\nBuy any school bag and get a FREE water bottle worth Rs.150.\nAvailable in 5 colours. Sizes: Small, Medium, Large.\nPrice Range: Rs.350 to Rs.850.\nSpecial offer valid till 31 March 2025.\nVisit: Roshan Stores, Main Market, Pune. Contact: 9876543210",
+      "instruction_en": "Read the advertisement carefully and answer questions 9 to 11.",
+      "applies_from": 9,
+      "applies_to": 11
+    },
+    {
+      "context_type": "pictograph",
+      "title_en": "Favourite Sports of Students",
+      "instruction_en": "The pictograph shows the favourite sports of 100 students. Each symbol represents 5 students.\nFootball: 6 symbols (30 students)\nCricket: 5 symbols (25 students)\nKabaddi: 4 symbols (20 students)\nBadminton: 3 symbols (15 students)\nChess: 2 symbols (10 students)\nStudy the pictograph and answer questions 63 to 65.",
+      "applies_from": 63,
+      "applies_to": 65
+    }
+  ],
+  "questions": [
+    {
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 1,
+      "question_type": "context_text",
+      "context_ref": 0,
+      "text_en": "What was Bal Gandharva's real name?",
+      "correct_option": 2,
+      "explanation_en": "Bal Gandharva's real name was Narayan Shripad Rajhans. 'Bal Gandharva' was his famous stage title.",
+      "difficulty": "easy",
+      "tags": ["comprehension", "biography"],
+      "options": [
+        { "option_no": 1, "text_en": "Narayan Vinayak Vaze" },
+        { "option_no": 2, "text_en": "Narayan Shripad Rajhans" },
+        { "option_no": 3, "text_en": "Dinanath Mangeshkar" },
+        { "option_no": 4, "text_en": "Vishnu Digambar Paluskar" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 2,
+      "question_type": "context_text",
+      "context_ref": 0,
+      "text_en": "Which company was Bal Gandharva associated with?",
+      "correct_option": 1,
+      "explanation_en": "Bal Gandharva was associated with the Kirloskar Natak Company, a pioneering Marathi theatre organisation.",
+      "difficulty": "easy",
+      "tags": ["comprehension", "biography"],
+      "options": [
+        { "option_no": 1, "text_en": "Kirloskar Natak Company" },
+        { "option_no": 2, "text_en": "Sangeet Natak Academy" },
+        { "option_no": 3, "text_en": "Bal Gandharva Rangamandir" },
+        { "option_no": 4, "text_en": "Prabhat Film Company" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 3,
+      "question_type": "context_text",
+      "context_ref": 0,
+      "text_en": "What does the title 'Bal Gandharva' mean?",
+      "correct_option": 3,
+      "explanation_en": "The title 'Bal Gandharva' means 'Child of the Heavenly Singers' (Gandharvas are divine musicians in Indian mythology).",
+      "difficulty": "medium",
+      "tags": ["comprehension", "biography"],
+      "options": [
+        { "option_no": 1, "text_en": "Great Singer" },
+        { "option_no": 2, "text_en": "Famous Actor" },
+        { "option_no": 3, "text_en": "Child of the Heavenly Singers" },
+        { "option_no": 4, "text_en": "Master of Theatre" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 4,
+      "question_type": "context_text",
+      "context_ref": 0,
+      "text_en": "Where was Bal Gandharva born?",
+      "correct_option": 4,
+      "explanation_en": "Bal Gandharva was born in Narayangaon, Maharashtra on 26 June 1888.",
+      "difficulty": "easy",
+      "tags": ["comprehension", "biography"],
+      "options": [
+        { "option_no": 1, "text_en": "Pune, Maharashtra" },
+        { "option_no": 2, "text_en": "Mumbai, Maharashtra" },
+        { "option_no": 3, "text_en": "Nashik, Maharashtra" },
+        { "option_no": 4, "text_en": "Narayangaon, Maharashtra" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 5,
+      "question_type": "context_text",
+      "context_ref": 0,
+      "text_en": "Which of the following is NOT one of Bal Gandharva's famous plays?",
+      "correct_option": 3,
+      "explanation_en": "Sharada, Manapman, and Saubhadra are mentioned as Bal Gandharva's legendary plays. Natasamrat is a different Marathi play.",
+      "difficulty": "medium",
+      "tags": ["comprehension", "biography"],
+      "options": [
+        { "option_no": 1, "text_en": "Sharada" },
+        { "option_no": 2, "text_en": "Manapman" },
+        { "option_no": 3, "text_en": "Natasamrat" },
+        { "option_no": 4, "text_en": "Saubhadra" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 2,
+      "question_no": 6,
+      "question_type": "context_text",
+      "context_ref": 1,
+      "text_en": "What does the brook flow over, according to the poem?",
+      "correct_option": 3,
+      "explanation_en": "The poem says 'Over pebbles, stones and sand' — the brook flows over these to reach the distant land.",
+      "difficulty": "easy",
+      "tags": ["poetry", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_en": "Leaves and flowers" },
+        { "option_no": 2, "text_en": "Mud and clay" },
+        { "option_no": 3, "text_en": "Pebbles, stones and sand" },
+        { "option_no": 4, "text_en": "Hills and valleys" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 2,
+      "question_no": 7,
+      "question_type": "context_text",
+      "context_ref": 1,
+      "text_en": "What does the word 'dispels' mean in the poem?",
+      "correct_option": 2,
+      "explanation_en": "'Dispels' means to drive away or remove. The brook 'dispels all gloom' means it removes sadness.",
+      "difficulty": "medium",
+      "tags": ["poetry", "vocabulary"],
+      "options": [
+        { "option_no": 1, "text_en": "Creates" },
+        { "option_no": 2, "text_en": "Removes" },
+        { "option_no": 3, "text_en": "Brings" },
+        { "option_no": 4, "text_en": "Hides" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 2,
+      "question_no": 8,
+      "question_type": "context_text",
+      "context_ref": 1,
+      "text_en": "According to the poem, what does the brook do for living things?",
+      "correct_option": 3,
+      "explanation_en": "The last two lines say 'It waters fields and quenches thirst, Of all living things, it serves them first.'",
+      "difficulty": "easy",
+      "tags": ["poetry", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_en": "Sings songs for them" },
+        { "option_no": 2, "text_en": "Provides food and shelter" },
+        { "option_no": 3, "text_en": "Waters fields and quenches thirst" },
+        { "option_no": 4, "text_en": "Carries them to distant lands" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 3,
+      "question_no": 9,
+      "question_type": "context_text",
+      "context_ref": 2,
+      "text_en": "What free item do you get when buying a school bag from Roshan Stores?",
+      "correct_option": 3,
+      "explanation_en": "The advertisement states: 'Buy any school bag and get a FREE water bottle worth Rs.150.'",
+      "difficulty": "easy",
+      "tags": ["advertisement", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_en": "A free lunch box" },
+        { "option_no": 2, "text_en": "A free pencil case" },
+        { "option_no": 3, "text_en": "A free water bottle worth Rs.150" },
+        { "option_no": 4, "text_en": "A free set of pens" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 3,
+      "question_no": 10,
+      "question_type": "context_text",
+      "context_ref": 2,
+      "text_en": "In how many colours are the bags available?",
+      "correct_option": 4,
+      "explanation_en": "The advertisement states 'Available in 5 colours.'",
+      "difficulty": "easy",
+      "tags": ["advertisement", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_en": "Three" },
+        { "option_no": 2, "text_en": "Four" },
+        { "option_no": 3, "text_en": "Six" },
+        { "option_no": 4, "text_en": "Five" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 3,
+      "question_no": 11,
+      "question_type": "context_text",
+      "context_ref": 2,
+      "text_en": "Till when is the special offer on school bags valid?",
+      "correct_option": 3,
+      "explanation_en": "The advertisement clearly states 'Special offer valid till 31 March 2025.'",
+      "difficulty": "easy",
+      "tags": ["advertisement", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_en": "31 January 2025" },
+        { "option_no": 2, "text_en": "31 December 2025" },
+        { "option_no": 3, "text_en": "31 March 2025" },
+        { "option_no": 4, "text_en": "31 March 2024" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 12,
+      "question_type": "text",
+      "text_en": "Choose the correct article: ___ honest man is respected by all.",
+      "correct_option": 2,
+      "explanation_en": "We use 'an' before words beginning with a vowel sound. 'Honest' begins with a silent 'h', so the vowel sound is 'o'. Therefore, 'an' is correct.",
+      "difficulty": "easy",
+      "tags": ["grammar", "articles"],
+      "options": [
+        { "option_no": 1, "text_en": "A" },
+        { "option_no": 2, "text_en": "An" },
+        { "option_no": 3, "text_en": "The" },
+        { "option_no": 4, "text_en": "No article" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 13,
+      "question_type": "text",
+      "text_en": "Fill in the blank with the correct preposition: She is good ___ drawing.",
+      "correct_option": 2,
+      "explanation_en": "We use 'good at' to talk about skills and abilities. 'She is good at drawing' is the correct expression.",
+      "difficulty": "easy",
+      "tags": ["grammar", "prepositions"],
+      "options": [
+        { "option_no": 1, "text_en": "in" },
+        { "option_no": 2, "text_en": "at" },
+        { "option_no": 3, "text_en": "on" },
+        { "option_no": 4, "text_en": "of" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 14,
+      "question_type": "text",
+      "text_en": "Which sentence is written in the Simple Past Tense?",
+      "correct_option": 3,
+      "explanation_en": "'She wrote a letter' uses the past tense verb 'wrote', making it Simple Past Tense.",
+      "difficulty": "medium",
+      "tags": ["grammar", "tenses"],
+      "options": [
+        { "option_no": 1, "text_en": "She writes a letter" },
+        { "option_no": 2, "text_en": "She will write a letter" },
+        { "option_no": 3, "text_en": "She wrote a letter" },
+        { "option_no": 4, "text_en": "She is writing a letter" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 15,
+      "question_type": "text",
+      "text_en": "Choose the correct plural form of 'mouse':",
+      "correct_option": 3,
+      "explanation_en": "The plural of 'mouse' is 'mice'. This is an irregular plural form that must be memorised.",
+      "difficulty": "easy",
+      "tags": ["grammar", "plurals"],
+      "options": [
+        { "option_no": 1, "text_en": "mouses" },
+        { "option_no": 2, "text_en": "mices" },
+        { "option_no": 3, "text_en": "mice" },
+        { "option_no": 4, "text_en": "mouse" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 16,
+      "question_type": "text",
+      "text_en": "What is the opposite (antonym) of the word 'ancient'?",
+      "correct_option": 2,
+      "explanation_en": "The antonym of 'ancient' (very old) is 'modern' (of the present time or recent past).",
+      "difficulty": "easy",
+      "tags": ["grammar", "antonyms"],
+      "options": [
+        { "option_no": 1, "text_en": "old" },
+        { "option_no": 2, "text_en": "modern" },
+        { "option_no": 3, "text_en": "traditional" },
+        { "option_no": 4, "text_en": "historical" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 17,
+      "question_type": "text",
+      "text_en": "Choose the word closest in meaning (synonym) to 'courageous':",
+      "correct_option": 2,
+      "explanation_en": "'Brave' is the synonym of 'courageous'. Both mean having the courage to face danger or difficulty.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "synonyms"],
+      "options": [
+        { "option_no": 1, "text_en": "fearful" },
+        { "option_no": 2, "text_en": "brave" },
+        { "option_no": 3, "text_en": "timid" },
+        { "option_no": 4, "text_en": "gentle" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 18,
+      "question_type": "text",
+      "text_en": "Choose the correctly spelled word:",
+      "correct_option": 2,
+      "explanation_en": "The correct spelling is 'Occurrence' — double 'c' and double 'r'.",
+      "difficulty": "medium",
+      "tags": ["vocabulary", "spelling"],
+      "options": [
+        { "option_no": 1, "text_en": "Occurance" },
+        { "option_no": 2, "text_en": "Occurrence" },
+        { "option_no": 3, "text_en": "Occurence" },
+        { "option_no": 4, "text_en": "Occurrance" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 19,
+      "question_type": "text",
+      "text_en": "Which word is a synonym of 'happy'?",
+      "correct_option": 3,
+      "explanation_en": "'Joyful' means feeling great pleasure or happiness, making it a synonym of 'happy'.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "synonyms"],
+      "options": [
+        { "option_no": 1, "text_en": "sad" },
+        { "option_no": 2, "text_en": "angry" },
+        { "option_no": 3, "text_en": "joyful" },
+        { "option_no": 4, "text_en": "tired" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 20,
+      "question_type": "text",
+      "text_en": "What does the idiom 'under the weather' mean?",
+      "correct_option": 2,
+      "explanation_en": "'Under the weather' is an idiom meaning to feel ill or unwell.",
+      "difficulty": "medium",
+      "tags": ["vocabulary", "idioms"],
+      "options": [
+        { "option_no": 1, "text_en": "During a storm" },
+        { "option_no": 2, "text_en": "Feeling ill" },
+        { "option_no": 3, "text_en": "Very happy" },
+        { "option_no": 4, "text_en": "Working outdoors" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 21,
+      "question_type": "text",
+      "text_en": "Choose the antonym of 'expand':",
+      "correct_option": 4,
+      "explanation_en": "The antonym of 'expand' (to become or make larger) is 'contract' (to become or make smaller).",
+      "difficulty": "medium",
+      "tags": ["vocabulary", "antonyms"],
+      "options": [
+        { "option_no": 1, "text_en": "grow" },
+        { "option_no": 2, "text_en": "enlarge" },
+        { "option_no": 3, "text_en": "increase" },
+        { "option_no": 4, "text_en": "contract" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 22,
+      "question_type": "text",
+      "text_en": "Find the correctly punctuated sentence:",
+      "correct_option": 2,
+      "explanation_en": "Exclamatory sentences expressing strong emotion or admiration end with an exclamation mark (!). 'What a beautiful day!' is correct.",
+      "difficulty": "easy",
+      "tags": ["grammar", "punctuation"],
+      "options": [
+        { "option_no": 1, "text_en": "What a beautiful day?" },
+        { "option_no": 2, "text_en": "What a beautiful day!" },
+        { "option_no": 3, "text_en": "What a beautiful day." },
+        { "option_no": 4, "text_en": "What, a beautiful day!" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 5,
+      "question_no": 23,
+      "question_type": "text",
+      "text_en": "Choose the correctly spelled word:",
+      "correct_option": 3,
+      "explanation_en": "The correct spelling is 'Receive' — follows the rule 'i before e except after c'. R-E-C-E-I-V-E.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "spelling"],
+      "options": [
+        { "option_no": 1, "text_en": "Recieve" },
+        { "option_no": 2, "text_en": "Recive" },
+        { "option_no": 3, "text_en": "Receive" },
+        { "option_no": 4, "text_en": "Reciive" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 24,
+      "question_type": "text",
+      "text_en": "Which is the correct passive voice of 'She sings a song'?",
+      "correct_option": 2,
+      "explanation_en": "In passive voice: Object becomes subject + is/am/are + past participle + by + subject. 'A song is sung by her' is the correct passive voice.",
+      "difficulty": "hard",
+      "tags": ["grammar", "voice"],
+      "options": [
+        { "option_no": 1, "text_en": "A song is being sung" },
+        { "option_no": 2, "text_en": "A song is sung by her" },
+        { "option_no": 3, "text_en": "A song was sung by her" },
+        { "option_no": 4, "text_en": "A song will be sung by her" }
+      ]
+    },
+    {
+      "section_id": 1,
+      "topic_id": 4,
+      "question_no": 25,
+      "question_type": "text",
+      "text_en": "Choose the correct word: He is the ___ student in the class.",
+      "correct_option": 1,
+      "explanation_en": "'Most intelligent' is the superlative degree of 'intelligent'. Superlative is used when comparing more than two things.",
+      "difficulty": "easy",
+      "tags": ["grammar", "degrees-of-comparison"],
+      "options": [
+        { "option_no": 1, "text_en": "most intelligent" },
+        { "option_no": 2, "text_en": "more intelligent" },
+        { "option_no": 3, "text_en": "intelligence" },
+        { "option_no": 4, "text_en": "intelligenter" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 26,
+      "question_type": "text",
+      "text_en": "What is the LCM of 12 and 18?",
+      "correct_option": 2,
+      "explanation_en": "LCM(12, 18): 12 = 2²×3, 18 = 2×3². LCM = 2²×3² = 4×9 = 36.",
+      "difficulty": "medium",
+      "tags": ["lcm-hcf", "number-system"],
+      "options": [
+        { "option_no": 1, "text_en": "6" },
+        { "option_no": 2, "text_en": "36" },
+        { "option_no": 3, "text_en": "24" },
+        { "option_no": 4, "text_en": "72" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 27,
+      "question_type": "text",
+      "text_en": "The HCF of 36 and 48 is:",
+      "correct_option": 1,
+      "explanation_en": "HCF(36, 48): 36 = 2²×3², 48 = 2⁴×3. HCF = 2²×3 = 12.",
+      "difficulty": "medium",
+      "tags": ["lcm-hcf", "number-system"],
+      "options": [
+        { "option_no": 1, "text_en": "12" },
+        { "option_no": 2, "text_en": "6" },
+        { "option_no": 3, "text_en": "24" },
+        { "option_no": 4, "text_en": "144" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 28,
+      "question_type": "text",
+      "text_en": "Which of the following is a prime number?",
+      "correct_option": 3,
+      "explanation_en": "59 is a prime number. 51 = 3×17, 57 = 3×19, 63 = 9×7. 59 has no factors other than 1 and itself.",
+      "difficulty": "medium",
+      "tags": ["prime-numbers", "number-system"],
+      "options": [
+        { "option_no": 1, "text_en": "51" },
+        { "option_no": 2, "text_en": "57" },
+        { "option_no": 3, "text_en": "59" },
+        { "option_no": 4, "text_en": "63" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 29,
+      "question_type": "text",
+      "text_en": "Write 45/100 as a decimal:",
+      "correct_option": 1,
+      "explanation_en": "45/100 = 0.45. To convert a fraction with denominator 100 to decimal, place the decimal point two places from the right.",
+      "difficulty": "easy",
+      "tags": ["decimals", "fractions"],
+      "options": [
+        { "option_no": 1, "text_en": "0.45" },
+        { "option_no": 2, "text_en": "4.5" },
+        { "option_no": 3, "text_en": "45.0" },
+        { "option_no": 4, "text_en": "0.045" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 30,
+      "question_type": "text",
+      "text_en": "The predecessor of −7 is:",
+      "correct_option": 2,
+      "explanation_en": "Predecessor means the number that comes just before. The predecessor of −7 is −7 − 1 = −8.",
+      "difficulty": "medium",
+      "tags": ["integers", "number-system"],
+      "options": [
+        { "option_no": 1, "text_en": "−6" },
+        { "option_no": 2, "text_en": "−8" },
+        { "option_no": 3, "text_en": "6" },
+        { "option_no": 4, "text_en": "8" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 31,
+      "question_type": "text",
+      "text_en": "What is 3/4 + 1/8?",
+      "correct_option": 1,
+      "explanation_en": "3/4 = 6/8. So 6/8 + 1/8 = 7/8.",
+      "difficulty": "easy",
+      "tags": ["fractions", "addition"],
+      "options": [
+        { "option_no": 1, "text_en": "7/8" },
+        { "option_no": 2, "text_en": "4/12" },
+        { "option_no": 3, "text_en": "1/2" },
+        { "option_no": 4, "text_en": "3/8" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 32,
+      "question_type": "text",
+      "text_en": "Simplify the fraction: 12/18",
+      "correct_option": 2,
+      "explanation_en": "HCF(12, 18) = 6. 12÷6 = 2, 18÷6 = 3. So 12/18 = 2/3.",
+      "difficulty": "easy",
+      "tags": ["fractions", "simplification"],
+      "options": [
+        { "option_no": 1, "text_en": "1/3" },
+        { "option_no": 2, "text_en": "2/3" },
+        { "option_no": 3, "text_en": "3/4" },
+        { "option_no": 4, "text_en": "4/6" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 33,
+      "question_type": "text",
+      "text_en": "What fraction of an hour is 45 minutes?",
+      "correct_option": 3,
+      "explanation_en": "1 hour = 60 minutes. 45/60 = 3/4. So 45 minutes is 3/4 of an hour.",
+      "difficulty": "easy",
+      "tags": ["fractions", "time"],
+      "options": [
+        { "option_no": 1, "text_en": "1/2" },
+        { "option_no": 2, "text_en": "2/3" },
+        { "option_no": 3, "text_en": "3/4" },
+        { "option_no": 4, "text_en": "4/5" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 34,
+      "question_type": "text",
+      "text_en": "Find: 5/6 of 42",
+      "correct_option": 2,
+      "explanation_en": "5/6 × 42 = (5 × 42) ÷ 6 = 210 ÷ 6 = 35.",
+      "difficulty": "medium",
+      "tags": ["fractions", "multiplication"],
+      "options": [
+        { "option_no": 1, "text_en": "30" },
+        { "option_no": 2, "text_en": "35" },
+        { "option_no": 3, "text_en": "7" },
+        { "option_no": 4, "text_en": "25" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 12,
+      "question_no": 35,
+      "question_type": "text",
+      "text_en": "What is 25% of 200?",
+      "correct_option": 2,
+      "explanation_en": "25% of 200 = 25/100 × 200 = 50.",
+      "difficulty": "easy",
+      "tags": ["percentages"],
+      "options": [
+        { "option_no": 1, "text_en": "25" },
+        { "option_no": 2, "text_en": "50" },
+        { "option_no": 3, "text_en": "75" },
+        { "option_no": 4, "text_en": "100" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 12,
+      "question_no": 36,
+      "question_type": "text",
+      "text_en": "Convert 3/5 to a percentage:",
+      "correct_option": 2,
+      "explanation_en": "3/5 × 100 = 300/5 = 60%.",
+      "difficulty": "easy",
+      "tags": ["percentages", "fractions"],
+      "options": [
+        { "option_no": 1, "text_en": "35%" },
+        { "option_no": 2, "text_en": "60%" },
+        { "option_no": 3, "text_en": "53%" },
+        { "option_no": 4, "text_en": "30%" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 12,
+      "question_no": 37,
+      "question_type": "text",
+      "text_en": "40% of a number is 80. What is the number?",
+      "correct_option": 3,
+      "explanation_en": "Let number = x. 40/100 × x = 80. x = 80 × 100/40 = 200.",
+      "difficulty": "medium",
+      "tags": ["percentages"],
+      "options": [
+        { "option_no": 1, "text_en": "32" },
+        { "option_no": 2, "text_en": "120" },
+        { "option_no": 3, "text_en": "200" },
+        { "option_no": 4, "text_en": "320" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 12,
+      "question_no": 38,
+      "question_type": "text",
+      "text_en": "In a class of 50 students, 30 are girls. What percentage of students are boys?",
+      "correct_option": 1,
+      "explanation_en": "Boys = 50 − 30 = 20. Percentage = 20/50 × 100 = 40%.",
+      "difficulty": "medium",
+      "tags": ["percentages"],
+      "options": [
+        { "option_no": 1, "text_en": "40%" },
+        { "option_no": 2, "text_en": "60%" },
+        { "option_no": 3, "text_en": "30%" },
+        { "option_no": 4, "text_en": "70%" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 9,
+      "question_no": 39,
+      "question_type": "text",
+      "text_en": "A shopkeeper bought a book for Rs.80 and sold it for Rs.100. What is the profit?",
+      "correct_option": 2,
+      "explanation_en": "Profit = Selling Price − Cost Price = 100 − 80 = Rs.20.",
+      "difficulty": "easy",
+      "tags": ["profit-loss"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.10" },
+        { "option_no": 2, "text_en": "Rs.20" },
+        { "option_no": 3, "text_en": "Rs.180" },
+        { "option_no": 4, "text_en": "Rs.25" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 9,
+      "question_no": 40,
+      "question_type": "text",
+      "text_en": "The cost price is Rs.500 and loss is Rs.50. What is the selling price?",
+      "correct_option": 2,
+      "explanation_en": "Selling Price = Cost Price − Loss = 500 − 50 = Rs.450.",
+      "difficulty": "easy",
+      "tags": ["profit-loss"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.550" },
+        { "option_no": 2, "text_en": "Rs.450" },
+        { "option_no": 3, "text_en": "Rs.425" },
+        { "option_no": 4, "text_en": "Rs.475" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 9,
+      "question_no": 41,
+      "question_type": "text",
+      "text_en": "If a toy costs Rs.120 and is sold for Rs.150, what is the profit percentage?",
+      "correct_option": 2,
+      "explanation_en": "Profit = 150 − 120 = Rs.30. Profit% = (30/120) × 100 = 25%.",
+      "difficulty": "medium",
+      "tags": ["profit-loss"],
+      "options": [
+        { "option_no": 1, "text_en": "20%" },
+        { "option_no": 2, "text_en": "25%" },
+        { "option_no": 3, "text_en": "30%" },
+        { "option_no": 4, "text_en": "15%" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 9,
+      "question_no": 42,
+      "question_type": "text",
+      "text_en": "A shirt has a marked price of Rs.600. It is sold at a 10% discount. What is the selling price?",
+      "correct_option": 1,
+      "explanation_en": "Discount = 10% of 600 = Rs.60. Selling Price = 600 − 60 = Rs.540.",
+      "difficulty": "medium",
+      "tags": ["profit-loss", "discount"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.540" },
+        { "option_no": 2, "text_en": "Rs.560" },
+        { "option_no": 3, "text_en": "Rs.640" },
+        { "option_no": 4, "text_en": "Rs.550" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 10,
+      "question_no": 43,
+      "question_type": "text",
+      "text_en": "Find the simple interest on Rs.1000 at 5% per annum for 2 years.",
+      "correct_option": 3,
+      "explanation_en": "SI = P × R × T / 100 = 1000 × 5 × 2 / 100 = Rs.100.",
+      "difficulty": "easy",
+      "tags": ["simple-interest"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.50" },
+        { "option_no": 2, "text_en": "Rs.500" },
+        { "option_no": 3, "text_en": "Rs.100" },
+        { "option_no": 4, "text_en": "Rs.1000" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 10,
+      "question_no": 44,
+      "question_type": "text",
+      "text_en": "The simple interest on Rs.500 for 3 years at 4% per annum is:",
+      "correct_option": 2,
+      "explanation_en": "SI = 500 × 4 × 3 / 100 = 6000/100 = Rs.60.",
+      "difficulty": "easy",
+      "tags": ["simple-interest"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.40" },
+        { "option_no": 2, "text_en": "Rs.60" },
+        { "option_no": 3, "text_en": "Rs.80" },
+        { "option_no": 4, "text_en": "Rs.120" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 10,
+      "question_no": 45,
+      "question_type": "text",
+      "text_en": "At what rate will Rs.2000 give simple interest of Rs.400 in 4 years?",
+      "correct_option": 3,
+      "explanation_en": "Rate = SI × 100 / (P × T) = 400 × 100 / (2000 × 4) = 40000/8000 = 5%.",
+      "difficulty": "medium",
+      "tags": ["simple-interest"],
+      "options": [
+        { "option_no": 1, "text_en": "4%" },
+        { "option_no": 2, "text_en": "6%" },
+        { "option_no": 3, "text_en": "5%" },
+        { "option_no": 4, "text_en": "8%" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 10,
+      "question_no": 46,
+      "question_type": "text",
+      "text_en": "Find the principal if SI = Rs.150, Rate = 5%, Time = 3 years.",
+      "correct_option": 4,
+      "explanation_en": "P = SI × 100 / (R × T) = 150 × 100 / (5 × 3) = 15000/15 = Rs.1000.",
+      "difficulty": "medium",
+      "tags": ["simple-interest"],
+      "options": [
+        { "option_no": 1, "text_en": "Rs.800" },
+        { "option_no": 2, "text_en": "Rs.1200" },
+        { "option_no": 3, "text_en": "Rs.500" },
+        { "option_no": 4, "text_en": "Rs.1000" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 13,
+      "question_no": 47,
+      "question_type": "text",
+      "text_en": "A train travels 300 km in 5 hours. What is its speed?",
+      "correct_option": 2,
+      "explanation_en": "Speed = Distance / Time = 300 / 5 = 60 km/h.",
+      "difficulty": "easy",
+      "tags": ["time-distance"],
+      "options": [
+        { "option_no": 1, "text_en": "50 km/h" },
+        { "option_no": 2, "text_en": "60 km/h" },
+        { "option_no": 3, "text_en": "75 km/h" },
+        { "option_no": 4, "text_en": "100 km/h" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 13,
+      "question_no": 48,
+      "question_type": "text",
+      "text_en": "A car travels at 80 km/h. How long does it take to cover 240 km?",
+      "correct_option": 3,
+      "explanation_en": "Time = Distance / Speed = 240 / 80 = 3 hours.",
+      "difficulty": "easy",
+      "tags": ["time-distance"],
+      "options": [
+        { "option_no": 1, "text_en": "2 hours" },
+        { "option_no": 2, "text_en": "4 hours" },
+        { "option_no": 3, "text_en": "3 hours" },
+        { "option_no": 4, "text_en": "5 hours" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 13,
+      "question_no": 49,
+      "question_type": "text",
+      "text_en": "A person walks at 5 km/h. How far does he walk in 2.5 hours?",
+      "correct_option": 2,
+      "explanation_en": "Distance = Speed × Time = 5 × 2.5 = 12.5 km.",
+      "difficulty": "easy",
+      "tags": ["time-distance"],
+      "options": [
+        { "option_no": 1, "text_en": "10 km" },
+        { "option_no": 2, "text_en": "12.5 km" },
+        { "option_no": 3, "text_en": "7.5 km" },
+        { "option_no": 4, "text_en": "15 km" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 13,
+      "question_no": 50,
+      "question_type": "text",
+      "text_en": "Convert 40 m/s into km/h:",
+      "correct_option": 1,
+      "explanation_en": "To convert m/s to km/h, multiply by 18/5. 40 × 18/5 = 40 × 3.6 = 144 km/h.",
+      "difficulty": "hard",
+      "tags": ["time-distance", "unit-conversion"],
+      "options": [
+        { "option_no": 1, "text_en": "144 km/h" },
+        { "option_no": 2, "text_en": "40 km/h" },
+        { "option_no": 3, "text_en": "400 km/h" },
+        { "option_no": 4, "text_en": "14.4 km/h" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 11,
+      "question_no": 51,
+      "question_type": "text",
+      "text_en": "What is the perimeter of a rectangle with length 8 cm and breadth 5 cm?",
+      "correct_option": 2,
+      "explanation_en": "Perimeter = 2 × (length + breadth) = 2 × (8 + 5) = 2 × 13 = 26 cm.",
+      "difficulty": "easy",
+      "tags": ["geometry", "perimeter"],
+      "options": [
+        { "option_no": 1, "text_en": "40 cm" },
+        { "option_no": 2, "text_en": "26 cm" },
+        { "option_no": 3, "text_en": "13 cm" },
+        { "option_no": 4, "text_en": "20 cm" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 11,
+      "question_no": 52,
+      "question_type": "text",
+      "text_en": "The area of a square with side 7 cm is:",
+      "correct_option": 2,
+      "explanation_en": "Area of a square = side × side = 7 × 7 = 49 sq cm.",
+      "difficulty": "easy",
+      "tags": ["geometry", "area"],
+      "options": [
+        { "option_no": 1, "text_en": "28 sq cm" },
+        { "option_no": 2, "text_en": "49 sq cm" },
+        { "option_no": 3, "text_en": "14 sq cm" },
+        { "option_no": 4, "text_en": "56 sq cm" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 11,
+      "question_no": 53,
+      "question_type": "text",
+      "text_en": "The sum of all angles in a triangle is:",
+      "correct_option": 2,
+      "explanation_en": "The angle sum property of a triangle states that the sum of all interior angles equals 180°.",
+      "difficulty": "easy",
+      "tags": ["geometry", "angles"],
+      "options": [
+        { "option_no": 1, "text_en": "90°" },
+        { "option_no": 2, "text_en": "180°" },
+        { "option_no": 3, "text_en": "270°" },
+        { "option_no": 4, "text_en": "360°" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 11,
+      "question_no": 54,
+      "question_type": "text",
+      "text_en": "Find the area of a triangle with base 12 cm and height 8 cm.",
+      "correct_option": 3,
+      "explanation_en": "Area of triangle = 1/2 × base × height = 1/2 × 12 × 8 = 48 sq cm.",
+      "difficulty": "medium",
+      "tags": ["geometry", "area"],
+      "options": [
+        { "option_no": 1, "text_en": "96 sq cm" },
+        { "option_no": 2, "text_en": "40 sq cm" },
+        { "option_no": 3, "text_en": "48 sq cm" },
+        { "option_no": 4, "text_en": "20 sq cm" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 7,
+      "question_no": 55,
+      "question_type": "text",
+      "text_en": "Convert 2.5 kg to grams:",
+      "correct_option": 2,
+      "explanation_en": "1 kg = 1000 g. 2.5 kg = 2.5 × 1000 = 2500 g.",
+      "difficulty": "easy",
+      "tags": ["weights-measures", "unit-conversion"],
+      "options": [
+        { "option_no": 1, "text_en": "250 g" },
+        { "option_no": 2, "text_en": "2500 g" },
+        { "option_no": 3, "text_en": "25000 g" },
+        { "option_no": 4, "text_en": "25 g" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 7,
+      "question_no": 56,
+      "question_type": "text",
+      "text_en": "How many millimetres are in 3.5 cm?",
+      "correct_option": 3,
+      "explanation_en": "1 cm = 10 mm. 3.5 cm = 3.5 × 10 = 35 mm.",
+      "difficulty": "easy",
+      "tags": ["weights-measures", "unit-conversion"],
+      "options": [
+        { "option_no": 1, "text_en": "3.5 mm" },
+        { "option_no": 2, "text_en": "350 mm" },
+        { "option_no": 3, "text_en": "35 mm" },
+        { "option_no": 4, "text_en": "0.35 mm" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 7,
+      "question_no": 57,
+      "question_type": "text",
+      "text_en": "1 litre = ___ millilitres",
+      "correct_option": 4,
+      "explanation_en": "1 litre = 1000 millilitres. This is a standard unit of liquid measurement.",
+      "difficulty": "easy",
+      "tags": ["weights-measures"],
+      "options": [
+        { "option_no": 1, "text_en": "10" },
+        { "option_no": 2, "text_en": "100" },
+        { "option_no": 3, "text_en": "10000" },
+        { "option_no": 4, "text_en": "1000" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 7,
+      "question_no": 58,
+      "question_type": "text",
+      "text_en": "Convert 2.75 m to centimetres:",
+      "correct_option": 2,
+      "explanation_en": "1 m = 100 cm. 2.75 m = 2.75 × 100 = 275 cm.",
+      "difficulty": "easy",
+      "tags": ["weights-measures", "unit-conversion"],
+      "options": [
+        { "option_no": 1, "text_en": "27.5 cm" },
+        { "option_no": 2, "text_en": "275 cm" },
+        { "option_no": 3, "text_en": "2750 cm" },
+        { "option_no": 4, "text_en": "0.0275 cm" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 17,
+      "question_no": 59,
+      "question_type": "text",
+      "text_en": "How many days are there in a leap year?",
+      "correct_option": 2,
+      "explanation_en": "A leap year has 366 days. February has 29 days in a leap year (instead of 28).",
+      "difficulty": "easy",
+      "tags": ["calendar-clock"],
+      "options": [
+        { "option_no": 1, "text_en": "365" },
+        { "option_no": 2, "text_en": "366" },
+        { "option_no": 3, "text_en": "360" },
+        { "option_no": 4, "text_en": "364" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 17,
+      "question_no": 60,
+      "question_type": "text",
+      "text_en": "If today is Wednesday, what day will it be after 10 days?",
+      "correct_option": 1,
+      "explanation_en": "10 days = 1 week (7 days) + 3 days. Wednesday + 3 days = Saturday.",
+      "difficulty": "medium",
+      "tags": ["calendar-clock"],
+      "options": [
+        { "option_no": 1, "text_en": "Saturday" },
+        { "option_no": 2, "text_en": "Friday" },
+        { "option_no": 3, "text_en": "Sunday" },
+        { "option_no": 4, "text_en": "Thursday" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 17,
+      "question_no": 61,
+      "question_type": "text",
+      "text_en": "What is the angle between the hands of a clock at 3:00?",
+      "correct_option": 2,
+      "explanation_en": "At 3:00, the minute hand points to 12 (0°) and the hour hand points to 3 (90°). The angle between them is 90°.",
+      "difficulty": "medium",
+      "tags": ["calendar-clock", "angles"],
+      "options": [
+        { "option_no": 1, "text_en": "180°" },
+        { "option_no": 2, "text_en": "90°" },
+        { "option_no": 3, "text_en": "60°" },
+        { "option_no": 4, "text_en": "120°" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 17,
+      "question_no": 62,
+      "question_type": "text",
+      "text_en": "How many seconds are there in 2 hours?",
+      "correct_option": 3,
+      "explanation_en": "1 hour = 3600 seconds. 2 hours = 2 × 3600 = 7200 seconds.",
+      "difficulty": "medium",
+      "tags": ["calendar-clock"],
+      "options": [
+        { "option_no": 1, "text_en": "120" },
+        { "option_no": 2, "text_en": "1200" },
+        { "option_no": 3, "text_en": "7200" },
+        { "option_no": 4, "text_en": "720" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 15,
+      "question_no": 63,
+      "question_type": "context_text",
+      "context_ref": 3,
+      "text_en": "According to the pictograph, which sport is the most popular?",
+      "correct_option": 3,
+      "explanation_en": "Football has 6 symbols × 5 = 30 students, which is the highest. So Football is the most popular sport.",
+      "difficulty": "easy",
+      "tags": ["data-handling", "pictograph"],
+      "options": [
+        { "option_no": 1, "text_en": "Cricket" },
+        { "option_no": 2, "text_en": "Kabaddi" },
+        { "option_no": 3, "text_en": "Football" },
+        { "option_no": 4, "text_en": "Badminton" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 15,
+      "question_no": 64,
+      "question_type": "context_text",
+      "context_ref": 3,
+      "text_en": "How many students like Cricket?",
+      "correct_option": 4,
+      "explanation_en": "Cricket: 5 symbols × 5 students each = 25 students.",
+      "difficulty": "easy",
+      "tags": ["data-handling", "pictograph"],
+      "options": [
+        { "option_no": 1, "text_en": "20" },
+        { "option_no": 2, "text_en": "30" },
+        { "option_no": 3, "text_en": "15" },
+        { "option_no": 4, "text_en": "25" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 15,
+      "question_no": 65,
+      "question_type": "context_text",
+      "context_ref": 3,
+      "text_en": "How many more students like Football than Chess?",
+      "correct_option": 2,
+      "explanation_en": "Football = 30 students, Chess = 10 students. Difference = 30 − 10 = 20 students.",
+      "difficulty": "medium",
+      "tags": ["data-handling", "pictograph"],
+      "options": [
+        { "option_no": 1, "text_en": "15" },
+        { "option_no": 2, "text_en": "20" },
+        { "option_no": 3, "text_en": "25" },
+        { "option_no": 4, "text_en": "10" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 16,
+      "question_no": 66,
+      "question_type": "text",
+      "text_en": "If x + 7 = 15, then x =",
+      "correct_option": 2,
+      "explanation_en": "x + 7 = 15. x = 15 − 7 = 8.",
+      "difficulty": "easy",
+      "tags": ["algebra"],
+      "options": [
+        { "option_no": 1, "text_en": "22" },
+        { "option_no": 2, "text_en": "8" },
+        { "option_no": 3, "text_en": "7" },
+        { "option_no": 4, "text_en": "10" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 16,
+      "question_no": 67,
+      "question_type": "text",
+      "text_en": "Find the value of 3y when y = 4:",
+      "correct_option": 3,
+      "explanation_en": "3y = 3 × 4 = 12.",
+      "difficulty": "easy",
+      "tags": ["algebra"],
+      "options": [
+        { "option_no": 1, "text_en": "7" },
+        { "option_no": 2, "text_en": "1" },
+        { "option_no": 3, "text_en": "12" },
+        { "option_no": 4, "text_en": "43" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 16,
+      "question_no": 68,
+      "question_type": "text",
+      "text_en": "Solve: 2x − 5 = 11",
+      "correct_option": 3,
+      "explanation_en": "2x = 11 + 5 = 16. x = 16/2 = 8.",
+      "difficulty": "medium",
+      "tags": ["algebra"],
+      "options": [
+        { "option_no": 1, "text_en": "3" },
+        { "option_no": 2, "text_en": "6" },
+        { "option_no": 3, "text_en": "8" },
+        { "option_no": 4, "text_en": "10" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 16,
+      "question_no": 69,
+      "question_type": "text",
+      "text_en": "If 5n = 35, then n =",
+      "correct_option": 4,
+      "explanation_en": "n = 35/5 = 7.",
+      "difficulty": "easy",
+      "tags": ["algebra"],
+      "options": [
+        { "option_no": 1, "text_en": "5" },
+        { "option_no": 2, "text_en": "6" },
+        { "option_no": 3, "text_en": "8" },
+        { "option_no": 4, "text_en": "7" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 70,
+      "question_type": "text",
+      "text_en": "Which fraction is the largest: 1/2, 3/8, 5/6, 2/3?",
+      "correct_option": 3,
+      "explanation_en": "Converting to decimals: 1/2=0.5, 3/8=0.375, 5/6≈0.833, 2/3≈0.667. So 5/6 is the largest.",
+      "difficulty": "medium",
+      "tags": ["fractions", "comparison"],
+      "options": [
+        { "option_no": 1, "text_en": "1/2" },
+        { "option_no": 2, "text_en": "3/8" },
+        { "option_no": 3, "text_en": "5/6" },
+        { "option_no": 4, "text_en": "2/3" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 71,
+      "question_type": "text",
+      "text_en": "What is 2/3 × 3/4?",
+      "correct_option": 1,
+      "explanation_en": "2/3 × 3/4 = (2×3)/(3×4) = 6/12 = 1/2.",
+      "difficulty": "easy",
+      "tags": ["fractions", "multiplication"],
+      "options": [
+        { "option_no": 1, "text_en": "1/2" },
+        { "option_no": 2, "text_en": "2/3" },
+        { "option_no": 3, "text_en": "3/4" },
+        { "option_no": 4, "text_en": "5/7" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 8,
+      "question_no": 72,
+      "question_type": "text",
+      "text_en": "Find: 4/5 ÷ 2/5",
+      "correct_option": 2,
+      "explanation_en": "4/5 ÷ 2/5 = 4/5 × 5/2 = 20/10 = 2.",
+      "difficulty": "medium",
+      "tags": ["fractions", "division"],
+      "options": [
+        { "option_no": 1, "text_en": "8/25" },
+        { "option_no": 2, "text_en": "2" },
+        { "option_no": 3, "text_en": "1/2" },
+        { "option_no": 4, "text_en": "1" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 73,
+      "question_type": "text",
+      "text_en": "Round 4567 to the nearest hundred:",
+      "correct_option": 1,
+      "explanation_en": "The tens digit is 6 (≥ 5), so we round up. 4567 rounded to the nearest hundred = 4600.",
+      "difficulty": "easy",
+      "tags": ["number-system", "rounding"],
+      "options": [
+        { "option_no": 1, "text_en": "4600" },
+        { "option_no": 2, "text_en": "4500" },
+        { "option_no": 3, "text_en": "4570" },
+        { "option_no": 4, "text_en": "5000" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 74,
+      "question_type": "text",
+      "text_en": "What is (−5) + (+8)?",
+      "correct_option": 3,
+      "explanation_en": "(−5) + (+8) = +3. When adding integers with different signs, subtract smaller absolute value from larger: 8−5=3, and the sign is positive (larger).",
+      "difficulty": "medium",
+      "tags": ["integers", "number-system"],
+      "options": [
+        { "option_no": 1, "text_en": "−13" },
+        { "option_no": 2, "text_en": "−3" },
+        { "option_no": 3, "text_en": "+3" },
+        { "option_no": 4, "text_en": "+13" }
+      ]
+    },
+    {
+      "section_id": 2,
+      "topic_id": 14,
+      "question_no": 75,
+      "question_type": "text",
+      "text_en": "The Roman numeral for 49 is:",
+      "correct_option": 2,
+      "explanation_en": "49 = 40 + 9 = XL + IX = XLIX. XL means 40 (10 before 50) and IX means 9 (1 before 10).",
+      "difficulty": "medium",
+      "tags": ["number-system", "roman-numerals"],
+      "options": [
+        { "option_no": 1, "text_en": "XLXI" },
+        { "option_no": 2, "text_en": "XLIX" },
+        { "option_no": 3, "text_en": "IL" },
+        { "option_no": 4, "text_en": "XXXXIX" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1375 @@
+{
+  "exam_id": 2,
+  "contexts": [
+    {
+      "context_type": "paragraph",
+      "title_mr": "निसर्ग",
+      "content_mr": "निसर्ग हे आपल्या जीवनाचे मूळ आहे. हवा, पाणी, माती आणि सूर्यप्रकाश हे निसर्गाचे अमूल्य देणे आहे. पशू, पक्षी, झाडे आणि नद्या हे निसर्गाचे अंग आहेत. आपण निसर्गाची जपणूक केली पाहिजे. झाडे तोडू नयेत, नद्या दूषित करू नयेत. स्वच्छ वातावरणात राहणे आपल्या आरोग्यासाठी उत्तम आहे. निसर्गाची काळजी घेणे हे आपले कर्तव्य आहे.",
+      "applies_from": 14,
+      "applies_to": 16
+    },
+    {
+      "context_type": "poem",
+      "title_mr": "आई माझी",
+      "content_mr": "आई माझी गोड गोड\nआईचे प्रेम अनमोल मोड\nआईशिवाय घर ते सुने\nआईविना मन माझे रुणे\nआई देते माया आपुली\nमाझ्या जीवनाची ती सावली",
+      "applies_from": 17,
+      "applies_to": 19
+    },
+    {
+      "context_type": "instruction",
+      "title_en": "Mirror Images",
+      "title_mr": "आरसा प्रतिमा",
+      "instruction_en": "In questions 26 to 28, a figure is shown on the left side of a vertical mirror. Select the correct mirror image from the four options given.",
+      "instruction_mr": "प्रश्न २६ ते २८ मध्ये एका उभ्या आरशाच्या डाव्या बाजूला एक आकृती दाखवली आहे. दिलेल्या चार पर्यायांतून बरोबर आरसा प्रतिमा निवडा.",
+      "applies_from": 26,
+      "applies_to": 28
+    },
+    {
+      "context_type": "instruction",
+      "title_en": "Water Images",
+      "title_mr": "पाणी प्रतिमा",
+      "instruction_en": "In questions 29 to 31, a figure is shown above a horizontal surface of water. Select the correct water image (reflection) from the four options given.",
+      "instruction_mr": "प्रश्न २९ ते ३१ मध्ये एक आकृती पाण्याच्या क्षितिज पृष्ठभागाच्या वर दाखवली आहे. दिलेल्या चार पर्यायांतून बरोबर पाणी प्रतिमा निवडा.",
+      "applies_from": 29,
+      "applies_to": 31
+    },
+    {
+      "context_type": "figure_series",
+      "title_en": "Figure Series",
+      "title_mr": "आकृती मालिका",
+      "instruction_en": "In questions 32 to 35, a series of figures is given. Find the next figure in the series from the four options.",
+      "instruction_mr": "प्रश्न ३२ ते ३५ मध्ये आकृत्यांची मालिका दिली आहे. मालिकेतील पुढील आकृती चार पर्यायांतून शोधा.",
+      "applies_from": 32,
+      "applies_to": 35
+    },
+    {
+      "context_type": "instruction",
+      "title_en": "Pattern Recognition",
+      "title_mr": "आकृती ओळख",
+      "instruction_en": "In questions 36 to 38, a pattern or matrix is given with one piece missing. Select the correct piece that completes the pattern.",
+      "instruction_mr": "प्रश्न ३६ ते ३८ मध्ये एक आकृती किंवा जाळी दिली आहे, ज्यात एक भाग रिकामा आहे. आकृती पूर्ण करणारा योग्य भाग निवडा.",
+      "applies_from": 36,
+      "applies_to": 38
+    },
+    {
+      "context_type": "venn_diagram",
+      "title_en": "Venn Diagram — Sports",
+      "instruction_en": "The Venn diagram shows students who play Cricket and Football. Circle A (Cricket) = 30 students total. Circle B (Football) = 25 students total. Students who play both Cricket and Football = 10. Total students in the survey = 60. Study the diagram and answer questions 61 to 64.",
+      "applies_from": 61,
+      "applies_to": 64
+    }
+  ],
+  "questions": [
+    {
+      "section_id": 3,
+      "topic_id": 18,
+      "question_no": 1,
+      "question_type": "marathi_only",
+      "text_mr": "\"शेत\" या शब्दाचे अनेकवचन कोणते?",
+      "correct_option": 1,
+      "explanation_mr": "\"शेत\" चे अनेकवचन \"शेते\" असते.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "plural"],
+      "options": [
+        { "option_no": 1, "text_mr": "शेते" },
+        { "option_no": 2, "text_mr": "शेती" },
+        { "option_no": 3, "text_mr": "शेतात" },
+        { "option_no": 4, "text_mr": "शेतानी" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 18,
+      "question_no": 2,
+      "question_type": "marathi_only",
+      "text_mr": "\"सुंदर\" शब्दाचा विरुद्धार्थी शब्द कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"सुंदर\" चा विरुद्धार्थी शब्द \"कुरूप\" आहे.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "antonyms"],
+      "options": [
+        { "option_no": 1, "text_mr": "रमणीय" },
+        { "option_no": 2, "text_mr": "कुरूप" },
+        { "option_no": 3, "text_mr": "मनोहर" },
+        { "option_no": 4, "text_mr": "सुभग" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 18,
+      "question_no": 3,
+      "question_type": "marathi_only",
+      "text_mr": "\"आकाश\" या शब्दाचा समानार्थी शब्द कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"नभ\" हा \"आकाश\" चा समानार्थी शब्द आहे.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "synonyms"],
+      "options": [
+        { "option_no": 1, "text_mr": "पाऊस" },
+        { "option_no": 2, "text_mr": "नभ" },
+        { "option_no": 3, "text_mr": "वारा" },
+        { "option_no": 4, "text_mr": "ढग" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 18,
+      "question_no": 4,
+      "question_type": "marathi_only",
+      "text_mr": "\"दुखणे\" या शब्दाचा विरुद्धार्थी शब्द कोणता?",
+      "correct_option": 3,
+      "explanation_mr": "\"दुखणे\" (दर्द होणे) चा विरुद्धार्थी \"बरे वाटणे\" किंवा \"सुखणे\" आहे.",
+      "difficulty": "medium",
+      "tags": ["vocabulary", "antonyms"],
+      "options": [
+        { "option_no": 1, "text_mr": "जगणे" },
+        { "option_no": 2, "text_mr": "रडणे" },
+        { "option_no": 3, "text_mr": "सुखणे" },
+        { "option_no": 4, "text_mr": "पडणे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 18,
+      "question_no": 5,
+      "question_type": "marathi_only",
+      "text_mr": "\"डोळा\" या शब्दाचे अनेकवचन काय आहे?",
+      "correct_option": 4,
+      "explanation_mr": "\"डोळा\" चे अनेकवचन \"डोळे\" असते.",
+      "difficulty": "easy",
+      "tags": ["vocabulary", "plural"],
+      "options": [
+        { "option_no": 1, "text_mr": "डोळ्यांस" },
+        { "option_no": 2, "text_mr": "डोळा" },
+        { "option_no": 3, "text_mr": "डोळ्याला" },
+        { "option_no": 4, "text_mr": "डोळे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 6,
+      "question_type": "marathi_only",
+      "text_mr": "\"लहान मुले खेळतात.\" या वाक्यातील क्रियापद कोणते?",
+      "correct_option": 3,
+      "explanation_mr": "\"खेळतात\" हे या वाक्यातील क्रियापद आहे कारण ते कृती दर्शवते.",
+      "difficulty": "easy",
+      "tags": ["grammar", "verb"],
+      "options": [
+        { "option_no": 1, "text_mr": "लहान" },
+        { "option_no": 2, "text_mr": "मुले" },
+        { "option_no": 3, "text_mr": "खेळतात" },
+        { "option_no": 4, "text_mr": "लहान मुले" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 7,
+      "question_type": "marathi_only",
+      "text_mr": "\"सूर्य\" शब्द कोणत्या लिंगाचा आहे?",
+      "correct_option": 4,
+      "explanation_mr": "\"सूर्य\" हा शब्द पुल्लिंगी आहे.",
+      "difficulty": "easy",
+      "tags": ["grammar", "gender"],
+      "options": [
+        { "option_no": 1, "text_mr": "स्त्रीलिंगी" },
+        { "option_no": 2, "text_mr": "नपुंसकलिंगी" },
+        { "option_no": 3, "text_mr": "उभयलिंगी" },
+        { "option_no": 4, "text_mr": "पुल्लिंगी" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 8,
+      "question_type": "marathi_only",
+      "text_mr": "\"मी शाळेत जातो\" - या वाक्याचे नकारार्थी रूप कोणते?",
+      "correct_option": 2,
+      "explanation_mr": "नकारार्थी वाक्यात 'नाही' किंवा 'नको' असे नकारार्थी शब्द येतात. \"मी शाळेत जात नाही\" हे नकारार्थी वाक्य आहे.",
+      "difficulty": "medium",
+      "tags": ["grammar", "sentence-types"],
+      "options": [
+        { "option_no": 1, "text_mr": "मी शाळेत जाईन" },
+        { "option_no": 2, "text_mr": "मी शाळेत जात नाही" },
+        { "option_no": 3, "text_mr": "मी शाळेत गेलो" },
+        { "option_no": 4, "text_mr": "मी शाळेत जात होतो" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 9,
+      "question_type": "marathi_only",
+      "text_mr": "\"हुशार\" हे कोणत्या प्रकारचे विशेषण आहे?",
+      "correct_option": 1,
+      "explanation_mr": "\"हुशार\" हे गुण दर्शवणारे विशेषण आहे, म्हणून ते गुणवाचक विशेषण आहे.",
+      "difficulty": "medium",
+      "tags": ["grammar", "adjective"],
+      "options": [
+        { "option_no": 1, "text_mr": "गुणवाचक विशेषण" },
+        { "option_no": 2, "text_mr": "संख्यावाचक विशेषण" },
+        { "option_no": 3, "text_mr": "परिमाणवाचक विशेषण" },
+        { "option_no": 4, "text_mr": "सार्वनामिक विशेषण" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 10,
+      "question_type": "marathi_only",
+      "text_mr": "\"फूल\" या शब्दाचे अनेकवचन कोणते?",
+      "correct_option": 1,
+      "explanation_mr": "\"फूल\" चे अनेकवचन \"फुले\" असते.",
+      "difficulty": "easy",
+      "tags": ["grammar", "plural"],
+      "options": [
+        { "option_no": 1, "text_mr": "फुले" },
+        { "option_no": 2, "text_mr": "फुलां" },
+        { "option_no": 3, "text_mr": "फूले" },
+        { "option_no": 4, "text_mr": "फुलानी" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 11,
+      "question_type": "marathi_only",
+      "text_mr": "\"घरोघरी मातीच्या चुली\" या म्हणीचा योग्य अर्थ कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"घरोघरी मातीच्या चुली\" या म्हणीचा अर्थ आहे की प्रत्येक घरात लहान-मोठ्या अडचणी असतात; कोणाचेही घर त्रासमुक्त नसते.",
+      "difficulty": "medium",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "सर्वत्र माती आहे" },
+        { "option_no": 2, "text_mr": "सर्वत्र समस्या असतात" },
+        { "option_no": 3, "text_mr": "प्रत्येक घरी चूल असते" },
+        { "option_no": 4, "text_mr": "माती खूप उपयोगाची आहे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 12,
+      "question_type": "marathi_only",
+      "text_mr": "\"पाण्यात राहून माशाशी वैर\" या म्हणीचा अर्थ कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "या म्हणीचा अर्थ आहे — ज्याच्या आश्रयाने राहावे लागते त्याच्याशीच शत्रुत्व करणे मूर्खपणाचे आहे.",
+      "difficulty": "hard",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "माशाला पाणी आवडत नाही" },
+        { "option_no": 2, "text_mr": "ज्याच्याशी राहावे लागते त्याच्याशी वैर करणे" },
+        { "option_no": 3, "text_mr": "पाण्याशिवाय मासा जगत नाही" },
+        { "option_no": 4, "text_mr": "नदीत राहणे धोकादायक आहे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 13,
+      "question_type": "marathi_only",
+      "text_mr": "\"अति तिथे माती\" या म्हणीचा योग्य अर्थ कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"अति तिथे माती\" चा अर्थ आहे — अतिरेक नेहमी हानिकारक असतो; कोणत्याही गोष्टीचा जास्त वापर नुकसानकारक ठरतो.",
+      "difficulty": "easy",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "जिथे माती असते तिथे अती असते" },
+        { "option_no": 2, "text_mr": "अतिरेक नेहमी हानिकारक असतो" },
+        { "option_no": 3, "text_mr": "माती खूप उपयोगाची असते" },
+        { "option_no": 4, "text_mr": "जास्त काम चांगले असते" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 20,
+      "question_no": 14,
+      "question_type": "marathi_only",
+      "context_ref": 0,
+      "text_mr": "उतार्‍यानुसार आपण काय करू नये?",
+      "correct_option": 2,
+      "explanation_mr": "उतार्‍यात लिहिले आहे की \"नद्या दूषित करू नयेत.\" म्हणून नद्या दूषित करणे हे आपण करू नये.",
+      "difficulty": "easy",
+      "tags": ["reading-comprehension"],
+      "options": [
+        { "option_no": 1, "text_mr": "झाडे लावणे" },
+        { "option_no": 2, "text_mr": "नद्या दूषित करणे" },
+        { "option_no": 3, "text_mr": "सूर्यप्रकाशात राहणे" },
+        { "option_no": 4, "text_mr": "पाणी पिणे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 20,
+      "question_no": 15,
+      "question_type": "marathi_only",
+      "context_ref": 0,
+      "text_mr": "उतार्‍यानुसार निसर्गाचे अमूल्य देणे कोणते?",
+      "correct_option": 2,
+      "explanation_mr": "उतार्‍यात लिहिले आहे की \"हवा, पाणी, माती आणि सूर्यप्रकाश हे निसर्गाचे अमूल्य देणे आहे.\"",
+      "difficulty": "easy",
+      "tags": ["reading-comprehension"],
+      "options": [
+        { "option_no": 1, "text_mr": "पैसा आणि संपत्ती" },
+        { "option_no": 2, "text_mr": "हवा, पाणी, माती आणि सूर्यप्रकाश" },
+        { "option_no": 3, "text_mr": "पशू आणि पक्षी" },
+        { "option_no": 4, "text_mr": "झाडे आणि नद्या" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 20,
+      "question_no": 16,
+      "question_type": "marathi_only",
+      "context_ref": 0,
+      "text_mr": "उतार्‍यातील \"अमूल्य\" शब्दाचा अर्थ काय आहे?",
+      "correct_option": 2,
+      "explanation_mr": "\"अमूल्य\" म्हणजे ज्याची किंमत करता येत नाही असे; खूप मौल्यवान.",
+      "difficulty": "medium",
+      "tags": ["reading-comprehension", "vocabulary"],
+      "options": [
+        { "option_no": 1, "text_mr": "महाग" },
+        { "option_no": 2, "text_mr": "खूप मौल्यवान" },
+        { "option_no": 3, "text_mr": "अनावश्यक" },
+        { "option_no": 4, "text_mr": "साधे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 21,
+      "question_no": 17,
+      "question_type": "marathi_only",
+      "context_ref": 1,
+      "text_mr": "या कवितेत आईचे प्रेम कसे म्हटले आहे?",
+      "correct_option": 3,
+      "explanation_mr": "कवितेत लिहिले आहे \"आईचे प्रेम अनमोल मोड\" — म्हणजे आईचे प्रेम अनमोल (अमूल्य) आहे.",
+      "difficulty": "easy",
+      "tags": ["poetry", "comprehension"],
+      "options": [
+        { "option_no": 1, "text_mr": "गोड" },
+        { "option_no": 2, "text_mr": "कठोर" },
+        { "option_no": 3, "text_mr": "अनमोल" },
+        { "option_no": 4, "text_mr": "साधे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 21,
+      "question_no": 18,
+      "question_type": "marathi_only",
+      "context_ref": 1,
+      "text_mr": "\"आईशिवाय घर ते सुने\" — या ओळीत \"सुने\" शब्दाचा अर्थ काय आहे?",
+      "correct_option": 4,
+      "explanation_mr": "इथे \"सुने\" म्हणजे रिकामे, ओसाड, एकटे — आईशिवाय घर रिकामे वाटते.",
+      "difficulty": "medium",
+      "tags": ["poetry", "vocabulary"],
+      "options": [
+        { "option_no": 1, "text_mr": "सूनबाई" },
+        { "option_no": 2, "text_mr": "ऐकणे" },
+        { "option_no": 3, "text_mr": "शांत" },
+        { "option_no": 4, "text_mr": "रिकामे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 21,
+      "question_no": 19,
+      "question_type": "marathi_only",
+      "context_ref": 1,
+      "text_mr": "कवितेत \"सावली\" शब्दाचा कोणत्या अर्थाने वापर केला आहे?",
+      "correct_option": 1,
+      "explanation_mr": "\"सावली\" म्हणजे आश्रय, संरक्षण. आई जीवनाची सावली (आश्रय) असते — हा अर्थ कवितेत वापरला आहे.",
+      "difficulty": "medium",
+      "tags": ["poetry", "vocabulary"],
+      "options": [
+        { "option_no": 1, "text_mr": "आश्रय" },
+        { "option_no": 2, "text_mr": "साडी" },
+        { "option_no": 3, "text_mr": "सौंदर्य" },
+        { "option_no": 4, "text_mr": "संगीत" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 20,
+      "question_type": "marathi_only",
+      "text_mr": "\"शाळा\" या शब्दाचे लिंग कोणते?",
+      "correct_option": 3,
+      "explanation_mr": "\"शाळा\" हा शब्द स्त्रीलिंगी आहे.",
+      "difficulty": "easy",
+      "tags": ["grammar", "gender"],
+      "options": [
+        { "option_no": 1, "text_mr": "पुल्लिंगी" },
+        { "option_no": 2, "text_mr": "नपुंसकलिंगी" },
+        { "option_no": 3, "text_mr": "स्त्रीलिंगी" },
+        { "option_no": 4, "text_mr": "उभयलिंगी" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 21,
+      "question_type": "marathi_only",
+      "text_mr": "\"तो दिवसभर काम करतो.\" या वाक्यातील 'दिवसभर' हा कोणत्या प्रकारचा शब्द आहे?",
+      "correct_option": 3,
+      "explanation_mr": "\"दिवसभर\" हा शब्द क्रियेची वेळ सांगतो, त्यामुळे तो क्रियाविशेषण आहे.",
+      "difficulty": "medium",
+      "tags": ["grammar", "parts-of-speech"],
+      "options": [
+        { "option_no": 1, "text_mr": "नाम" },
+        { "option_no": 2, "text_mr": "विशेषण" },
+        { "option_no": 3, "text_mr": "क्रियाविशेषण" },
+        { "option_no": 4, "text_mr": "सर्वनाम" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 19,
+      "question_no": 22,
+      "question_type": "marathi_only",
+      "text_mr": "\"चालणे\" या क्रियापदाचा भूतकाळाचा एकवचनी रूप कोणता?",
+      "correct_option": 3,
+      "explanation_mr": "\"चालणे\" या क्रियापदाचे भूतकाळातील रूप \"चालला\" (पुल्लिंगी) किंवा \"चालली\" (स्त्रीलिंगी) असे होते.",
+      "difficulty": "medium",
+      "tags": ["grammar", "tense"],
+      "options": [
+        { "option_no": 1, "text_mr": "चालेल" },
+        { "option_no": 2, "text_mr": "चालतो" },
+        { "option_no": 3, "text_mr": "चालला" },
+        { "option_no": 4, "text_mr": "चालणार" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 23,
+      "question_type": "marathi_only",
+      "text_mr": "\"एका हाताने टाळी वाजत नाही\" या म्हणीचा अर्थ कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"एका हाताने टाळी वाजत नाही\" चा अर्थ आहे — कोणत्याही कामासाठी दोघांची गरज असते; एकट्याने काहीही होत नाही.",
+      "difficulty": "easy",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "टाळी वाजवणे कठीण आहे" },
+        { "option_no": 2, "text_mr": "एकट्याने काहीही होत नाही" },
+        { "option_no": 3, "text_mr": "दोन्ही हात समान असतात" },
+        { "option_no": 4, "text_mr": "टाळी वाजवणे शिकले पाहिजे" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 24,
+      "question_type": "marathi_only",
+      "text_mr": "\"वाचाल तर वाचाल\" या म्हणीचा योग्य अर्थ कोणता?",
+      "correct_option": 2,
+      "explanation_mr": "\"वाचाल तर वाचाल\" — वाचन केल्यानेच ज्ञान मिळते आणि ज्ञानानेच जगता येते.",
+      "difficulty": "easy",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "वाचणे ही एक कला आहे" },
+        { "option_no": 2, "text_mr": "ज्ञान मिळवणेच जगण्याचा मार्ग आहे" },
+        { "option_no": 3, "text_mr": "वाचणे वेळ वाया घालवते" },
+        { "option_no": 4, "text_mr": "फक्त पुस्तके वाचावीत" }
+      ]
+    },
+    {
+      "section_id": 3,
+      "topic_id": 22,
+      "question_no": 25,
+      "question_type": "marathi_only",
+      "text_mr": "\"उंदराला मांजराची साक्ष\" या म्हणीचा अर्थ काय?",
+      "correct_option": 1,
+      "explanation_mr": "\"उंदराला मांजराची साक्ष\" म्हणजे — शत्रूकडून साक्ष मागणे म्हणजे न्याय मिळणे अशक्य आहे; पक्षपाती साक्षीदाराकडून खरा न्याय मिळत नाही.",
+      "difficulty": "hard",
+      "tags": ["idioms-proverbs"],
+      "options": [
+        { "option_no": 1, "text_mr": "शत्रूकडून न्याय मिळत नाही" },
+        { "option_no": 2, "text_mr": "मांजर उंदराशी दयाळू असते" },
+        { "option_no": 3, "text_mr": "साक्ष देणे महत्त्वाचे आहे" },
+        { "option_no": 4, "text_mr": "उंदीर खूप हुशार असतो" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 26,
+      "question_type": "image_only",
+      "context_ref": 2,
+      "question_image_url": "PLACEHOLDER_Q26",
+      "question_image_alt_en": "Figure showing the letter E with vertical mirror line",
+      "correct_option": 1,
+      "explanation_en": "The mirror image of a figure is its horizontal flip. The correct mirror image is option 1.",
+      "difficulty": "easy",
+      "tags": ["mirror-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q26_OPT1", "image_alt_en": "Correct mirror image" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q26_OPT2", "image_alt_en": "Water reflection" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q26_OPT3", "image_alt_en": "Rotated figure" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q26_OPT4", "image_alt_en": "Inverted figure" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 27,
+      "question_type": "image_only",
+      "context_ref": 2,
+      "question_image_url": "PLACEHOLDER_Q27",
+      "question_image_alt_en": "Figure showing arrow pattern with mirror line",
+      "correct_option": 3,
+      "explanation_en": "The mirror image flips the figure horizontally. The correct mirror image is option 3.",
+      "difficulty": "medium",
+      "tags": ["mirror-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q27_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q27_OPT2", "image_alt_en": "Option 2" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q27_OPT3", "image_alt_en": "Correct mirror image" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q27_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 28,
+      "question_type": "image_only",
+      "context_ref": 2,
+      "question_image_url": "PLACEHOLDER_Q28",
+      "question_image_alt_en": "Figure showing geometric shape with mirror line",
+      "correct_option": 2,
+      "explanation_en": "The mirror image reverses left and right. The correct mirror image is option 2.",
+      "difficulty": "medium",
+      "tags": ["mirror-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q28_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q28_OPT2", "image_alt_en": "Correct mirror image" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q28_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q28_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 29,
+      "question_type": "image_only",
+      "context_ref": 3,
+      "question_image_url": "PLACEHOLDER_Q29",
+      "question_image_alt_en": "Figure shown above water surface for water reflection",
+      "correct_option": 4,
+      "explanation_en": "The water image (reflection) flips the figure vertically — top becomes bottom. The correct water image is option 4.",
+      "difficulty": "easy",
+      "tags": ["water-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q29_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q29_OPT2", "image_alt_en": "Option 2" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q29_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q29_OPT4", "image_alt_en": "Correct water image" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 30,
+      "question_type": "image_only",
+      "context_ref": 3,
+      "question_image_url": "PLACEHOLDER_Q30",
+      "question_image_alt_en": "Number pattern shown above water for reflection",
+      "correct_option": 2,
+      "explanation_en": "The water reflection inverts the figure vertically. The correct water image is option 2.",
+      "difficulty": "medium",
+      "tags": ["water-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q30_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q30_OPT2", "image_alt_en": "Correct water image" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q30_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q30_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 23,
+      "question_no": 31,
+      "question_type": "image_only",
+      "context_ref": 3,
+      "question_image_url": "PLACEHOLDER_Q31",
+      "question_image_alt_en": "Geometric shape above water for reflection",
+      "correct_option": 1,
+      "explanation_en": "The water image inverts the figure — what was on top goes to the bottom. The correct water image is option 1.",
+      "difficulty": "medium",
+      "tags": ["water-images"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q31_OPT1", "image_alt_en": "Correct water image" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q31_OPT2", "image_alt_en": "Option 2" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q31_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q31_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 32,
+      "question_type": "image_only",
+      "context_ref": 4,
+      "question_image_url": "PLACEHOLDER_Q32",
+      "question_image_alt_en": "Figure series: circle, square, triangle, circle, square, ?",
+      "correct_option": 3,
+      "explanation_en": "The pattern repeats: circle, square, triangle. The next figure after circle, square is triangle.",
+      "difficulty": "easy",
+      "tags": ["figure-series"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q32_OPT1", "image_alt_en": "Circle" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q32_OPT2", "image_alt_en": "Square" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q32_OPT3", "image_alt_en": "Triangle (correct)" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q32_OPT4", "image_alt_en": "Pentagon" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 33,
+      "question_type": "image_only",
+      "context_ref": 4,
+      "question_image_url": "PLACEHOLDER_Q33",
+      "question_image_alt_en": "Figure series showing dots increasing in a pattern",
+      "correct_option": 4,
+      "explanation_en": "Each figure in the series has one more dot than the previous. The next figure has 5 dots.",
+      "difficulty": "medium",
+      "tags": ["figure-series"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q33_OPT1", "image_alt_en": "3 dots" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q33_OPT2", "image_alt_en": "4 dots" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q33_OPT3", "image_alt_en": "6 dots" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q33_OPT4", "image_alt_en": "5 dots (correct)" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 34,
+      "question_type": "image_only",
+      "context_ref": 4,
+      "question_image_url": "PLACEHOLDER_Q34",
+      "question_image_alt_en": "Figure series with rotating arrow pattern",
+      "correct_option": 2,
+      "explanation_en": "The arrow rotates 90° clockwise in each step. The next arrow points downward.",
+      "difficulty": "medium",
+      "tags": ["figure-series"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q34_OPT1", "image_alt_en": "Arrow pointing right" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q34_OPT2", "image_alt_en": "Arrow pointing down (correct)" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q34_OPT3", "image_alt_en": "Arrow pointing left" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q34_OPT4", "image_alt_en": "Arrow pointing up" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 35,
+      "question_type": "image_only",
+      "context_ref": 4,
+      "question_image_url": "PLACEHOLDER_Q35",
+      "question_image_alt_en": "Figure series with shapes getting progressively larger",
+      "correct_option": 1,
+      "explanation_en": "Each shape in the series is larger than the previous one. The next shape is the largest in the sequence.",
+      "difficulty": "hard",
+      "tags": ["figure-series"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q35_OPT1", "image_alt_en": "Largest shape (correct)" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q35_OPT2", "image_alt_en": "Same size shape" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q35_OPT3", "image_alt_en": "Smaller shape" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q35_OPT4", "image_alt_en": "Different shape" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 26,
+      "question_no": 36,
+      "question_type": "image_only",
+      "context_ref": 5,
+      "question_image_url": "PLACEHOLDER_Q36",
+      "question_image_alt_en": "3x3 matrix with one piece missing — find the missing piece",
+      "correct_option": 3,
+      "explanation_en": "Each row and column follows a pattern. The missing piece completes both the row and column patterns.",
+      "difficulty": "medium",
+      "tags": ["pattern-recognition"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q36_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q36_OPT2", "image_alt_en": "Option 2" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q36_OPT3", "image_alt_en": "Correct piece" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q36_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 26,
+      "question_no": 37,
+      "question_type": "image_only",
+      "context_ref": 5,
+      "question_image_url": "PLACEHOLDER_Q37",
+      "question_image_alt_en": "Pattern matrix with shaded squares — find missing piece",
+      "correct_option": 4,
+      "explanation_en": "The shading pattern moves diagonally. The missing piece continues this diagonal shading pattern.",
+      "difficulty": "hard",
+      "tags": ["pattern-recognition"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q37_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q37_OPT2", "image_alt_en": "Option 2" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q37_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q37_OPT4", "image_alt_en": "Correct piece" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 26,
+      "question_no": 38,
+      "question_type": "image_only",
+      "context_ref": 5,
+      "question_image_url": "PLACEHOLDER_Q38",
+      "question_image_alt_en": "Embedded figure — find which option contains the given shape",
+      "correct_option": 2,
+      "explanation_en": "The given shape is embedded (hidden) in option 2. Look carefully at the lines in each option.",
+      "difficulty": "hard",
+      "tags": ["pattern-recognition"],
+      "options": [
+        { "option_no": 1, "image_url": "PLACEHOLDER_Q38_OPT1", "image_alt_en": "Option 1" },
+        { "option_no": 2, "image_url": "PLACEHOLDER_Q38_OPT2", "image_alt_en": "Contains embedded figure" },
+        { "option_no": 3, "image_url": "PLACEHOLDER_Q38_OPT3", "image_alt_en": "Option 3" },
+        { "option_no": 4, "image_url": "PLACEHOLDER_Q38_OPT4", "image_alt_en": "Option 4" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 39,
+      "question_type": "text",
+      "text_en": "Dog : Bark :: Cat : ?",
+      "correct_option": 2,
+      "explanation_en": "A dog barks; a cat mews (makes a mewing sound). The analogy is animal : sound the animal makes.",
+      "difficulty": "easy",
+      "tags": ["analogy"],
+      "options": [
+        { "option_no": 1, "text_en": "Walk" },
+        { "option_no": 2, "text_en": "Mew" },
+        { "option_no": 3, "text_en": "Run" },
+        { "option_no": 4, "text_en": "Eat" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 40,
+      "question_type": "text",
+      "text_en": "Book : Read :: Food : ?",
+      "correct_option": 3,
+      "explanation_en": "We read a book; we eat food. The analogy is: object : action performed with it.",
+      "difficulty": "easy",
+      "tags": ["analogy"],
+      "options": [
+        { "option_no": 1, "text_en": "Drink" },
+        { "option_no": 2, "text_en": "Cook" },
+        { "option_no": 3, "text_en": "Eat" },
+        { "option_no": 4, "text_en": "Smell" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 41,
+      "question_type": "text",
+      "text_en": "Mumbai : Maharashtra :: Chennai : ?",
+      "correct_option": 2,
+      "explanation_en": "Mumbai is the capital of Maharashtra. Chennai is the capital of Tamil Nadu. The analogy is capital city : state.",
+      "difficulty": "easy",
+      "tags": ["analogy", "geography"],
+      "options": [
+        { "option_no": 1, "text_en": "Karnataka" },
+        { "option_no": 2, "text_en": "Tamil Nadu" },
+        { "option_no": 3, "text_en": "Kerala" },
+        { "option_no": 4, "text_en": "Andhra Pradesh" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 42,
+      "question_type": "text",
+      "text_en": "Clock : Time :: Thermometer : ?",
+      "correct_option": 2,
+      "explanation_en": "A clock measures time; a thermometer measures temperature. The analogy is: instrument : what it measures.",
+      "difficulty": "easy",
+      "tags": ["analogy"],
+      "options": [
+        { "option_no": 1, "text_en": "Weather" },
+        { "option_no": 2, "text_en": "Temperature" },
+        { "option_no": 3, "text_en": "Wind" },
+        { "option_no": 4, "text_en": "Pressure" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 43,
+      "question_type": "text",
+      "text_en": "4 : 16 :: 5 : ?",
+      "correct_option": 2,
+      "explanation_en": "4² = 16. Similarly, 5² = 25. The pattern is: number : its square.",
+      "difficulty": "medium",
+      "tags": ["analogy", "number-patterns"],
+      "options": [
+        { "option_no": 1, "text_en": "20" },
+        { "option_no": 2, "text_en": "25" },
+        { "option_no": 3, "text_en": "10" },
+        { "option_no": 4, "text_en": "30" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 44,
+      "question_type": "text",
+      "text_en": "Find the next number in the series: 2, 4, 8, 16, ___",
+      "correct_option": 3,
+      "explanation_en": "Each number is double the previous number. 16 × 2 = 32.",
+      "difficulty": "easy",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "24" },
+        { "option_no": 2, "text_en": "28" },
+        { "option_no": 3, "text_en": "32" },
+        { "option_no": 4, "text_en": "64" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 45,
+      "question_type": "text",
+      "text_en": "Find the next number: 1, 4, 9, 16, 25, ___",
+      "correct_option": 2,
+      "explanation_en": "This series is perfect squares: 1²=1, 2²=4, 3²=9, 4²=16, 5²=25. Next: 6²=36.",
+      "difficulty": "medium",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "30" },
+        { "option_no": 2, "text_en": "36" },
+        { "option_no": 3, "text_en": "40" },
+        { "option_no": 4, "text_en": "49" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 46,
+      "question_type": "text",
+      "text_en": "Find the next number: 100, 91, 82, 73, ___",
+      "correct_option": 1,
+      "explanation_en": "Each number decreases by 9. 73 − 9 = 64.",
+      "difficulty": "medium",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "64" },
+        { "option_no": 2, "text_en": "60" },
+        { "option_no": 3, "text_en": "66" },
+        { "option_no": 4, "text_en": "62" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 47,
+      "question_type": "text",
+      "text_en": "Find the next number in the Fibonacci-like series: 2, 3, 5, 8, 13, ___",
+      "correct_option": 3,
+      "explanation_en": "Each number is the sum of the two preceding numbers: 5+8=13, 8+13=21.",
+      "difficulty": "medium",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "18" },
+        { "option_no": 2, "text_en": "20" },
+        { "option_no": 3, "text_en": "21" },
+        { "option_no": 4, "text_en": "25" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 48,
+      "question_type": "text",
+      "text_en": "Find the missing number: 3, 6, 11, 18, ___",
+      "correct_option": 1,
+      "explanation_en": "Differences: 3, 5, 7, 9 (odd numbers increasing by 2). Next difference is 9, so 18 + 9 = 27.",
+      "difficulty": "hard",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "27" },
+        { "option_no": 2, "text_en": "25" },
+        { "option_no": 3, "text_en": "24" },
+        { "option_no": 4, "text_en": "30" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 31,
+      "question_no": 49,
+      "question_type": "text",
+      "text_en": "Which is the odd one out? Rose, Lotus, Jasmine, Mango",
+      "correct_option": 3,
+      "explanation_en": "Rose, Lotus and Jasmine are flowers. Mango is a fruit. So Mango is the odd one out.",
+      "difficulty": "easy",
+      "tags": ["odd-one-out", "classification"],
+      "options": [
+        { "option_no": 1, "text_en": "Rose" },
+        { "option_no": 2, "text_en": "Lotus" },
+        { "option_no": 3, "text_en": "Mango" },
+        { "option_no": 4, "text_en": "Jasmine" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 31,
+      "question_no": 50,
+      "question_type": "text",
+      "text_en": "Which is the odd one out? Square, Circle, Triangle, Cube",
+      "correct_option": 4,
+      "explanation_en": "Square, Circle and Triangle are 2D (flat) shapes. Cube is a 3D shape. So Cube is the odd one out.",
+      "difficulty": "easy",
+      "tags": ["odd-one-out", "geometry"],
+      "options": [
+        { "option_no": 1, "text_en": "Square" },
+        { "option_no": 2, "text_en": "Circle" },
+        { "option_no": 3, "text_en": "Triangle" },
+        { "option_no": 4, "text_en": "Cube" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 31,
+      "question_no": 51,
+      "question_type": "text",
+      "text_en": "Which is the odd one out? Cricket, Hockey, Football, Chess",
+      "correct_option": 4,
+      "explanation_en": "Cricket, Hockey and Football are outdoor physical sports. Chess is an indoor board game. So Chess is the odd one out.",
+      "difficulty": "easy",
+      "tags": ["odd-one-out", "classification"],
+      "options": [
+        { "option_no": 1, "text_en": "Cricket" },
+        { "option_no": 2, "text_en": "Hockey" },
+        { "option_no": 3, "text_en": "Football" },
+        { "option_no": 4, "text_en": "Chess" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 31,
+      "question_no": 52,
+      "question_type": "text",
+      "text_en": "Which is the odd one out? January, March, June, August",
+      "correct_option": 3,
+      "explanation_en": "January (31), March (31), August (31) have 31 days. June has only 30 days. So June is the odd one out.",
+      "difficulty": "medium",
+      "tags": ["odd-one-out", "calendar"],
+      "options": [
+        { "option_no": 1, "text_en": "January" },
+        { "option_no": 2, "text_en": "March" },
+        { "option_no": 3, "text_en": "June" },
+        { "option_no": 4, "text_en": "August" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 28,
+      "question_no": 53,
+      "question_type": "text",
+      "text_en": "In a code language, each letter is shifted forward by 1 (A→B, B→C ...). What is the code for DOG?",
+      "correct_option": 1,
+      "explanation_en": "D+1=E, O+1=P, G+1=H. So DOG is coded as EPH.",
+      "difficulty": "medium",
+      "tags": ["coding-decoding"],
+      "options": [
+        { "option_no": 1, "text_en": "EPH" },
+        { "option_no": 2, "text_en": "CNF" },
+        { "option_no": 3, "text_en": "ENG" },
+        { "option_no": 4, "text_en": "FPH" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 28,
+      "question_no": 54,
+      "question_type": "text",
+      "text_en": "If A=1, B=2, C=3 ... Z=26, find the value of CAT:",
+      "correct_option": 3,
+      "explanation_en": "C=3, A=1, T=20. Sum = 3+1+20 = 24.",
+      "difficulty": "medium",
+      "tags": ["coding-decoding", "number-code"],
+      "options": [
+        { "option_no": 1, "text_en": "21" },
+        { "option_no": 2, "text_en": "26" },
+        { "option_no": 3, "text_en": "24" },
+        { "option_no": 4, "text_en": "30" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 28,
+      "question_no": 55,
+      "question_type": "text",
+      "text_en": "In a code, MANGO is written as OCPIQ (each letter shifted +2). How is APPLE coded?",
+      "correct_option": 3,
+      "explanation_en": "Each letter is shifted forward by 2. A+2=C, P+2=R, P+2=R, L+2=N, E+2=G. So APPLE = CRRNG.",
+      "difficulty": "hard",
+      "tags": ["coding-decoding"],
+      "options": [
+        { "option_no": 1, "text_en": "ARPLE" },
+        { "option_no": 2, "text_en": "BQQMF" },
+        { "option_no": 3, "text_en": "CRRNG" },
+        { "option_no": 4, "text_en": "DSSOH" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 28,
+      "question_no": 56,
+      "question_type": "text",
+      "text_en": "In a code, SCHOOL is written as VFKRRO (each letter +3). Find the code for TIGER.",
+      "correct_option": 1,
+      "explanation_en": "T+3=W, I+3=L, G+3=J, E+3=H, R+3=U. So TIGER = WLJHU.",
+      "difficulty": "hard",
+      "tags": ["coding-decoding"],
+      "options": [
+        { "option_no": 1, "text_en": "WLJHU" },
+        { "option_no": 2, "text_en": "UJHFR" },
+        { "option_no": 3, "text_en": "VKIJT" },
+        { "option_no": 4, "text_en": "XMKHV" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 27,
+      "question_no": 57,
+      "question_type": "text",
+      "text_en": "Ramesh walks 5 km North, then 3 km East, then 5 km South. How far is he from his starting point?",
+      "correct_option": 2,
+      "explanation_en": "He walks 5 km North then 5 km South — these cancel out. He is left 3 km East of the starting point.",
+      "difficulty": "medium",
+      "tags": ["direction-position"],
+      "options": [
+        { "option_no": 1, "text_en": "5 km" },
+        { "option_no": 2, "text_en": "3 km" },
+        { "option_no": 3, "text_en": "13 km" },
+        { "option_no": 4, "text_en": "8 km" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 27,
+      "question_no": 58,
+      "question_type": "text",
+      "text_en": "If you face North and turn 90° clockwise, which direction do you face?",
+      "correct_option": 4,
+      "explanation_en": "Facing North and turning 90° clockwise means turning to the right. North → East.",
+      "difficulty": "easy",
+      "tags": ["direction-position"],
+      "options": [
+        { "option_no": 1, "text_en": "North" },
+        { "option_no": 2, "text_en": "West" },
+        { "option_no": 3, "text_en": "South" },
+        { "option_no": 4, "text_en": "East" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 27,
+      "question_no": 59,
+      "question_type": "text",
+      "text_en": "Sunita is to the East of Rekha. Rekha is to the North of Priya. In which direction is Sunita from Priya?",
+      "correct_option": 3,
+      "explanation_en": "Rekha is North of Priya, and Sunita is East of Rekha. So Sunita is to the North-East of Priya.",
+      "difficulty": "hard",
+      "tags": ["direction-position"],
+      "options": [
+        { "option_no": 1, "text_en": "North" },
+        { "option_no": 2, "text_en": "East" },
+        { "option_no": 3, "text_en": "Northeast" },
+        { "option_no": 4, "text_en": "Northwest" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 27,
+      "question_no": 60,
+      "question_type": "text",
+      "text_en": "A person walks 4 km East, then 3 km North. What is the shortest distance from the starting point?",
+      "correct_option": 2,
+      "explanation_en": "Using Pythagoras: √(4² + 3²) = √(16+9) = √25 = 5 km.",
+      "difficulty": "hard",
+      "tags": ["direction-position"],
+      "options": [
+        { "option_no": 1, "text_en": "7 km" },
+        { "option_no": 2, "text_en": "5 km" },
+        { "option_no": 3, "text_en": "6 km" },
+        { "option_no": 4, "text_en": "4 km" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 29,
+      "question_no": 61,
+      "question_type": "context_text",
+      "context_ref": 6,
+      "text_en": "How many students play only Cricket (not Football)?",
+      "correct_option": 2,
+      "explanation_en": "Only Cricket = Total Cricket − Both = 30 − 10 = 20 students.",
+      "difficulty": "medium",
+      "tags": ["venn-diagram"],
+      "options": [
+        { "option_no": 1, "text_en": "30" },
+        { "option_no": 2, "text_en": "20" },
+        { "option_no": 3, "text_en": "10" },
+        { "option_no": 4, "text_en": "40" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 29,
+      "question_no": 62,
+      "question_type": "context_text",
+      "context_ref": 6,
+      "text_en": "How many students play only Football (not Cricket)?",
+      "correct_option": 2,
+      "explanation_en": "Only Football = Total Football − Both = 25 − 10 = 15 students.",
+      "difficulty": "medium",
+      "tags": ["venn-diagram"],
+      "options": [
+        { "option_no": 1, "text_en": "25" },
+        { "option_no": 2, "text_en": "15" },
+        { "option_no": 3, "text_en": "10" },
+        { "option_no": 4, "text_en": "35" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 29,
+      "question_no": 63,
+      "question_type": "context_text",
+      "context_ref": 6,
+      "text_en": "How many students play at least one of the two sports?",
+      "correct_option": 2,
+      "explanation_en": "At least one sport = Cricket + Football − Both = 30 + 25 − 10 = 45 students.",
+      "difficulty": "medium",
+      "tags": ["venn-diagram"],
+      "options": [
+        { "option_no": 1, "text_en": "55" },
+        { "option_no": 2, "text_en": "45" },
+        { "option_no": 3, "text_en": "35" },
+        { "option_no": 4, "text_en": "65" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 29,
+      "question_no": 64,
+      "question_type": "context_text",
+      "context_ref": 6,
+      "text_en": "How many students play neither Cricket nor Football?",
+      "correct_option": 2,
+      "explanation_en": "Neither = Total − At least one = 60 − 45 = 15 students.",
+      "difficulty": "hard",
+      "tags": ["venn-diagram"],
+      "options": [
+        { "option_no": 1, "text_en": "10" },
+        { "option_no": 2, "text_en": "15" },
+        { "option_no": 3, "text_en": "20" },
+        { "option_no": 4, "text_en": "5" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 30,
+      "question_no": 65,
+      "question_type": "text",
+      "text_en": "In a number code: M=13, A=1, N=14, G=7, O=15. What word does 13-1-14-7-15 represent?",
+      "correct_option": 1,
+      "explanation_en": "13=M, 1=A, 14=N, 7=G, 15=O. The word is MANGO.",
+      "difficulty": "easy",
+      "tags": ["number-puzzles", "coding"],
+      "options": [
+        { "option_no": 1, "text_en": "MANGO" },
+        { "option_no": 2, "text_en": "HORSE" },
+        { "option_no": 3, "text_en": "TIGER" },
+        { "option_no": 4, "text_en": "APPLE" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 30,
+      "question_no": 66,
+      "question_type": "text",
+      "text_en": "A number when multiplied by 5 gives 125. What is the number?",
+      "correct_option": 2,
+      "explanation_en": "Let the number = x. 5x = 125. x = 125 ÷ 5 = 25.",
+      "difficulty": "easy",
+      "tags": ["number-puzzles"],
+      "options": [
+        { "option_no": 1, "text_en": "20" },
+        { "option_no": 2, "text_en": "25" },
+        { "option_no": 3, "text_en": "30" },
+        { "option_no": 4, "text_en": "35" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 30,
+      "question_no": 67,
+      "question_type": "text",
+      "text_en": "If January 1 is a Monday, what day is January 15?",
+      "correct_option": 1,
+      "explanation_en": "January 1 = Monday. January 8 = Monday (7 days later). January 15 = Monday (14 days = 2 weeks after Jan 1).",
+      "difficulty": "medium",
+      "tags": ["number-puzzles", "calendar"],
+      "options": [
+        { "option_no": 1, "text_en": "Monday" },
+        { "option_no": 2, "text_en": "Tuesday" },
+        { "option_no": 3, "text_en": "Wednesday" },
+        { "option_no": 4, "text_en": "Sunday" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 30,
+      "question_no": 68,
+      "question_type": "text",
+      "text_en": "The sum of two numbers is 50 and their difference is 10. What is the larger number?",
+      "correct_option": 3,
+      "explanation_en": "Let the numbers be x and y. x + y = 50, x − y = 10. Adding: 2x = 60, x = 30. The larger number is 30.",
+      "difficulty": "medium",
+      "tags": ["number-puzzles"],
+      "options": [
+        { "option_no": 1, "text_en": "20" },
+        { "option_no": 2, "text_en": "25" },
+        { "option_no": 3, "text_en": "30" },
+        { "option_no": 4, "text_en": "40" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 32,
+      "question_no": 69,
+      "question_type": "text",
+      "text_en": "All cats are animals. All animals have hearts. Which conclusion is definitely true?",
+      "correct_option": 3,
+      "explanation_en": "If all cats are animals, and all animals have hearts, then all cats must have hearts (transitive property of logic).",
+      "difficulty": "medium",
+      "tags": ["logic-reasoning"],
+      "options": [
+        { "option_no": 1, "text_en": "All animals are cats" },
+        { "option_no": 2, "text_en": "Some cats do not have hearts" },
+        { "option_no": 3, "text_en": "All cats have hearts" },
+        { "option_no": 4, "text_en": "Only cats have hearts" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 32,
+      "question_no": 70,
+      "question_type": "text",
+      "text_en": "If A > B, B > C, and C > D, which of the following is definitely true?",
+      "correct_option": 2,
+      "explanation_en": "A > B > C > D. Therefore A is the greatest, and A > D is definitely true.",
+      "difficulty": "medium",
+      "tags": ["logic-reasoning"],
+      "options": [
+        { "option_no": 1, "text_en": "D is the largest" },
+        { "option_no": 2, "text_en": "A > D" },
+        { "option_no": 3, "text_en": "B > A" },
+        { "option_no": 4, "text_en": "C > A" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 32,
+      "question_no": 71,
+      "question_type": "text",
+      "text_en": "Ravi is taller than Suresh but shorter than Mohan. Mohan is shorter than Kiran. Who is the tallest?",
+      "correct_option": 4,
+      "explanation_en": "Height order: Kiran > Mohan > Ravi > Suresh. Therefore Kiran is the tallest.",
+      "difficulty": "medium",
+      "tags": ["logic-reasoning", "comparison"],
+      "options": [
+        { "option_no": 1, "text_en": "Ravi" },
+        { "option_no": 2, "text_en": "Suresh" },
+        { "option_no": 3, "text_en": "Mohan" },
+        { "option_no": 4, "text_en": "Kiran" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 32,
+      "question_no": 72,
+      "question_type": "text",
+      "text_en": "There are 5 houses in a row: Red, Blue, Green, Yellow, White. Red is next to Blue. Green is between Yellow and White. Blue is at one end. Which house is at the other end?",
+      "correct_option": 3,
+      "explanation_en": "Blue is at one end. Red is next to Blue. The order is Blue-Red-...-...-... Green is between Yellow and White. The arrangement is Blue-Red-Yellow-Green-White. White is at the other end.",
+      "difficulty": "hard",
+      "tags": ["logic-reasoning"],
+      "options": [
+        { "option_no": 1, "text_en": "Red" },
+        { "option_no": 2, "text_en": "Yellow" },
+        { "option_no": 3, "text_en": "White" },
+        { "option_no": 4, "text_en": "Green" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 24,
+      "question_no": 73,
+      "question_type": "text",
+      "text_en": "Painter : Brush :: Writer : ?",
+      "correct_option": 3,
+      "explanation_en": "A painter uses a brush as a tool; a writer uses a pen as a tool.",
+      "difficulty": "easy",
+      "tags": ["analogy"],
+      "options": [
+        { "option_no": 1, "text_en": "Paper" },
+        { "option_no": 2, "text_en": "Book" },
+        { "option_no": 3, "text_en": "Pen" },
+        { "option_no": 4, "text_en": "Ink" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 25,
+      "question_no": 74,
+      "question_type": "text",
+      "text_en": "Find the next number in the series: 1, 1, 2, 3, 5, 8, 13, ___",
+      "correct_option": 3,
+      "explanation_en": "This is the Fibonacci series where each number is the sum of the two before it. 8 + 13 = 21.",
+      "difficulty": "medium",
+      "tags": ["series-completion"],
+      "options": [
+        { "option_no": 1, "text_en": "18" },
+        { "option_no": 2, "text_en": "20" },
+        { "option_no": 3, "text_en": "21" },
+        { "option_no": 4, "text_en": "25" }
+      ]
+    },
+    {
+      "section_id": 4,
+      "topic_id": 32,
+      "question_no": 75,
+      "question_type": "text",
+      "text_en": "If all roses are flowers and some flowers fade quickly, which conclusion is correct?",
+      "correct_option": 3,
+      "explanation_en": "We know all roses are flowers, but only some flowers fade quickly. We cannot conclude all roses fade quickly, but it is possible that some roses may fade quickly.",
+      "difficulty": "hard",
+      "tags": ["logic-reasoning"],
+      "options": [
+        { "option_no": 1, "text_en": "All roses fade quickly" },
+        { "option_no": 2, "text_en": "No roses are flowers" },
+        { "option_no": 3, "text_en": "Some roses may fade quickly" },
+        { "option_no": 4, "text_en": "No roses fade quickly" }
+      ]
+    }
+  ]
+}
