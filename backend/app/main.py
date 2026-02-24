@@ -1,8 +1,10 @@
+import os
 from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import engine
@@ -83,19 +85,29 @@ async def health():
 #
 # from app.modules.auth.router import router as auth_router
 from app.modules.user.router import router as user_router
+from app.modules.user.parent_router import router as parent_router
 from app.modules.catalog.router import router as catalog_router
 from app.modules.question.router import router as question_router, admin_router as question_admin_router
-# from app.modules.attempt.router import router as attempt_router
-# from app.modules.analysis.router import router as analysis_router
-# from app.modules.media.router import router as media_router
-# from app.modules.admin.router import router as admin_router
+from app.modules.attempt.router import router as attempt_router
+from app.modules.analysis.router import router as analysis_router
+from app.modules.media.router import router as media_router
+from app.modules.admin.router import router as admin_router
 #
 # app.include_router(auth_router,           prefix="/api/auth",            tags=["auth"])
 app.include_router(user_router,            prefix="/api/users",           tags=["users"])
+app.include_router(parent_router,          prefix="/api/parent",          tags=["parent"])
 app.include_router(catalog_router,         prefix="/api/catalog",         tags=["catalog"])
 app.include_router(question_router,        prefix="/api/questions",       tags=["questions"])
 app.include_router(question_admin_router,  prefix="/api/admin/questions", tags=["admin-questions"])
-# app.include_router(attempt_router,        prefix="/api/attempts",        tags=["attempts"])
-# app.include_router(analysis_router,       prefix="/api/analysis",        tags=["analysis"])
-# app.include_router(media_router,          prefix="/api/media",           tags=["media"])
-# app.include_router(admin_router,          prefix="/api/admin",           tags=["admin"])
+app.include_router(attempt_router,         prefix="/api/attempts",        tags=["attempts"])
+app.include_router(analysis_router,        prefix="/api/analysis",        tags=["analysis"])
+app.include_router(media_router,           prefix="/api/media",           tags=["media"])
+app.include_router(admin_router,           prefix="/api/admin",           tags=["admin"])
+
+# ── Static file serving (local media provider) ────────────────────────────────
+# In production with Cloudinary, this mount is still harmless (empty dir).
+_uploads_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "uploads")
+)
+os.makedirs(_uploads_dir, exist_ok=True)
+app.mount("/static", StaticFiles(directory=_uploads_dir), name="static")

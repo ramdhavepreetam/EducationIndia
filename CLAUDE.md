@@ -1,6 +1,6 @@
 # ScholarPath — Project Knowledge File
 # Read this file first before making any code changes.
-# Updated: 2026-02-23 | Version: 1.3.0
+# Updated: 2026-02-23 | Version: 1.5.0
 
 ---
 
@@ -668,6 +668,8 @@ Last updated: 2026-02-23
 ```
 backend/app/main.py              ✅ FastAPI app, CORS (ports 5173+5174), lifespan,
                                     exception handlers, JWKS fetch on startup
+                                    Routers registered: user, parent, catalog, question,
+                                    question_admin, attempt, analysis, media, admin
 backend/pytest.ini               ✅ asyncio_mode=auto (fixes all async test discovery)
 backend/app/config.py            ✅ pydantic-settings v2, reads .env from project root
 backend/app/database.py          ✅ async SQLAlchemy engine, get_db() dependency
@@ -693,17 +695,6 @@ modules/auth/      ✅ COMPLETE
                      require_admin, require_super_admin
                      set_jwks_keys() — called by main.py lifespan on startup
   (no router — Supabase handles login/register)
-
-modules/user/      ✅ COMPLETE
-  models.py        → UserProfile, ParentStudentLink
-  schemas.py       → UserProfileResponse, ChildProfileResponse, UpdateProfileRequest,
-                     CompleteProfileRequest, LinkChildRequest
-  repository.py    → get_by_id, get_user_id_by_email (cross-schema auth.users),
-                     update, get_children_with_links, get/create/update_link
-  service.py       → get_my_profile, update_my_profile, complete_profile, link_child
-  router.py        → GET /me, PUT /me, POST /me/complete-profile,
-                     GET /my-children, POST /link-child
-  tests/           → test_service.py (unit, mocked repo), test_router.py (integration)
 
 modules/catalog/   ✅ COMPLETE
   models.py        → ExamBoard, ExamCategory, ExamEvent, Exam, Section, Topic
@@ -737,10 +728,76 @@ modules/question/  ✅ COMPLETE
                      test_security.py (10 tests including schema field allowlist)
   README.md        ✅
 
-modules/attempt/   ⬜ NOT STARTED
-modules/analysis/  ⬜ NOT STARTED
-modules/media/     ⬜ NOT STARTED
-modules/admin/     ⬜ NOT STARTED
+modules/attempt/   ✅ COMPLETE
+modules/analysis/  ✅ COMPLETE
+
+modules/media/     ✅ COMPLETE
+  providers/       → LocalProvider (saves to backend/uploads/, serves /static/)
+                     CloudinaryProvider (cloudinary SDK)
+                     Swap via MEDIA_PROVIDER env var (ADR-007)
+  models.py        → MediaFile
+  schemas.py       → MediaUploadResponse
+  service.py       → upload(), delete() (delegates to active provider)
+  router.py        → POST /api/media/upload (admin only)
+  static mount:    → app.mount("/static", ...) in main.py
+  aiofiles:        → added to requirements.txt for async local writes
+
+modules/admin/     ✅ COMPLETE
+  schemas.py       → AdminOverviewStats, AdminAttemptRow, AdminExamRow,
+                     QuestionStatRow, StudentDashboardResponse, StudentDashboardStats
+  router.py        → GET  /api/admin/dashboard/overview        (AdminOverviewStats)
+                     GET  /api/admin/dashboard/student         (StudentDashboardResponse)
+                     GET  /api/admin/dashboard/attempts/recent (AdminAttemptRow[])
+                     GET  /api/admin/catalog/exams             (AdminExamRow[])
+                     PUT  /api/admin/catalog/exams/{id}/publish
+                     PUT  /api/admin/catalog/exams/{id}/unpublish
+                     GET  /api/admin/questions/stats?exam_id=X (QuestionStatRow[])
+  NOTE: Admin is orchestrator only — raw SQL COUNT queries are fine, no business logic
+
+modules/user/      ✅ COMPLETE (core + parent sub-feature)
+  [Core — existing]
+  models.py        → UserProfile, ParentStudentLink
+  schemas.py       → UserProfileResponse, UpdateProfileRequest, CompleteProfileRequest,
+                     LinkChildRequest
+  repository.py    → get_by_id, get_user_id_by_email, update, get_children_with_links,
+                     get/create/update_link
+  service.py       → get_my_profile, update_my_profile, complete_profile, link_child
+  router.py        → GET /api/users/me, PUT /api/users/me,
+                     POST /api/users/me/complete-profile,
+                     GET /api/users/my-children, POST /api/users/link-child
+  tests/           → test_service.py, test_router.py
+
+  [Parent sub-feature — added Sessions 1–2, ADR-009]
+  parent_schemas.py    → LinkChildRequest, UpdateLinkNicknameRequest,
+                         ChildProfileSchema, ChildStatsSchema, ChildAttemptSummarySchema,
+                         WeakTopicSchema, ChildDetailSchema, ParentDashboardSchema
+  parent_repository.py → get_linked_children, get_link, find_student_by_email,
+                         create_link, deactivate_link, update_nickname,
+                         get_child_attempts (enforces link check — raises Forbidden),
+                         get_child_stats, get_child_topic_performance
+                         Singleton: parent_repository = ParentRepository()
+                         Cross-module queries (attempts, exams) via text() only — no
+                         model imports across module boundaries (CLAUDE.md rule)
+  parent_service.py    → get_dashboard, get_children, get_child_detail,
+                         get_child_attempts_paged, get_child_topics,
+                         link_child, update_nickname, unlink_child
+                         Singleton: parent_service = ParentService()
+                         Defence-in-depth: link checked at service level AND inside
+                         get_child_attempts() in the repository (ADR-009)
+                         Sequential DB calls only — AsyncSession is not concurrency-safe
+  parent_router.py     → GET  /api/parent/dashboard         (ParentDashboardSchema)
+                         GET  /api/parent/children           (list[ChildProfileSchema])
+                         POST /api/parent/children/link      (ChildProfileSchema, 201)
+                         GET  /api/parent/children/{id}      (ChildDetailSchema)
+                         GET  /api/parent/children/{id}/attempts  (paginated dict)
+                         GET  /api/parent/children/{id}/topics    (list[WeakTopicSchema])
+                         PUT  /api/parent/children/{id}/nickname  (ChildProfileSchema)
+                         DELETE /api/parent/children/{id}/unlink  ({success: true})
+                         All endpoints require require_parent dependency
+  tests/           → test_parent_repository.py (20 tests)
+                     test_parent_service.py    (17 tests)
+                     test_parent_router.py     (25 tests)
+                     test_parent_security.py   (17 tests)
 ```
 
 ### Frontend Modules
@@ -749,6 +806,8 @@ frontend/package.json            ✅ React 18, Vite, Zustand, axios, supabase-js
 frontend/vite.config.js          ✅ @/ alias → ./src
 frontend/src/main.jsx            ✅ BrowserRouter with v7_startTransition + v7_relativeSplatPath
 frontend/src/App.jsx             ✅ Routes + AuthRedirect (handles OAuth callback at /)
+                                    ParentRoute guard (role !== 'parent' → /dashboard)
+                                    /parent and /parent/children/:studentId registered
 frontend/src/config/
   supabaseClient.js              ✅ createClient with env var validation
   apiClient.js                   ✅ Axios + JWT interceptor + 401 auto-logout
@@ -768,12 +827,56 @@ shared/layouts/
   AuthLayout.jsx                 ✅ Centered card layout for auth + onboarding pages
   AppLayout.jsx                  ✅ Sidebar + header layout for authenticated app
 
-modules/exam/      ⬜ NOT STARTED
-modules/attempt/   ⬜ NOT STARTED
-modules/analysis/  ⬜ NOT STARTED
-modules/dashboard/ ⬜ NOT STARTED (placeholder in App.jsx)
-modules/parent/    ⬜ NOT STARTED
-modules/admin/     ⬜ NOT STARTED
+modules/attempt/   ✅ COMPLETE
+  Timer, question palette, autosave, exam shell
+
+modules/analysis/  ✅ COMPLETE
+  Result page, topic breakdown, PDF report card (jsPDF + html2canvas)
+
+modules/dashboard/ ✅ COMPLETE
+  Student home: available exams, attempt history, performance stats
+
+modules/admin/     ✅ COMPLETE
+  AdminRoute guard: checks role ∈ ['exam_admin','super_admin'], shows AccessDenied otherwise
+  pages/AdminDashboardPage.jsx    → platform stats (4 count cards + recent activity table)
+  pages/QuestionManagerPage.jsx   → browse all questions, BulkImportButton, QuestionEditForm modal
+  pages/ExamPublisherPage.jsx     → list all exams, publish/unpublish toggle
+  pages/ImageUploaderPage.jsx     → upload images for Intelligence Test questions
+  pages/StatsPage.jsx             → per-question performance, CSV export
+  store/adminStore.js             → Zustand store for all admin data
+  api/adminApi.js                 → API calls for all admin endpoints
+
+modules/exam/      ⬜ NOT STARTED (catalog browsing — separate from admin)
+
+modules/parent/    ✅ COMPLETE (Sessions 3–4)
+  api/parentApi.js             → 8 methods: getDashboard, getChildren, getChildDetail,
+                                  getChildAttempts, getChildTopics, linkChild,
+                                  updateNickname, unlinkChild
+  store/parentStore.js         → Zustand: loadDashboard, selectChild, linkChild,
+                                  updateNickname, unlinkChild, reset
+                                  State: children[], selectedChildId, childDetail,
+                                  isLoading, isLoadingDetail, isSaving, error, saveError
+  pages/ParentDashboardPage.jsx→ 4 render states: skeleton / error / empty+CTA / main
+                                  Child switcher tabs, profile card, weak topics,
+                                  progress chart, attempt history, link modal
+  pages/ChildDetailPage.jsx    → Full-page drill-down from :studentId URL param
+                                  Profile header, stats grid, weak topics, progress
+                                  chart, full paginated attempt history
+  components/ChildSwitcher.jsx → Horizontal scrollable tab strip, avatar initials,
+                                  class badge, dashed "+ Add" button
+  components/ChildProfileCard.jsx → Inline nickname editing (Enter to save), unlink
+                                  confirmation dialog, 4 stat boxes (attempts/avg/best/last)
+  components/ChildWeakTopics.jsx  → Orange "Needs Attention" + collapsible green
+                                  "Strong Areas", TopicBar progress bars, Marathi support
+  components/ChildProgressChart.jsx → Recharts LineChart, one line per paper_code,
+                                  grade reference lines at 90/70/50%, custom tooltip
+  components/ChildAttemptHistory.jsx → Table: score, grade badge, status badge
+                                  (Time Expired/Incomplete/In Progress), client-side
+                                  pagination (controlled by showPagination prop)
+  components/LinkChildModal.jsx → 2-step: email input → success screen
+                                  Loading spinner, error display, Enter key support
+  index.js                     → Exports all 10 items (2 pages + 6 components +
+                                  useParentStore + parentApi)
 ```
 
 ### Pending Tasks
@@ -783,29 +886,13 @@ TODO: Seed 150 MSCE exam questions via bulk-import endpoint
       → POST /api/admin/questions/bulk-import with admin JWT
       → Run GET /api/questions/?exam_id=1 to verify (should return 75 items, no correct_option)
 
-TODO: Scaffold attempt module (Day 7 — state machine + autosave + submit)
-      → Models: attempts, responses
-      → State machine: not_started → ongoing → submitted | expired | abandoned
-      → Per-answer upsert via responses table
-      → Server-side timer (started_at + duration_minutes)
-      → Submit scores are computed by ANALYSIS module, not attempt module
-
-TODO: Scaffold analysis module (Day 9 — scorer.py + recommender.py)
-      → Pure functions only, no DB writes
-      → Called by attempt module on submit
-
-TODO: Scaffold frontend exam module (exam listing + exam detail pages)
-TODO: Scaffold frontend attempt module (timer + palette + question cards + autosave)
-TODO: Scaffold frontend analysis module (result page + PDF report card)
-TODO: Scaffold media, admin backend modules
-
 TODO: Enable Facebook OAuth in Supabase dashboard
       → Authentication → Providers → Facebook (add App ID + Secret)
       → Google OAuth is already enabled and working
 
-TODO: Complete OnboardingPage form logic
-      → Currently scaffolded; needs to call completeProfile() and set is_onboarded=true
-      → Then redirect to /dashboard
+TODO: Deploy (Day 14)
+      → Vercel (frontend) + Render (backend) + UptimeRobot keepalive
+      → UptimeRobot required to prevent Render free-tier sleep (ADR-008)
 ```
 
 ---
@@ -922,6 +1009,27 @@ if attempt["status"] != "submitted":
 
 # Test verifies schema fields — catches accidental additions:
 assert "correct_option" not in QuestionDeliverySchema.model_fields
+```
+
+### Parent module — cross-module data access pattern (ADR-009)
+```python
+# parent_repository.py reads from attempts + exams via text() raw SQL only.
+# NEVER import Attempt or Exam models into the user module.
+# The link check fires at BOTH service level AND inside get_child_attempts():
+#   service:    link = await parent_repository.get_link(db, parent_id, student_id)
+#               if not link: raise Forbidden(...)
+#   repository: get_child_attempts() calls get_link() before executing the query
+# This double-check is intentional defence-in-depth (ADR-009).
+
+# get_child_attempts raises Forbidden directly — caller does not need to re-check.
+# get_child_stats / get_child_topic_performance do NOT check the link —
+#   they are internal helpers called only after the link has been verified.
+
+# Sequential DB calls only — a single AsyncSession is not concurrency-safe:
+stats_raw   = await parent_repository.get_child_stats(db, student_id)
+attempt_rows = await parent_repository.get_child_attempts(db, parent_id, student_id)
+topics_raw  = await parent_repository.get_child_topic_performance(db, student_id)
+# Do NOT use asyncio.gather() for DB queries sharing the same session.
 ```
 
 ### view() queries via text() in repository

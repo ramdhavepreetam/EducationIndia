@@ -17,3 +17,7 @@ pydantic-settings==2.2.1
 
 # ── HTTP client (Supabase service-role calls if needed) ──────
 httpx==0.27.0
+
+# ── Media / file uploads ──────────────────────────────────────
+aiofiles==23.2.1               # async file I/O for local media provider
+# cloudinary==1.40.0           # uncomment when MEDIA_PROVIDER=cloudinary
