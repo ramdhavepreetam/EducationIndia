@@ -20,15 +20,22 @@ export default function AppLayout() {
     }
 
     const isAdmin = ['exam_admin', 'super_admin'].includes(user?.role)
+    const isParent = user?.role === 'parent'
 
-    const navItems = [
+    const navItems = isAdmin ? [
+        { to: '/admin', label: t('nav.dashboard', 'Dashboard'), icon: DashboardIcon },
+        { to: '/admin/questions', label: 'Questions', icon: ExamsIcon },
+        { to: '/admin/publish', label: 'Publish Exams', icon: ResultsIcon },
+        { to: '/admin/stats', label: 'Stats', icon: ProfileIcon },
+        { to: '/admin/images', label: 'Images', icon: AdminIcon },
+    ] : isParent ? [
+        { to: '/parent', label: 'Dashboard', icon: DashboardIcon },
+        { to: '/parent', label: 'My Children', icon: ProfileIcon },
+    ] : [
         { to: '/dashboard', label: t('nav.dashboard'), icon: DashboardIcon },
         { to: '/exams', label: t('nav.exams'), icon: ExamsIcon },
         { to: '/results', label: t('nav.results'), icon: ResultsIcon },
         { to: '/profile', label: t('nav.profile'), icon: ProfileIcon },
-        ...(isAdmin ? [
-            { to: '/admin', label: t('nav.adminPanel', 'Admin Panel'), icon: AdminIcon },
-        ] : []),
     ]
 
     return (

@@ -179,7 +179,7 @@ class QuestionService:
                 + (" ..." if len(validation_errors) > 5 else "")
             )
 
-        inserted, errors = await question_repository.bulk_insert(db, import_data)
+        inserted, errors = await question_repository.replace_exam_questions(db, import_data)
         return BulkImportResult(
             exam_id=import_data.exam_id,
             inserted=inserted,

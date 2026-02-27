@@ -61,7 +61,7 @@ class ReportSchema(BaseModel):
     total_skipped: int
     percentage: float
     grade: str
-    section_scores: List[SectionScoreSchema]
-    topic_scores: List[TopicScoreSchema]
-    time_analysis: TimeAnalysisSchema
+    section_scores: List[Any]
+    topic_scores: List[Any]
+    time_analysis: Any
     recommendations: List[str]

@@ -431,6 +431,39 @@ class QuestionRepository:
 
         return inserted, errors
 
+    async def replace_exam_questions(
+        self, db: AsyncSession, import_data: BulkImportSchema
+    ) -> tuple[int, list[str]]:
+        """
+        Delete all existing questions (and their options + contexts) for the exam,
+        then insert the new batch. Makes bulk-import idempotent for admin re-seeding.
+
+        Deletion order (FK constraints):
+          options → questions → question_contexts (all filtered by exam_id)
+        """
+        # Delete options first (FK to questions)
+        await db.execute(
+            text(
+                "DELETE FROM options WHERE question_id IN "
+                "(SELECT id FROM questions WHERE exam_id = :eid)"
+            ),
+            {"eid": import_data.exam_id},
+        )
+        # Delete questions
+        await db.execute(
+            text("DELETE FROM questions WHERE exam_id = :eid"),
+            {"eid": import_data.exam_id},
+        )
+        # Delete question contexts
+        await db.execute(
+            text("DELETE FROM question_contexts WHERE exam_id = :eid"),
+            {"eid": import_data.exam_id},
+        )
+        await db.flush()
+
+        return await self.bulk_insert(db, import_data)
+
+
 
 # Module-level singleton — import this in service.py
 question_repository = QuestionRepository()

@@ -48,26 +48,55 @@ async def get_student_dashboard(
 
     attempts_orm = await attempt_repository.get_all_student_attempts(db, current_user.id)
 
-    submitted_attempts = [a for a in attempts_orm if a.status == "submitted" and a.percentage is not None]
+    # status is a SQLAlchemy enum — extract its string value for comparison
+    def _status(a) -> str:
+        return str(a.status.value if hasattr(a.status, "value") else a.status)
+
+    submitted_attempts = [
+        a for a in attempts_orm
+        if _status(a) == "submitted" and a.percentage is not None
+    ]
 
     total_attempts = len(attempts_orm)
     exams_completed = len(set(a.exam_id for a in submitted_attempts))
-    best_score = max((a.total_score for a in submitted_attempts if a.total_score is not None), default=0)
+    best_score = max(
+        (a.total_score for a in submitted_attempts if a.total_score is not None),
+        default=0,
+    )
     avg_percentage = 0.0
     if submitted_attempts:
-        avg_percentage = sum(a.percentage for a in submitted_attempts) / len(submitted_attempts)
+        avg_percentage = sum(float(a.percentage) for a in submitted_attempts) / len(submitted_attempts)
 
     stats = StudentDashboardStats(
         total_attempts=total_attempts,
         avg_percentage=round(avg_percentage, 1),
         best_score=best_score,
-        exams_completed=exams_completed
+        exams_completed=exams_completed,
     )
+
+    # Map ORM Attempt objects → AttemptSummary (ORM has `id`; schema expects `attempt_id`)
+    recent = [
+        AttemptSummary(
+            attempt_id=a.id,
+            exam_id=a.exam_id,
+            attempt_number=a.attempt_number,
+            status=_status(a),
+            total_score=a.total_score,
+            total_correct=a.total_correct,
+            total_wrong=a.total_wrong,
+            total_skipped=a.total_skipped,
+            percentage=float(a.percentage) if a.percentage is not None else None,
+            grade=a.grade,
+            started_at=a.started_at,
+            submitted_at=a.submitted_at,
+        )
+        for a in attempts_orm[:5]
+    ]
 
     return StudentDashboardResponse(
         available_exams=exams,
-        recent_attempts=attempts_orm[:5],
-        stats=stats
+        recent_attempts=recent,
+        stats=stats,
     )
 
 

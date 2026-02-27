@@ -52,7 +52,7 @@ export default function QuestionPalette({ questions, onNavigate }) {
                 <div className="grid grid-cols-5 gap-3">
                     {questions.map((q) => (
                         <button
-                            key={q.question_id}
+                            key={q.id}
                             onClick={() => onNavigate(q.question_no)}
                             className={getStatusClasses(q.question_no)}
                             aria-label={`Question ${q.question_no}`}

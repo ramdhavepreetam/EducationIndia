@@ -51,7 +51,7 @@ rules    = ["NEVER return correct_option in exam delivery — SECURITY BOUNDARY"
 owns     = "attempts, responses, state_machine"
 exposes  = "AttemptService.start(), save_response(), submit()"
 consumes = "catalog, question, auth"
-rules    = ["NO score computation", "NO correct_option reads", "raw storage only"]
+rules    = ["NO score computation", "NO correct_option reads", "raw storage only", "GOTCHA: QuestionDeliverySchema exposes 'id' (not 'question_id')", "FE uses useAutoSave hook (debounce/dedup)"]
 
 [modules.analysis]
 owns     = "NOTHING — read-only"
@@ -280,6 +280,8 @@ migrations   = "NEVER generate — describe changes, human reviews and runs"
 components   = "functional only, Tailwind only (no inline styles)"
 state        = "Zustand — one store per module, always include isLoading+error+reset()"
 api_calls    = "always through apiClient.js — never raw fetch/axios"
+routing      = "role-aware POST-LOGIN redirect (parent→/parent, students→/dashboard). AppLayout sidebar varies by role."
+hooks        = "React Rules of Hooks strict adherence: all useStates BEFORE conditional returns (e.g. guarded auth pages)."
 exports      = "each module exports ONLY through index.js (pages, stores, api)"
 i18n         = "t() for ALL UI strings — never hardcode English text in JSX"
 loading      = "every data-fetching component needs loading + error state"
@@ -380,17 +382,14 @@ VITE_DEFAULT_LANGUAGE = "en"
 # ── BUILD PHASES ────────────────────────────────────────────────────────────
 
 [phases]
-done = ["Day1:FastAPI+Auth", "Day2:User", "Day3:FE-Auth", "Day4:Catalog"]
+done = [
+  "Day1:FastAPI+Auth", "Day2:User", "Day3:FE-Auth", "Day4:Catalog",
+  "Day5:Question (models + security)", "Day7:Attempt (state + api)", 
+  "Day8:Exam UI", "Day9:Analysis", "Day10:Result + PDF", 
+  "Day11:Student dashboard", "Day12:Parent dashboard", "Day13:Admin panel"
+]
 next = [
-  "Day5:  Question module — models + security + bulk importer",
-  "Day6:  Seed 150 MSCE questions via importer",
-  "Day7:  Attempt module — state machine + autosave + submit",
-  "Day8:  Exam UI — timer + palette + question cards + autosave",
-  "Day9:  Analysis — scorer.py + recommender.py + wire into attempt",
-  "Day10: Result page + PDF report card (jsPDF)",
-  "Day11: Student dashboard",
-  "Day12: Parent dashboard",
-  "Day13: Admin panel + image uploader + media module",
+  "Day6:  Seed 150 MSCE questions via importer (Pending Data Task)",
   "Day14: Deploy Vercel + Render + UptimeRobot keepalive"
 ]
 rule = "complete verification checklist before advancing to next day"
