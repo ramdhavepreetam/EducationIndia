@@ -29,24 +29,14 @@ import {
 
 export default function App() {
     const initialize = useAuthStore((s) => s.initialize)
-    const isLoading = useAuthStore((s) => s.isLoading)
 
     useEffect(() => {
         initialize()
     }, [initialize])
 
-    // Global loading screen while auth initializes (covers OAuth redirect landing)
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-surface-50">
-                <div className="flex flex-col items-center gap-4 animate-fade-in">
-                    <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
-                    <p className="text-surface-500 text-sm font-medium">Loading…</p>
-                </div>
-            </div>
-        )
-    }
-
+    // NOTE: No global spinner here — public routes (/login, /register) must
+    // always render immediately. isLoading guard lives in ProtectedRoute and
+    // AuthRedirect only, so Supabase init latency never blocks auth pages.
     return (
         <Routes>
             {/* Root + catch-all: smart redirect based on auth state.
@@ -107,8 +97,17 @@ export default function App() {
  */
 function AuthRedirect() {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+    const isLoading = useAuthStore((s) => s.isLoading)
     const user = useAuthStore((s) => s.user)
 
+    // Wait for auth init before redirecting (handles OAuth callback landing at "/")
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-surface-50">
+                <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
+            </div>
+        )
+    }
     if (!isAuthenticated) return <Navigate to="/login" replace />
     if (!user?.is_onboarded) return <Navigate to="/onboarding" replace />
     return <Navigate to="/dashboard" replace />

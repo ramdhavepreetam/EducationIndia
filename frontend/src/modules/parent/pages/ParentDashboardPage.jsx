@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParentStore } from '../store/parentStore'
 import { useAuthStore } from '@/modules/auth/store/authStore'
-import ChildSwitcher       from '../components/ChildSwitcher'
-import ChildProfileCard    from '../components/ChildProfileCard'
-import ChildWeakTopics     from '../components/ChildWeakTopics'
-import ChildProgressChart  from '../components/ChildProgressChart'
+import ChildSwitcher from '../components/ChildSwitcher'
+import ChildProfileCard from '../components/ChildProfileCard'
+import ChildWeakTopics from '../components/ChildWeakTopics'
+import ChildProgressChart from '../components/ChildProgressChart'
 import ChildAttemptHistory from '../components/ChildAttemptHistory'
-import LinkChildModal      from '../components/LinkChildModal'
+import LinkChildModal from '../components/LinkChildModal'
 
 export default function ParentDashboardPage() {
   const navigate = useNavigate()
@@ -34,12 +34,12 @@ export default function ParentDashboardPage() {
           <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
         </div>
         <div className="flex gap-3 mb-6">
-          {[1,2,3].map(i => (
+          {[1, 2, 3].map(i => (
             <div key={i} className="h-10 w-28 bg-gray-200 rounded-full animate-pulse" />
           ))}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {[1,2,3,4].map(i => (
+          {[1, 2, 3, 4].map(i => (
             <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse" />
           ))}
         </div>
@@ -95,7 +95,7 @@ export default function ParentDashboardPage() {
         <LinkChildModal
           isOpen={showLinkModal}
           onClose={() => setShowLinkModal(false)}
-          onSuccess={() => setShowLinkModal(false)}
+          onSuccess={() => { setShowLinkModal(false); loadDashboard() }}
         />
       </div>
     )
@@ -120,7 +120,7 @@ export default function ParentDashboardPage() {
       {/* Child detail area */}
       {isLoadingDetail ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {[1,2,3,4].map(i => (
+          {[1, 2, 3, 4].map(i => (
             <div key={i} className="h-48 bg-gray-200 rounded-xl animate-pulse" />
           ))}
         </div>
@@ -157,7 +157,7 @@ export default function ParentDashboardPage() {
       <LinkChildModal
         isOpen={showLinkModal}
         onClose={() => setShowLinkModal(false)}
-        onSuccess={() => setShowLinkModal(false)}
+        onSuccess={() => { setShowLinkModal(false); loadDashboard() }}
       />
 
     </div>

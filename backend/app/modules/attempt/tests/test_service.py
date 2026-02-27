@@ -20,7 +20,7 @@ from app.modules.attempt.schemas import (
     SaveResponseRequest,
     StartAttemptRequest,
 )
-from app.modules.attempt.service import AttemptService, _compute_result_stub
+from app.modules.attempt.service import AttemptService
 from app.modules.attempt.state_machine import AttemptAlreadySubmittedException
 from app.shared.exceptions import BadRequest, Conflict, Forbidden, NotFound
 
@@ -203,6 +203,23 @@ class TestSaveResponse:
 
 # ── submit_exam ───────────────────────────────────────────────────────────────
 
+# Scoring was moved to analysis_service.generate_report (ADR-006).
+# Tests patch analysis_service.generate_report instead of the old _compute_result_stub.
+
+_SCORE_RESULT = {
+    "total_score": 0,
+    "total_correct": 0,
+    "total_wrong": 0,
+    "total_skipped": 75,
+    "percentage": 0.0,
+    "grade": "Below Average",
+    "section_scores": [],
+    "topic_scores": [],
+    "time_analysis": {},
+    "recommendations": [],
+}
+
+
 class TestSubmitExam:
     async def test_submit_transitions_to_submitted(self, service, mock_db):
         svc, repo, catalog = service
@@ -212,14 +229,11 @@ class TestSubmitExam:
         repo.update_attempt_result.return_value = attempt
 
         with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
-            with patch("app.modules.attempt.service._compute_result_stub", AsyncMock(return_value={
-                "total_score": 0, "total_correct": 0, "total_wrong": 0,
-                "total_skipped": 75, "percentage": 0.0, "grade": "Below Average",
-                "section_scores": [], "topic_scores": [], "time_analysis": {},
-                "recommendations": ["stub"],
-            })):
-                with patch.object(svc, "_load_questions_with_answers", AsyncMock(return_value=[])):
-                    result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
         assert isinstance(result, AttemptResultResponse)
 
@@ -252,46 +266,29 @@ class TestSubmitExam:
         repo.update_attempt_result.return_value = attempt
 
         with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
-            with patch("app.modules.attempt.service._compute_result_stub", AsyncMock(return_value={
-                "total_score": 0, "total_correct": 0, "total_wrong": 0,
-                "total_skipped": 0, "percentage": 0.0, "grade": "Below Average",
-                "section_scores": [], "topic_scores": [], "time_analysis": {},
-                "recommendations": [],
-            })):
-                with patch.object(svc, "_load_questions_with_answers", AsyncMock(return_value=[])):
-                    result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
         assert isinstance(result, AttemptResultResponse)
 
+    async def test_result_contains_no_correct_option(self, service, mock_db):
+        """Security: submit response must not contain correct_option."""
+        svc, repo, catalog = service
+        attempt = make_attempt()
+        repo.get_attempt_by_id.return_value = attempt
+        repo.get_all_responses.return_value = []
+        repo.update_attempt_result.return_value = attempt
 
-# ── _compute_result_stub ──────────────────────────────────────────────────────
+        with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
-class TestComputeResultStub:
-    async def test_stub_counts_correctly(self):
-        questions = [
-            {"id": 1, "correct_option": 1, "marks": 2},
-            {"id": 2, "correct_option": 2, "marks": 2},
-            {"id": 3, "correct_option": 3, "marks": 2},
-        ]
-        responses = [
-            make_response(question_id=1, selected_option=1),   # correct
-            make_response(question_id=2, selected_option=4),   # wrong
-            make_response(question_id=3, selected_option=None),# skipped
-        ]
-        result = await _compute_result_stub(responses, questions, None)
-
-        assert result["total_correct"] == 1
-        assert result["total_wrong"] == 1
-        assert result["total_skipped"] == 1
-        assert result["total_score"] == 2
-        assert "grade" in result
-
-    async def test_stub_no_correct_option_in_result(self):
-        """Security: stub output must not contain correct_option."""
-        questions = [{"id": 1, "correct_option": 2, "marks": 2}]
-        responses = [make_response(question_id=1, selected_option=2)]
-
-        result = await _compute_result_stub(responses, questions, None)
-
-        assert "correct_option" not in result
-        assert "correct_option" not in str(result.get("recommendations", ""))
+        result_dict = result.model_dump()
+        assert "correct_option" not in result_dict
+        assert "correct_option" not in str(result_dict.get("recommendations", ""))

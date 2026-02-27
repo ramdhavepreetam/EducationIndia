@@ -16,6 +16,7 @@ export default function OnboardingPage() {
     const navigate = useNavigate()
     const updateUser = useAuthStore((s) => s.updateUser)
     const setLanguage = useAuthStore((s) => s.setLanguage)
+    const user = useAuthStore((s) => s.user)
 
     const [form, setForm] = useState({
         school_name: '',
@@ -59,7 +60,9 @@ export default function OnboardingPage() {
             await authApi.completeProfile(payload)
             updateUser({ is_onboarded: true, ...payload })
             setLanguage(form.preferred_language)
-            navigate('/dashboard', { replace: true })
+            // Route based on role: parents go to /parent, everyone else to /dashboard
+            const destination = user?.role === 'parent' ? '/parent' : '/dashboard'
+            navigate(destination, { replace: true })
         } catch (err) {
             setError(err?.response?.data?.detail || err?.message || t('errors.generic'))
         } finally {
@@ -146,8 +149,8 @@ export default function OnboardingPage() {
                     <label htmlFor="onboard-lang" className="input-label">{t('onboarding.preferredLanguage')}</label>
                     <div className="flex gap-3">
                         <label className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border cursor-pointer transition-all duration-200 ${form.preferred_language === 'en'
-                                ? 'border-brand-400 bg-brand-50 text-brand-700 shadow-sm'
-                                : 'border-surface-200 bg-white text-surface-600 hover:border-surface-300'
+                            ? 'border-brand-400 bg-brand-50 text-brand-700 shadow-sm'
+                            : 'border-surface-200 bg-white text-surface-600 hover:border-surface-300'
                             }`}>
                             <input
                                 type="radio"
@@ -160,8 +163,8 @@ export default function OnboardingPage() {
                             <span className="text-sm font-medium">{t('onboarding.languageEn')}</span>
                         </label>
                         <label className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border cursor-pointer transition-all duration-200 ${form.preferred_language === 'mr'
-                                ? 'border-brand-400 bg-brand-50 text-brand-700 shadow-sm'
-                                : 'border-surface-200 bg-white text-surface-600 hover:border-surface-300'
+                            ? 'border-brand-400 bg-brand-50 text-brand-700 shadow-sm'
+                            : 'border-surface-200 bg-white text-surface-600 hover:border-surface-300'
                             }`}>
                             <input
                                 type="radio"
