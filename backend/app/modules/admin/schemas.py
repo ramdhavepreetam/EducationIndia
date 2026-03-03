@@ -46,7 +46,7 @@ class AdminAttemptRow(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     attempt_id: UUID
-    student_id: UUID
+    student_id: Optional[UUID] = None
     student_name: Optional[str]
     exam_id: int
     exam_title: Optional[str]
