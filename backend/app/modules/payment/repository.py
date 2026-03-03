@@ -209,6 +209,43 @@ class PaymentRepository:
             {"p": price_inr},
         )
 
+    async def grant_subscription(
+        self, db: AsyncSession, parent_id: str, plan_id: int, months: int
+    ) -> dict:
+        """Admin grants a subscription manually. Creates an active subscription."""
+        result = await db.execute(
+            text("""
+                INSERT INTO subscriptions
+                    (parent_id, plan_id, status, started_at, expires_at,
+                     amount_paid_inr, razorpay_order_id, created_at, updated_at)
+                VALUES
+                    (:pid, :plan_id, 'active', now(),
+                     now() + make_interval(months => :months),
+                     0, 'admin_grant_' || gen_random_uuid()::text, now(), now())
+                RETURNING *
+            """),
+            {"pid": parent_id, "plan_id": plan_id, "months": months},
+        )
+        row = result.mappings().first()
+        if not row:
+            return {}
+        await db.commit()
+        return dict(row)
+
+    async def find_parent_by_email(self, db: AsyncSession, email: str) -> dict | None:
+        """Find a parent user by email for admin grant flow."""
+        result = await db.execute(
+            text("""
+                SELECT up.id, up.full_name, au.email, up.role
+                FROM user_profiles up
+                JOIN auth.users au ON au.id = up.id
+                WHERE au.email = :email AND up.role = 'parent'
+            """),
+            {"email": email},
+        )
+        row = result.mappings().first()
+        return dict(row) if row else None
+
 
 # Module-level singleton
 payment_repository = PaymentRepository()
