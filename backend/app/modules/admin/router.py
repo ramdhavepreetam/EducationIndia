@@ -347,3 +347,44 @@ async def cancel_subscription(
     from app.modules.payment.repository import payment_repository
     result = await payment_repository.cancel_subscription(db, sub_id)
     return {"status": "cancelled", "id": str(result.get("id"))}
+
+
+@router.post("/subscriptions/grant")
+async def grant_subscription(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """
+    Admin manually grants a subscription to a parent by email.
+    Body: { email: str, plan_id: int, months: int }
+    """
+    from app.modules.payment.repository import payment_repository
+    from app.shared.exceptions import BadRequest, NotFound
+
+    email = body.get("email", "").strip().lower()
+    plan_id = body.get("plan_id")
+    months = body.get("months", 5)
+
+    if not email:
+        raise BadRequest("'email' is required")
+    if not plan_id:
+        raise BadRequest("'plan_id' is required")
+
+    # Find parent by email
+    parent = await payment_repository.find_parent_by_email(db, email)
+    if not parent:
+        raise NotFound(f"No parent account found for '{email}'")
+
+    # Create the subscription
+    result = await payment_repository.grant_subscription(
+        db, str(parent["id"]), plan_id, months
+    )
+
+    return {
+        "status": "granted",
+        "subscription_id": str(result.get("id")),
+        "parent_name": parent.get("full_name"),
+        "parent_email": email,
+        "expires_at": str(result.get("expires_at")),
+    }

@@ -3,6 +3,7 @@ import { settingsApi } from '../api/settingsApi'
 
 export const AdminSubscriptionsPage = () => {
     const [subscriptions, setSubscriptions] = useState([])
+    const [plans, setPlans] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState(null)
 
@@ -10,15 +11,24 @@ export const AdminSubscriptionsPage = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [actionLoadingId, setActionLoadingId] = useState(null)
 
+    // Grant form state
+    const [showGrant, setShowGrant] = useState(false)
+    const [grantEmail, setGrantEmail] = useState('')
+    const [grantPlanId, setGrantPlanId] = useState('')
+    const [grantMonths, setGrantMonths] = useState(5)
+    const [grantLoading, setGrantLoading] = useState(false)
+    const [grantError, setGrantError] = useState(null)
+    const [grantSuccess, setGrantSuccess] = useState(null)
+
     useEffect(() => {
         loadSubscriptions()
+        loadPlans()
     }, [])
 
     const loadSubscriptions = async () => {
         setIsLoading(true)
         setError(null)
         try {
-            // Mocking pagination for now — the backend currently returns all desc
             const data = await settingsApi.fetchSubscriptions()
             setSubscriptions(data)
         } catch (err) {
@@ -28,13 +38,40 @@ export const AdminSubscriptionsPage = () => {
         }
     }
 
+    const loadPlans = async () => {
+        try {
+            const data = await settingsApi.fetchPlans()
+            setPlans(Array.isArray(data) ? data : data?.plans ? data.plans : [data])
+            if (data?.id) setGrantPlanId(data.id)
+            else if (Array.isArray(data) && data.length > 0) setGrantPlanId(data[0].id)
+            else if (data?.plans?.length > 0) setGrantPlanId(data.plans[0].id)
+        } catch (_) {
+            // Plans may not load if no active plans
+        }
+    }
+
+    const handleGrant = async (e) => {
+        e.preventDefault()
+        setGrantLoading(true)
+        setGrantError(null)
+        setGrantSuccess(null)
+        try {
+            const result = await settingsApi.grantSubscription(grantEmail, grantPlanId, grantMonths)
+            setGrantSuccess(`Granted to ${result.parent_name || result.parent_email}. Expires: ${new Date(result.expires_at).toLocaleDateString()}`)
+            setGrantEmail('')
+            await loadSubscriptions()
+        } catch (err) {
+            setGrantError(err.response?.data?.detail || 'Failed to grant subscription')
+        } finally {
+            setGrantLoading(false)
+        }
+    }
+
     const handleExtend = async (id, months) => {
         setActionLoadingId(id)
         try {
             const result = await settingsApi.extendSubscription(id, months)
-            setSubscriptions((prev) =>
-                prev.map((sub) => (sub.id === id ? { ...sub, ...result } : sub))
-            )
+            await loadSubscriptions()
         } catch (err) {
             alert(err.response?.data?.detail || 'Failed to extend subscription')
         } finally {
@@ -47,10 +84,8 @@ export const AdminSubscriptionsPage = () => {
 
         setActionLoadingId(id)
         try {
-            const result = await settingsApi.cancelSubscription(id)
-            setSubscriptions((prev) =>
-                prev.map((sub) => (sub.id === id ? { ...sub, status: result.status } : sub))
-            )
+            await settingsApi.cancelSubscription(id)
+            await loadSubscriptions()
         } catch (err) {
             alert(err.response?.data?.detail || 'Failed to cancel subscription')
         } finally {
@@ -74,16 +109,13 @@ export const AdminSubscriptionsPage = () => {
 
     // Filter and Search logic
     const filteredSubs = subscriptions.filter((sub) => {
-        // Tab Filter
         if (activeTab === 'Active' && sub.status !== 'active') return false
         if (activeTab === 'Expired' && sub.status !== 'expired') return false
         if (activeTab === 'Pending' && sub.status !== 'pending') return false
 
-        // Search Filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase()
             const nameMatch = (sub.parent_name || '').toLowerCase().includes(query)
-            // Assuming email might be added later, currently mostly name
             return nameMatch
         }
 
@@ -95,7 +127,7 @@ export const AdminSubscriptionsPage = () => {
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Subscription Management</h1>
-                    <p className="text-sm text-gray-500 mt-1">View and manage parent access.</p>
+                    <p className="text-sm text-gray-500 mt-1">View and manage parent access. {subscriptions.length} total subscription{subscriptions.length !== 1 ? 's' : ''}.</p>
                 </div>
 
                 <div className="flex gap-3">
@@ -112,6 +144,13 @@ export const AdminSubscriptionsPage = () => {
                         />
                     </div>
                     <button
+                        onClick={() => setShowGrant(!showGrant)}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                        Grant Access
+                    </button>
+                    <button
                         onClick={loadSubscriptions}
                         className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
                     >
@@ -119,6 +158,66 @@ export const AdminSubscriptionsPage = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Grant Access Form */}
+            {showGrant && (
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+                    <h3 className="text-lg font-semibold text-blue-900 mb-4">Grant Subscription Access</h3>
+                    <form onSubmit={handleGrant} className="flex flex-wrap items-end gap-4">
+                        <div className="flex-1 min-w-[200px]">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Parent Email</label>
+                            <input
+                                type="email"
+                                required
+                                value={grantEmail}
+                                onChange={(e) => setGrantEmail(e.target.value)}
+                                placeholder="parent@email.com"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div className="w-48">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
+                            <select
+                                value={grantPlanId}
+                                onChange={(e) => setGrantPlanId(Number(e.target.value))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
+                            >
+                                {plans.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name} — ₹{p.price_inr}</option>
+                                ))}
+                                {plans.length === 0 && <option value="">No plans</option>}
+                            </select>
+                        </div>
+                        <div className="w-32">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                            <div className="flex items-center gap-1">
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={24}
+                                    value={grantMonths}
+                                    onChange={(e) => setGrantMonths(Number(e.target.value))}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500"
+                                />
+                                <span className="text-sm text-gray-500 whitespace-nowrap">months</span>
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            disabled={grantLoading || !grantEmail || !grantPlanId}
+                            className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {grantLoading ? 'Granting...' : 'Grant Access'}
+                        </button>
+                    </form>
+                    {grantError && (
+                        <div className="mt-3 text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{grantError}</div>
+                    )}
+                    {grantSuccess && (
+                        <div className="mt-3 text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg">✅ {grantSuccess}</div>
+                    )}
+                </div>
+            )}
 
             {/* Tabs */}
             <div className="border-b border-gray-200 mb-6">
@@ -136,6 +235,14 @@ export const AdminSubscriptionsPage = () => {
               `}
                         >
                             {tab}
+                            {tab === 'All' && subscriptions.length > 0 && (
+                                <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">{subscriptions.length}</span>
+                            )}
+                            {tab === 'Active' && (
+                                <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-600">
+                                    {subscriptions.filter(s => s.status === 'active').length}
+                                </span>
+                            )}
                         </button>
                     ))}
                 </nav>
@@ -153,7 +260,19 @@ export const AdminSubscriptionsPage = () => {
                 <div className="text-center py-16 bg-white rounded-xl border border-gray-200 border-dashed">
                     <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                     <h3 className="mt-2 text-sm font-medium text-gray-900">No subscriptions</h3>
-                    <p className="mt-1 text-sm text-gray-500">No records found matching your current filters.</p>
+                    <p className="mt-1 text-sm text-gray-500">
+                        {subscriptions.length === 0
+                            ? 'No parent has subscribed yet. Use "Grant Access" to create one manually.'
+                            : 'No records found matching your current filters.'}
+                    </p>
+                    {subscriptions.length === 0 && (
+                        <button
+                            onClick={() => setShowGrant(true)}
+                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+                        >
+                            Grant First Subscription
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
@@ -164,6 +283,7 @@ export const AdminSubscriptionsPage = () => {
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parent</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Started</th>
                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry</th>
                                     <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -173,14 +293,17 @@ export const AdminSubscriptionsPage = () => {
                                     <tr key={sub.id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm font-medium text-gray-900">{sub.parent_name || 'Unknown'}</div>
-                                            <div className="text-sm text-gray-500 font-mono text-xs">{sub.parent_id.split('-')[0]}...</div>
+                                            <div className="text-sm text-gray-500 font-mono text-xs">{sub.parent_id?.split('-')[0]}...</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-gray-900">{sub.plan_name}</div>
-                                            <div className="text-sm text-gray-500">₹{sub.amount_paid_inr}</div>
+                                            <div className="text-sm text-gray-900">{sub.plan_name || 'Standard'}</div>
+                                            <div className="text-sm text-gray-500">₹{sub.amount_paid_inr || 0}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {getStatusBadge(sub.status)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {sub.started_at ? new Date(sub.started_at).toLocaleDateString() : 'N/A'}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {sub.expires_at ? new Date(sub.expires_at).toLocaleDateString() : 'N/A'}
@@ -193,16 +316,16 @@ export const AdminSubscriptionsPage = () => {
                                                 <div className="flex justify-end gap-2">
                                                     {(sub.status === 'active' || sub.status === 'expired') && (
                                                         <>
-                                                            <button onClick={() => handleExtend(sub.id, 1)} className="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded">
+                                                            <button onClick={() => handleExtend(sub.id, 1)} className="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded text-xs font-medium">
                                                                 +1M
                                                             </button>
-                                                            <button onClick={() => handleExtend(sub.id, 3)} className="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded">
+                                                            <button onClick={() => handleExtend(sub.id, 3)} className="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded text-xs font-medium">
                                                                 +3M
                                                             </button>
                                                         </>
                                                     )}
                                                     {sub.status === 'active' && (
-                                                        <button onClick={() => handleCancel(sub.id)} className="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded ml-2">
+                                                        <button onClick={() => handleCancel(sub.id)} className="text-red-600 hover:text-red-900 bg-red-50 px-2 py-1 rounded text-xs font-medium ml-2">
                                                             Cancel
                                                         </button>
                                                     )}

@@ -12,4 +12,10 @@ export const settingsApi = {
 
     cancelSubscription: (id) =>
         apiClient.post(`/api/admin/subscriptions/${id}/cancel`).then(r => r.data),
+
+    grantSubscription: (email, planId, months) =>
+        apiClient.post('/api/admin/subscriptions/grant', { email, plan_id: planId, months }).then(r => r.data),
+
+    fetchPlans: () =>
+        apiClient.get('/api/payment/plans').then(r => r.data),
 }
