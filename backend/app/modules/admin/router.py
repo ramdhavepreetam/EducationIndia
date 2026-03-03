@@ -267,3 +267,83 @@ async def get_question_stats(
     ).mappings().all()
 
     return [QuestionStatRow(**dict(r)) for r in rows]
+
+
+# ── Admin settings & subscription endpoints (ADR-014) ─────────────────────────
+
+@router.get("/settings")
+async def get_all_settings(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Returns all app_settings rows. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_settings(db)
+
+
+@router.put("/settings/{key}")
+async def update_setting(
+    key: str,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    admin: UserIdentity = Depends(require_admin),
+):
+    """
+    Updates one app_settings row. Admin only.
+    If key=payment_amount_inr, also syncs subscription_plans.price_inr.
+    """
+    from app.modules.payment.repository import payment_repository
+    value = body.get("value")
+    if value is None:
+        from app.shared.exceptions import BadRequest
+        raise BadRequest("'value' field is required")
+
+    await payment_repository.update_setting(db, key, str(value), admin.id)
+
+    # Sync plan price when amount changes
+    if key == "payment_amount_inr":
+        try:
+            await payment_repository.sync_plan_price(db, int(value))
+        except (ValueError, TypeError):
+            pass
+
+    return {"key": key, "value": str(value), "status": "updated"}
+
+
+@router.get("/subscriptions")
+async def list_subscriptions(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """All subscriptions with parent info. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_subscriptions_admin(db)
+
+
+@router.post("/subscriptions/{sub_id}/extend")
+async def extend_subscription(
+    sub_id: str,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Extends a subscription's expires_at. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    months = body.get("months", 0)
+    if not months or months < 1:
+        from app.shared.exceptions import BadRequest
+        raise BadRequest("'months' must be >= 1")
+
+    result = await payment_repository.extend_subscription(db, sub_id, months)
+    return {"status": "extended", "expires_at": str(result.get("expires_at"))}
+
+@router.post("/subscriptions/{sub_id}/cancel")
+async def cancel_subscription(
+    sub_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Cancels a subscription. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    result = await payment_repository.cancel_subscription(db, sub_id)
+    return {"status": "cancelled", "id": str(result.get("id"))}

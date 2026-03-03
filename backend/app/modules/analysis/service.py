@@ -3,7 +3,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
-from app.modules.analysis.schemas import ResponseData, ReportSchema
+from app.modules.analysis.schemas import ResponseData, ReportSchema, ReportFreeSchema
 from app.modules.analysis.scorer import (
     calculate_total_score,
     calculate_section_scores,
@@ -113,17 +113,39 @@ class AnalysisService:
             raise Forbidden("Not authorized to view this report")
             
         if role == "parent":
-            # Check parent-student link
-            check_query = text("""
-                SELECT 1 FROM parent_student_links 
-                WHERE parent_id = :parent_id AND student_id = :student_id AND is_active = true
-            """)
-            result = await db.execute(check_query, {"parent_id": user_id, "student_id": str(attempt.student_id)})
-            if not result.scalar():
-                raise Forbidden("Not authorized to view this student's report")
-                
+            # Check parent owns the child profile on this attempt (ADR-013)
+            if attempt.child_profile_id:
+                from app.modules.user.child_repository import ChildRepository
+                child_repo = ChildRepository()
+                is_owner = await child_repo.validate_ownership(
+                    attempt.child_profile_id, user_id, db
+                )
+                if not is_owner:
+                    raise Forbidden("Not authorized to view this report")
+            else:
+                raise Forbidden("Not authorized to view this report")
+
+        # Access control gate (ADR-014)
+        from app.shared.access_control import get_access_context, can_see_full_analysis, get_tier
+        ctx = await get_access_context(user_id, db)
+
+        if role == "parent" and not can_see_full_analysis(ctx):
+            return ReportFreeSchema(
+                attempt_id=str(attempt.id),
+                exam_id=attempt.exam_id,
+                status=current_status,
+                attempt_number=attempt.attempt_number,
+                submitted_at=attempt.submitted_at.isoformat() if attempt.submitted_at else "",
+                total_score=attempt.total_score or 0,
+                total_correct=attempt.total_correct or 0,
+                total_wrong=attempt.total_wrong or 0,
+                total_skipped=attempt.total_skipped or 0,
+                percentage=float(attempt.percentage or 0.0),
+                grade=attempt.grade or "",
+            )
+
         # admins bypass the restriction
-        
+
         return ReportSchema(
             attempt_id=str(attempt.id),
             exam_id=attempt.exam_id,
@@ -139,7 +161,8 @@ class AnalysisService:
             section_scores=attempt.section_scores or [],
             topic_scores=attempt.topic_scores or [],
             time_analysis=attempt.time_analysis or {},
-            recommendations=attempt.recommendations or []
+            recommendations=attempt.recommendations or [],
+            tier=get_tier(ctx) if role == "parent" else "paid",
         )
 
 # singleton

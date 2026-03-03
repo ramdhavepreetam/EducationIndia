@@ -43,20 +43,35 @@ export default function OnboardingPage() {
         e.preventDefault()
         setError('')
 
-        if (!form.school_name || !form.district || !form.std_class) {
-            setError(t('errors.required'))
-            return
-        }
-
         try {
             setLoading(true)
             const payload = {
-                school_name: form.school_name,
-                district: form.district,
-                std_class: parseInt(form.std_class, 10),
-                medium: form.medium || undefined,
+                school_name: form.school_name || 'N/A', // ensure string
+                district: form.district || 'N/A',
                 preferred_language: form.preferred_language,
             }
+
+            if (user?.role === 'student') {
+                if (!form.school_name || !form.district || !form.std_class) {
+                    setError(t('errors.required'))
+                    setLoading(false)
+                    return
+                }
+                payload.school_name = form.school_name
+                payload.district = form.district
+                payload.std_class = parseInt(form.std_class, 10)
+                if (form.medium) payload.medium = form.medium
+            } else if (user?.role === 'parent') {
+                // Parents just need basics
+                if (!form.school_name || !form.district) {
+                    setError(t('errors.required'))
+                    setLoading(false)
+                    return
+                }
+                payload.school_name = form.school_name
+                payload.district = form.district
+            }
+
             await authApi.completeProfile(payload)
             updateUser({ is_onboarded: true, ...payload })
             setLanguage(form.preferred_language)
@@ -87,14 +102,16 @@ export default function OnboardingPage() {
 
             {/* Onboarding form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-                {/* School name */}
+                {/* School name (City/Region for Parents) */}
                 <div>
-                    <label htmlFor="onboard-school" className="input-label">{t('onboarding.schoolName')}</label>
+                    <label htmlFor="onboard-school" className="input-label">
+                        {user?.role === 'parent' ? t('dashboard.parentLocation', 'City / Area') : t('onboarding.schoolName')}
+                    </label>
                     <input
                         id="onboard-school"
                         type="text"
                         className="input-field"
-                        placeholder={t('onboarding.schoolNamePlaceholder')}
+                        placeholder={user?.role === 'parent' ? 'e.g. Pune' : t('onboarding.schoolNamePlaceholder')}
                         value={form.school_name}
                         onChange={handleChange('school_name')}
                     />
@@ -113,36 +130,40 @@ export default function OnboardingPage() {
                     />
                 </div>
 
-                {/* Standard / Class */}
-                <div>
-                    <label htmlFor="onboard-class" className="input-label">{t('onboarding.stdClass')}</label>
-                    <select
-                        id="onboard-class"
-                        className="input-field"
-                        value={form.std_class}
-                        onChange={handleChange('std_class')}
-                    >
-                        <option value="" disabled>{t('onboarding.stdClassPlaceholder')}</option>
-                        <option value="5">{t('onboarding.class5')}</option>
-                        <option value="8">{t('onboarding.class8')}</option>
-                    </select>
-                </div>
+                {/* Standard / Class (Students Only) */}
+                {user?.role === 'student' && (
+                    <div>
+                        <label htmlFor="onboard-class" className="input-label">{t('onboarding.stdClass')}</label>
+                        <select
+                            id="onboard-class"
+                            className="input-field"
+                            value={form.std_class}
+                            onChange={handleChange('std_class')}
+                        >
+                            <option value="" disabled>{t('onboarding.stdClassPlaceholder')}</option>
+                            <option value="5">{t('onboarding.class5')}</option>
+                            <option value="8">{t('onboarding.class8')}</option>
+                        </select>
+                    </div>
+                )}
 
-                {/* Medium of study */}
-                <div>
-                    <label htmlFor="onboard-medium" className="input-label">{t('onboarding.medium')}</label>
-                    <select
-                        id="onboard-medium"
-                        className="input-field"
-                        value={form.medium}
-                        onChange={handleChange('medium')}
-                    >
-                        <option value="" disabled>{t('onboarding.mediumPlaceholder')}</option>
-                        <option value="english">{t('onboarding.mediumEnglish')}</option>
-                        <option value="marathi">{t('onboarding.mediumMarathi')}</option>
-                        <option value="semi_english">{t('onboarding.mediumSemiEnglish')}</option>
-                    </select>
-                </div>
+                {/* Medium of study (Students Only) */}
+                {user?.role === 'student' && (
+                    <div>
+                        <label htmlFor="onboard-medium" className="input-label">{t('onboarding.medium')}</label>
+                        <select
+                            id="onboard-medium"
+                            className="input-field"
+                            value={form.medium}
+                            onChange={handleChange('medium')}
+                        >
+                            <option value="" disabled>{t('onboarding.mediumPlaceholder')}</option>
+                            <option value="english">{t('onboarding.mediumEnglish')}</option>
+                            <option value="marathi">{t('onboarding.mediumMarathi')}</option>
+                            <option value="semi_english">{t('onboarding.mediumSemiEnglish')}</option>
+                        </select>
+                    </div>
+                )}
 
                 {/* Preferred language */}
                 <div>

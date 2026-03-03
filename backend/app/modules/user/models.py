@@ -139,3 +139,44 @@ class ParentStudentLink(Base):
         foreign_keys=[student_id],
         back_populates="student_links",
     )
+
+
+class ChildProfile(Base):
+    """
+    Replaces parent_student_links (ADR-013).
+    A lightweight profile owned by a parent. No login credentials.
+    """
+    __tablename__ = "child_profiles"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
+    )
+    parent_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("user_profiles.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    name: Mapped[str] = mapped_column(Text, nullable=False)
+    std_class: Mapped[int] = mapped_column(SmallInteger, nullable=False)
+    medium: Mapped[MediumTypeEnum | None] = mapped_column(
+        Enum(MediumTypeEnum, name="medium_type", create_type=False),
+        server_default="english",
+    )
+    school_name: Mapped[str | None] = mapped_column(Text)
+    district: Mapped[str | None] = mapped_column(Text)
+    avatar_color: Mapped[str] = mapped_column(
+        String(7), server_default="#3B82F6"
+    )
+    is_active: Mapped[bool] = mapped_column(Boolean, server_default="true")
+
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=func.now()
+    )
+
+    # Relationships
+    parent: Mapped["UserProfile"] = relationship(
+        "UserProfile", foreign_keys=[parent_id]
+    )

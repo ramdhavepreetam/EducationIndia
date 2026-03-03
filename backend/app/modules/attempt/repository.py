@@ -36,13 +36,15 @@ class AttemptRepository:
         self,
         db: AsyncSession,
         *,
-        student_id: UUID,
+        child_profile_id: UUID,
+        student_id: UUID | None,
         exam_id: int,
         assignment_id: int | None,
         attempt_number: int,
     ) -> Attempt:
         """Insert a new attempt row with status='ongoing'."""
         attempt = Attempt(
+            child_profile_id=child_profile_id,
             student_id=student_id,
             exam_id=exam_id,
             assignment_id=assignment_id,
@@ -72,7 +74,7 @@ class AttemptRepository:
         """
         result = await db.execute(
             select(Attempt).where(
-                Attempt.student_id == student_id,
+                Attempt.child_profile_id == student_id,
                 Attempt.exam_id == exam_id,
                 Attempt.status == "ongoing",
             )
@@ -88,7 +90,7 @@ class AttemptRepository:
         """
         result = await db.execute(
             select(func.count(Attempt.id)).where(
-                Attempt.student_id == student_id,
+                Attempt.child_profile_id == student_id,
                 Attempt.exam_id == exam_id,
             )
         )
@@ -101,7 +103,7 @@ class AttemptRepository:
         """Return all attempts for a student+exam (any status), newest first."""
         result = await db.execute(
             select(Attempt).where(
-                Attempt.student_id == student_id,
+                Attempt.child_profile_id == student_id,
                 Attempt.exam_id == exam_id,
             ).order_by(Attempt.attempt_number.desc())
         )
@@ -112,7 +114,7 @@ class AttemptRepository:
     ) -> list[Attempt]:
         """Return all attempts for a student across all exams (any status), newest first."""
         stmt = select(Attempt).where(
-            Attempt.student_id == student_id
+            Attempt.child_profile_id == student_id
         ).order_by(Attempt.started_at.desc())
         if limit is not None:
             stmt = stmt.limit(limit)

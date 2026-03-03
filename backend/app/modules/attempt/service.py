@@ -46,7 +46,7 @@ class AttemptService:
     async def start_exam(
         self,
         db: AsyncSession,
-        student_id: UUID,
+        parent_id: UUID,
         request: StartAttemptRequest,
     ) -> AttemptStateResponse:
         """
@@ -68,9 +68,27 @@ class AttemptService:
         # 1. Validate exam is active
         exam = await catalog_service.get_active_exam(db, request.exam_id)
 
+        # 1.5 Validate child profile belongs to parent
+        from app.modules.user.child_repository import ChildRepository
+        child_repo = ChildRepository()
+        is_owner = await child_repo.validate_ownership(
+            request.child_profile_id, parent_id, db
+        )
+        if not is_owner:
+            raise Forbidden("Child profile not found")
+
+        # 1.6 Access control gate (ADR-014)
+        from app.shared.access_control import get_access_context, can_start_exam as check_start
+        ctx = await get_access_context(parent_id, db)
+        allowed, reason = await check_start(
+            ctx, request.exam_id, request.child_profile_id, db
+        )
+        if not allowed:
+            raise Forbidden(reason)
+
         # 2. Ensure no duplicate ongoing attempt
         existing = await attempt_repository.get_ongoing_attempt(
-            db, student_id, request.exam_id
+            db, request.child_profile_id, request.exam_id
         )
         if existing is not None:
             raise Conflict(
@@ -80,15 +98,16 @@ class AttemptService:
 
         # 3. Validate assignment if provided
         if request.assignment_id is not None:
-            await self._validate_assignment(db, request.assignment_id, student_id)
+            await self._validate_assignment(db, request.assignment_id, request.child_profile_id)
 
         # 4. Create attempt
         attempt_number = await attempt_repository.get_attempt_number(
-            db, student_id, request.exam_id
+            db, request.child_profile_id, request.exam_id
         )
         attempt = await attempt_repository.create_attempt(
             db,
-            student_id=student_id,
+            child_profile_id=request.child_profile_id,
+            student_id=None,
             exam_id=request.exam_id,
             assignment_id=request.assignment_id,
             attempt_number=attempt_number,
@@ -333,12 +352,20 @@ class AttemptService:
 
     # ── Private helpers ───────────────────────────────────────────────────────
 
-    async def _get_owned_attempt(self, db, attempt_id, student_id):
-        """Load attempt and verify it belongs to this student."""
+    async def _get_owned_attempt(self, db, attempt_id, parent_id):
+        """Load attempt and verify it belongs to this parent's child (or the student directly)."""
         attempt = await attempt_repository.get_attempt_by_id(db, attempt_id)
         if attempt is None:
             raise NotFound(f"Attempt {attempt_id} not found")
-        if attempt.student_id != student_id:
+        if attempt.child_profile_id:
+            from app.modules.user.child_repository import ChildRepository
+            child_repo = ChildRepository()
+            is_owner = await child_repo.validate_ownership(
+                attempt.child_profile_id, parent_id, db
+            )
+            if not is_owner:
+                raise Forbidden("This attempt does not belong to your child")
+        elif attempt.student_id != parent_id:
             raise Forbidden("This attempt does not belong to you")
         return attempt
 

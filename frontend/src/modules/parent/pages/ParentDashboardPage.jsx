@@ -2,21 +2,23 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParentStore } from '../store/parentStore'
 import { useAuthStore } from '@/modules/auth/store/authStore'
+import { useTranslation } from 'react-i18next'
 import ChildSwitcher from '../components/ChildSwitcher'
 import ChildProfileCard from '../components/ChildProfileCard'
 import ChildWeakTopics from '../components/ChildWeakTopics'
 import ChildProgressChart from '../components/ChildProgressChart'
 import ChildAttemptHistory from '../components/ChildAttemptHistory'
-import LinkChildModal from '../components/LinkChildModal'
+import CreateChildModal from '../components/CreateChildModal'
 
 export default function ParentDashboardPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user } = useAuthStore()
   const {
     children, selectedChildId, childDetail,
     isLoading, isLoadingDetail, error,
     isSaving,
-    loadDashboard, selectChild, updateNickname, unlinkChild
+    loadDashboard, selectChild, updateChild, deleteChild
   } = useParentStore()
 
   const [showLinkModal, setShowLinkModal] = useState(false)
@@ -73,26 +75,26 @@ export default function ParentDashboardPage() {
     return (
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Parent Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('parent.dashboard.title', 'Parent Dashboard')}</h1>
         </div>
         <div className="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center">
           <div className="text-6xl mb-4">👨‍👩‍👧</div>
           <h2 className="text-xl font-semibold text-gray-700 mb-2">
-            No children linked yet
+            {t('parent.dashboard.noChildren', 'No children added yet')}
           </h2>
           <p className="text-gray-500 mb-6">
-            Add your child's email to start monitoring their exam progress.
+            {t('parent.dashboard.noChildrenHint', 'Create a child profile to start monitoring their exam progress.')}
           </p>
           <button
             onClick={() => setShowLinkModal(true)}
             className="px-6 py-3 bg-blue-600 text-white rounded-xl
                        font-medium hover:bg-blue-700 transition-colors"
           >
-            + Add Your Child
+            {t('parent.dashboard.addChild', '+ Add Your Child')}
           </button>
         </div>
 
-        <LinkChildModal
+        <CreateChildModal
           isOpen={showLinkModal}
           onClose={() => setShowLinkModal(false)}
           onSuccess={() => { setShowLinkModal(false); loadDashboard() }}
@@ -107,7 +109,7 @@ export default function ParentDashboardPage() {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Parent Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('parent.dashboard.title', 'Parent Dashboard')}</h1>
       </div>
 
       <ChildSwitcher
@@ -131,8 +133,8 @@ export default function ParentDashboardPage() {
             profile={childDetail.profile}
             stats={childDetail.stats}
             onViewDetail={() => navigate(`/parent/children/${selectedChildId}`)}
-            onEditNickname={(nickname) => updateNickname(selectedChildId, nickname)}
-            onUnlink={() => unlinkChild(selectedChildId)}
+            onEditNickname={(nickname) => updateChild(selectedChildId, { name: nickname })}
+            onUnlink={() => deleteChild(selectedChildId)}
             isSaving={isSaving}
           />
 
@@ -154,7 +156,7 @@ export default function ParentDashboardPage() {
         </div>
       ) : null}
 
-      <LinkChildModal
+      <CreateChildModal
         isOpen={showLinkModal}
         onClose={() => setShowLinkModal(false)}
         onSuccess={() => { setShowLinkModal(false); loadDashboard() }}

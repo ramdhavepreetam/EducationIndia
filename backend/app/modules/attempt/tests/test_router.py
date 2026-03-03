@@ -122,7 +122,7 @@ class TestStartExamEndpoint:
             client = TestClient(app)
             resp = client.post(
                 "/api/attempts/start",
-                json={"exam_id": EXAM_ID},
+                json={"exam_id": EXAM_ID, "child_profile_id": str(uuid4())},
             )
 
         assert resp.status_code == 201
@@ -140,7 +140,7 @@ class TestStartExamEndpoint:
                 side_effect=Conflict("already have an ongoing attempt")
             )
             client = TestClient(app)
-            resp = client.post("/api/attempts/start", json={"exam_id": EXAM_ID})
+            resp = client.post("/api/attempts/start", json={"exam_id": EXAM_ID, "child_profile_id": str(uuid4())})
 
         assert resp.status_code == 409
 
@@ -149,7 +149,7 @@ class TestStartExamEndpoint:
         app = get_test_app(identity=None)
 
         client = TestClient(app)
-        resp = client.post("/api/attempts/start", json={"exam_id": EXAM_ID})
+        resp = client.post("/api/attempts/start", json={"exam_id": EXAM_ID, "child_profile_id": str(uuid4())})
 
         assert resp.status_code == 401
 

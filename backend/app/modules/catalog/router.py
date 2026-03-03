@@ -14,9 +14,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 
 from app.database import get_db
-from app.modules.auth.dependencies import UserIdentity, require_admin
+from app.modules.auth.dependencies import UserIdentity, require_admin, verify_token
 from app.modules.catalog.schemas import (
     BoardResponse,
+    ExamAccessResponse,
     ExamDetailResponse,
     ExamSummaryResponse,
     PublishExamResponse,
@@ -57,6 +58,27 @@ async def list_exams(
         is_admin=False,
     )
     return exams
+
+
+@router.get("/exams/accessible", response_model=list[ExamAccessResponse])
+async def list_exams_accessible(
+    board_id: Optional[int] = Query(None, description="Filter by board ID"),
+    std_class: Optional[int] = Query(None, description="Filter by standard (5 or 8)"),
+    year: Optional[int] = Query(None, description="Filter by exam year"),
+    db: AsyncSession = Depends(get_db),
+    identity: UserIdentity = Depends(verify_token),
+):
+    """
+    List exams with access flags for the authenticated parent (ADR-014).
+    Exams the parent cannot access have is_accessible=false + lock_reason.
+    """
+    return await catalog_service.list_exams_with_access(
+        db,
+        identity.id,
+        board_id=board_id,
+        std_class=std_class,
+        year=year,
+    )
 
 
 @router.get("/exams/{exam_id}", response_model=ExamDetailResponse)

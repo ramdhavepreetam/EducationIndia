@@ -5,11 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.modules.auth.dependencies import UserIdentity, verify_token
 from app.modules.analysis.service import analysis_service
-from app.modules.analysis.schemas import ReportSchema
+from app.modules.analysis.schemas import ReportSchema, ReportFreeSchema
+from typing import Union
 
 router = APIRouter()
 
-@router.get("/attempts/{attempt_id}/report", response_model=ReportSchema)
+@router.get("/attempts/{attempt_id}/report", response_model=Union[ReportSchema, ReportFreeSchema])
 async def get_report(
     attempt_id: UUID,
     db: AsyncSession = Depends(get_db),
