@@ -6,21 +6,30 @@
  */
 import { Outlet, useNavigate, NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
 import { useAuthStore } from '@/modules/auth'
+import { SubscriptionStatus, usePaymentStore } from '@/modules/payment'
 
 export default function AppLayout() {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const user = useAuthStore((s) => s.user)
     const logout = useAuthStore((s) => s.logout)
+    const { loadStatus } = usePaymentStore()
+
+    const isAdmin = ['exam_admin', 'super_admin'].includes(user?.role)
+    const isParent = user?.role === 'parent'
+
+    useEffect(() => {
+        if (isParent) {
+            loadStatus()
+        }
+    }, [isParent, loadStatus])
 
     const handleLogout = async () => {
         await logout()
         navigate('/login', { replace: true })
     }
-
-    const isAdmin = ['exam_admin', 'super_admin'].includes(user?.role)
-    const isParent = user?.role === 'parent'
 
     const navItems = isAdmin ? [
         { to: '/admin', label: t('nav.dashboard', 'Dashboard'), icon: DashboardIcon },
@@ -71,6 +80,12 @@ export default function AppLayout() {
 
                 {/* User section */}
                 <div className="p-4 border-t border-surface-100">
+                    {/* Subscription badge (desktop) */}
+                    {isParent && (
+                        <div className="mb-4 px-2">
+                            <SubscriptionStatus />
+                        </div>
+                    )}
                     <div className="flex items-center gap-3 px-4 py-2">
                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-sm">
                             {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
@@ -105,12 +120,15 @@ export default function AppLayout() {
                         </div>
                         <span className="text-base font-bold text-gradient">{t('app.name')}</span>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
-                    >
-                        {t('nav.logout')}
-                    </button>
+                    <div className="flex items-center gap-3">
+                        {isParent && <SubscriptionStatus />}
+                        <button
+                            onClick={handleLogout}
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                            {t('nav.logout')}
+                        </button>
+                    </div>
                 </header>
 
                 {/* Page content */}

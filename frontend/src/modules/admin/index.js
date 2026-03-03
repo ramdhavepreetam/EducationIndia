@@ -4,6 +4,8 @@ export { QuestionManagerPage } from './pages/QuestionManagerPage'
 export { ExamPublisherPage } from './pages/ExamPublisherPage'
 export { ImageUploaderPage } from './pages/ImageUploaderPage'
 export { StatsPage } from './pages/StatsPage'
+export { AdminSettingsPage } from './pages/AdminSettingsPage'
+export { AdminSubscriptionsPage } from './pages/AdminSubscriptionsPage'
 
 // Components
 export { AdminRoute } from './components/AdminRoute'

@@ -10,9 +10,6 @@ Routes:
   GET    /api/parent/children/{student_id}               → ChildDetailSchema
   GET    /api/parent/children/{student_id}/attempts      → paginated dict
   GET    /api/parent/children/{student_id}/topics        → list[WeakTopicSchema]
-  POST   /api/parent/children/link                       → ChildProfileSchema (201)
-  PUT    /api/parent/children/{student_id}/nickname      → ChildProfileSchema
-  DELETE /api/parent/children/{student_id}/unlink        → {"success": True}
 """
 
 from uuid import UUID
@@ -25,9 +22,7 @@ from app.modules.auth.dependencies import UserIdentity, require_parent
 from app.modules.user.parent_schemas import (
     ChildDetailSchema,
     ChildProfileSchema,
-    LinkChildRequest,
     ParentDashboardSchema,
-    UpdateLinkNicknameRequest,
     WeakTopicSchema,
 )
 from app.modules.user.parent_service import parent_service
@@ -53,14 +48,7 @@ async def get_children(
     return await parent_service.get_children(db, current_user.id)
 
 
-@router.post("/children/link", response_model=ChildProfileSchema, status_code=201)
-async def link_child(
-    request: LinkChildRequest,
-    current_user: UserIdentity = Depends(require_parent),
-    db: AsyncSession = Depends(get_db),
-):
-    """Link a child account by their email address."""
-    return await parent_service.link_child(db, current_user.id, request.student_email)
+
 
 
 @router.get("/children/{student_id}", response_model=ChildDetailSchema)
@@ -97,27 +85,4 @@ async def get_child_topics(
     return await parent_service.get_child_topics(db, current_user.id, student_id)
 
 
-@router.put(
-    "/children/{student_id}/nickname", response_model=ChildProfileSchema
-)
-async def update_nickname(
-    student_id: UUID,
-    request: UpdateLinkNicknameRequest,
-    current_user: UserIdentity = Depends(require_parent),
-    db: AsyncSession = Depends(get_db),
-):
-    """Update the display nickname for a linked child."""
-    return await parent_service.update_nickname(
-        db, current_user.id, student_id, request.child_nickname
-    )
 
-
-@router.delete("/children/{student_id}/unlink")
-async def unlink_child(
-    student_id: UUID,
-    current_user: UserIdentity = Depends(require_parent),
-    db: AsyncSession = Depends(get_db),
-):
-    """Deactivate the parent-child link. Does not delete any student data."""
-    await parent_service.unlink_child(db, current_user.id, student_id)
-    return {"success": True, "message": "Child unlinked successfully"}

@@ -39,7 +39,13 @@ def mock_db():
 
 @pytest.fixture
 def service():
-    return AnalysisService()
+    svc = AnalysisService()
+    mock_ctx = MagicMock()
+    mock_ctx.is_paid = True
+    mock_ctx.free_exam_id = 1
+    mock_ctx.free_max_attempts = 3
+    with patch("app.shared.access_control.get_access_context", AsyncMock(return_value=mock_ctx)):
+        yield svc
 
 
 def make_attempt(status="submitted", student_id=STUDENT_ID):

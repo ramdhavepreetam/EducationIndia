@@ -67,10 +67,13 @@ class Attempt(Base):
     id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True), primary_key=True, default=uuid4
     )
-    student_id: Mapped[UUID] = mapped_column(
+    child_profile_id: Mapped[UUID | None] = mapped_column(
         PG_UUID(as_uuid=True),
-        ForeignKey("user_profiles.id", ondelete="CASCADE"),
-        nullable=False,
+        ForeignKey("child_profiles.id", ondelete="SET NULL"),
+    )
+    student_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("user_profiles.id", ondelete="SET NULL"),
     )
     exam_id: Mapped[int] = mapped_column(
         Integer, ForeignKey("exams.id", ondelete="CASCADE"), nullable=False

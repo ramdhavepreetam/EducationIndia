@@ -65,3 +65,22 @@ class ReportSchema(BaseModel):
     topic_scores: List[Any]
     time_analysis: Any
     recommendations: List[str]
+    tier: str = "paid"
+    upgrade_prompt: bool = False
+
+
+class ReportFreeSchema(BaseModel):
+    """Free-tier response — score summary only, no detailed analysis."""
+    attempt_id: str
+    exam_id: int
+    status: str
+    attempt_number: int
+    submitted_at: str
+    total_score: int
+    total_correct: int
+    total_wrong: int
+    total_skipped: int
+    percentage: float
+    grade: str
+    tier: str = "free"
+    upgrade_prompt: bool = True

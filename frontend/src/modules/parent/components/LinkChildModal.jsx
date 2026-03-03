@@ -1,3 +1,7 @@
+/**
+ * @deprecated ADR-013 — Replaced by CreateChildModal.jsx.
+ * This file is kept for safe fallback. Do not use in new code.
+ */
 import { useState } from 'react'
 import { useParentStore } from '../store/parentStore'
 
@@ -6,10 +10,10 @@ const STEPS = { EMAIL: 'email', SUCCESS: 'success' }
 const LinkChildModal = ({ isOpen, onClose, onSuccess }) => {
   const { linkChild, isSaving } = useParentStore()
 
-  const [step, setStep]               = useState(STEPS.EMAIL)
-  const [email, setEmail]             = useState('')
+  const [step, setStep] = useState(STEPS.EMAIL)
+  const [email, setEmail] = useState('')
   const [linkedChild, setLinkedChild] = useState(null)
-  const [error, setError]             = useState(null)
+  const [error, setError] = useState(null)
 
   if (!isOpen) return null
 
@@ -120,11 +124,11 @@ const LinkChildModal = ({ isOpen, onClose, onSuccess }) => {
                 >
                   {isSaving
                     ? <span className="flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/30
+                      <span className="w-4 h-4 border-2 border-white/30
                                          border-t-white rounded-full
                                          animate-spin" />
-                        Linking...
-                      </span>
+                      Linking...
+                    </span>
                     : 'Link Child'
                   }
                 </button>
@@ -156,7 +160,7 @@ const LinkChildModal = ({ isOpen, onClose, onSuccess }) => {
               <p className="text-sm text-green-600 bg-green-50
                             rounded-xl py-2 px-4">
                 ✓ Successfully linked! You can now monitor
-                  their exam progress.
+                their exam progress.
               </p>
 
               <button

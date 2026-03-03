@@ -21,11 +21,18 @@ import {
     ExamPublisherPage,
     ImageUploaderPage,
     StatsPage,
+    AdminSettingsPage,
+    AdminSubscriptionsPage,
 } from '@/modules/admin'
 import {
     ParentDashboardPage,
     ChildDetailPage,
 } from '@/modules/parent'
+import {
+    UpgradePage,
+    PaymentSuccessPage,
+    PaymentFailedPage,
+} from '@/modules/payment'
 
 export default function App() {
     const initialize = useAuthStore((s) => s.initialize)
@@ -72,12 +79,19 @@ export default function App() {
                     <Route path="/results" element={<GenericPlaceholder title="Results" />} />
                     <Route path="/profile" element={<GenericPlaceholder title="Profile" />} />
 
+                    {/* Payment routes */}
+                    <Route path="/upgrade" element={<UpgradePage />} />
+                    <Route path="/payment/success" element={<PaymentSuccessPage />} />
+                    <Route path="/payment/failed" element={<PaymentFailedPage />} />
+
                     {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
                     <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
                     <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
                     <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
                     <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
                     <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
+                    <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
+                    <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
 
                     {/* Parent routes — guarded by ParentRoute (redirects non-parents) */}
                     <Route path="/parent" element={<ParentRoute><ParentDashboardPage /></ParentRoute>} />

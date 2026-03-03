@@ -61,6 +61,12 @@ class ExamSummaryResponse(BaseModel):
     is_active: bool
 
 
+class ExamAccessResponse(ExamSummaryResponse):
+    """Exam summary with access control flags (ADR-014)."""
+    is_accessible: bool = True
+    lock_reason: Optional[str] = None
+
+
 class ExamDetailResponse(BaseModel):
     """Full exam detail — used in GET /api/catalog/exams/{id}."""
     model_config = ConfigDict(from_attributes=True)

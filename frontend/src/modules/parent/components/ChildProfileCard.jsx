@@ -5,13 +5,13 @@ const ChildProfileCard = ({
   onEditNickname, onUnlink, isSaving
 }) => {
   const [editingNickname, setEditingNickname] = useState(false)
-  const [nicknameInput, setNicknameInput]     = useState(
-    profile.child_nickname || ''
+  const [nicknameInput, setNicknameInput] = useState(
+    profile.name || ''
   )
-  const [unlinkConfirm, setUnlinkConfirm]     = useState(false)
-  const [saveError, setSaveError]             = useState(null)
+  const [unlinkConfirm, setUnlinkConfirm] = useState(false)
+  const [saveError, setSaveError] = useState(null)
 
-  const displayName = profile.child_nickname || profile.full_name
+  const displayName = profile.name || 'Child'
 
   const handleNicknameSave = async () => {
     if (!nicknameInput.trim()) return
@@ -25,22 +25,30 @@ const ChildProfileCard = ({
   }
 
   const statBoxes = [
-    { label: 'Attempts',
+    {
+      label: 'Attempts',
       value: stats.total_attempts,
-      icon: '📝' },
-    { label: 'Avg Score',
+      icon: '📝'
+    },
+    {
+      label: 'Avg Score',
       value: stats.avg_percentage ? `${stats.avg_percentage}%` : '—',
-      icon: '📊' },
-    { label: 'Best Score',
+      icon: '📊'
+    },
+    {
+      label: 'Best Score',
       value: stats.best_score ? `${stats.best_score}/150` : '—',
-      icon: '🏆' },
-    { label: 'Last Active',
+      icon: '🏆'
+    },
+    {
+      label: 'Last Active',
       value: stats.last_active
         ? new Date(stats.last_active).toLocaleDateString('en-IN', {
-            day: 'numeric', month: 'short'
-          })
+          day: 'numeric', month: 'short'
+        })
         : '—',
-      icon: '🕒' },
+      icon: '🕒'
+    },
   ]
 
   return (
@@ -63,7 +71,7 @@ const ChildProfileCard = ({
               <div className="w-16 h-16 rounded-full bg-gradient-to-br
                               from-blue-400 to-blue-600 flex items-center
                               justify-center text-2xl font-bold text-white">
-                {displayName[0].toUpperCase()}
+                {(displayName || 'C')[0].toUpperCase()}
               </div>
             )}
 
@@ -125,7 +133,7 @@ const ChildProfileCard = ({
               <p className="text-sm text-gray-400 mt-0.5">
                 {[
                   profile.std_class && `${profile.std_class}th Std`,
-                  profile.medium    && `${profile.medium} medium`,
+                  profile.medium && `${profile.medium} medium`,
                   profile.school_name,
                   profile.district
                 ].filter(Boolean).join(' · ')}

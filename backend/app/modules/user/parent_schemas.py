@@ -11,38 +11,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
-
-
-# ── Requests ──────────────────────────────────────────────────────────────────
-
-class LinkChildRequest(BaseModel):
-    student_email: str
-
-
-class UpdateLinkNicknameRequest(BaseModel):
-    child_nickname: str = Field(..., max_length=50)
-
+from app.modules.user.child_schemas import ChildProfileSchema
 
 # ── Responses ─────────────────────────────────────────────────────────────────
-
-class ChildProfileSchema(BaseModel):
-    """
-    Child's public profile as seen by a linked parent.
-    Populated from UserProfile ORM object + link metadata.
-    """
-    model_config = ConfigDict(from_attributes=True)
-
-    student_id: UUID
-    full_name: str
-    std_class: Optional[int] = None
-    medium: Optional[str] = None
-    school_name: Optional[str] = None
-    district: Optional[str] = None
-    avatar_url: Optional[str] = None
-    child_nickname: Optional[str] = None
-    is_onboarded: bool
-    linked_at: datetime
-
 
 class ChildStatsSchema(BaseModel):
     """Aggregate performance stats across all submitted attempts."""
