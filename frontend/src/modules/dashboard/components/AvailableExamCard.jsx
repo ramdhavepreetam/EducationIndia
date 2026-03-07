@@ -1,14 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/modules/auth'
+import { useParentStore } from '@/modules/parent/store/parentStore'
 
 export const AvailableExamCard = ({ exam }) => {
     const { t } = useTranslation()
     const { user } = useAuthStore()
+    const selectedChildId = useParentStore(s => s.selectedChildId)
     const navigate = useNavigate()
 
     const title = user?.preferred_language === 'mr' && exam.title_mr ? exam.title_mr : exam.title_en
     const isLocked = exam.is_accessible === false
+
+    const startUrl = selectedChildId
+        ? `/exam/${exam.id}/start?childId=${selectedChildId}`
+        : `/exam/${exam.id}/start`
 
     return (
         <div className={`bg-white p-5 rounded-xl border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition ${isLocked
@@ -39,7 +45,7 @@ export const AvailableExamCard = ({ exam }) => {
                 </button>
             ) : (
                 <Link
-                    to={`/exam/${exam.id}/start`}
+                    to={startUrl}
                     className="px-6 py-2 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-700 transition w-full md:w-auto text-center shrink-0"
                 >
                     {t('dashboard.startExam', 'Start')}

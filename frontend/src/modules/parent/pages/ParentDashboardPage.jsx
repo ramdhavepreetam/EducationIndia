@@ -133,6 +133,7 @@ export default function ParentDashboardPage() {
             profile={childDetail.profile}
             stats={childDetail.stats}
             onViewDetail={() => navigate(`/parent/children/${selectedChildId}`)}
+            onStartExam={() => navigate(`/dashboard?childId=${selectedChildId}`)}
             onEditNickname={(nickname) => updateChild(selectedChildId, { name: nickname })}
             onUnlink={() => deleteChild(selectedChildId)}
             isSaving={isSaving}
@@ -148,7 +149,7 @@ export default function ParentDashboardPage() {
 
           <ChildAttemptHistory
             attempts={childDetail.recent_attempts}
-            onViewResult={(id) => navigate(`/analysis/${id}`)}
+            onViewResult={(id) => navigate(`/attempts/${id}/result`)}
             pageSize={5}
             showPagination={false}
           />

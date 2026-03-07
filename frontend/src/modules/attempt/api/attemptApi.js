@@ -2,8 +2,11 @@ import apiClient from '@/config/apiClient'
 
 export const attemptApi = {
     /** Start a new attempt or resume an ongoing one */
-    start: async (examId) => {
-        const response = await apiClient.post('/api/attempts/start', { exam_id: Number(examId) })
+    start: async (examId, childProfileId) => {
+        const response = await apiClient.post('/api/attempts/start', {
+            exam_id: Number(examId),
+            child_profile_id: childProfileId
+        })
         return response.data
     },
 

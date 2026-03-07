@@ -6,10 +6,10 @@ export const useDashboardStore = create((set) => ({
     isLoading: false,
     error: null,
 
-    fetchDashboard: async () => {
+    fetchDashboard: async (childId = null) => {
         set({ isLoading: true, error: null })
         try {
-            const data = await dashboardApi.getStudentDashboard()
+            const data = await dashboardApi.getStudentDashboard(childId)
             set({ dashboardData: data, isLoading: false })
             return data
         } catch (err) {

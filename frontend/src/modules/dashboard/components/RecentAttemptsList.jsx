@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useParentStore } from '@/modules/parent/store/parentStore'
 
 export const RecentAttemptsList = ({ attempts }) => {
     const { t } = useTranslation()
+    const selectedChildId = useParentStore(s => s.selectedChildId)
 
     if (!attempts || attempts.length === 0) {
         return <div className="text-surface-500 p-4 bg-surface-50 rounded-lg text-center">{t('dashboard.noAttempts', 'No recent attempts')}</div>
@@ -46,7 +48,7 @@ export const RecentAttemptsList = ({ attempts }) => {
                         </Link>
                     ) : (
                         <Link
-                            to={`/exam/${attempt.exam_id}/start`}
+                            to={`/exam/${attempt.exam_id}/start${selectedChildId ? `?childId=${selectedChildId}` : ''}`}
                             className="bg-brand-50 text-brand-700 font-medium text-sm hover:text-brand-800 transition px-4 py-2 rounded-lg hover:bg-brand-100 shrink-0 border border-brand-200"
                         >
                             {t('dashboard.resume', 'Resume')}
