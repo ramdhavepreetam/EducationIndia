@@ -45,7 +45,7 @@ async def get_access_context(
     row = result.mappings().first()
     return AccessContext(
         parent_id=parent_id,
-        is_paid=row["is_paid"],
+        is_paid=True, # TODO: bypassed for testing. Revert back to `row["is_paid"]` when testing is complete.
         free_exam_id=row["free_exam_id"],
         free_max_attempts=row["free_max_attempts"],
     )

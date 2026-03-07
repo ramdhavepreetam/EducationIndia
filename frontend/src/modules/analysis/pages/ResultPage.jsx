@@ -47,7 +47,8 @@ export const ResultPage = () => {
                 scale: 2, // Higher density for better text rendering
                 useCORS: true,
                 logging: false,
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                scrollY: -window.scrollY // Fixes scroll offset bugs
             });
 
             const imgData = canvas.toDataURL('image/png');
@@ -61,6 +62,8 @@ export const ResultPage = () => {
 
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            
+            console.log('PDF dimensions:', pdfWidth, 'x', pdfHeight);
 
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
@@ -175,12 +178,12 @@ export const ResultPage = () => {
             </div>
 
             {/* Hidden PDF Canvas rendering area */}
-            <div className="fixed overflow-hidden pointer-events-none" style={{ left: '-9999px', top: 0 }}>
+            <div className="absolute pointer-events-none opacity-0" style={{ left: '-9999px', top: 0, width: '800px' }}>
                 <ReportCardPDF
                     ref={pdfRef}
                     report={report}
                     studentInfo={user}
-                    examInfo={{ title_en: "Mock Exam Title", medium: user?.medium || 'English' }} // We'd ideally fetch real exam details from catalog
+                    examInfo={{ title_en: report.exam_title_en || "Mock Exam Title", medium: user?.medium || 'English' }}
                 />
             </div>
 

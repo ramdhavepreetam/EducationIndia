@@ -17,9 +17,10 @@ from typing import List
 from uuid import UUID
 
 from app.database import get_db
-from app.modules.auth.dependencies import require_student, require_admin, UserIdentity
+from app.modules.auth.dependencies import require_student, require_admin, require_role, UserIdentity
 from app.modules.catalog.service import catalog_service
 from app.modules.attempt.repository import attempt_repository
+from app.modules.attempt.schemas import AttemptSummary
 from app.modules.catalog.schemas import ExamSummaryResponse, PublishExamResponse
 from app.modules.admin.schemas import (
     StudentDashboardResponse,
@@ -37,16 +38,34 @@ router = APIRouter()
 
 @router.get("/dashboard/student", response_model=StudentDashboardResponse)
 async def get_student_dashboard(
-    current_user: UserIdentity = Depends(require_student),
+    child_id: UUID | None = None,
+    current_user: UserIdentity = Depends(require_role("student", "parent")),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get the student dashboard data (orchestrator pattern).
     Aggregates active exams from Catalog and all attempts from Attempt module.
     """
+    from app.modules.user.repository import user_repository
+    from app.shared.exceptions import Forbidden
+
+    target_id = current_user.id
+    if current_user.role == "parent":
+        if not child_id:
+            target_id = None
+        else:
+            from app.modules.user.child_repository import ChildRepository
+            child_repo = ChildRepository()
+            child = await child_repo.get_by_id(child_id, current_user.id, db)
+            if not child:
+                raise Forbidden("Not authorized to view this child's dashboard")
+            target_id = child_id
+
     exams = await catalog_service.list_exams(db, is_admin=False)
 
-    attempts_orm = await attempt_repository.get_all_student_attempts(db, current_user.id)
+    attempts_orm = []
+    if target_id is not None:
+        attempts_orm = await attempt_repository.get_all_student_attempts(db, target_id)
 
     # status is a SQLAlchemy enum — extract its string value for comparison
     def _status(a) -> str:

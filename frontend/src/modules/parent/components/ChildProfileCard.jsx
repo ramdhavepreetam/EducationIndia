@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const ChildProfileCard = ({
-  profile, stats, onViewDetail,
+  profile, stats, onViewDetail, onStartExam,
   onEditNickname, onUnlink, isSaving
 }) => {
   const [editingNickname, setEditingNickname] = useState(false)
@@ -143,6 +143,14 @@ const ChildProfileCard = ({
 
           {/* Action buttons */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={onStartExam}
+              className="text-sm px-3 py-1.5 bg-green-600 text-white
+                         rounded-lg hover:bg-green-700 transition-colors
+                         font-medium"
+            >
+              📝 Start Exam
+            </button>
             <button
               onClick={onViewDetail}
               className="text-sm px-3 py-1.5 border border-blue-200

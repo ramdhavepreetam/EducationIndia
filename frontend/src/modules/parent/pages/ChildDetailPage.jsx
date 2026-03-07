@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useParentStore } from '../store/parentStore'
 import { useAuthStore } from '@/modules/auth/store/authStore'
-import ChildWeakTopics     from '../components/ChildWeakTopics'
-import ChildProgressChart  from '../components/ChildProgressChart'
+import ChildWeakTopics from '../components/ChildWeakTopics'
+import ChildProgressChart from '../components/ChildProgressChart'
 import ChildAttemptHistory from '../components/ChildAttemptHistory'
 
 export default function ChildDetailPage() {
@@ -25,7 +25,7 @@ export default function ChildDetailPage() {
   if (isLoadingDetail) {
     return (
       <div className="max-w-3xl mx-auto p-6 space-y-4">
-        {[1,2,3,4].map(i => (
+        {[1, 2, 3, 4].map(i => (
           <div key={i} className="h-40 bg-gray-200 rounded-xl animate-pulse" />
         ))}
       </div>
@@ -53,14 +53,24 @@ export default function ChildDetailPage() {
   return (
     <div className="max-w-3xl mx-auto p-6">
 
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/parent')}
-        className="flex items-center gap-2 text-gray-500
-                   hover:text-gray-700 mb-6 text-sm"
-      >
-        ← Back to Dashboard
-      </button>
+      {/* Header with back + start exam */}
+      <div className="flex items-center justify-between mb-6">
+        <button
+          onClick={() => navigate('/parent')}
+          className="flex items-center gap-2 text-gray-500
+                     hover:text-gray-700 text-sm"
+        >
+          ← Back to Dashboard
+        </button>
+        <button
+          onClick={() => navigate(`/dashboard?childId=${studentId}`)}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg
+                     hover:bg-green-700 transition-colors font-medium
+                     text-sm flex items-center gap-2"
+        >
+          📝 Start Exam
+        </button>
+      </div>
 
       <div className="space-y-6">
 
@@ -70,7 +80,7 @@ export default function ChildDetailPage() {
             <div className="w-16 h-16 rounded-full bg-gradient-to-br
                             from-blue-400 to-blue-600 flex items-center
                             justify-center text-2xl font-bold text-white">
-              {childDetail.profile.full_name[0].toUpperCase()}
+              {childDetail.profile?.full_name ? childDetail.profile.full_name[0].toUpperCase() : '?'}
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">
@@ -80,7 +90,7 @@ export default function ChildDetailPage() {
               <p className="text-gray-500 text-sm">
                 {[
                   childDetail.profile.std_class && `${childDetail.profile.std_class}th Std`,
-                  childDetail.profile.medium    && `${childDetail.profile.medium} medium`,
+                  childDetail.profile.medium && `${childDetail.profile.medium} medium`,
                   childDetail.profile.school_name,
                   childDetail.profile.district
                 ].filter(Boolean).join(' · ')}
@@ -93,16 +103,20 @@ export default function ChildDetailPage() {
         <div className="grid grid-cols-2 gap-4">
           {[
             { label: 'Total Attempts', value: childDetail.stats.total_attempts },
-            { label: 'Avg Score',
+            {
+              label: 'Avg Score',
               value: childDetail.stats.avg_percentage
-                ? `${childDetail.stats.avg_percentage}%` : '—' },
-            { label: 'Best Score',
+                ? `${childDetail.stats.avg_percentage}%` : '—'
+            },
+            {
+              label: 'Best Score',
               value: childDetail.stats.best_score
-                ? `${childDetail.stats.best_score}/150` : '—' },
+                ? `${childDetail.stats.best_score}/150` : '—'
+            },
             { label: 'Exams Completed', value: childDetail.stats.exams_completed },
           ].map(stat => (
             <div key={stat.label}
-                 className="bg-white rounded-xl border border-gray-100
+              className="bg-white rounded-xl border border-gray-100
                             p-4 shadow-sm text-center">
               <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
               <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
@@ -120,7 +134,7 @@ export default function ChildDetailPage() {
 
         <ChildAttemptHistory
           attempts={childDetail.recent_attempts}
-          onViewResult={(id) => navigate(`/analysis/${id}`)}
+          onViewResult={(id) => navigate(`/attempts/${id}/result`)}
           pageSize={10}
           showPagination={true}
         />
