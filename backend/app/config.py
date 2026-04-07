@@ -27,6 +27,14 @@ class Settings(BaseSettings):
     MEDIA_PROVIDER: str = "local"
     CLOUDINARY_URL: str = ""
 
+    # ── Razorpay (ADR-014) ────────────────────────────────────
+    RAZORPAY_KEY_ID: str = ""
+    RAZORPAY_KEY_SECRET: str = ""
+    RAZORPAY_WEBHOOK_SECRET: str = ""
+
+    # ── Frontend ─────────────────────────────────────────────
+    FRONTEND_URL: str = "http://localhost:5173"
+
     # ── App ──────────────────────────────────────────────────
     DEBUG: bool = False
     APP_NAME: str = "ScholarPath"

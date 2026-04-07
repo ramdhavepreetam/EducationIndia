@@ -7,14 +7,25 @@ import { AvailableExamCard } from '../components/AvailableExamCard'
 import { RecentAttemptsList } from '../components/RecentAttemptsList'
 import { ProgressChart } from '../components/ProgressChart'
 
+import { useParentStore } from '@/modules/parent/store/parentStore'
+import { useSearchParams } from 'react-router-dom'
+
 export const StudentDashboardPage = () => {
     const { t } = useTranslation()
     const { user } = useAuthStore()
     const { dashboardData, isLoading, error, fetchDashboard } = useDashboardStore()
+    const selectedChildId = useParentStore(s => s.selectedChildId)
+    const [searchParams] = useSearchParams()
+    const urlChildId = searchParams.get('childId')
 
     useEffect(() => {
-        fetchDashboard()
-    }, [fetchDashboard])
+        const effectiveChildId = selectedChildId || urlChildId
+        if (user?.role === 'parent' && effectiveChildId) {
+            fetchDashboard(effectiveChildId)
+        } else {
+            fetchDashboard()
+        }
+    }, [fetchDashboard, user?.role, selectedChildId, urlChildId])
 
     if (isLoading && !dashboardData) {
         return (

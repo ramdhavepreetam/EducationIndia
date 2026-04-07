@@ -133,13 +133,19 @@ export const useAuthStore = create((set, get) => ({
    * Email + name sign up (creates Supabase auth.users row).
    * The on_auth_user_created DB trigger auto-creates user_profiles.
    * Returns the Supabase user (not the backend profile — not yet onboarded).
+   *
+   * TODO [PRODUCTION]: Re-enable email confirmation in Supabase Auth settings
+   * and set up a custom SMTP provider (SendGrid/Resend). The built-in Supabase
+   * mailer is rate-limited to 4 emails/hr and emails often land in spam.
+   * Currently disabled for dev/testing convenience.
    */
   register: async (email, password, fullName) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        // ADR-014: Registration is for parents. Students are child_profiles.
+        data: { full_name: fullName, role: 'parent' },
       },
     })
     if (error) throw error

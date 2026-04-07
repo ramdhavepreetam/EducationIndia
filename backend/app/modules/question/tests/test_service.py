@@ -213,7 +213,7 @@ class TestBulkImport:
         svc, repo, catalog_svc = service
         catalog_svc.get_exam.return_value = MagicMock(id=1)
         import_data = make_import_data(count=5)
-        repo.bulk_insert.return_value = (5, [])
+        repo.replace_exam_questions.return_value = (5, [])
 
         result = await svc.bulk_import(mock_db, import_data)
 
@@ -233,7 +233,7 @@ class TestBulkImport:
         with pytest.raises(BadRequest, match="Duplicate question_no"):
             await svc.bulk_import(mock_db, import_data)
 
-        repo.bulk_insert.assert_not_called()
+        repo.replace_exam_questions.assert_not_called()
 
     async def test_bulk_import_raises_not_found_for_missing_exam(self, service, mock_db):
         svc, repo, catalog_svc = service

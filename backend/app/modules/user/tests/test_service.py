@@ -9,9 +9,11 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
 import pytest
+from pydantic import ValidationError
 
 from app.modules.user.models import ParentStudentLink, UserProfile, UserRoleEnum
 from app.modules.user.schemas import (
+    ChangePasswordRequest,
     CompleteProfileRequest,
     LinkChildRequest,
     UpdateProfileRequest,
@@ -268,3 +270,133 @@ class TestLinkChild:
             mock_repo.update_link.assert_awaited_once_with(
                 db, 42, {"is_active": True}
             )
+
+
+# ── update_my_profile — is_onboarded via PUT /me ─────────────────────────────
+
+class TestUpdateProfileIsOnboarded:
+    """User spec: test_update_profile_sets_is_onboarded_true."""
+
+    async def test_sets_is_onboarded_true(self, service, db, student_profile):
+        updated = MagicMock(spec=UserProfile)
+        updated.is_onboarded = True
+
+        with patch("app.modules.user.service.user_repository") as mock_repo:
+            mock_repo.update = AsyncMock(return_value=updated)
+
+            data = UpdateProfileRequest(is_onboarded=True)
+            result = await service.update_my_profile(db, student_profile.id, data)
+
+            assert result == updated
+            call_args = mock_repo.update.call_args
+            updates_passed = call_args[0][2]
+            assert updates_passed["is_onboarded"] is True
+
+    async def test_partial_update_preserves_unchanged_fields(self, service, db, student_profile):
+        """User spec: test_update_profile_partial_update.
+        Only send full_name — phone should remain unchanged."""
+        updated = MagicMock(spec=UserProfile)
+        updated.full_name = "Alice Updated"
+        updated.phone = "9876543210"  # unchanged
+
+        with patch("app.modules.user.service.user_repository") as mock_repo:
+            mock_repo.update = AsyncMock(return_value=updated)
+
+            data = UpdateProfileRequest(full_name="Alice Updated")
+            result = await service.update_my_profile(db, student_profile.id, data)
+
+            # Only full_name should be in the updates dict (exclude_unset)
+            call_args = mock_repo.update.call_args
+            updates_passed = call_args[0][2]
+            assert "full_name" in updates_passed
+            assert "phone" not in updates_passed
+            assert result.full_name == "Alice Updated"
+            assert result.phone == "9876543210"
+
+
+# ── update_my_profile — validation ───────────────────────────────────────────
+
+class TestUpdateProfileValidation:
+    """User spec: test_update_profile_invalid_language."""
+
+    def test_invalid_language_raises_validation_error(self):
+        """preferred_language only accepts 'en', 'mr', 'hi'."""
+        with pytest.raises(ValidationError, match="preferred_language"):
+            UpdateProfileRequest(preferred_language="jp")
+
+    def test_valid_language_accepted(self):
+        """Confirm valid languages pass."""
+        for lang in ("en", "mr", "hi"):
+            req = UpdateProfileRequest(preferred_language=lang)
+            assert req.preferred_language == lang
+
+
+# ── change_password ──────────────────────────────────────────────────────────
+
+class TestChangePassword:
+    """User spec: change_password error paths."""
+
+    async def test_wrong_current_password_raises_bad_request(self, service):
+        """User spec: test_change_password_wrong_current_password."""
+        data = ChangePasswordRequest(
+            current_password="wrong_password",
+            new_password="newpass1234",
+            confirm_password="newpass1234",
+        )
+
+        with patch("app.modules.user.service.create_client") as mock_create:
+            mock_supabase = MagicMock()
+
+            # Step 1 succeeds (get user)
+            mock_user_resp = MagicMock()
+            mock_user_resp.user.email = "test@example.com"
+            mock_supabase.auth.admin.get_user_by_id.return_value = mock_user_resp
+
+            # Step 2 fails (sign-in with wrong password)
+            mock_supabase.auth.sign_in_with_password.side_effect = Exception("Invalid login")
+
+            mock_create.return_value = mock_supabase
+
+            with pytest.raises(BadRequest, match="Current password is incorrect"):
+                await service.change_password(uuid4(), data)
+
+    def test_passwords_dont_match_raises_value_error(self):
+        """User spec: test_change_password_passwords_dont_match.
+        Pydantic validator should catch mismatched passwords."""
+        with pytest.raises(ValidationError, match="Passwords do not match"):
+            ChangePasswordRequest(
+                current_password="current123",
+                new_password="newpass1234",
+                confirm_password="differentpass",
+            )
+
+
+# ── update_avatar ────────────────────────────────────────────────────────────
+
+class TestUpdateAvatar:
+    """User spec: test_avatar_url_updated_correctly."""
+
+    async def test_updates_avatar_url(self, service, db):
+        user_id = uuid4()
+        new_url = "https://example.com/avatar.jpg"
+
+        updated_profile = MagicMock(spec=UserProfile)
+        updated_profile.avatar_url = new_url
+
+        with patch("app.modules.user.service.user_repository") as mock_repo:
+            mock_repo.update = AsyncMock(return_value=updated_profile)
+
+            result = await service.update_avatar(db, user_id, new_url)
+
+            assert result.avatar_url == new_url
+            mock_repo.update.assert_awaited_once_with(
+                db, user_id, {"avatar_url": new_url}
+            )
+
+    async def test_raises_not_found_for_missing_user(self, service, db):
+        with patch("app.modules.user.service.user_repository") as mock_repo:
+            mock_repo.update = AsyncMock(return_value=None)
+
+            with pytest.raises(NotFound):
+                await service.update_avatar(db, uuid4(), "https://example.com/a.jpg")
+

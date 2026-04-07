@@ -16,7 +16,7 @@ export const useAttemptStore = create((set, get) => ({
     // Actions
     setSavingState: (isSaving) => set({ isSaving }),
 
-    startExam: async (examId) => {
+    startExam: async (examId, childProfileId) => {
         set({ isLoading: true, error: null })
         try {
             // Fetch questions (metadata/content)
@@ -24,7 +24,7 @@ export const useAttemptStore = create((set, get) => ({
             const deliveryQuestions = await attemptApi.getExamDeliveryQuestions(examId)
 
             // Start attempt
-            const attempt = await attemptApi.start(examId)
+            const attempt = await attemptApi.start(examId, childProfileId)
 
             set({
                 currentAttempt: attempt,

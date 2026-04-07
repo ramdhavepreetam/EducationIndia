@@ -5,16 +5,19 @@ Rules (CLAUDE.md):
   - Call repository methods only; never write SQL here.
   - Never import from auth module internals — only auth.dependencies.
   - Parent cannot edit student profile — enforced here (not in router).
-  - is_onboarded flips to True exactly once: in complete_profile().
+  - is_onboarded can be set to True via update_my_profile (unified endpoint).
 """
 
 import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from supabase import create_client
 
+from app.config import settings
 from app.modules.user.models import ParentStudentLink, UserProfile, UserRoleEnum
 from app.modules.user.repository import user_repository
 from app.modules.user.schemas import (
+    ChangePasswordRequest,
     CompleteProfileRequest,
     LinkChildRequest,
     UpdateProfileRequest,
@@ -41,6 +44,7 @@ class UserService:
         """
         Partial update — only fields present in the request body are changed.
         Uses exclude_unset so missing fields are not overwritten with None.
+        Also used for onboarding: client sends { is_onboarded: true, ... }.
         """
         updates = data.model_dump(exclude_unset=True)
         if not updates:
@@ -75,6 +79,81 @@ class UserService:
 
         updated = await user_repository.update(db, user_id, updates)
         return updated  # type: ignore[return-value]  # profile existed, so update returns it
+
+    async def update_avatar(
+        self,
+        db: AsyncSession,
+        user_id: uuid.UUID,
+        avatar_url: str,
+    ) -> UserProfile:
+        """Update avatar_url on user profile after successful media upload."""
+        profile = await user_repository.update(
+            db, user_id, {"avatar_url": avatar_url}
+        )
+        if not profile:
+            raise NotFound("Profile not found")
+        return profile
+
+    async def change_password(
+        self,
+        user_id: uuid.UUID,
+        data: ChangePasswordRequest,
+    ) -> dict:
+        """
+        Uses Supabase admin client to update password.
+        Validates current_password by attempting a sign-in first.
+
+        IMPORTANT: Supabase handles password storage — this NEVER
+        touches passwords in the DB directly.
+        """
+        supabase_client = create_client(
+            settings.SUPABASE_URL, settings.SUPABASE_SERVICE_KEY
+        )
+
+        # Step 1: Get user email from auth.users
+        try:
+            user_resp = supabase_client.auth.admin.get_user_by_id(str(user_id))
+            email = user_resp.user.email
+        except Exception:
+            raise BadRequest("Unable to verify identity")
+
+        # Step 2: Verify current password via Supabase sign-in
+        try:
+            supabase_client.auth.sign_in_with_password({
+                "email": email,
+                "password": data.current_password,
+            })
+        except Exception:
+            raise BadRequest("Current password is incorrect")
+
+        # Step 3: Update password via admin API
+        try:
+            supabase_client.auth.admin.update_user_by_id(
+                str(user_id),
+                {"password": data.new_password},
+            )
+        except Exception:
+            raise BadRequest("Password update failed. Try again.")
+
+        return {"success": True}
+
+    async def get_subscription_status(
+        self,
+        db: AsyncSession,
+        user_id: uuid.UUID,
+    ) -> dict:
+        """
+        Convenience wrapper that returns subscription status for a parent.
+        Uses access_control.get_access_context() as the single source of truth.
+        """
+        from app.shared.access_control import get_access_context
+
+        ctx = await get_access_context(db, user_id)
+        return {
+            "is_paid": ctx.get("is_paid", False),
+            "expires_at": ctx.get("expires_at"),
+            "days_remaining": ctx.get("days_remaining", 0),
+        }
 
     async def get_my_children(
         self, db: AsyncSession, parent_id: uuid.UUID
@@ -143,3 +222,4 @@ class UserService:
 
 # Module-level singleton — import this in router.py
 user_service = UserService()
+

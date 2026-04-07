@@ -45,6 +45,46 @@ class CatalogService:
             include_inactive=is_admin,
         )
 
+    async def list_exams_with_access(
+        self,
+        db: AsyncSession,
+        parent_id,
+        *,
+        board_id: int | None = None,
+        std_class: int | None = None,
+        year: int | None = None,
+    ) -> list[dict]:
+        """
+        List exams with access flags for a parent (ADR-014).
+        Returns dicts with is_accessible and lock_reason fields.
+        """
+        from app.shared.access_control import get_access_context
+
+        exams = await catalog_repository.list_exams(
+            db, board_id=board_id, std_class=std_class, year=year, include_inactive=False,
+        )
+        ctx = await get_access_context(parent_id, db)
+
+        result = []
+        for exam in exams:
+            is_accessible = ctx.is_paid or (exam.id == ctx.free_exam_id)
+            result.append({
+                "id": exam.id,
+                "event_id": exam.event_id,
+                "paper_code": exam.paper_code,
+                "set_code": exam.set_code,
+                "title_en": exam.title_en,
+                "title_mr": exam.title_mr,
+                "medium": exam.medium.value if hasattr(exam.medium, "value") else str(exam.medium),
+                "total_questions": exam.total_questions,
+                "total_marks": exam.total_marks,
+                "duration_minutes": exam.duration_minutes,
+                "is_active": exam.is_active,
+                "is_accessible": is_accessible,
+                "lock_reason": None if is_accessible else "upgrade_required_exam",
+            })
+        return result
+
     async def get_exam(self, db: AsyncSession, exam_id: int) -> Exam:
         """
         Return a single exam with sections + topics eagerly loaded.

@@ -20,7 +20,7 @@ from app.modules.attempt.schemas import (
     SaveResponseRequest,
     StartAttemptRequest,
 )
-from app.modules.attempt.service import AttemptService, _compute_result_stub
+from app.modules.attempt.service import AttemptService
 from app.modules.attempt.state_machine import AttemptAlreadySubmittedException
 from app.shared.exceptions import BadRequest, Conflict, Forbidden, NotFound
 
@@ -55,13 +55,28 @@ def mock_catalog():
 
 
 @pytest.fixture
-def service(mock_repo, mock_catalog):
+def mock_child_repo():
+    repo = AsyncMock()
+    repo.validate_ownership.return_value = True
+    return repo
+
+
+@pytest.fixture
+def service(mock_repo, mock_catalog, mock_child_repo):
     svc = AttemptService()
+    
+    mock_ctx = MagicMock()
+    mock_ctx.is_paid = True
+    mock_ctx.free_exam_id = 1
+    mock_ctx.free_max_attempts = 3
+
     with (
         patch("app.modules.attempt.service.attempt_repository", mock_repo),
         patch("app.modules.attempt.service.catalog_service", mock_catalog),
+        patch("app.modules.user.child_repository.ChildRepository", return_value=mock_child_repo),
+        patch("app.shared.access_control.get_access_context", AsyncMock(return_value=mock_ctx))
     ):
-        yield svc, mock_repo, mock_catalog
+        yield svc, mock_repo, mock_catalog, mock_child_repo
 
 
 def make_attempt(
@@ -108,13 +123,13 @@ def make_response(question_id=1, question_no=1, selected_option=2):
 
 class TestStartExam:
     async def test_creates_attempt_successfully(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         repo.get_ongoing_attempt.return_value = None
         repo.get_attempt_number.return_value = 1
         created = make_attempt()
         repo.create_attempt.return_value = created
 
-        result = await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID))
+        result = await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
 
         assert isinstance(result, AttemptStateResponse)
         assert result.attempt_id == ATTEMPT_ID
@@ -122,37 +137,37 @@ class TestStartExam:
         assert result.time_remaining_seconds == 90 * 60
 
     async def test_fails_if_ongoing_attempt_exists(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         repo.get_ongoing_attempt.return_value = make_attempt()
 
         with pytest.raises(Conflict, match="already have an ongoing attempt"):
-            await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID))
+            await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
 
         repo.create_attempt.assert_not_called()
 
     async def test_calls_catalog_to_validate_exam(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         repo.get_ongoing_attempt.return_value = None
         repo.get_attempt_number.return_value = 1
         repo.create_attempt.return_value = make_attempt()
 
-        await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID))
+        await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
 
         catalog.get_active_exam.assert_called_once_with(mock_db, EXAM_ID)
 
     async def test_raises_not_found_for_inactive_exam(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         catalog.get_active_exam.side_effect = NotFound("Exam not available")
 
         with pytest.raises(NotFound):
-            await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID))
+            await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
 
 
 # ── save_response ─────────────────────────────────────────────────────────────
 
 class TestSaveResponse:
     async def test_save_response_returns_state_item(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt()
         repo.get_attempt_by_id.return_value = attempt
         response = make_response()
@@ -168,72 +183,91 @@ class TestSaveResponse:
         assert result.visit_count == 1
 
     async def test_fails_if_attempt_belongs_to_other_student(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt(student_id=OTHER_STUDENT_ID)
         repo.get_attempt_by_id.return_value = attempt
+        child_repo.validate_ownership.return_value = False
 
-        with pytest.raises(Forbidden, match="belong to you"):
-            await svc.save_response(
-                mock_db, ATTEMPT_ID, STUDENT_ID,
-                SaveResponseRequest(question_id=1, selected_option=2)
-            )
+        with patch.object(svc, "_get_question_no", AsyncMock(return_value=1)):
+            with pytest.raises(Forbidden, match="belong to you"):
+                await svc.save_response(
+                    mock_db, ATTEMPT_ID, STUDENT_ID,
+                    SaveResponseRequest(question_id=1, selected_option=2)
+                )
 
     async def test_fails_if_attempt_is_submitted(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt(status="submitted")
         repo.get_attempt_by_id.return_value = attempt
 
-        with pytest.raises(AttemptAlreadySubmittedException):
-            await svc.save_response(
-                mock_db, ATTEMPT_ID, STUDENT_ID,
-                SaveResponseRequest(question_id=1, selected_option=2)
-            )
+        with patch.object(svc, "_get_question_no", AsyncMock(return_value=1)):
+            with pytest.raises(AttemptAlreadySubmittedException):
+                await svc.save_response(
+                    mock_db, ATTEMPT_ID, STUDENT_ID,
+                    SaveResponseRequest(question_id=1, selected_option=2)
+                )
 
     async def test_fails_if_attempt_is_expired(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt(status="expired")
         repo.get_attempt_by_id.return_value = attempt
 
-        with pytest.raises(Forbidden, match="expired"):
-            await svc.save_response(
-                mock_db, ATTEMPT_ID, STUDENT_ID,
-                SaveResponseRequest(question_id=1, selected_option=2)
-            )
+        with patch.object(svc, "_get_question_no", AsyncMock(return_value=1)):
+            with pytest.raises(Forbidden, match="expired"):
+                await svc.save_response(
+                    mock_db, ATTEMPT_ID, STUDENT_ID,
+                    SaveResponseRequest(question_id=1, selected_option=2)
+                )
 
 
 # ── submit_exam ───────────────────────────────────────────────────────────────
 
+# Scoring was moved to analysis_service.generate_report (ADR-006).
+# Tests patch analysis_service.generate_report instead of the old _compute_result_stub.
+
+_SCORE_RESULT = {
+    "total_score": 0,
+    "total_correct": 0,
+    "total_wrong": 0,
+    "total_skipped": 75,
+    "percentage": 0.0,
+    "grade": "Below Average",
+    "section_scores": [],
+    "topic_scores": [],
+    "time_analysis": {},
+    "recommendations": [],
+}
+
+
 class TestSubmitExam:
     async def test_submit_transitions_to_submitted(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt()
         repo.get_attempt_by_id.return_value = attempt
         repo.get_all_responses.return_value = []
         repo.update_attempt_result.return_value = attempt
 
         with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
-            with patch("app.modules.attempt.service._compute_result_stub", AsyncMock(return_value={
-                "total_score": 0, "total_correct": 0, "total_wrong": 0,
-                "total_skipped": 75, "percentage": 0.0, "grade": "Below Average",
-                "section_scores": [], "topic_scores": [], "time_analysis": {},
-                "recommendations": ["stub"],
-            })):
-                with patch.object(svc, "_load_questions_with_answers", AsyncMock(return_value=[])):
-                    result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
         assert isinstance(result, AttemptResultResponse)
 
     async def test_submit_fails_for_other_student_attempt(self, service, mock_db):
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         attempt = make_attempt(student_id=OTHER_STUDENT_ID)
         repo.get_attempt_by_id.return_value = attempt
+        child_repo.validate_ownership.return_value = False
 
         with pytest.raises(Forbidden, match="belong to you"):
             await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
     async def test_submit_rejected_after_grace_period(self, service, mock_db):
         """If timer expired more than 30s ago, reject submission."""
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         # started 91 minutes + 31 seconds ago (beyond grace)
         very_old_start = datetime.now(timezone.utc) - timedelta(minutes=91, seconds=31)
         attempt = make_attempt(started_at=very_old_start)
@@ -244,7 +278,7 @@ class TestSubmitExam:
 
     async def test_submit_within_grace_period_succeeds(self, service, mock_db):
         """30-second grace: 90 min + 20s elapsed should still be accepted."""
-        svc, repo, catalog = service
+        svc, repo, catalog, child_repo = service
         recent_start = datetime.now(timezone.utc) - timedelta(minutes=90, seconds=20)
         attempt = make_attempt(started_at=recent_start)
         repo.get_attempt_by_id.return_value = attempt
@@ -252,46 +286,29 @@ class TestSubmitExam:
         repo.update_attempt_result.return_value = attempt
 
         with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
-            with patch("app.modules.attempt.service._compute_result_stub", AsyncMock(return_value={
-                "total_score": 0, "total_correct": 0, "total_wrong": 0,
-                "total_skipped": 0, "percentage": 0.0, "grade": "Below Average",
-                "section_scores": [], "topic_scores": [], "time_analysis": {},
-                "recommendations": [],
-            })):
-                with patch.object(svc, "_load_questions_with_answers", AsyncMock(return_value=[])):
-                    result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
         assert isinstance(result, AttemptResultResponse)
 
+    async def test_result_contains_no_correct_option(self, service, mock_db):
+        """Security: submit response must not contain correct_option."""
+        svc, repo, catalog, child_repo = service
+        attempt = make_attempt()
+        repo.get_attempt_by_id.return_value = attempt
+        repo.get_all_responses.return_value = []
+        repo.update_attempt_result.return_value = attempt
 
-# ── _compute_result_stub ──────────────────────────────────────────────────────
+        with patch("app.modules.attempt.service.transition", AsyncMock(return_value=attempt)):
+            with patch(
+                "app.modules.analysis.service.analysis_service.generate_report",
+                AsyncMock(return_value=_SCORE_RESULT),
+            ):
+                result = await svc.submit_exam(mock_db, ATTEMPT_ID, STUDENT_ID)
 
-class TestComputeResultStub:
-    async def test_stub_counts_correctly(self):
-        questions = [
-            {"id": 1, "correct_option": 1, "marks": 2},
-            {"id": 2, "correct_option": 2, "marks": 2},
-            {"id": 3, "correct_option": 3, "marks": 2},
-        ]
-        responses = [
-            make_response(question_id=1, selected_option=1),   # correct
-            make_response(question_id=2, selected_option=4),   # wrong
-            make_response(question_id=3, selected_option=None),# skipped
-        ]
-        result = await _compute_result_stub(responses, questions, None)
-
-        assert result["total_correct"] == 1
-        assert result["total_wrong"] == 1
-        assert result["total_skipped"] == 1
-        assert result["total_score"] == 2
-        assert "grade" in result
-
-    async def test_stub_no_correct_option_in_result(self):
-        """Security: stub output must not contain correct_option."""
-        questions = [{"id": 1, "correct_option": 2, "marks": 2}]
-        responses = [make_response(question_id=1, selected_option=2)]
-
-        result = await _compute_result_stub(responses, questions, None)
-
-        assert "correct_option" not in result
-        assert "correct_option" not in str(result.get("recommendations", ""))
+        result_dict = result.model_dump()
+        assert "correct_option" not in result_dict
+        assert "correct_option" not in str(result_dict.get("recommendations", ""))

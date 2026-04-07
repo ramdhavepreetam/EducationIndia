@@ -25,6 +25,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class StartAttemptRequest(BaseModel):
     """Body for POST /api/attempts/start."""
     exam_id: int
+    child_profile_id: UUID
     assignment_id: Optional[int] = None
 
 

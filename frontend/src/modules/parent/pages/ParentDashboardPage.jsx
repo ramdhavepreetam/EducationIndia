@@ -2,28 +2,45 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParentStore } from '../store/parentStore'
 import { useAuthStore } from '@/modules/auth/store/authStore'
-import ChildSwitcher       from '../components/ChildSwitcher'
-import ChildProfileCard    from '../components/ChildProfileCard'
-import ChildWeakTopics     from '../components/ChildWeakTopics'
-import ChildProgressChart  from '../components/ChildProgressChart'
+import { usePaymentStore } from '@/modules/payment/store/paymentStore'
+import { useTranslation } from 'react-i18next'
+import ChildSwitcher from '../components/ChildSwitcher'
+import ChildProfileCard from '../components/ChildProfileCard'
+import ChildWeakTopics from '../components/ChildWeakTopics'
+import ChildProgressChart from '../components/ChildProgressChart'
 import ChildAttemptHistory from '../components/ChildAttemptHistory'
-import LinkChildModal      from '../components/LinkChildModal'
+import RecentMistakesCard from '../components/RecentMistakesCard'
+import CreateChildModal from '../components/CreateChildModal'
 
 export default function ParentDashboardPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { user } = useAuthStore()
+  const { status: subscription } = usePaymentStore()
+  const isPaid = subscription?.is_active ?? false
+  const language = user?.preferred_language || 'en'
+
   const {
     children, selectedChildId, childDetail,
     isLoading, isLoadingDetail, error,
-    isSaving,
-    loadDashboard, selectChild, updateNickname, unlinkChild
+    isSaving, recentMistakes,
+    loadDashboard, selectChild, updateChild, deleteChild,
+    loadRecentMistakes,
   } = useParentStore()
 
   const [showLinkModal, setShowLinkModal] = useState(false)
+  const [highlightedAttemptId, setHighlightedAttemptId] = useState(null)
 
   useEffect(() => {
     loadDashboard()
   }, [])
+
+  // Load recent mistakes when a child is selected and dashboard loads
+  useEffect(() => {
+    if (selectedChildId) {
+      loadRecentMistakes(selectedChildId)
+    }
+  }, [selectedChildId])
 
   // ── Loading skeleton ─────────────────────────────
   if (isLoading) {
@@ -34,12 +51,12 @@ export default function ParentDashboardPage() {
           <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
         </div>
         <div className="flex gap-3 mb-6">
-          {[1,2,3].map(i => (
+          {[1, 2, 3].map(i => (
             <div key={i} className="h-10 w-28 bg-gray-200 rounded-full animate-pulse" />
           ))}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {[1,2,3,4].map(i => (
+          {[1, 2, 3, 4].map(i => (
             <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse" />
           ))}
         </div>
@@ -73,29 +90,29 @@ export default function ParentDashboardPage() {
     return (
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Parent Dashboard</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('parent.dashboard.title', 'Parent Dashboard')}</h1>
         </div>
         <div className="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center">
           <div className="text-6xl mb-4">👨‍👩‍👧</div>
           <h2 className="text-xl font-semibold text-gray-700 mb-2">
-            No children linked yet
+            {t('parent.dashboard.noChildren', 'No children added yet')}
           </h2>
           <p className="text-gray-500 mb-6">
-            Add your child's email to start monitoring their exam progress.
+            {t('parent.dashboard.noChildrenHint', 'Create a child profile to start monitoring their exam progress.')}
           </p>
           <button
             onClick={() => setShowLinkModal(true)}
             className="px-6 py-3 bg-blue-600 text-white rounded-xl
                        font-medium hover:bg-blue-700 transition-colors"
           >
-            + Add Your Child
+            {t('parent.dashboard.addChild', '+ Add Your Child')}
           </button>
         </div>
 
-        <LinkChildModal
+        <CreateChildModal
           isOpen={showLinkModal}
           onClose={() => setShowLinkModal(false)}
-          onSuccess={() => setShowLinkModal(false)}
+          onSuccess={() => { setShowLinkModal(false); loadDashboard() }}
         />
       </div>
     )
@@ -107,7 +124,7 @@ export default function ParentDashboardPage() {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Parent Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('parent.dashboard.title', 'Parent Dashboard')}</h1>
       </div>
 
       <ChildSwitcher
@@ -120,7 +137,7 @@ export default function ParentDashboardPage() {
       {/* Child detail area */}
       {isLoadingDetail ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {[1,2,3,4].map(i => (
+          {[1, 2, 3, 4].map(i => (
             <div key={i} className="h-48 bg-gray-200 rounded-xl animate-pulse" />
           ))}
         </div>
@@ -131,33 +148,52 @@ export default function ParentDashboardPage() {
             profile={childDetail.profile}
             stats={childDetail.stats}
             onViewDetail={() => navigate(`/parent/children/${selectedChildId}`)}
-            onEditNickname={(nickname) => updateNickname(selectedChildId, nickname)}
-            onUnlink={() => unlinkChild(selectedChildId)}
+            onStartExam={() => navigate(`/dashboard?childId=${selectedChildId}`)}
+            onEditNickname={(nickname) => updateChild(selectedChildId, { name: nickname })}
+            onUnlink={() => deleteChild(selectedChildId)}
             isSaving={isSaving}
           />
 
           <ChildWeakTopics
             weakTopics={childDetail.weak_topics}
             strongTopics={childDetail.strong_topics}
-            language={user?.preferred_language || 'en'}
+            language={language}
+          />
+
+          {/* ── Recent Mistakes Card ── */}
+          <RecentMistakesCard
+            recentMistakes={recentMistakes}
+            language={language}
+            isPaid={isPaid}
+            onUpgrade={() => navigate('/upgrade')}
+            onViewAll={(attemptId) => {
+              setHighlightedAttemptId(attemptId)
+              document.getElementById('attempt-history')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }}
           />
 
           <ChildProgressChart attempts={childDetail.recent_attempts} />
 
-          <ChildAttemptHistory
-            attempts={childDetail.recent_attempts}
-            onViewResult={(id) => navigate(`/analysis/${id}`)}
-            pageSize={5}
-            showPagination={false}
-          />
+          {/* Scroll target for "View All Mistakes" */}
+          <div id="attempt-history">
+            <ChildAttemptHistory
+              attempts={childDetail.recent_attempts}
+              childId={selectedChildId}
+              onViewResult={(id) => navigate(`/attempts/${id}/result`)}
+              pageSize={5}
+              showPagination={false}
+              highlightedAttemptId={highlightedAttemptId}
+            />
+          </div>
 
         </div>
       ) : null}
 
-      <LinkChildModal
+      <CreateChildModal
         isOpen={showLinkModal}
         onClose={() => setShowLinkModal(false)}
-        onSuccess={() => setShowLinkModal(false)}
+        onSuccess={() => { setShowLinkModal(false); loadDashboard() }}
       />
 
     </div>

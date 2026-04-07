@@ -13,35 +13,31 @@ from uuid import uuid4
 
 import pytest
 
-from app.modules.user.models import ParentStudentLink, UserProfile
+from app.modules.user.models import ChildProfile
 from app.modules.user.parent_service import ParentService
-from app.shared.exceptions import BadRequest, Conflict, Forbidden, NotFound
+from app.shared.exceptions import Forbidden, NotFound
 
 pytestmark = pytest.mark.asyncio
 
 
 # ── Factories ──────────────────────────────────────────────────────────────────
 
-def _mock_profile(student_id=None) -> MagicMock:
-    """A MagicMock shaped like a UserProfile ORM object."""
-    p = MagicMock(spec=UserProfile)
-    p.id = student_id or uuid4()
-    p.full_name = "Arjun S"
+def _mock_profile(parent_id=None, child_id=None) -> MagicMock:
+    """A MagicMock shaped like a ChildProfile ORM object."""
+    p = MagicMock(spec=ChildProfile)
+    p.id = child_id or uuid4()
+    p.parent_id = parent_id or uuid4()
+    p.name = "Arjun S"
     p.std_class = 5
     p.medium = "english"
     p.school_name = "City School"
     p.district = "Pune"
-    p.avatar_url = None
-    p.is_onboarded = True
+    p.avatar_color = "#3B82F6"
+    p.is_active = True
     return p
 
 
-def _make_child_row(student_id=None):
-    """Simulate a row returned by get_linked_children: (UserProfile, nickname, linked_at)."""
-    profile = _mock_profile(student_id)
-    nickname = "Chhotu"
-    linked_at = datetime.now(timezone.utc)
-    return (profile, nickname, linked_at)
+
 
 
 def _default_stats() -> dict:
@@ -55,10 +51,7 @@ def _default_stats() -> dict:
     }
 
 
-def _mock_link() -> MagicMock:
-    link = MagicMock(spec=ParentStudentLink)
-    link.is_active = True
-    return link
+
 
 
 # ── Fixtures ───────────────────────────────────────────────────────────────────
@@ -84,9 +77,8 @@ class TestGetDashboard:
     async def test_returns_empty_dashboard_for_no_children(self, service, db):
         """No linked children → empty children list, no selected detail."""
         parent_id = uuid4()
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_linked_children = AsyncMock(return_value=[])
-
+        with patch("app.modules.user.parent_service.ChildRepository.get_children", new_callable=AsyncMock) as mock_get_children:
+            mock_get_children.return_value = []
             result = await service.get_dashboard(db, parent_id)
 
         assert result.children == []
@@ -95,21 +87,26 @@ class TestGetDashboard:
     async def test_loads_first_child_detail_when_children_exist(self, service, db):
         """When children exist, dashboard includes first child's detail."""
         parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
+        child_id = uuid4()
+        child_profile = _mock_profile(parent_id, child_id)
 
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_child_stats = AsyncMock(return_value=_default_stats())
-            mock_repo.get_child_attempts = AsyncMock(return_value=[])
-            mock_repo.get_child_topic_performance = AsyncMock(return_value=[])
+        with patch("app.modules.user.parent_service.ChildRepository.get_children", new_callable=AsyncMock) as mock_get_children, \
+             patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id, \
+             patch(PATCH + ".get_child_stats", new_callable=AsyncMock) as mock_stats, \
+             patch(PATCH + ".get_child_attempts", new_callable=AsyncMock) as mock_attempts, \
+             patch(PATCH + ".get_child_topic_performance", new_callable=AsyncMock) as mock_topics:
+            
+            mock_get_children.return_value = [child_profile]
+            mock_get_by_id.return_value = child_profile
+            mock_stats.return_value = _default_stats()
+            mock_attempts.return_value = []
+            mock_topics.return_value = []
 
             result = await service.get_dashboard(db, parent_id)
 
         assert len(result.children) == 1
         assert result.selected_child_detail is not None
-        assert result.children[0].student_id == student_id
+        assert result.children[0].id == child_id
 
 
 # ── get_child_detail ───────────────────────────────────────────────────────────
@@ -117,34 +114,37 @@ class TestGetDashboard:
 class TestGetChildDetail:
     async def test_raises_forbidden_if_not_linked(self, service, db):
         """Service rejects access when no active link exists."""
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=None)
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id:
+            mock_get_by_id.return_value = None
 
             with pytest.raises(Forbidden):
                 await service.get_child_detail(db, uuid4(), uuid4())
 
     async def test_returns_full_detail_when_linked(self, service, db):
         parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
+        child_id = uuid4()
+        child_profile = _mock_profile(parent_id, child_id)
 
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_child_stats = AsyncMock(return_value=_default_stats())
-            mock_repo.get_child_attempts = AsyncMock(return_value=[])
-            mock_repo.get_child_topic_performance = AsyncMock(return_value=[])
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id, \
+             patch(PATCH + ".get_child_stats", new_callable=AsyncMock) as mock_stats, \
+             patch(PATCH + ".get_child_attempts", new_callable=AsyncMock) as mock_attempts, \
+             patch(PATCH + ".get_child_topic_performance", new_callable=AsyncMock) as mock_topics:
+            
+            mock_get_by_id.return_value = child_profile
+            mock_stats.return_value = _default_stats()
+            mock_attempts.return_value = []
+            mock_topics.return_value = []
 
-            result = await service.get_child_detail(db, parent_id, student_id)
+            result = await service.get_child_detail(db, parent_id, child_id)
 
-        assert result.profile.student_id == student_id
+        assert result.profile.id == child_id
         assert result.stats.total_attempts == 0
 
     async def test_weak_topics_split_correctly(self, service, db):
         """Topics with status=weak go to weak_topics, strong → strong_topics, average ignored."""
         parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
+        child_id = uuid4()
+        child_profile = _mock_profile(parent_id, child_id)
 
         topics = [
             {"topic_id": 1, "topic_name_en": "Fractions", "topic_name_mr": None,
@@ -155,14 +155,17 @@ class TestGetChildDetail:
              "avg_percentage": 60.0, "attempts_count": 2, "status": "average"},
         ]
 
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_child_stats = AsyncMock(return_value=_default_stats())
-            mock_repo.get_child_attempts = AsyncMock(return_value=[])
-            mock_repo.get_child_topic_performance = AsyncMock(return_value=topics)
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id, \
+             patch(PATCH + ".get_child_stats", new_callable=AsyncMock) as mock_stats, \
+             patch(PATCH + ".get_child_attempts", new_callable=AsyncMock) as mock_attempts, \
+             patch(PATCH + ".get_child_topic_performance", new_callable=AsyncMock) as mock_topics:
+            
+            mock_get_by_id.return_value = child_profile
+            mock_stats.return_value = _default_stats()
+            mock_attempts.return_value = []
+            mock_topics.return_value = topics
 
-            result = await service.get_child_detail(db, parent_id, student_id)
+            result = await service.get_child_detail(db, parent_id, child_id)
 
         assert len(result.weak_topics) == 1
         assert result.weak_topics[0].topic_name_en == "Fractions"
@@ -174,8 +177,8 @@ class TestGetChildDetail:
     async def test_strong_topics_sorted_descending(self, service, db):
         """Strong topics sorted by avg_percentage DESC (best first)."""
         parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
+        child_id = uuid4()
+        child_profile = _mock_profile(parent_id, child_id)
 
         topics = [
             {"topic_id": 1, "topic_name_en": "A", "topic_name_mr": None,
@@ -184,146 +187,29 @@ class TestGetChildDetail:
              "avg_percentage": 95.0, "attempts_count": 5, "status": "strong"},
         ]
 
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_child_stats = AsyncMock(return_value=_default_stats())
-            mock_repo.get_child_attempts = AsyncMock(return_value=[])
-            mock_repo.get_child_topic_performance = AsyncMock(return_value=topics)
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id, \
+             patch(PATCH + ".get_child_stats", new_callable=AsyncMock) as mock_stats, \
+             patch(PATCH + ".get_child_attempts", new_callable=AsyncMock) as mock_attempts, \
+             patch(PATCH + ".get_child_topic_performance", new_callable=AsyncMock) as mock_topics:
+            
+            mock_get_by_id.return_value = child_profile
+            mock_stats.return_value = _default_stats()
+            mock_attempts.return_value = []
+            mock_topics.return_value = topics
 
-            result = await service.get_child_detail(db, parent_id, student_id)
+            result = await service.get_child_detail(db, parent_id, child_id)
 
         assert result.strong_topics[0].avg_percentage == 95.0
         assert result.strong_topics[1].avg_percentage == 72.0
 
-
-# ── link_child ─────────────────────────────────────────────────────────────────
-
-class TestLinkChild:
-    async def test_raises_not_found_for_unknown_email(self, service, db):
-        """Email not registered as student → NotFound."""
-        with patch(PATCH) as mock_repo:
-            mock_repo.find_student_by_email = AsyncMock(return_value=None)
-
-            with pytest.raises(NotFound):
-                await service.link_child(db, uuid4(), "unknown@test.com")
-
-    async def test_raises_bad_request_for_self_link(self, service, db):
-        """Parent tries to link their own account → BadRequest."""
-        parent_id = uuid4()
-
-        with patch(PATCH) as mock_repo:
-            mock_repo.find_student_by_email = AsyncMock(
-                return_value={"id": parent_id, "full_name": "Self"}
-            )
-
-            with pytest.raises(BadRequest):
-                await service.link_child(db, parent_id, "self@test.com")
-
-    async def test_raises_conflict_if_already_linked(self, service, db):
-        """Active link already exists → Conflict."""
-        parent_id = uuid4()
-        student_id = uuid4()
-
-        with patch(PATCH) as mock_repo:
-            mock_repo.find_student_by_email = AsyncMock(
-                return_value={"id": student_id, "full_name": "Arjun"}
-            )
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-
-            with pytest.raises(Conflict):
-                await service.link_child(db, parent_id, "arjun@test.com")
-
-    async def test_creates_link_and_returns_child_profile(self, service, db):
-        """Happy path: link created → ChildProfileSchema returned."""
-        parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
-
-        with patch(PATCH) as mock_repo:
-            mock_repo.find_student_by_email = AsyncMock(
-                return_value={"id": student_id, "full_name": "Arjun"}
-            )
-            mock_repo.get_link = AsyncMock(return_value=None)
-            mock_repo.create_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
-
-            result = await service.link_child(db, parent_id, "arjun@test.com")
-
-        assert result.student_id == student_id
-        mock_repo.create_link.assert_awaited_once()
-        db.commit.assert_awaited_once()
-
-
-# ── update_nickname ────────────────────────────────────────────────────────────
-
-class TestUpdateNickname:
-    async def test_raises_not_found_if_no_active_link(self, service, db):
-        with patch(PATCH) as mock_repo:
-            mock_repo.update_nickname = AsyncMock(return_value=False)
-
-            with pytest.raises(NotFound):
-                await service.update_nickname(db, uuid4(), uuid4(), "Buddy")
-
-    async def test_returns_updated_profile_on_success(self, service, db):
-        parent_id = uuid4()
-        student_id = uuid4()
-        child_row = _make_child_row(student_id)
-
-        with patch(PATCH) as mock_repo:
-            mock_repo.update_nickname = AsyncMock(return_value=True)
-            mock_repo.get_linked_children = AsyncMock(return_value=[child_row])
-
-            result = await service.update_nickname(
-                db, parent_id, student_id, "Buddy"
-            )
-
-        assert result.student_id == student_id
-        db.commit.assert_awaited_once()
-
-
-# ── unlink_child ───────────────────────────────────────────────────────────────
-
-class TestUnlinkChild:
-    async def test_raises_not_found_if_no_active_link(self, service, db):
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=None)
-
-            with pytest.raises(NotFound):
-                await service.unlink_child(db, uuid4(), uuid4())
-
-    async def test_returns_true_on_success(self, service, db):
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.deactivate_link = AsyncMock(return_value=True)
-
-            result = await service.unlink_child(db, uuid4(), uuid4())
-
-        assert result is True
-        db.commit.assert_awaited_once()
-
-    async def test_does_not_delete_student_account(self, service, db):
-        """Unlink soft-deactivates the link only — no student data is deleted."""
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.deactivate_link = AsyncMock(return_value=True)
-
-            await service.unlink_child(db, uuid4(), uuid4())
-
-        # Deactivate was called, but no delete method exists or was called
-        mock_repo.deactivate_link.assert_awaited_once()
-        # Confirm no method named "delete" was called on the repo mock
-        assert not any(
-            "delete" in str(call) for call in mock_repo.method_calls
-        )
 
 
 # ── get_child_attempts_paged ───────────────────────────────────────────────────
 
 class TestGetChildAttemptsPaged:
     async def test_raises_forbidden_if_not_linked(self, service, db):
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=None)
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id:
+            mock_get_by_id.return_value = None
 
             with pytest.raises(Forbidden):
                 await service.get_child_attempts_paged(db, uuid4(), uuid4())
@@ -331,7 +217,8 @@ class TestGetChildAttemptsPaged:
     async def test_returns_correct_page_slice(self, service, db):
         """Page 2 of size 2 from 5 total rows returns rows 3-4."""
         parent_id = uuid4()
-        student_id = uuid4()
+        child_id = uuid4()
+        child_profile = _mock_profile(parent_id, child_id)
 
         # 5 simple mapping rows
         rows = [
@@ -343,12 +230,14 @@ class TestGetChildAttemptsPaged:
             for i in range(5)
         ]
 
-        with patch(PATCH) as mock_repo:
-            mock_repo.get_link = AsyncMock(return_value=_mock_link())
-            mock_repo.get_child_attempts = AsyncMock(return_value=rows)
+        with patch("app.modules.user.parent_service.ChildRepository.get_by_id", new_callable=AsyncMock) as mock_get_by_id, \
+             patch(PATCH + ".get_child_attempts", new_callable=AsyncMock) as mock_attempts:
+            
+            mock_get_by_id.return_value = child_profile
+            mock_attempts.return_value = rows
 
             result = await service.get_child_attempts_paged(
-                db, parent_id, student_id, page=2, size=2
+                db, parent_id, child_id, page=2, size=2
             )
 
         assert result["total"] == 5

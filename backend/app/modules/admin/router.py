@@ -17,9 +17,10 @@ from typing import List
 from uuid import UUID
 
 from app.database import get_db
-from app.modules.auth.dependencies import require_student, require_admin, UserIdentity
+from app.modules.auth.dependencies import require_student, require_admin, require_role, UserIdentity
 from app.modules.catalog.service import catalog_service
 from app.modules.attempt.repository import attempt_repository
+from app.modules.attempt.schemas import AttemptSummary
 from app.modules.catalog.schemas import ExamSummaryResponse, PublishExamResponse
 from app.modules.admin.schemas import (
     StudentDashboardResponse,
@@ -37,37 +38,84 @@ router = APIRouter()
 
 @router.get("/dashboard/student", response_model=StudentDashboardResponse)
 async def get_student_dashboard(
-    current_user: UserIdentity = Depends(require_student),
+    child_id: UUID | None = None,
+    current_user: UserIdentity = Depends(require_role("student", "parent")),
     db: AsyncSession = Depends(get_db)
 ):
     """
     Get the student dashboard data (orchestrator pattern).
     Aggregates active exams from Catalog and all attempts from Attempt module.
     """
+    from app.modules.user.repository import user_repository
+    from app.shared.exceptions import Forbidden
+
+    target_id = current_user.id
+    if current_user.role == "parent":
+        if not child_id:
+            target_id = None
+        else:
+            from app.modules.user.child_repository import ChildRepository
+            child_repo = ChildRepository()
+            child = await child_repo.get_by_id(child_id, current_user.id, db)
+            if not child:
+                raise Forbidden("Not authorized to view this child's dashboard")
+            target_id = child_id
+
     exams = await catalog_service.list_exams(db, is_admin=False)
 
-    attempts_orm = await attempt_repository.get_all_student_attempts(db, current_user.id)
+    attempts_orm = []
+    if target_id is not None:
+        attempts_orm = await attempt_repository.get_all_student_attempts(db, target_id)
 
-    submitted_attempts = [a for a in attempts_orm if a.status == "submitted" and a.percentage is not None]
+    # status is a SQLAlchemy enum — extract its string value for comparison
+    def _status(a) -> str:
+        return str(a.status.value if hasattr(a.status, "value") else a.status)
+
+    submitted_attempts = [
+        a for a in attempts_orm
+        if _status(a) == "submitted" and a.percentage is not None
+    ]
 
     total_attempts = len(attempts_orm)
     exams_completed = len(set(a.exam_id for a in submitted_attempts))
-    best_score = max((a.total_score for a in submitted_attempts if a.total_score is not None), default=0)
+    best_score = max(
+        (a.total_score for a in submitted_attempts if a.total_score is not None),
+        default=0,
+    )
     avg_percentage = 0.0
     if submitted_attempts:
-        avg_percentage = sum(a.percentage for a in submitted_attempts) / len(submitted_attempts)
+        avg_percentage = sum(float(a.percentage) for a in submitted_attempts) / len(submitted_attempts)
 
     stats = StudentDashboardStats(
         total_attempts=total_attempts,
         avg_percentage=round(avg_percentage, 1),
         best_score=best_score,
-        exams_completed=exams_completed
+        exams_completed=exams_completed,
     )
+
+    # Map ORM Attempt objects → AttemptSummary (ORM has `id`; schema expects `attempt_id`)
+    recent = [
+        AttemptSummary(
+            attempt_id=a.id,
+            exam_id=a.exam_id,
+            attempt_number=a.attempt_number,
+            status=_status(a),
+            total_score=a.total_score,
+            total_correct=a.total_correct,
+            total_wrong=a.total_wrong,
+            total_skipped=a.total_skipped,
+            percentage=float(a.percentage) if a.percentage is not None else None,
+            grade=a.grade,
+            started_at=a.started_at,
+            submitted_at=a.submitted_at,
+        )
+        for a in attempts_orm[:5]
+    ]
 
     return StudentDashboardResponse(
         available_exams=exams,
-        recent_attempts=attempts_orm[:5],
-        stats=stats
+        recent_attempts=recent,
+        stats=stats,
     )
 
 
@@ -238,3 +286,124 @@ async def get_question_stats(
     ).mappings().all()
 
     return [QuestionStatRow(**dict(r)) for r in rows]
+
+
+# ── Admin settings & subscription endpoints (ADR-014) ─────────────────────────
+
+@router.get("/settings")
+async def get_all_settings(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Returns all app_settings rows. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_settings(db)
+
+
+@router.put("/settings/{key}")
+async def update_setting(
+    key: str,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    admin: UserIdentity = Depends(require_admin),
+):
+    """
+    Updates one app_settings row. Admin only.
+    If key=payment_amount_inr, also syncs subscription_plans.price_inr.
+    """
+    from app.modules.payment.repository import payment_repository
+    value = body.get("value")
+    if value is None:
+        from app.shared.exceptions import BadRequest
+        raise BadRequest("'value' field is required")
+
+    await payment_repository.update_setting(db, key, str(value), admin.id)
+
+    # Sync plan price when amount changes
+    if key == "payment_amount_inr":
+        try:
+            await payment_repository.sync_plan_price(db, int(value))
+        except (ValueError, TypeError):
+            pass
+
+    return {"key": key, "value": str(value), "status": "updated"}
+
+
+@router.get("/subscriptions")
+async def list_subscriptions(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """All subscriptions with parent info. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_subscriptions_admin(db)
+
+
+@router.post("/subscriptions/{sub_id}/extend")
+async def extend_subscription(
+    sub_id: str,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Extends a subscription's expires_at. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    months = body.get("months", 0)
+    if not months or months < 1:
+        from app.shared.exceptions import BadRequest
+        raise BadRequest("'months' must be >= 1")
+
+    result = await payment_repository.extend_subscription(db, sub_id, months)
+    return {"status": "extended", "expires_at": str(result.get("expires_at"))}
+
+@router.post("/subscriptions/{sub_id}/cancel")
+async def cancel_subscription(
+    sub_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Cancels a subscription. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    result = await payment_repository.cancel_subscription(db, sub_id)
+    return {"status": "cancelled", "id": str(result.get("id"))}
+
+
+@router.post("/subscriptions/grant")
+async def grant_subscription(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """
+    Admin manually grants a subscription to a parent by email.
+    Body: { email: str, plan_id: int, months: int }
+    """
+    from app.modules.payment.repository import payment_repository
+    from app.shared.exceptions import BadRequest, NotFound
+
+    email = body.get("email", "").strip().lower()
+    plan_id = body.get("plan_id")
+    months = body.get("months", 5)
+
+    if not email:
+        raise BadRequest("'email' is required")
+    if not plan_id:
+        raise BadRequest("'plan_id' is required")
+
+    # Find parent by email
+    parent = await payment_repository.find_parent_by_email(db, email)
+    if not parent:
+        raise NotFound(f"No parent account found for '{email}'")
+
+    # Create the subscription
+    result = await payment_repository.grant_subscription(
+        db, str(parent["id"]), plan_id, months
+    )
+
+    return {
+        "status": "granted",
+        "subscription_id": str(result.get("id")),
+        "parent_name": parent.get("full_name"),
+        "parent_email": email,
+        "expires_at": str(result.get("expires_at")),
+    }
