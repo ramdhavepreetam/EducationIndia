@@ -42,18 +42,8 @@ export function ExamPage() {
     useEffect(() => {
         const load = async () => {
             if (!currentAttempt && examId) {
-                try {
-                    // Try to resolve ongoing attempt via a resume logic or just use attempt state endpoint
-                    // We need the attemptId to call getState. To be safe, maybe we need an endpoint that 
-                    // returns the active attempt for a given exam, but since start exam returns 409 we
-                    // can try starting and catch 409, then list attempts and resume the first ongoing one.
-                    // This logic is abstracted into attemptApi or store in a real app, 
-                    // but let's assume `resumeExam` handles fetching the active one.
-                    alert("This route expects currentAttempt in store. Start exam from /start first.");
-                    navigate(`/exam/${examId}/start`);
-                } catch (err) {
-                    navigate(`/exam/${examId}/start`)
-                }
+                // No active attempt in store — redirect to /start so user can begin
+                navigate(`/exam/${examId}/start`, { replace: true })
             }
         }
         load()

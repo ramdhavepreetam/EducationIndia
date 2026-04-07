@@ -4,14 +4,19 @@ import { parentApi } from '../api/parentApi'
 export const useParentStore = create((set, get) => ({
 
   // ── State ─────────────────────────────────────────
-  children:         [],     // list[ChildProfileSchema]
-  selectedChildId:  null,   // UUID string
-  childDetail:      null,   // ChildDetailSchema
-  isLoading:        false,  // initial dashboard load
-  isLoadingDetail:  false,  // switching between children
-  isSaving:         false,  // link/unlink/nickname operations
-  error:            null,
-  saveError:        null,
+  children: [],     // list[ChildProfileSchema]
+  selectedChildId: null,   // UUID string
+  childDetail: null,   // ChildDetailSchema
+  isLoading: false,  // initial dashboard load
+  isLoadingDetail: false,  // switching between children
+  isSaving: false,  // link/unlink/nickname operations
+  error: null,
+  saveError: null,
+
+  // ── Wrong Answers Review ───────────────────────────
+  wrongAnswersCache: {},   // { [attemptId]: WrongAnswersSummary }
+  recentMistakes: null,    // RecentMistakesSchema
+  loadingWrongAnswers: {}, // { [attemptId]: boolean }
 
   // ── Actions ───────────────────────────────────────
 
@@ -20,14 +25,14 @@ export const useParentStore = create((set, get) => ({
     try {
       const data = await parentApi.getDashboard()
       set({
-        children:        data.children,
-        selectedChildId: data.children[0]?.student_id ?? null,
-        childDetail:     data.selected_child_detail,
-        isLoading:       false
+        children: data.children,
+        selectedChildId: data.children[0]?.id ?? null,
+        childDetail: data.selected_child_detail,
+        isLoading: false
       })
     } catch (err) {
       set({
-        error:     err.response?.data?.detail ?? err.message,
+        error: err.response?.data?.detail ?? err.message,
         isLoading: false
       })
     }
@@ -41,26 +46,26 @@ export const useParentStore = create((set, get) => ({
     try {
       const detail = await parentApi.getChildDetail(studentId)
       set({ childDetail: detail, isLoadingDetail: false })
+      // Also load recent mistakes for the newly selected child
+      await get().loadRecentMistakes(studentId)
     } catch (err) {
       set({
-        error:           err.response?.data?.detail ?? err.message,
+        error: err.response?.data?.detail ?? err.message,
         isLoadingDetail: false
       })
     }
   },
 
-  linkChild: async (studentEmail) => {
+  createChild: async (formData) => {
     set({ isSaving: true, saveError: null })
     try {
-      const child = await parentApi.linkChild(studentEmail)
-      // Add to children list, auto-select the new child
+      const child = await parentApi.createChild(formData)
       set(state => ({
-        children:        [...state.children, child],
-        selectedChildId: child.student_id,
-        isSaving:        false
+        children: [...state.children, child],
+        selectedChildId: child.id,
+        isSaving: false
       }))
-      // Load full detail for newly linked child
-      await get().selectChild(child.student_id)
+      await get().selectChild(child.id)
       return { success: true, child }
     } catch (err) {
       const message = err.response?.data?.detail ?? err.message
@@ -69,23 +74,19 @@ export const useParentStore = create((set, get) => ({
     }
   },
 
-  updateNickname: async (studentId, nickname) => {
+  updateChild: async (childId, formData) => {
     set({ isSaving: true, saveError: null })
     try {
-      const updated = await parentApi.updateNickname(studentId, nickname)
-      // Update the child in the children list
+      const updated = await parentApi.updateChild(childId, formData)
       set(state => ({
         children: state.children.map(c =>
-          c.student_id === studentId
-            ? { ...c, child_nickname: updated.child_nickname }
-            : c
+          c.id === childId ? updated : c
         ),
-        // Also update inside childDetail if this is the selected child
-        childDetail: state.childDetail && state.selectedChildId === studentId
+        childDetail: state.childDetail && state.selectedChildId === childId
           ? {
-              ...state.childDetail,
-              profile: { ...state.childDetail.profile, child_nickname: updated.child_nickname }
-            }
+            ...state.childDetail,
+            profile: updated
+          }
           : state.childDetail,
         isSaving: false
       }))
@@ -97,24 +98,23 @@ export const useParentStore = create((set, get) => ({
     }
   },
 
-  unlinkChild: async (studentId) => {
+  deleteChild: async (childId) => {
     set({ isSaving: true, saveError: null })
     try {
-      await parentApi.unlinkChild(studentId)
+      await parentApi.deleteChild(childId)
 
       const remainingChildren = get().children.filter(
-        c => c.student_id !== studentId
+        c => c.id !== childId
       )
-      const nextSelectedId = remainingChildren[0]?.student_id ?? null
+      const nextSelectedId = remainingChildren[0]?.id ?? null
 
       set({
-        children:        remainingChildren,
+        children: remainingChildren,
         selectedChildId: nextSelectedId,
-        childDetail:     null,
-        isSaving:        false
+        childDetail: null,
+        isSaving: false
       })
 
-      // Load detail for next child if one exists
       if (nextSelectedId) {
         await get().selectChild(nextSelectedId)
       }
@@ -127,16 +127,57 @@ export const useParentStore = create((set, get) => ({
     }
   },
 
+  // ── Wrong Answers Actions ─────────────────────────
+
+  loadRecentMistakes: async (childId) => {
+    try {
+      const data = await parentApi.getRecentMistakes(childId)
+      set({ recentMistakes: data })
+    } catch {
+      set({ recentMistakes: null })
+    }
+  },
+
+  loadAttemptWrongAnswers: async (childId, attemptId) => {
+    // Check cache first — don't re-fetch if already loaded
+    const cached = get().wrongAnswersCache[attemptId]
+    if (cached) return cached
+
+    set(state => ({
+      loadingWrongAnswers: {
+        ...state.loadingWrongAnswers,
+        [attemptId]: true
+      }
+    }))
+
+    try {
+      const data = await parentApi.getAttemptWrongAnswers(childId, attemptId)
+      set(state => ({
+        wrongAnswersCache: { ...state.wrongAnswersCache, [attemptId]: data },
+        loadingWrongAnswers: { ...state.loadingWrongAnswers, [attemptId]: false }
+      }))
+      return data
+    } catch (err) {
+      set(state => ({
+        loadingWrongAnswers: { ...state.loadingWrongAnswers, [attemptId]: false }
+      }))
+      throw err
+    }
+  },
+
   clearError: () => set({ error: null, saveError: null }),
 
   reset: () => set({
-    children:        [],
+    children: [],
     selectedChildId: null,
-    childDetail:     null,
-    isLoading:       false,
+    childDetail: null,
+    isLoading: false,
     isLoadingDetail: false,
-    isSaving:        false,
-    error:           null,
-    saveError:       null
+    isSaving: false,
+    error: null,
+    saveError: null,
+    wrongAnswersCache: {},
+    recentMistakes: null,
+    loadingWrongAnswers: {},
   })
 }))

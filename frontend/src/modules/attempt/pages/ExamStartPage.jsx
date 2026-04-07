@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAttemptStore } from '../store/attemptStore'
 
 export function ExamStartPage() {
     const { t } = useTranslation()
     const { examId } = useParams()
+    const [searchParams] = useSearchParams()
+    const childId = searchParams.get('childId')
     const navigate = useNavigate()
     const [isChecking, setIsChecking] = useState(true)
 
@@ -21,16 +23,14 @@ export function ExamStartPage() {
     }, [examId])
 
     const handleStart = async () => {
-        if (!examId) return
+        if (!examId || !childId) return
         try {
-            await startExam(examId)
+            await startExam(examId, childId)
             navigate(`/exam/${examId}/attempt`)
         } catch (err) {
             // Error is handled by store and displayed below
             if (err.response?.status === 409) {
                 // If 409 Conflict, an ongoing attempt exists. Resume it.
-                // Assuming the API returned the ongoing attempt id in the error, or we fetch it.
-                // For simplicity, we just route them into the attempt page which will try to resume.
                 navigate(`/exam/${examId}/attempt`)
             }
         }

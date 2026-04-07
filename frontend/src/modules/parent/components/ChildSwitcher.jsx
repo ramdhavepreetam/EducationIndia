@@ -3,14 +3,14 @@ const ChildSwitcher = ({ children, selectedChildId, onSelect, onAddChild }) => {
     <div className="flex items-center gap-2 overflow-x-auto pb-1
                     scrollbar-hide mb-6">
       {children.map(child => {
-        const isSelected = child.student_id === selectedChildId
-        const label = child.child_nickname || child.full_name
+        const isSelected = child.id === selectedChildId
+        const label = child.name || 'Child'
         const classLabel = child.std_class ? `${child.std_class}th` : null
 
         return (
           <button
-            key={child.student_id}
-            onClick={() => onSelect(child.student_id)}
+            key={child.id}
+            onClick={() => onSelect(child.id)}
             className={`
               flex items-center gap-2 px-4 py-2 rounded-full
               text-sm font-medium whitespace-nowrap transition-all
@@ -26,7 +26,7 @@ const ChildSwitcher = ({ children, selectedChildId, onSelect, onAddChild }) => {
               text-xs font-bold
               ${isSelected ? 'bg-white/20 text-white' : 'bg-gray-300 text-gray-600'}
             `}>
-              {label[0].toUpperCase()}
+              {label?.[0]?.toUpperCase() || 'C'}
             </span>
 
             {label}

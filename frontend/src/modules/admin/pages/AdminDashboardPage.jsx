@@ -47,6 +47,8 @@ export function AdminDashboardPage() {
         { to: '/admin/publish', label: t('admin.publishExams', 'Publish Exams') },
         { to: '/admin/images', label: t('admin.uploadImages', 'Upload Images') },
         { to: '/admin/stats', label: t('admin.viewStats', 'View Stats') },
+        { to: '/admin/settings', label: t('admin.systemSettings', 'System Settings') },
+        { to: '/admin/subscriptions', label: t('admin.subscriptions', 'Subscriptions') },
     ]
 
     return (
@@ -111,11 +113,10 @@ export function AdminDashboardPage() {
                                     <td className="px-4 py-3 font-medium text-surface-800">{a.student_name || 'Unknown'}</td>
                                     <td className="px-4 py-3 text-surface-600">{a.exam_title || `Exam ${a.exam_id}`}</td>
                                     <td className="px-4 py-3">
-                                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${
-                                            a.status === 'submitted' ? 'bg-green-100 text-green-700' :
-                                            a.status === 'ongoing' ? 'bg-blue-100 text-blue-700' :
-                                            'bg-surface-100 text-surface-600'
-                                        }`}>{a.status}</span>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${a.status === 'submitted' ? 'bg-green-100 text-green-700' :
+                                                a.status === 'ongoing' ? 'bg-blue-100 text-blue-700' :
+                                                    'bg-surface-100 text-surface-600'
+                                            }`}>{a.status}</span>
                                     </td>
                                     <td className="px-4 py-3 font-mono text-surface-700">
                                         {a.total_score != null ? `${a.total_score} (${a.percentage?.toFixed(1)}%)` : '—'}

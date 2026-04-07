@@ -7,7 +7,7 @@ export const analysisApi = {
      * @returns {Promise<Object>} The report data
      */
     getAttemptReport: async (attemptId) => {
-        const response = await apiClient.get(`/analysis/attempts/${attemptId}/report`);
+        const response = await apiClient.get(`/api/analysis/attempts/${attemptId}/report`);
         return response.data;
     }
 };

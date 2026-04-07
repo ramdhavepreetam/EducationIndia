@@ -78,7 +78,12 @@ One small Zustand store per module, modules communicate through stores.
 ```
 modules/auth/store/authStore.js      → { user, token, isAuthenticated, login(), logout() }
 modules/attempt/store/attemptStore.js → { currentAttempt, responses, questionStatus,
-                                          timeRemaining, saveResponse(), submitExam() }
+                                          timeRemaining, startExam(), resumeExam(),
+                                          selectOption(), navigateTo(), submitExam() }
+                                        NOTE: autosave is handled by useAutoSave hook,
+                                        NOT by a store action. The store is for state only.
+modules/attempt/hooks/useAutoSave.js  → Debounced queue (500ms), per-questionNo dedup,
+                                        sequentially flushes via attemptApi.saveResponse()
 modules/analysis/store/analysisStore.js → { report, isLoading, fetchReport() }
 modules/parent/store/parentStore.js  → { children, selectedChild, setSelectedChild() }
 config/apiClient.js                  → Axios instance reads authStore.token for Authorization header
@@ -95,39 +100,50 @@ import { attemptApi } from '../api/attemptApi'
 
 export const useAttemptStore = create((set, get) => ({
   currentAttempt: null,
-  responses: {},              // { [questionNo]: { selectedOption, isMarkedReview } }
+  responses: {},   // { [questionNo]: { selectedOption, isMarkedReview, visitCount, questionId } }
   timeRemaining: null,
-  
-  startExam: async (examId) => {
-    const attempt = await attemptApi.start(examId)
-    set({ currentAttempt: attempt, timeRemaining: attempt.duration_seconds })
-  },
-  
-  saveResponse: async (questionNo, questionId, selectedOption) => {
-    // Optimistic update — update store immediately, then persist
+  isSaving: false,
+
+  startExam: async (examId) => { ... },
+  resumeExam: async (attemptId, examId) => { ... },
+
+  // Local-only optimistic update — does NOT call the API
+  selectOption: (questionNo, questionId, selectedOption) => {
     set(state => ({
       responses: {
         ...state.responses,
-        [questionNo]: { ...state.responses[questionNo], selectedOption }
+        [questionNo]: { ...state.responses[questionNo], selectedOption, questionId }
       }
     }))
-    // Fire and forget — don't await (keeps UI instant)
-    attemptApi.saveResponse(get().currentAttempt.id, questionId, selectedOption)
+    // API call is handled by useAutoSave hook (debounced, queued)
   },
-  
-  toggleMarkReview: (questionNo) => {
-    set(state => ({
-      responses: {
-        ...state.responses,
-        [questionNo]: {
-          ...state.responses[questionNo],
-          isMarkedReview: !state.responses[questionNo]?.isMarkedReview
-        }
-      }
-    }))
+
+  submitExam: async (attemptId) => {
+    const result = await attemptApi.submit(attemptId)
+    return result
   }
 }))
 ```
+
+Autosave hook (attempt/hooks/useAutoSave.js):
+```javascript
+// Separate from the store — handles API call with debounce + retry queue
+export function useAutoSave() {
+  const currentAttempt = useAttemptStore(s => s.currentAttempt)
+  // Debounce 500ms, deduplicate by questionNo, flush sequentially:
+  const scheduleSave = useCallback((questionNo, questionId, selectedOption, isMarkedReview, timeTaken) => {
+    pendingSaves.current.set(questionNo, { questionNo, questionId, selectedOption, isMarkedReview, timeTakenSeconds: timeTaken })
+    clearTimeout(timeoutRef.current)
+    timeoutRef.current = setTimeout(processQueue, 500)
+  }, [processQueue])
+  // processQueue: await attemptApi.saveResponse(currentAttempt.attempt_id, ...) for each pending item
+  return { scheduleSave }
+}
+```
+
+Key design choice: `selectOption()` in the store does an optimistic local update ONLY.
+The actual HTTP POST is delegated to `useAutoSave.scheduleSave()` which provides
+debouncing, deduplication, and retry logic — keeping the store pure state.
 
 API client with auth interceptor (config/apiClient.js):
 ```javascript

@@ -8,9 +8,11 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import { useAuthStore } from '@/modules/auth'
 import { ProtectedRoute } from '@/modules/auth'
-import { LoginPage, RegisterPage, OnboardingPage } from '@/modules/auth'
+import { LoginPage, RegisterPage } from '@/modules/auth'
+import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
 import { ExamStartPage, ExamPage, ExamSubmittedPage } from '@/modules/attempt'
 import { ResultPage } from '@/modules/analysis'
 import { StudentDashboardPage } from '@/modules/dashboard'
@@ -21,80 +23,86 @@ import {
     ExamPublisherPage,
     ImageUploaderPage,
     StatsPage,
+    AdminSettingsPage,
+    AdminSubscriptionsPage,
 } from '@/modules/admin'
 import {
     ParentDashboardPage,
     ChildDetailPage,
 } from '@/modules/parent'
+import {
+    UpgradePage,
+    PaymentSuccessPage,
+    PaymentFailedPage,
+} from '@/modules/payment'
 
 export default function App() {
     const initialize = useAuthStore((s) => s.initialize)
-    const isLoading = useAuthStore((s) => s.isLoading)
 
     useEffect(() => {
         initialize()
     }, [initialize])
 
-    // Global loading screen while auth initializes (covers OAuth redirect landing)
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-surface-50">
-                <div className="flex flex-col items-center gap-4 animate-fade-in">
-                    <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
-                    <p className="text-surface-500 text-sm font-medium">Loading…</p>
-                </div>
-            </div>
-        )
-    }
-
+    // NOTE: No global spinner here — public routes (/login, /register) must
+    // always render immediately. isLoading guard lives in ProtectedRoute and
+    // AuthRedirect only, so Supabase init latency never blocks auth pages.
     return (
-        <Routes>
-            {/* Root + catch-all: smart redirect based on auth state.
-                Handles OAuth callback landing at "/" and any unknown routes. */}
-            <Route index element={<AuthRedirect />} />
-            <Route path="*" element={<AuthRedirect />} />
+        <ErrorBoundary>
+            <Routes>
+                {/* Root + catch-all: smart redirect based on auth state.
+                    Handles OAuth callback landing at "/" and any unknown routes. */}
+                <Route index element={<AuthRedirect />} />
+                <Route path="*" element={<AuthRedirect />} />
 
-            {/* Public auth routes — redirect away if already authenticated */}
-            <Route element={<AuthLayout />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-            </Route>
-
-            {/* Protected routes — require authentication */}
-            <Route element={<ProtectedRoute />}>
-                {/* Onboarding uses AuthLayout (no sidebar yet) */}
+                {/* Public auth routes — redirect away if already authenticated */}
                 <Route element={<AuthLayout />}>
-                    <Route path="/onboarding" element={<OnboardingPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
                 </Route>
 
-                {/* Exam taking flow (full screen, no sidebar) */}
-                <Route path="/exam/:examId/start" element={<ExamStartPage />} />
-                <Route path="/exam/:examId/attempt" element={<ExamPage />} />
-                <Route path="/exam/submitted/:id" element={<ExamSubmittedPage />} />
+                {/* Protected routes — require authentication */}
+                <Route element={<ProtectedRoute />}>
+                    {/* Onboarding uses AuthLayout (no sidebar yet) */}
+                    <Route element={<AuthLayout />}>
+                        <Route path="/onboarding" element={<OnboardingPage />} />
+                    </Route>
 
-                {/* Exam result analysis (full screen container, might want sidebar later but keeping consistent with attempt for now) */}
-                <Route path="/attempts/:attemptId/result" element={<ResultPage />} />
+                    {/* Exam taking flow (full screen, no sidebar) */}
+                    <Route path="/exam/:examId/start" element={<ExamStartPage />} />
+                    <Route path="/exam/:examId/attempt" element={<ExamPage />} />
+                    <Route path="/exam/submitted/:id" element={<ExamSubmittedPage />} />
 
-                {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
-                <Route element={<AppLayout />}>
-                    <Route path="/dashboard" element={<StudentDashboardPage />} />
-                    <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
-                    <Route path="/results" element={<GenericPlaceholder title="Results" />} />
-                    <Route path="/profile" element={<GenericPlaceholder title="Profile" />} />
+                    {/* Exam result analysis (full screen container, might want sidebar later but keeping consistent with attempt for now) */}
+                    <Route path="/attempts/:attemptId/result" element={<ResultPage />} />
 
-                    {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
-                    <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
-                    <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
-                    <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
-                    <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
-                    <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
+                    {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
+                    <Route element={<AppLayout />}>
+                        <Route path="/dashboard" element={<StudentDashboardPage />} />
+                        <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
+                        <Route path="/results" element={<GenericPlaceholder title="Results" />} />
+                        <Route path="/profile" element={<OnboardingGuard><ProfilePage /></OnboardingGuard>} />
 
-                    {/* Parent routes — guarded by ParentRoute (redirects non-parents) */}
-                    <Route path="/parent" element={<ParentRoute><ParentDashboardPage /></ParentRoute>} />
-                    <Route path="/parent/children/:studentId" element={<ParentRoute><ChildDetailPage /></ParentRoute>} />
+                        {/* Payment routes — require onboarding */}
+                        <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
+                        <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
+                        <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
+
+                        {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
+                        <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
+                        <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
+                        <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
+                        <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
+                        <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
+                        <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
+                        <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
+
+                        {/* Parent routes — guarded by ParentRoute + OnboardingGuard */}
+                        <Route path="/parent" element={<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>} />
+                        <Route path="/parent/children/:studentId" element={<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>} />
+                    </Route>
                 </Route>
-            </Route>
-        </Routes>
+            </Routes>
+        </ErrorBoundary>
     )
 }
 
@@ -107,8 +115,17 @@ export default function App() {
  */
 function AuthRedirect() {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+    const isLoading = useAuthStore((s) => s.isLoading)
     const user = useAuthStore((s) => s.user)
 
+    // Wait for auth init before redirecting (handles OAuth callback landing at "/")
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-surface-50">
+                <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
+            </div>
+        )
+    }
     if (!isAuthenticated) return <Navigate to="/login" replace />
     if (!user?.is_onboarded) return <Navigate to="/onboarding" replace />
     return <Navigate to="/dashboard" replace />

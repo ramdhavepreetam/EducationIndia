@@ -1,7 +1,7 @@
 # ADR-009: Parent-Student Authorization Model
 
 **Date:** 2025-02-21
-**Status:** Accepted
+**Status:** Superseded by ADR-013
 **Decider:** Preetam
 **Modules Affected:** user, auth, attempt, analysis, parent dashboard
 

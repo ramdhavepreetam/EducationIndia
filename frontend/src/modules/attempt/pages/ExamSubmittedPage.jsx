@@ -66,10 +66,10 @@ export function ExamSubmittedPage() {
 
                     <div className="flex flex-col gap-3">
                         <button
-                            onClick={() => navigate(`/analysis/${id}`)}
+                            onClick={() => navigate(`/attempts/${id}/result`)}
                             className="w-full py-4 text-brand-700 bg-brand-50 border border-brand-200 font-bold rounded-xl hover:bg-brand-100 transition-colors"
                         >
-                            {t('exam.viewAnalysis', 'View Detailed Analysis (Day 9)')}
+                            {t('exam.viewAnalysis', 'View Detailed Analysis')}
                         </button>
 
                         <button

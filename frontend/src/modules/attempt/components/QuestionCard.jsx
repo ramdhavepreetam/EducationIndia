@@ -35,7 +35,7 @@ export default function QuestionCard({
     const isMarkedReview = response?.isMarkedReview || false
 
     const handleOptionSelect = (optNumber) => {
-        onAnswer(question.question_no, question.question_id, optNumber)
+        onAnswer(question.question_no, question.id, optNumber)
     }
 
     const handleSaveAndNext = () => {
@@ -52,7 +52,7 @@ export default function QuestionCard({
 
                     <button
                         type="button"
-                        onClick={() => onMarkReview(question.question_no, question.question_id)}
+                        onClick={() => onMarkReview(question.question_no, question.id)}
                         className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors shrink-0 whitespace-nowrap ${isMarkedReview
                             ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                             : 'bg-surface-100 text-surface-600 hover:bg-surface-200'

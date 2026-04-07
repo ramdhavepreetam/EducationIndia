@@ -61,7 +61,62 @@ class ReportSchema(BaseModel):
     total_skipped: int
     percentage: float
     grade: str
-    section_scores: List[SectionScoreSchema]
-    topic_scores: List[TopicScoreSchema]
-    time_analysis: TimeAnalysisSchema
+    section_scores: List[Any]
+    topic_scores: List[Any]
+    time_analysis: Any
     recommendations: List[str]
+    tier: str = "paid"
+    upgrade_prompt: bool = False
+
+
+class ReportFreeSchema(BaseModel):
+    """Free-tier response — score summary only, no detailed analysis."""
+    attempt_id: str
+    exam_id: int
+    status: str
+    attempt_number: int
+    submitted_at: str
+    total_score: int
+    total_correct: int
+    total_wrong: int
+    total_skipped: int
+    percentage: float
+    grade: str
+    tier: str = "free"
+    upgrade_prompt: bool = True
+
+
+# ── Wrong Answers (used by parent dashboard + result page) ────────────────────
+
+class OptionItemSchema(BaseModel):
+    """One option (A/B/C/D) for a question."""
+    option_no: int
+    text_en: Optional[str] = None
+    text_mr: Optional[str] = None
+    image_url: Optional[str] = None
+    is_correct: bool = False
+
+
+class WrongAnswerItem(BaseModel):
+    """One wrong question with full details for review."""
+    question_no: int
+    question_text_en: Optional[str] = None
+    question_text_mr: Optional[str] = None
+    question_image_url: Optional[str] = None
+    selected_option: int
+    correct_option: int
+    explanation_en: Optional[str] = None
+    explanation_mr: Optional[str] = None
+    section_subject_en: Optional[str] = None
+    section_label: Optional[str] = None
+    subject_mr: Optional[str] = None
+    topic_name_en: Optional[str] = None
+    topic_name_mr: Optional[str] = None
+    options: List[OptionItemSchema] = []
+
+
+class WrongAnswersSummary(BaseModel):
+    """Summary of wrong answers for an attempt."""
+    total_wrong: int
+    total_skipped: int = 0
+    items: List[WrongAnswerItem] = []

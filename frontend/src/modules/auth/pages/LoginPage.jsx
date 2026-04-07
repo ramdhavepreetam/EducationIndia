@@ -9,6 +9,14 @@ import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '../store/authStore'
 
+/** Returns the correct landing page for a given user profile, based on role. */
+function getRoleHome(profile) {
+    if (!profile?.is_onboarded) return '/onboarding'
+    if (['exam_admin', 'super_admin'].includes(profile?.role)) return '/admin'
+    if (profile?.role === 'parent') return '/parent'
+    return '/dashboard'
+}
+
 export default function LoginPage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
@@ -19,15 +27,16 @@ export default function LoginPage() {
     const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
     const user = useAuthStore((s) => s.user)
 
-    // Already logged in — send to the right place immediately
-    if (isAuthenticated) {
-        return <Navigate to={user?.is_onboarded ? '/dashboard' : '/onboarding'} replace />
-    }
-
+    // All hooks MUST be declared before any conditional returns (Rules of Hooks)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+
+    // Already logged in — send to the right place immediately (role-aware)
+    if (isAuthenticated) {
+        return <Navigate to={getRoleHome(user)} replace />
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -41,7 +50,7 @@ export default function LoginPage() {
         try {
             setLoading(true)
             const profile = await login(email, password)
-            navigate(profile?.is_onboarded ? '/dashboard' : '/onboarding', { replace: true })
+            navigate(getRoleHome(profile), { replace: true })
         } catch (err) {
             setError(err?.message || t('errors.invalidCredentials'))
         } finally {

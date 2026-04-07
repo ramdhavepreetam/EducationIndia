@@ -1,120 +1,68 @@
 """
 Parent monitoring service — all business logic for the parent dashboard.
-
-Lives in the user module (ADR-009).
-Repository handles DB queries. Service handles decisions.
-
-Rules enforced here:
-  - Always verify parent-child link before accessing child data (ADR-009)
-  - Defence-in-depth: link checked at service level AND inside get_child_attempts()
-  - Never import models from other modules — cross-module data via parent_repository raw SQL
-  - Sequential DB calls only — single AsyncSession is not concurrency-safe
-
-Singleton: import parent_service (not ParentService) in parent_router.py.
 """
 
 from uuid import UUID
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.modules.analysis.schemas import WrongAnswersSummary
+from app.modules.analysis.wrong_answers import build_wrong_answers_summary
 from app.modules.user.parent_repository import parent_repository
+from app.modules.user.child_repository import ChildRepository
+from app.modules.user.child_schemas import ChildProfileSchema
 from app.modules.user.parent_schemas import (
     ChildAttemptSummarySchema,
     ChildDetailSchema,
-    ChildProfileSchema,
     ChildStatsSchema,
     ParentDashboardSchema,
+    RecentMistakesSchema,
     WeakTopicSchema,
 )
-from app.shared.exceptions import BadRequest, Conflict, Forbidden, NotFound
+from app.shared.access_control import get_access_context, can_see_full_analysis
+from app.shared.exceptions import Forbidden, NotFound
 
 
 class ParentService:
 
-    # ── Private helpers ───────────────────────────────────────────────────────
-
-    def _build_child_profile(self, row) -> ChildProfileSchema:
-        """
-        Build ChildProfileSchema from a get_linked_children row.
-        Row is a SQLAlchemy Row: (UserProfile, child_nickname, linked_at).
-        MediumTypeEnum extends str, so profile.medium is already string-compatible.
-        """
-        profile, nickname, linked_at = row
-        return ChildProfileSchema(
-            student_id=profile.id,
-            full_name=profile.full_name,
-            std_class=profile.std_class,
-            medium=profile.medium,
-            school_name=profile.school_name,
-            district=profile.district,
-            avatar_url=profile.avatar_url,
-            child_nickname=nickname,
-            is_onboarded=profile.is_onboarded,
-            linked_at=linked_at,
-        )
+    def __init__(self):
+        self.child_repo = ChildRepository()
 
     def _build_attempt_summary(self, row) -> ChildAttemptSummarySchema:
-        """
-        Build ChildAttemptSummarySchema from a get_child_attempts mapping row.
-        Keys match schema field names exactly (attempt_id, exam_title_en, etc.).
-        """
         return ChildAttemptSummarySchema(**dict(row))
-
-    # ── Public methods ────────────────────────────────────────────────────────
 
     async def get_dashboard(
         self, db: AsyncSession, parent_id: UUID
     ) -> ParentDashboardSchema:
-        """
-        Returns all linked children + full detail for the first child.
-        If no children linked, returns an empty dashboard (no error).
-        """
-        rows = await parent_repository.get_linked_children(db, parent_id)
-        if not rows:
+        children = await self.child_repo.get_children(parent_id, db)
+        if not children:
             return ParentDashboardSchema(children=[], selected_child_detail=None)
 
-        children = [self._build_child_profile(r) for r in rows]
-        first_child_id = children[0].student_id
+        child_schemas = [ChildProfileSchema.model_validate(c) for c in children]
+        first_child_id = child_schemas[0].id
         detail = await self.get_child_detail(db, parent_id, first_child_id)
 
-        return ParentDashboardSchema(children=children, selected_child_detail=detail)
-
-    async def get_children(
-        self, db: AsyncSession, parent_id: UUID
-    ) -> list[ChildProfileSchema]:
-        """Return all linked children as profile schemas."""
-        rows = await parent_repository.get_linked_children(db, parent_id)
-        return [self._build_child_profile(r) for r in rows]
+        return ParentDashboardSchema(children=child_schemas, selected_child_detail=detail)
 
     async def get_child_detail(
-        self, db: AsyncSession, parent_id: UUID, student_id: UUID
+        self, db: AsyncSession, parent_id: UUID, child_id: UUID
     ) -> ChildDetailSchema:
-        """
-        Full detail for one child: profile + stats + recent attempts + topics.
-        Service checks link first. get_child_attempts() also checks link (ADR-009
-        defence-in-depth — repository is the single authority on the link).
-        """
-        link = await parent_repository.get_link(db, parent_id, student_id)
-        if not link:
-            raise Forbidden("You are not linked to this student")
+        child = await self.child_repo.get_by_id(child_id, parent_id, db)
+        if not child:
+            raise Forbidden("Child profile not found or does not belong to you")
 
-        # Sequential queries — single AsyncSession is not concurrency-safe
-        stats_raw = await parent_repository.get_child_stats(db, student_id)
+        stats_raw = await parent_repository.get_child_stats(db, child_id)
         attempt_rows = await parent_repository.get_child_attempts(
-            db, parent_id, student_id
+            db, child_id, limit=10
         )
         topics_raw = await parent_repository.get_child_topic_performance(
-            db, student_id
+            db, child_id
         )
-        child_rows = await parent_repository.get_linked_children(db, parent_id)
 
-        child_row = next((r for r in child_rows if r[0].id == student_id), None)
-        if not child_row:
-            raise NotFound("Child profile not found")
-
-        profile = self._build_child_profile(child_row)
+        profile = ChildProfileSchema.model_validate(child)
         stats = ChildStatsSchema(**stats_raw)
-        attempts = [self._build_attempt_summary(r) for r in attempt_rows[:10]]
+        attempts = [self._build_attempt_summary(r) for r in attempt_rows]
 
         weak_topics = [
             WeakTopicSchema(**t) for t in topics_raw if t["status"] == "weak"
@@ -136,20 +84,16 @@ class ParentService:
         self,
         db: AsyncSession,
         parent_id: UUID,
-        student_id: UUID,
+        child_id: UUID,
         page: int = 1,
         size: int = 10,
     ) -> dict:
-        """
-        Paginated attempt history for a child.
-        Link is verified before querying — raises Forbidden if not linked.
-        """
-        link = await parent_repository.get_link(db, parent_id, student_id)
-        if not link:
-            raise Forbidden("You are not linked to this student")
+        child = await self.child_repo.get_by_id(child_id, parent_id, db)
+        if not child:
+            raise Forbidden("Child profile not found or does not belong to you")
 
         all_rows = await parent_repository.get_child_attempts(
-            db, parent_id, student_id, limit=200
+            db, child_id, limit=200
         )
         total = len(all_rows)
         start = (page - 1) * size
@@ -165,87 +109,148 @@ class ParentService:
         }
 
     async def get_child_topics(
-        self, db: AsyncSession, parent_id: UUID, student_id: UUID
+        self, db: AsyncSession, parent_id: UUID, child_id: UUID
     ) -> list[WeakTopicSchema]:
-        """Per-topic performance for a child. Link required."""
-        link = await parent_repository.get_link(db, parent_id, student_id)
-        if not link:
-            raise Forbidden("You are not linked to this student")
+        child = await self.child_repo.get_by_id(child_id, parent_id, db)
+        if not child:
+            raise Forbidden("Child profile not found or does not belong to you")
 
         topics_raw = await parent_repository.get_child_topic_performance(
-            db, student_id
+            db, child_id
         )
         return [WeakTopicSchema(**t) for t in topics_raw]
 
-    async def link_child(
-        self, db: AsyncSession, parent_id: UUID, student_email: str
-    ) -> ChildProfileSchema:
+    # ── Wrong Answers Review (ADR-012, ADR-013, ADR-014) ──────────────────────
+
+    async def get_attempt_wrong_answers(
+        self,
+        parent_id: UUID,
+        child_profile_id: UUID,
+        attempt_id: UUID,
+        db: AsyncSession,
+    ) -> WrongAnswersSummary:
         """
-        Link a parent to a student account by email.
-        Guards: student must exist, not already linked, not a self-link.
+        Returns wrong answers for a specific submitted attempt.
+        Reuses analysis.wrong_answers.build_wrong_answers_summary.
+
+        Security checks (all must pass before loading any data):
+          1. child_profile belongs to this parent (ADR-013)
+          2. attempt belongs to this child_profile
+          3. attempt.status == 'submitted' (ADR-012)
+        Then:
+          4. check paid tier → include_details flag (ADR-014)
+          5. call build_wrong_answers_summary
         """
-        student = await parent_repository.find_student_by_email(db, student_email)
-        if not student:
-            raise NotFound(
-                "No student account found with this email. "
-                "Ask your child to register on ScholarPath first."
+        # Check 1: parent owns child profile
+        child = await self.child_repo.get_by_id(child_profile_id, parent_id, db)
+        if not child:
+            raise Forbidden("Child profile not found")
+
+        # Check 2: attempt belongs to this child_profile
+        attempt = await db.execute(
+            text("""
+                SELECT id, status
+                FROM attempts
+                WHERE id = :aid
+                AND child_profile_id = :cid
+            """),
+            {"aid": str(attempt_id), "cid": str(child_profile_id)},
+        )
+        attempt_row = attempt.mappings().first()
+        if not attempt_row:
+            raise NotFound("Attempt not found for this child")
+
+        # Check 3: must be submitted (ADR-012 — correct_option post-submit only)
+        if attempt_row["status"] != "submitted":
+            raise Forbidden("Attempt must be submitted to review answers")
+
+        # Check 4: paid tier check (ADR-014)
+        ctx = await get_access_context(parent_id, db)
+        include_details = can_see_full_analysis(ctx)
+
+        # Check 5: build and return
+        return await build_wrong_answers_summary(
+            attempt_id=attempt_id,
+            db=db,
+            include_details=include_details,
+        )
+
+    async def get_recent_mistakes_summary(
+        self,
+        parent_id: UUID,
+        child_profile_id: UUID,
+        db: AsyncSession,
+    ) -> RecentMistakesSchema:
+        """
+        Returns the most recent 5 wrong questions from the child's
+        most recent submitted attempt. Used for the dashboard card.
+
+        Free tier: returns attempt metadata + counts, items=[].
+        Paid tier: returns attempt metadata + top 5 wrong items.
+        """
+        # Check 1: parent owns child
+        child = await self.child_repo.get_by_id(child_profile_id, parent_id, db)
+        if not child:
+            raise Forbidden("Child profile not found")
+
+        # Get most recent SUBMITTED attempt for this child
+        result = await db.execute(
+            text("""
+                SELECT
+                    a.id            AS attempt_id,
+                    a.submitted_at,
+                    a.total_score,
+                    a.percentage,
+                    a.grade,
+                    e.title_en      AS exam_title_en,
+                    e.title_mr      AS exam_title_mr,
+                    e.paper_code
+                FROM attempts a
+                JOIN exams e ON e.id = a.exam_id
+                WHERE a.child_profile_id = :cid
+                AND   a.status = 'submitted'
+                ORDER BY a.submitted_at DESC
+                LIMIT 1
+            """),
+            {"cid": str(child_profile_id)},
+        )
+        latest = result.mappings().first()
+
+        if not latest:
+            return RecentMistakesSchema(
+                has_attempts=False,
+                attempt_id=None,
+                exam_title_en=None,
+                exam_title_mr=None,
+                submitted_at=None,
+                total_score=None,
+                grade=None,
+                wrong_answers_summary=None,
             )
 
-        student_id = student["id"]
+        # Paid tier check (ADR-014)
+        ctx = await get_access_context(parent_id, db)
+        include_details = can_see_full_analysis(ctx)
 
-        if str(parent_id) == str(student_id):
-            raise BadRequest("You cannot link to your own account")
-
-        existing = await parent_repository.get_link(db, parent_id, student_id)
-        if existing:
-            raise Conflict("You are already monitoring this student")
-
-        await parent_repository.create_link(db, parent_id, student_id, parent_id)
-        await db.commit()
-
-        rows = await parent_repository.get_linked_children(db, parent_id)
-        new_row = next((r for r in rows if r[0].id == student_id), None)
-        if not new_row:
-            raise NotFound("Could not load new child profile after linking")
-        return self._build_child_profile(new_row)
-
-    async def update_nickname(
-        self,
-        db: AsyncSession,
-        parent_id: UUID,
-        student_id: UUID,
-        nickname: str,
-    ) -> ChildProfileSchema:
-        """Update child nickname on an active link. Raises NotFound if link missing."""
-        updated = await parent_repository.update_nickname(
-            db, parent_id, student_id, nickname
+        # Get wrong answers (limit to 5 for dashboard card)
+        summary = await build_wrong_answers_summary(
+            attempt_id=latest["attempt_id"],
+            db=db,
+            include_details=include_details,
+            limit=5,
         )
-        if not updated:
-            raise NotFound("Active link not found — cannot update nickname")
 
-        await db.commit()
-
-        rows = await parent_repository.get_linked_children(db, parent_id)
-        row = next((r for r in rows if r[0].id == student_id), None)
-        if not row:
-            raise NotFound("Child not found after nickname update")
-        return self._build_child_profile(row)
-
-    async def unlink_child(
-        self, db: AsyncSession, parent_id: UUID, student_id: UUID
-    ) -> bool:
-        """
-        Soft-deactivates the parent-child link (is_active=False).
-        Does NOT delete the student account or any attempt/analysis data.
-        """
-        link = await parent_repository.get_link(db, parent_id, student_id)
-        if not link:
-            raise NotFound("Link not found or already removed")
-
-        await parent_repository.deactivate_link(db, parent_id, student_id)
-        await db.commit()
-        return True
+        return RecentMistakesSchema(
+            has_attempts=True,
+            attempt_id=latest["attempt_id"],
+            exam_title_en=latest["exam_title_en"],
+            exam_title_mr=latest["exam_title_mr"],
+            paper_code=latest["paper_code"],
+            submitted_at=latest["submitted_at"],
+            total_score=latest["total_score"],
+            grade=latest["grade"],
+            wrong_answers_summary=summary,
+        )
 
 
-# Module-level singleton — import this in parent_router.py
 parent_service = ParentService()
