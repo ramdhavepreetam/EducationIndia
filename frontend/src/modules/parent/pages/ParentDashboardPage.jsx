@@ -2,30 +2,45 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParentStore } from '../store/parentStore'
 import { useAuthStore } from '@/modules/auth/store/authStore'
+import { usePaymentStore } from '@/modules/payment/store/paymentStore'
 import { useTranslation } from 'react-i18next'
 import ChildSwitcher from '../components/ChildSwitcher'
 import ChildProfileCard from '../components/ChildProfileCard'
 import ChildWeakTopics from '../components/ChildWeakTopics'
 import ChildProgressChart from '../components/ChildProgressChart'
 import ChildAttemptHistory from '../components/ChildAttemptHistory'
+import RecentMistakesCard from '../components/RecentMistakesCard'
 import CreateChildModal from '../components/CreateChildModal'
 
 export default function ParentDashboardPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { user } = useAuthStore()
+  const { status: subscription } = usePaymentStore()
+  const isPaid = subscription?.is_active ?? false
+  const language = user?.preferred_language || 'en'
+
   const {
     children, selectedChildId, childDetail,
     isLoading, isLoadingDetail, error,
-    isSaving,
-    loadDashboard, selectChild, updateChild, deleteChild
+    isSaving, recentMistakes,
+    loadDashboard, selectChild, updateChild, deleteChild,
+    loadRecentMistakes,
   } = useParentStore()
 
   const [showLinkModal, setShowLinkModal] = useState(false)
+  const [highlightedAttemptId, setHighlightedAttemptId] = useState(null)
 
   useEffect(() => {
     loadDashboard()
   }, [])
+
+  // Load recent mistakes when a child is selected and dashboard loads
+  useEffect(() => {
+    if (selectedChildId) {
+      loadRecentMistakes(selectedChildId)
+    }
+  }, [selectedChildId])
 
   // ── Loading skeleton ─────────────────────────────
   if (isLoading) {
@@ -142,17 +157,35 @@ export default function ParentDashboardPage() {
           <ChildWeakTopics
             weakTopics={childDetail.weak_topics}
             strongTopics={childDetail.strong_topics}
-            language={user?.preferred_language || 'en'}
+            language={language}
+          />
+
+          {/* ── Recent Mistakes Card ── */}
+          <RecentMistakesCard
+            recentMistakes={recentMistakes}
+            language={language}
+            isPaid={isPaid}
+            onUpgrade={() => navigate('/upgrade')}
+            onViewAll={(attemptId) => {
+              setHighlightedAttemptId(attemptId)
+              document.getElementById('attempt-history')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }}
           />
 
           <ChildProgressChart attempts={childDetail.recent_attempts} />
 
-          <ChildAttemptHistory
-            attempts={childDetail.recent_attempts}
-            onViewResult={(id) => navigate(`/attempts/${id}/result`)}
-            pageSize={5}
-            showPagination={false}
-          />
+          {/* Scroll target for "View All Mistakes" */}
+          <div id="attempt-history">
+            <ChildAttemptHistory
+              attempts={childDetail.recent_attempts}
+              childId={selectedChildId}
+              onViewResult={(id) => navigate(`/attempts/${id}/result`)}
+              pageSize={5}
+              showPagination={false}
+              highlightedAttemptId={highlightedAttemptId}
+            />
+          </div>
 
         </div>
       ) : null}

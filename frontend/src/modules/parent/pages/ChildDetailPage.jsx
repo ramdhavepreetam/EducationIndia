@@ -134,6 +134,7 @@ export default function ChildDetailPage() {
 
         <ChildAttemptHistory
           attempts={childDetail.recent_attempts}
+          childId={studentId}
           onViewResult={(id) => navigate(`/attempts/${id}/result`)}
           pageSize={10}
           showPagination={true}

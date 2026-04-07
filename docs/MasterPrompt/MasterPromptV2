@@ -1,0 +1,519 @@
+# SCHOLARPATH — MASTER CONTEXT v2.0 (TOML)
+# ==========================================
+# Paste at start of every Claude Code session.
+# Then state: MODULE=x TASK=y
+# V2 changes: child_profiles, payment, access_control
+# ==========================================
+
+[project]
+name    = "ScholarPath"
+desc    = "Multilingual MSCE exam prep portal. Parents + Children + Admins"
+version = "2.0"
+langs   = ["en","mr"]
+scale   = "1 exam now → multi-board, zero code change per new exam"
+schema  = "/database/scholarpath_migration.sql + /database/migration_v2.sql"
+adrs    = "/docs/adr/ADR-001..ADR-014"
+
+[stack]
+be     = "Python 3.11 + FastAPI + SQLAlchemy 2.0 async + Alembic"
+db     = "PostgreSQL via Supabase (free)"
+auth   = "Supabase Auth — Google + Facebook + Email. Trigger auto-creates user_profiles"
+fe     = "React 18 + Vite + Tailwind 3 + Zustand + react-i18next"
+http   = "Axios + request interceptor (JWT) + response interceptor (401→logout)"
+test   = "pytest + pytest-asyncio | Vitest + RTL"
+media  = "LocalProvider(dev) → CloudinaryProvider(prod) via MEDIA_PROVIDER env"
+deploy = "Vercel(fe) + Render(be) + Supabase(db)"
+payment= "Razorpay — one-time orders, INR, UPI+cards+netbanking"
+
+# ── WHO USES THE APP ──────────────────────────────────────────────────────
+# V2: No student accounts. Parents own everything.
+# Parent logs in → creates child profile → starts exam for child
+# → hands device to child → child takes exam → parent sees result
+
+[users]
+parent = "Supabase Auth account. Owns child profiles. Pays for access."
+child  = "No login. DB row only (child_profiles). Name + class."
+admin  = "Supabase Auth account. role=exam_admin or super_admin."
+
+# ── MODULES ───────────────────────────────────────────────────────────────
+
+[modules.auth]
+owns     = "JWT verification, role checks"
+exposes  = "verify_token(), require_role()"
+consumes = "nothing"
+rules    = ["no DB tables", "no profile logic"]
+
+[modules.user]
+owns     = "user_profiles, child_profiles"
+exposes  = "UserService.get_profile(), ChildProfileService.create(), update(), delete()"
+consumes = "auth.verify_token"
+rules    = [
+  "no auth decisions",
+  "child_profiles owned by parent — always filter by parent_id",
+  "parent_student_links table is DEPRECATED — do not use"
+]
+
+[modules.catalog]
+owns     = "exam_boards, exam_categories, exam_events, exams, sections, topics"
+exposes  = "CatalogService.get_exam(), list_exams(parent_id)"
+consumes = "auth, shared.access_control"
+rules    = [
+  "no question data",
+  "list_exams() tags each exam with is_accessible based on subscription"
+]
+
+[modules.question]
+owns     = "questions, options, question_contexts"
+exposes  = "QuestionService.get_questions_for_exam(), validate_answer()"
+consumes = "catalog(exam_id), media(image_url)"
+rules    = ["NEVER return correct_option in exam delivery — SECURITY BOUNDARY ADR-012"]
+
+[modules.attempt]
+owns     = "attempts, responses, state_machine"
+exposes  = "AttemptService.start(), save_response(), submit()"
+consumes = "catalog, question, auth, shared.access_control"
+rules    = [
+  "NO score computation",
+  "NO correct_option reads",
+  "raw storage only",
+  "start_exam() MUST call can_start_exam() before creating attempt",
+  "attempts.child_profile_id — use this. attempts.student_id is deprecated."
+]
+
+[modules.analysis]
+owns     = "NOTHING — read-only"
+exposes  = "AnalysisService.generate_report(), get_attempt_report()"
+consumes = "attempt(read), question(correct answers), shared.access_control"
+rules    = [
+  "pure scorer/recommender functions stay untouched",
+  "get_attempt_report() checks can_see_full_analysis() before returning topic data",
+  "free tier response: total_score, percentage, grade ONLY",
+  "paid tier response: full section_scores, topic_scores, recommendations"
+]
+
+[modules.media]
+owns     = "media_files"
+exposes  = "MediaService.upload(), delete()"
+consumes = "auth(upload perms)"
+rules    = ["swap provider via MEDIA_PROVIDER env only"]
+
+[modules.payment]
+owns     = "subscriptions, payments, subscription_plans"
+exposes  = "PaymentService.create_order(), verify_and_activate(), get_status()"
+consumes = "auth, app_settings"
+rules    = [
+  "RAZORPAY_KEY_SECRET in .env ONLY — never in DB, never in code",
+  "ALWAYS verify Razorpay signature before activating subscription",
+  "webhook endpoint excluded from JWT auth middleware",
+  "price always read from app_settings — never hardcoded in code or components",
+  "create_order() reads price from app_settings at runtime"
+]
+
+[modules.access_control]
+owns     = "nothing — pure utility"
+file     = "backend/app/shared/access_control.py"
+exposes  = "get_access_context(), can_start_exam(), can_see_full_analysis(), can_download_pdf()"
+consumes = "app_settings, subscriptions"
+rules    = [
+  "SINGLE SOURCE OF TRUTH for all tier decisions",
+  "NEVER duplicate access logic in individual modules",
+  "call get_access_context() ONCE per request, pass ctx around",
+  "paid tier = active subscription + expires_at > now()"
+]
+
+[modules.admin]
+owns     = "NOTHING — orchestrator only"
+exposes  = "/api/admin/* routes"
+consumes = "all modules via public interfaces"
+rules    = [
+  "ZERO business logic",
+  "delegate only, never own",
+  "app_settings CRUD via /api/admin/settings"
+]
+
+# ── TIERS ─────────────────────────────────────────────────────────────────
+
+[tier.free]
+who           = "all parents with no active subscription"
+exam_access   = "exam_id from app_settings.free_tier_exam_id (default: 1)"
+max_attempts  = "app_settings.free_tier_max_attempts (default: 3) per child"
+result_shows  = "total_score, percentage, grade ONLY"
+result_hides  = "section_scores, topic_scores, recommendations, PDF"
+locked_ui     = "UpgradePrompt component shown where content is locked"
+
+[tier.paid]
+who           = "parents with active subscription (expires_at > now())"
+exam_access   = "all active exams"
+max_attempts  = "unlimited"
+result_shows  = "everything — full analysis, PDF download"
+duration      = "app_settings.access_duration_months (default: 5) months"
+scope         = "per parent account — all child profiles included"
+on_expiry     = "full lockout — free tier rules apply"
+
+# ── DATABASE ──────────────────────────────────────────────────────────────
+
+[db.rules]
+multilingual   = "every text field = column_en + column_mr (TEXT, nullable)"
+correct_option = "NEVER in API response during active exam. v_exam_questions view."
+scores         = "computed ONCE on submit → stored JSONB in attempts. Never recompute."
+stats          = "question_stats updated by DB trigger ONLY. Never in app code."
+rls            = "parents see own child_profiles + their attempts. admins bypass via is_admin()."
+child_owner    = "child_profiles.parent_id = auth.uid() enforced by RLS on all child data"
+settings       = "app_settings readable by all (safe keys). writable by admin only."
+
+[db.views]
+v_exam_questions   = "exam delivery — EXCLUDES correct_option. Always use this."
+v_exam_answers     = "post-exam review — includes correct_option. status=submitted gate."
+v_student_attempts = "joins attempts+exams+exam_events. use for dashboard."
+
+[db.triggers]
+auto = [
+  "questions_updated_at",
+  "user_profiles_updated_at",
+  "child_profiles_updated_at",
+  "sync_correct_option_trigger",
+  "update_question_stats_trigger",
+  "increment_attempts_used",
+  "on_auth_user_created — creates user_profiles on Supabase signup",
+  "subscriptions_updated_at"
+]
+rule = "NEVER replicate trigger logic in app code"
+
+[db.rls_helpers]
+"is_admin()"                           = "true if role IN (exam_admin, super_admin)"
+"is_parent()"                          = "true if role = parent"
+"parent_has_active_subscription(uuid)" = "DB function — true if active sub + not expired"
+
+# ── ALL TABLES ────────────────────────────────────────────────────────────
+
+[db.tables.exam_boards]
+cols = "id, name_en, name_mr, short_code VARCHAR(20) UNIQUE, state, website_url, logo_url, is_active, created_at"
+
+[db.tables.exam_categories]
+cols = "id, board_id→exam_boards, name_en, name_mr, description_en, description_mr, icon_url, is_active, created_at"
+
+[db.tables.exam_events]
+cols = "id, board_id, category_id, title_en, title_mr, std_class SMALLINT, year SMALLINT, exam_date, registration_deadline, description_en, description_mr, is_active DEFAULT false, created_at"
+
+[db.tables.exams]
+cols   = "id, event_id, paper_code VARCHAR(10), set_code DEFAULT 'A', paper_number, title_en, title_mr, medium medium_type, total_questions DEFAULT 75, total_marks DEFAULT 150, marks_per_question DEFAULT 2, duration_minutes DEFAULT 90, instructions_en, instructions_mr, is_active DEFAULT false, created_at"
+unique = "(paper_code, set_code)"
+
+[db.tables.sections]
+cols = "id, exam_id, section_label VARCHAR(5), subject_en, subject_mr, question_from SMALLINT, question_to SMALLINT, order_index, color_hex DEFAULT '#3B82F6'"
+
+[db.tables.topics]
+cols = "id, section_id, name_en, name_mr, description_en, description_mr, order_index"
+
+[db.tables.question_contexts]
+cols = "id, exam_id, context_type, title_en, title_mr, content_en, content_mr, image_url, image_alt_en, image_alt_mr, instruction_en, instruction_mr, applies_from SMALLINT, applies_to SMALLINT, order_index, created_at"
+
+[db.tables.questions]
+cols = """
+  id, exam_id, section_id, topic_id, context_id(nullable),
+  question_no SMALLINT, question_type DEFAULT 'text',
+  text_en(nullable), text_mr(nullable),
+  question_image_url, question_image_alt_en, question_image_alt_mr,
+  correct_option SMALLINT CHECK(1-4),
+  explanation_en, explanation_mr, hint_en, hint_mr,
+  marks DEFAULT 2, difficulty DEFAULT 'medium',
+  tags TEXT[] DEFAULT '{}',
+  attempt_count INT DEFAULT 0, correct_count INT DEFAULT 0,
+  actual_difficulty_ratio NUMERIC(4,3),
+  created_at, updated_at"""
+unique   = "(exam_id, question_no)"
+security = "correct_option NEVER sent to frontend during exam"
+
+[db.tables.options]
+cols   = "id, question_id, option_no SMALLINT CHECK(1-4), text_en(nullable), text_mr(nullable), image_url(nullable), image_alt_en, image_alt_mr, is_correct BOOLEAN DEFAULT false"
+note   = "is_correct synced from questions.correct_option by trigger"
+unique = "(question_id, option_no)"
+
+[db.tables.user_profiles]
+cols = """
+  id UUID PK→auth.users(id),
+  full_name, role user_role DEFAULT 'parent', avatar_url, phone,
+  preferred_language VARCHAR(5) DEFAULT 'en',
+  std_class SMALLINT, medium medium_type, school_name, district,
+  state DEFAULT 'Maharashtra', date_of_birth DATE,
+  auth_provider TEXT DEFAULT 'email',
+  is_active DEFAULT true, is_onboarded DEFAULT false,
+  created_at, updated_at"""
+note = "V2: default role is parent. student role no longer created."
+
+[db.tables.child_profiles]
+cols = """
+  id UUID PK DEFAULT gen_random_uuid(),
+  parent_id UUID NOT NULL FK→user_profiles(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  std_class SMALLINT NOT NULL CHECK(5 or 8),
+  medium medium_type DEFAULT 'english',
+  school_name TEXT,
+  district TEXT,
+  avatar_color VARCHAR(7) DEFAULT '#3B82F6',
+  is_active BOOLEAN DEFAULT true,
+  created_at, updated_at"""
+rls  = "parent_id = auth.uid() OR is_admin()"
+note = "V2: replaces parent_student_links. No email. No password. Parent owns."
+
+[db.tables.attempts]
+cols = """
+  id UUID PK DEFAULT gen_random_uuid(),
+  child_profile_id UUID FK→child_profiles(id),
+  student_id UUID (DEPRECATED — null on new rows),
+  exam_id INT, assignment_id INT(nullable),
+  attempt_number SMALLINT DEFAULT 1,
+  status attempt_status DEFAULT 'ongoing',
+  started_at, submitted_at, last_saved_at, duration_seconds INT,
+  total_score SMALLINT, total_correct, total_wrong, total_skipped,
+  percentage NUMERIC(5,2), grade VARCHAR(20),
+  section_scores JSONB DEFAULT '[]',
+  topic_scores   JSONB DEFAULT '[]',
+  time_analysis  JSONB DEFAULT '{}',
+  recommendations JSONB DEFAULT '[]',
+  ip_address INET, user_agent TEXT, created_at"""
+note = "Use child_profile_id. student_id deprecated."
+
+[db.tables.responses]
+cols = "id BIGSERIAL, attempt_id UUID, question_id INT, question_no SMALLINT, selected_option SMALLINT, is_correct BOOLEAN, marks_obtained DEFAULT 0, first_visited_at, answered_at, time_taken_seconds SMALLINT, visit_count DEFAULT 0, is_marked_review DEFAULT false"
+
+[db.tables.app_settings]
+cols = "key VARCHAR(100) PK, value TEXT NOT NULL, type VARCHAR(20), label TEXT, updated_at, updated_by UUID"
+note = "All configurable values. Admin edits via panel. No redeploy needed."
+safe_public_keys = ["payment_amount_inr","access_duration_months","razorpay_key_id","free_tier_exam_id","free_tier_max_attempts","app_name"]
+important = "Price in ALL UI components fetched from API. NEVER hardcoded."
+
+[db.tables.subscription_plans]
+cols = "id SERIAL PK, name TEXT, duration_months SMALLINT DEFAULT 5, price_inr INT, max_children INT DEFAULT 999, features JSONB, is_active BOOLEAN, created_at"
+
+[db.tables.subscriptions]
+cols = "id UUID PK, parent_id UUID FK→user_profiles, plan_id INT, status VARCHAR(20), started_at, expires_at, razorpay_order_id TEXT UNIQUE, razorpay_payment_id TEXT, amount_paid_inr INT, created_at, updated_at"
+statuses = ["pending","active","expired","cancelled"]
+rls      = "parent sees own. admin sees all."
+
+[db.tables.payments]
+cols     = "id UUID PK, subscription_id UUID, parent_id UUID, amount_inr INT, currency DEFAULT 'INR', razorpay_order_id, razorpay_payment_id, razorpay_signature, status VARCHAR(20), paid_at, failure_reason, created_at"
+statuses = ["created","captured","failed","refunded"]
+
+[db.tables.question_stats]
+cols = "question_id PK, total_attempts, correct_count, wrong_count, skip_count, avg_time_seconds, actual_difficulty, updated_at"
+rule = "DB trigger ONLY — never write from app code"
+
+[db.tables.notifications]
+cols = "id BIGSERIAL, user_id UUID, type, title_en, title_mr, body_en, body_mr, data JSONB, is_read DEFAULT false, read_at, created_at"
+
+[db.tables.enquiries]
+cols = "id, name, email, phone, school_name, district, std_class, message, status, admin_notes, responded_by UUID, responded_at, source, referral_code, created_at"
+
+[db.enums]
+user_role        = ["student","parent","teacher","exam_admin","super_admin"]
+medium_type      = ["english","marathi","hindi","semi_english"]
+question_type    = ["text","text_image","image_only","context_text","context_image","marathi_only","bilingual"]
+attempt_status   = ["ongoing","submitted","expired","abandoned"]
+difficulty_level = ["easy","medium","hard"]
+
+# ── EXAM DOMAIN ───────────────────────────────────────────────────────────
+
+[exam.structure]
+"Paper 0501" = "Sec-I Q1-25 English | Sec-II Q26-75 Mathematics"
+"Paper 0502" = "Sec-I Q1-25 Marathi | Sec-II Q26-75 Intelligence Test"
+questions    = 75
+marks_each   = 2
+total_marks  = 150
+duration_min = 90
+marking      = "correct=+2 wrong=0 skipped=0 (NO negative marking)"
+
+[exam.grades]
+"Excellent"    = ">= 90%"
+"Good"         = ">= 70%"
+"Average"      = ">= 50%"
+"Below Average"= "< 50%"
+
+[exam.topic_status]
+strong  = ">= 70%"
+average = ">= 50%"
+weak    = "< 50% → triggers recommendation"
+
+[exam.attempt_states]
+transitions = {not_started=["ongoing"], ongoing=["submitted","expired","abandoned"], submitted=[], expired=[], abandoned=["ongoing"]}
+terminal    = ["submitted","expired"]
+
+[exam.palette_colors]
+"not-visited"     = "visit_count=0 → gray bg-gray-200"
+"visited"         = "visit_count>0 no answer → white border-gray-400"
+"answered"        = "selected_option set not marked → green bg-green-500"
+"marked"          = "is_marked_review=true no answer → orange bg-orange-400"
+"marked-answered" = "is_marked_review=true + answer → purple bg-purple-500"
+"current"         = "ring-2 ring-blue-600 added to any status"
+
+# ── CODE STANDARDS ────────────────────────────────────────────────────────
+
+[code.backend]
+file_order   = "models → schemas → repository → repository_test → service → service_test → router → router_test"
+queries      = "ALL DB queries in repository.py ONLY"
+logic        = "ALL business logic in service.py ONLY"
+router_rule  = "router calls service ONLY — no direct DB, no logic"
+async        = "async/await on EVERY DB operation"
+exceptions   = "raise specific exceptions from shared/exceptions.py"
+multilingual = "every text field = field_en + field_mr, never field: str alone"
+lang_util    = "from app.shared.i18n import get_text"
+migrations   = "NEVER generate — describe changes, human reviews and runs"
+access_gate  = "ALWAYS import from app.shared.access_control — never write tier logic inline"
+
+[code.frontend]
+components    = "functional only, Tailwind only (no inline styles)"
+state         = "Zustand — one store per module, always include isLoading+error+reset()"
+api_calls     = "always through apiClient.js — never raw fetch/axios"
+exports       = "each module exports ONLY through index.js"
+i18n          = "t() for ALL UI strings — never hardcode English text in JSX"
+loading       = "every data-fetching component needs loading + error state"
+autosave      = "optimistic update first, API call fire-and-forget"
+price_display = "ALWAYS fetch price from API (/api/payment/plans) — NEVER hardcode ₹499"
+
+[code.testing]
+required_per_module = ["unit(service, mocked repo)","integration(router, TestClient)","security(auth boundaries)"]
+security_tests = [
+  "test_correct_option_not_in_exam_delivery",
+  "test_child_profile_only_visible_to_own_parent",
+  "test_free_tier_blocked_from_paper_2",
+  "test_free_tier_blocked_after_3_attempts",
+  "test_analysis_topic_data_hidden_for_free_tier",
+  "test_paid_tier_sees_full_analysis",
+  "test_admin_endpoint_blocked_for_parent",
+  "test_payment_verify_rejects_invalid_signature"
+]
+
+# ── AI BOUNDARIES ─────────────────────────────────────────────────────────
+
+[ai.do]
+freely = [
+  "scaffold: models, schemas, repos, services, routers",
+  "boilerplate: logging, error handling, config, DI",
+  "tests: unit + integration + security stubs",
+  "docs: README per module, docstrings",
+  "refactor: rename, restructure, deduplicate",
+  "frontend: components, stores, API hooks, i18n keys",
+  "SQL: standard CRUD in repository.py"
+]
+
+[ai.never]
+touch = [
+  "module boundaries (set in ADRs)",
+  "DB migrations (human reviews + runs)",
+  "auth + RLS logic (security-critical)",
+  "scoring thresholds (business logic)",
+  "correct_option in exam delivery (ADR-012)",
+  "Razorpay secret key — .env only, never in code",
+  "access control logic outside access_control.py",
+  "price hardcoded in any component or string",
+  "cross-module internal imports",
+  "DB queries outside repository.py",
+  "business logic in admin module",
+  "scores computed in attempt module"
+]
+
+[ai.workflow]
+"1_load_context"   = "read CLAUDE.md → read ADR → read module README"
+"2_adr_check"      = "existing ADR? follow it. missing? STOP and flag."
+"3_contract_first" = "write schemas BEFORE repo/service/router"
+"4_scaffold"       = "one module at a time, file order above"
+"5_guardrails"     = "verify checklist after every file"
+"6_ship_slice"     = "API + frontend + tests = done. never ship partial"
+"7_document"       = "update module README after every task"
+
+[ai.checklist]
+before_done = [
+  "all DB queries in repository.py only",
+  "no correct_option in any exam delivery response",
+  "no tier logic outside access_control.py",
+  "no price hardcoded anywhere",
+  "child_profile_id used (not student_id) in new code",
+  "multilingual pairs on all content fields",
+  "no cross-module internal imports",
+  "async throughout backend",
+  "specific exceptions raised",
+  "unit + integration + security tests written",
+  "module README updated",
+  "loading+error states in all frontend data components",
+  "no hardcoded strings (use t())"
+]
+
+# ── SESSION FORMAT ────────────────────────────────────────────────────────
+
+[session]
+format = """
+MODULE:      [auth|user|catalog|question|attempt|analysis|media|payment|admin]
+TASK TYPE:   [scaffold|feature|test|refactor|fix|docs]
+ADR:         [ADR-XXX]
+TASK:        one clear sentence
+CREATE:      list of files to create
+MODIFY:      list of files to modify (be explicit)
+NO TOUCH:    files/modules that must not change
+DONE WHEN:   acceptance criteria
+"""
+
+# ── ENVIRONMENT VARIABLES ─────────────────────────────────────────────────
+
+[env.backend]
+DATABASE_URL             = "postgresql+asyncpg://user:pass@host/scholarpath"
+SUPABASE_URL             = "https://xxx.supabase.co"
+SUPABASE_JWT_SECRET      = "from Supabase → Settings → API → JWT secret"
+SUPABASE_SERVICE_KEY     = "service role key"
+MEDIA_PROVIDER           = "local | cloudinary"
+BASE_URL                 = "http://localhost:8000"
+RAZORPAY_KEY_ID          = "from Razorpay dashboard (also in app_settings for FE)"
+RAZORPAY_KEY_SECRET      = "from Razorpay dashboard — NEVER in DB"
+RAZORPAY_WEBHOOK_SECRET  = "from Razorpay dashboard — for webhook verification"
+
+[env.frontend]
+VITE_API_URL           = "http://localhost:8000"
+VITE_SUPABASE_URL      = "https://xxx.supabase.co"
+VITE_SUPABASE_ANON_KEY = "anon key"
+VITE_DEFAULT_LANGUAGE  = "en"
+
+# ── BUILD STATUS ──────────────────────────────────────────────────────────
+
+[build.done]
+days_1_to_13 = [
+  "Day1:  FastAPI + Auth",
+  "Day2:  User module",
+  "Day3:  Frontend Auth",
+  "Day4:  Catalog module",
+  "Day5:  Question module + security",
+  "Day6:  Seed 150 MSCE questions",
+  "Day7:  Attempt module + state machine",
+  "Day8:  Exam-taking UI",
+  "Day9:  Analysis module + scorer",
+  "Day10: Result page + PDF",
+  "Day11: Student dashboard",
+  "Day12: Parent dashboard (Sessions 1-4)",
+  "Day13: Admin panel + image uploader"
+]
+
+[build.v2_sessions]
+"Session A" = "DB migration + child_profiles + rewrite parent module"
+"Session B" = "access_control.py + gates in attempt/analysis/catalog"
+"Session C" = "payment module backend (Razorpay orders + webhooks)"
+"Session D" = "payment frontend (checkout + success + upgrade page)"
+"Session E" = "admin settings panel + subscription management"
+
+[build.rule]
+rule = "complete verification checklist before advancing to next session"
+
+# ── ADR INDEX ─────────────────────────────────────────────────────────────
+
+[adrs]
+"ADR-001" = "Authentication — Supabase Auth, Google+Facebook+Email"
+"ADR-002" = "Vertical Slice Architecture — module contracts"
+"ADR-003" = "Multilingual — _en/_mr column pairs, get_text()"
+"ADR-004" = "Question Content Model — 7 types, contexts, options"
+"ADR-005" = "Attempt State Machine — per-answer upsert, resume"
+"ADR-006" = "Score Computation — pure functions, JSONB on submit"
+"ADR-007" = "Media Provider Pattern — LocalProvider/Cloudinary"
+"ADR-008" = "Supabase Platform — free tier, RLS, UptimeRobot"
+"ADR-009" = "SUPERSEDED by ADR-013"
+"ADR-010" = "Frontend Zustand Stores — one per module"
+"ADR-011" = "Exam Scalability — 4-level hierarchy"
+"ADR-012" = "Answer Security — v_exam_questions, correct_option server-side"
+"ADR-013" = "Child Profile Model — replaces student accounts (ADR-009)"
+"ADR-014" = "Payment + Access Control — Razorpay, app_settings, tiers"

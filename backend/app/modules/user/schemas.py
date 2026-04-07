@@ -9,7 +9,7 @@ module just returns everything and lets the frontend use preferred_language.
 from datetime import date, datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
 
 # ── Response schemas ──────────────────────────────────────────────────────────
@@ -87,13 +87,18 @@ class UpdateProfileRequest(BaseModel):
     """
     PUT /me — partial update. Only fields included in the request are updated.
     Uses exclude_unset=True in service so absent fields are not touched.
-    NOT updatable: role, is_active, is_onboarded, subscription_*, auth_provider.
+    NOT updatable: role, is_active, subscription_*, auth_provider.
+
+    is_onboarded can be set to True here — onboarding completion sends
+    { is_onboarded: true, ...other fields } through this same endpoint.
     """
-    full_name: str | None = None
-    phone: str | None = None
+    model_config = ConfigDict(extra="ignore")
+
+    full_name: str | None = Field(None, min_length=2, max_length=100)
+    phone: str | None = Field(None, max_length=20)
     avatar_url: str | None = None
-    school_name: str | None = None
-    district: str | None = None
+    school_name: str | None = Field(None, max_length=200)
+    district: str | None = Field(None, max_length=100)
     state: str | None = None
     date_of_birth: date | None = None
     preferred_language: str | None = Field(
@@ -106,6 +111,7 @@ class UpdateProfileRequest(BaseModel):
         pattern="^(english|marathi|hindi|semi_english)$",
     )
     std_class: int | None = Field(None, ge=1, le=12)
+    is_onboarded: bool | None = None
 
 
 class CompleteProfileRequest(BaseModel):
@@ -142,3 +148,19 @@ class LinkChildRequest(BaseModel):
         max_length=100,
         description="Optional nickname shown in parent dashboard",
     )
+
+
+class ChangePasswordRequest(BaseModel):
+    """
+    POST /me/change-password — only for auth_provider='email' users.
+    Google/Facebook users don't have a password to change here.
+    """
+    current_password: str = Field(..., min_length=6)
+    new_password: str = Field(..., min_length=8)
+    confirm_password: str = Field(..., min_length=8)
+
+    @model_validator(mode="after")
+    def passwords_match(self):
+        if self.new_password != self.confirm_password:
+            raise ValueError("Passwords do not match")
+        return self

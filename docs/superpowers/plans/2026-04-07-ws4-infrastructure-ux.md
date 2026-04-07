@@ -34,7 +34,14 @@ cd frontend && npm test
 **Files:**
 - Modify: `backend/app/main.py`
 - Modify: `backend/app/modules/auth/dependencies.py` (only if `set_jwks_keys` lives there)
+- Create: `backend/app/tests/__init__.py` (create directory)
 - Create: `backend/app/tests/test_startup.py`
+
+- [ ] **Step 0: Create the backend/app/tests directory**
+
+  ```bash
+  mkdir -p backend/app/tests && touch backend/app/tests/__init__.py
+  ```
 
 - [ ] **Step 1: Read main.py lifespan block**
 
@@ -173,8 +180,11 @@ cd frontend && npm test
 
 **Problem:** No rate limiting. Change-password, payment, and webhook endpoints are unprotected against abuse.
 
+**Important:** The `Limiter` instance must live in a standalone `backend/app/limiter.py` module — **not in `main.py`**. If routers import `limiter` from `main.py`, it creates a circular import (`main.py` imports routers → routers import `main.py`).
+
 **Files:**
 - Modify: `backend/requirements.txt`
+- Create: `backend/app/limiter.py` (new module for the Limiter instance)
 - Modify: `backend/app/main.py`
 - Modify: `backend/app/modules/user/router.py`
 - Modify: `backend/app/modules/payment/router.py`
@@ -243,16 +253,30 @@ cd frontend && npm test
   ```
   Expected: All 3 `FAILED`.
 
-- [ ] **Step 4: Set up slowapi in main.py**
+- [ ] **Step 4: Create backend/app/limiter.py**
 
-  In `backend/app/main.py`, add after the imports:
+  Create `backend/app/limiter.py`:
 
   ```python
-  from slowapi import Limiter, _rate_limit_exceeded_handler
+  """
+  Shared rate limiter instance.
+  Defined here (not in main.py) to avoid circular imports:
+    main.py imports routers → routers cannot import main.py.
+  """
+  from slowapi import Limiter
   from slowapi.util import get_remote_address
-  from slowapi.errors import RateLimitExceeded
 
   limiter = Limiter(key_func=get_remote_address)
+  ```
+
+- [ ] **Step 5: Register limiter in main.py**
+
+  In `backend/app/main.py`, add:
+
+  ```python
+  from slowapi import _rate_limit_exceeded_handler
+  from slowapi.errors import RateLimitExceeded
+  from app.limiter import limiter
   ```
 
   After `app = FastAPI(...)`, add:
@@ -262,11 +286,11 @@ cd frontend && npm test
   app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
   ```
 
-- [ ] **Step 5: Add rate limit to change-password endpoint in user/router.py**
+- [ ] **Step 6: Add rate limit to change-password endpoint in user/router.py**
 
   In `backend/app/modules/user/router.py`:
 
-  1. Add import: `from app.main import limiter`
+  1. Add import: `from app.limiter import limiter`
   2. Add `from fastapi import Request` if not already imported.
   3. Decorate the change-password endpoint:
 

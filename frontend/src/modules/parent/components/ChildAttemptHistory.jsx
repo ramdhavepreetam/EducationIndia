@@ -1,4 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '@/modules/auth/store/authStore'
+import { usePaymentStore } from '@/modules/payment/store/paymentStore'
+import AttemptMistakesDrawer from './AttemptMistakesDrawer'
 
 const gradeColor = (grade) => ({
   'Excellent':    'text-green-600 bg-green-50',
@@ -16,26 +21,49 @@ const statusBadge = (status) => ({
 
 const ChildAttemptHistory = ({
   attempts,
+  childId,
   onViewResult,
   pageSize = 5,
-  showPagination = false
+  showPagination = false,
+  highlightedAttemptId = null,
 }) => {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { user } = useAuthStore()
+  const { status: subscription } = usePaymentStore()
+  const isPaid = subscription?.is_active ?? false
+  const language = user?.preferred_language || 'en'
+
   const [page, setPage] = useState(1)
+  const [expandedAttemptId, setExpandedAttemptId] = useState(null)
 
   const totalPages = Math.ceil(attempts.length / pageSize)
   const start      = (page - 1) * pageSize
   const visible    = attempts.slice(start, start + pageSize)
+
+  // Auto-expand highlighted attempt from RecentMistakesCard "View All"
+  useEffect(() => {
+    if (highlightedAttemptId) {
+      setExpandedAttemptId(highlightedAttemptId)
+    }
+  }, [highlightedAttemptId])
+
+  const handleToggleMistakes = (attemptId) => {
+    setExpandedAttemptId(prev => prev === attemptId ? null : attemptId)
+  }
 
   if (attempts.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-gray-100
                       shadow-sm p-6">
         <h3 className="font-semibold text-gray-900 mb-4">
-          Recent Attempts
+          {t('parent.attempts.title', 'Recent Attempts')}
         </h3>
         <div className="text-center py-8">
           <p className="text-4xl mb-3">📋</p>
-          <p className="text-gray-400 text-sm">No exams taken yet.</p>
+          <p className="text-gray-400 text-sm">
+            {t('parent.attempts.empty', 'No exams taken yet.')}
+          </p>
         </div>
       </div>
     )
@@ -46,7 +74,9 @@ const ChildAttemptHistory = ({
                     shadow-sm overflow-hidden">
       <div className="p-6 pb-3">
         <h3 className="font-semibold text-gray-900">
-          {showPagination ? 'All Attempts' : 'Recent Attempts'}
+          {showPagination
+            ? t('parent.attempts.allTitle', 'All Attempts')
+            : t('parent.attempts.title', 'Recent Attempts')}
         </h3>
       </div>
 
@@ -54,11 +84,11 @@ const ChildAttemptHistory = ({
       <div className="px-6 pb-2 grid grid-cols-12 gap-2
                       text-xs text-gray-400 font-medium uppercase
                       tracking-wide border-b border-gray-50">
-        <div className="col-span-5">Exam</div>
-        <div className="col-span-2 text-center">Score</div>
-        <div className="col-span-2 text-center">Grade</div>
-        <div className="col-span-2 text-right">Date</div>
-        <div className="col-span-1" />
+        <div className="col-span-4">{t('parent.attempts.exam', 'Exam')}</div>
+        <div className="col-span-2 text-center">{t('parent.attempts.score', 'Score')}</div>
+        <div className="col-span-2 text-center">{t('parent.attempts.grade', 'Grade')}</div>
+        <div className="col-span-2 text-right">{t('parent.attempts.date', 'Date')}</div>
+        <div className="col-span-2" />
       </div>
 
       {/* Rows */}
@@ -70,69 +100,99 @@ const ChildAttemptHistory = ({
                 day: 'numeric', month: 'short', year: '2-digit'
               })
             : '—'
+          const isExpanded = expandedAttemptId === attempt.attempt_id
 
           return (
-            <div key={attempt.attempt_id}
-                 className="px-6 py-4 grid grid-cols-12 gap-2
-                            items-center hover:bg-gray-50/50
-                            transition-colors">
+            <div key={attempt.attempt_id}>
+              <div className={`px-6 py-4 grid grid-cols-12 gap-2
+                              items-center hover:bg-gray-50/50
+                              transition-colors
+                              ${isExpanded ? 'bg-gray-50/30' : ''}`}>
 
-              {/* Exam name */}
-              <div className="col-span-5">
-                <p className="text-sm font-medium text-gray-800 truncate">
-                  {attempt.exam_title_en}
-                </p>
-                <p className="text-xs text-gray-400">
-                  Attempt #{attempt.attempt_number}
-                </p>
+                {/* Exam name */}
+                <div className="col-span-4">
+                  <p className="text-sm font-medium text-gray-800 truncate">
+                    {attempt.exam_title_en}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {t('parent.attempts.attemptNo', 'Attempt #{{n}}', { n: attempt.attempt_number })}
+                  </p>
+                </div>
+
+                {/* Score */}
+                <div className="col-span-2 text-center">
+                  {attempt.status === 'submitted' ? (
+                    <span className="text-sm font-bold text-gray-800">
+                      {attempt.total_score}/{attempt.total_marks}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-gray-300">—</span>
+                  )}
+                </div>
+
+                {/* Grade / status */}
+                <div className="col-span-2 text-center">
+                  {badge ? (
+                    <span className={`text-xs px-2 py-0.5 rounded-full
+                                     font-medium ${badge.cls}`}>
+                      {badge.label}
+                    </span>
+                  ) : attempt.grade ? (
+                    <span className={`text-xs px-2 py-0.5 rounded-full
+                                     font-medium ${gradeColor(attempt.grade)}`}>
+                      {attempt.grade}
+                    </span>
+                  ) : (
+                    <span className="text-gray-300 text-xs">—</span>
+                  )}
+                </div>
+
+                {/* Date */}
+                <div className="col-span-2 text-right">
+                  <span className="text-xs text-gray-400">{dateStr}</span>
+                </div>
+
+                {/* Action buttons */}
+                <div className="col-span-2 text-right flex items-center justify-end gap-1.5">
+                  {attempt.status === 'submitted' && (
+                    <>
+                      <button
+                        onClick={() => handleToggleMistakes(attempt.attempt_id)}
+                        className={`text-xs px-3 py-1.5 rounded-lg font-medium
+                                   border transition-colors
+                                   ${isExpanded
+                                     ? 'bg-red-50 border-red-200 text-red-600'
+                                     : 'bg-white border-gray-200 text-gray-600 hover:border-red-200 hover:text-red-500'
+                                   }`}
+                      >
+                        {isExpanded
+                          ? '▲ Hide Mistakes'
+                          : '▼ Review Mistakes'}
+                      </button>
+                      <button
+                        onClick={() => onViewResult(attempt.attempt_id)}
+                        className="text-xs px-2 py-1 bg-blue-50 text-blue-600
+                                   rounded-lg hover:bg-blue-100 transition-colors
+                                   whitespace-nowrap"
+                      >
+                        {t('parent.attempts.view', 'View')}
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
-              {/* Score */}
-              <div className="col-span-2 text-center">
-                {attempt.status === 'submitted' ? (
-                  <span className="text-sm font-bold text-gray-800">
-                    {attempt.total_score}/{attempt.total_marks}
-                  </span>
-                ) : (
-                  <span className="text-sm text-gray-300">—</span>
-                )}
-              </div>
-
-              {/* Grade / status */}
-              <div className="col-span-2 text-center">
-                {badge ? (
-                  <span className={`text-xs px-2 py-0.5 rounded-full
-                                   font-medium ${badge.cls}`}>
-                    {badge.label}
-                  </span>
-                ) : attempt.grade ? (
-                  <span className={`text-xs px-2 py-0.5 rounded-full
-                                   font-medium ${gradeColor(attempt.grade)}`}>
-                    {attempt.grade}
-                  </span>
-                ) : (
-                  <span className="text-gray-300 text-xs">—</span>
-                )}
-              </div>
-
-              {/* Date */}
-              <div className="col-span-2 text-right">
-                <span className="text-xs text-gray-400">{dateStr}</span>
-              </div>
-
-              {/* View button */}
-              <div className="col-span-1 text-right">
-                {attempt.status === 'submitted' && (
-                  <button
-                    onClick={() => onViewResult(attempt.attempt_id)}
-                    className="text-xs px-2 py-1 bg-blue-50 text-blue-600
-                               rounded-lg hover:bg-blue-100 transition-colors
-                               whitespace-nowrap"
-                  >
-                    View
-                  </button>
-                )}
-              </div>
+              {/* Inline mistakes drawer */}
+              {isExpanded && attempt.status === 'submitted' && (
+                <AttemptMistakesDrawer
+                  childId={childId}
+                  attemptId={attempt.attempt_id}
+                  isPaid={isPaid}
+                  language={language}
+                  onUpgrade={() => navigate('/upgrade')}
+                  onClose={() => setExpandedAttemptId(null)}
+                />
+              )}
             </div>
           )
         })}
@@ -143,8 +203,11 @@ const ChildAttemptHistory = ({
         <div className="px-6 py-4 border-t border-gray-50
                         flex items-center justify-between">
           <p className="text-xs text-gray-400">
-            Showing {start + 1}–{Math.min(start + pageSize, attempts.length)}
-            {' '}of {attempts.length}
+            {t('parent.attempts.showing', 'Showing {{from}}–{{to}} of {{total}}', {
+              from: start + 1,
+              to: Math.min(start + pageSize, attempts.length),
+              total: attempts.length
+            })}
           </p>
           <div className="flex gap-2">
             <button
@@ -153,7 +216,7 @@ const ChildAttemptHistory = ({
               className="px-3 py-1 text-xs bg-gray-100 text-gray-600
                          rounded-lg disabled:opacity-40 hover:bg-gray-200"
             >
-              ← Prev
+              ← {t('common.prev', 'Prev')}
             </button>
             <button
               onClick={() => setPage(p => Math.min(totalPages, p + 1))}
@@ -161,7 +224,7 @@ const ChildAttemptHistory = ({
               className="px-3 py-1 text-xs bg-gray-100 text-gray-600
                          rounded-lg disabled:opacity-40 hover:bg-gray-200"
             >
-              Next →
+              {t('common.next', 'Next')} →
             </button>
           </div>
         </div>

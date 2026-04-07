@@ -31,4 +31,14 @@ export const parentApi = {
 
   deleteChild: (childId) =>
     apiClient.delete(`/api/children/${childId}`).then(r => r.data),
+
+  // ── Wrong Answers Review ────────────────────────────────────────────────
+
+  getAttemptWrongAnswers: (childId, attemptId) =>
+    apiClient.get(`/api/parent/children/${childId}/attempts/${attemptId}/wrong-answers`)
+      .then(r => r.data),
+
+  getRecentMistakes: (childId) =>
+    apiClient.get(`/api/parent/children/${childId}/recent-mistakes`)
+      .then(r => r.data),
 }

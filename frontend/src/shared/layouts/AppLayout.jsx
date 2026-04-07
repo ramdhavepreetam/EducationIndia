@@ -42,6 +42,7 @@ export default function AppLayout() {
     ] : isParent ? [
         { to: '/parent', label: 'Dashboard', icon: DashboardIcon },
         { to: '/parent', label: 'My Children', icon: ProfileIcon },
+        { to: '/profile', label: t('nav.profile', 'Profile'), icon: SettingsIcon },
     ] : [
         { to: '/dashboard', label: t('nav.dashboard'), icon: DashboardIcon },
         { to: '/exams', label: t('nav.exams'), icon: ExamsIcon },
@@ -89,9 +90,16 @@ export default function AppLayout() {
                         </div>
                     )}
                     <div className="flex items-center gap-3 px-4 py-2">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-sm">
-                            {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
-                        </div>
+                        {user?.avatar_url
+                          ? <img src={user.avatar_url}
+                                 alt={user?.full_name || 'Avatar'}
+                                 className="w-9 h-9 rounded-full object-cover ring-2 ring-surface-100" />
+                          : <div className="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-bold text-sm">
+                                {user?.full_name
+                                  ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+                                  : 'U'}
+                            </div>
+                        }
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-surface-900 truncate">
                                 {user?.full_name || 'Student'}
