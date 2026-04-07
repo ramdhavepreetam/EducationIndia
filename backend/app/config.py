@@ -32,6 +32,9 @@ class Settings(BaseSettings):
     RAZORPAY_KEY_SECRET: str = ""
     RAZORPAY_WEBHOOK_SECRET: str = ""
 
+    # ── Frontend ─────────────────────────────────────────────
+    FRONTEND_URL: str = "http://localhost:5173"
+
     # ── App ──────────────────────────────────────────────────
     DEBUG: bool = False
     APP_NAME: str = "ScholarPath"
