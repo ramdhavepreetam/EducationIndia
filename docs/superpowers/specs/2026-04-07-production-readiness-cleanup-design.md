@@ -95,7 +95,7 @@ The `is_paid=True` bypass in `access_control.py` is intentionally excluded from 
 - Remove `self.child_repo = ChildRepository()` from `ParentService.__init__()`.
 - Replace **all** `self.child_repo` call sites in `parent_service.py` with the imported module-level `child_repository` singleton. Failure to replace every call site will cause `AttributeError: 'ParentService' object has no attribute 'child_repo'` at runtime.
 - Add a docstring block at the top of `parent_service.py` clearly stating: methods using `parent_repository` operate on `parent_student_links` (ADR-009 — linked student accounts); methods using `child_repository` operate on `child_profiles` (ADR-013 — parent-created profiles for unregistered children).
-- Update `child_schemas.py` to use Pydantic v2 `model_config = ConfigDict(from_attributes=True)` if it uses the old v1 `class Config` style.
+- Update `child_schemas.py` to use Pydantic v2 `model_config = ConfigDict(from_attributes=True)` — it currently uses the old v1 `class Config: from_attributes = True` style (confirmed at line 34).
 
 **Test:** Assert that a service method for a `child_profile_id` request calls `child_repository` methods (not `parent_repository`), and vice versa for `student_id` requests. Use mock repositories to isolate.
 
@@ -173,7 +173,9 @@ admin.subscriptions.cancelConfirm, admin.subscriptions.loadError
 
 **Problem:** `POST /api/admin/subscriptions/grant` (in `backend/app/modules/admin/router.py`) accepts `plan_id` from the request body and passes it directly to the DB insert. The user is identified by email in the body, not a path parameter. Invalid plan_id causes an unhandled PostgreSQL FK violation (500) instead of a clean 400.
 
-**Fix:** Before the insert, query: `SELECT id FROM payment_plans WHERE id = :plan_id AND is_active = true`. If no row returned, raise `BadRequest("plan_id does not exist or is inactive")`.
+**Fix:**
+- **Route ordering fix (pre-existing bug):** In `admin/router.py`, the literal route `POST /subscriptions/grant` is currently declared *after* the parametric routes `POST /subscriptions/{sub_id}/cancel` and `POST /subscriptions/{sub_id}/extend`. FastAPI will match `/subscriptions/grant` as `sub_id="grant"` against the earlier parametric routes, making `/subscriptions/grant` unreachable. Move the `@router.post("/subscriptions/grant")` handler to before any `/subscriptions/{sub_id}` routes.
+- **Validation fix:** Before the insert, query: `SELECT id FROM payment_plans WHERE id = :plan_id AND is_active = true`. If no row returned, raise `BadRequest("plan_id does not exist or is inactive")`.
 
 **Test:** Call endpoint with `plan_id=9999`. Assert HTTP 400 with readable error message. Call with valid plan_id — assert HTTP 200 and subscription created.
 
