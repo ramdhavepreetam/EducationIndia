@@ -13,6 +13,11 @@ export const useParentStore = create((set, get) => ({
   error: null,
   saveError: null,
 
+  // ── Wrong Answers Review ───────────────────────────
+  wrongAnswersCache: {},   // { [attemptId]: WrongAnswersSummary }
+  recentMistakes: null,    // RecentMistakesSchema
+  loadingWrongAnswers: {}, // { [attemptId]: boolean }
+
   // ── Actions ───────────────────────────────────────
 
   loadDashboard: async () => {
@@ -41,6 +46,8 @@ export const useParentStore = create((set, get) => ({
     try {
       const detail = await parentApi.getChildDetail(studentId)
       set({ childDetail: detail, isLoadingDetail: false })
+      // Also load recent mistakes for the newly selected child
+      await get().loadRecentMistakes(studentId)
     } catch (err) {
       set({
         error: err.response?.data?.detail ?? err.message,
@@ -120,6 +127,44 @@ export const useParentStore = create((set, get) => ({
     }
   },
 
+  // ── Wrong Answers Actions ─────────────────────────
+
+  loadRecentMistakes: async (childId) => {
+    try {
+      const data = await parentApi.getRecentMistakes(childId)
+      set({ recentMistakes: data })
+    } catch {
+      set({ recentMistakes: null })
+    }
+  },
+
+  loadAttemptWrongAnswers: async (childId, attemptId) => {
+    // Check cache first — don't re-fetch if already loaded
+    const cached = get().wrongAnswersCache[attemptId]
+    if (cached) return cached
+
+    set(state => ({
+      loadingWrongAnswers: {
+        ...state.loadingWrongAnswers,
+        [attemptId]: true
+      }
+    }))
+
+    try {
+      const data = await parentApi.getAttemptWrongAnswers(childId, attemptId)
+      set(state => ({
+        wrongAnswersCache: { ...state.wrongAnswersCache, [attemptId]: data },
+        loadingWrongAnswers: { ...state.loadingWrongAnswers, [attemptId]: false }
+      }))
+      return data
+    } catch (err) {
+      set(state => ({
+        loadingWrongAnswers: { ...state.loadingWrongAnswers, [attemptId]: false }
+      }))
+      throw err
+    }
+  },
+
   clearError: () => set({ error: null, saveError: null }),
 
   reset: () => set({
@@ -130,6 +175,9 @@ export const useParentStore = create((set, get) => ({
     isLoadingDetail: false,
     isSaving: false,
     error: null,
-    saveError: null
+    saveError: null,
+    wrongAnswersCache: {},
+    recentMistakes: null,
+    loadingWrongAnswers: {},
   })
 }))

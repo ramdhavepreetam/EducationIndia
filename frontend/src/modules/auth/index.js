@@ -8,7 +8,7 @@
 // Pages
 export { default as LoginPage } from './pages/LoginPage'
 export { default as RegisterPage } from './pages/RegisterPage'
-export { default as OnboardingPage } from './pages/OnboardingPage'
+// NOTE: OnboardingPage moved to user module (frontend/src/modules/user/)
 
 // Components
 export { default as ProtectedRoute } from './components/ProtectedRoute'

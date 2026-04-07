@@ -68,3 +68,23 @@ class ParentDashboardSchema(BaseModel):
     """Root schema for the parent dashboard page."""
     children: list[ChildProfileSchema]
     selected_child_detail: Optional[ChildDetailSchema] = None
+
+
+# ── Wrong Answers Review (ADR-013, ADR-014) ──────────────────────────────────
+
+class RecentMistakesSchema(BaseModel):
+    """Dashboard card: most recent wrong answers for a child's latest attempt."""
+    has_attempts: bool
+    attempt_id: Optional[UUID] = None
+    exam_title_en: Optional[str] = None
+    exam_title_mr: Optional[str] = None
+    paper_code: Optional[str] = None
+    submitted_at: Optional[datetime] = None
+    total_score: Optional[int] = None
+    grade: Optional[str] = None
+    wrong_answers_summary: Optional['WrongAnswersSummary'] = None
+
+
+# Deferred import to avoid circular dependency
+from app.modules.analysis.schemas import WrongAnswersSummary  # noqa: E402
+RecentMistakesSchema.model_rebuild()

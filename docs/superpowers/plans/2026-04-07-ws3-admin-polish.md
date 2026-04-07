@@ -192,7 +192,7 @@ cd frontend && npm test
       expect(mrTitle).not.toBe('admin.settings.title') // key must exist
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
       await i18n.changeLanguage('en')
     })
   })
@@ -344,10 +344,11 @@ cd frontend && npm test
       /subscriptions/grant must not be swallowed by /subscriptions/{sub_id}/extend.
       FastAPI routes are matched in declaration order — literal routes must come first.
       """
-      from app.modules.admin import router as admin_module
       import inspect
+      import app.modules.admin.router as admin_module
 
-      source = inspect.getsource(admin_module.router)
+      # Inspect the MODULE source (not admin_module.router which is an APIRouter object)
+      source = inspect.getsource(admin_module)
 
       grant_pos = source.find('"/subscriptions/grant"')
       extend_pos = source.find('"/subscriptions/{sub_id}/extend"')
@@ -367,23 +368,22 @@ cd frontend && npm test
   @pytest.mark.asyncio
   async def test_grant_subscription_rejects_invalid_plan_id():
       """
-      POST /subscriptions/grant with a nonexistent plan_id must return 400,
-      not a 500 FK constraint violation.
+      grant_subscription handler with invalid plan_id must raise BadRequest.
+      We call the handler directly (it is a plain async function, not a coroutine wrapper).
+      payment_repository is imported inside the function body, so we patch at the module level.
       """
       from app.shared.exceptions import BadRequest
 
+      mock_db = AsyncMock()
+      # First execute() call is the plan validation query — scalar() returns None (not found)
+      # Second execute() call would be the insert — should never be reached
+      mock_db.execute.return_value.scalar.return_value = None
+
       with patch(
-          'app.modules.admin.router.payment_repository',
-          autospec=True,
-      ) as mock_payment_repo, patch(
-          'app.modules.admin.router.payment_repository.find_parent_by_email',
+          'app.modules.payment.repository.payment_repository.find_parent_by_email',
           new_callable=AsyncMock,
           return_value={"id": "some-uuid", "full_name": "Test Parent"},
       ):
-          # Make plan lookup return None (plan doesn't exist)
-          mock_db = AsyncMock()
-          mock_db.execute.return_value.scalar.return_value = None
-
           from app.modules.admin.router import grant_subscription
           with pytest.raises(BadRequest, match="plan_id"):
               await grant_subscription(
@@ -396,18 +396,18 @@ cd frontend && npm test
   @pytest.mark.asyncio
   async def test_grant_subscription_accepts_valid_plan_id():
       """
-      POST /subscriptions/grant with a valid plan_id proceeds to grant.
+      grant_subscription handler with valid plan_id proceeds to create subscription.
       """
       mock_db = AsyncMock()
-      # Plan exists
+      # Plan validation query returns a valid id
       mock_db.execute.return_value.scalar.return_value = 1
 
       with patch(
-          'app.modules.admin.router.payment_repository.find_parent_by_email',
+          'app.modules.payment.repository.payment_repository.find_parent_by_email',
           new_callable=AsyncMock,
           return_value={"id": "abc", "full_name": "Test Parent"},
       ), patch(
-          'app.modules.admin.router.payment_repository.grant_subscription',
+          'app.modules.payment.repository.payment_repository.grant_subscription',
           new_callable=AsyncMock,
           return_value={"id": "sub-1", "expires_at": "2027-01-01"},
       ):

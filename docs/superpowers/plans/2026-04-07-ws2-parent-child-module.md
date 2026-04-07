@@ -30,7 +30,8 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
 - Modify: `backend/app/modules/user/child_repository.py` (add module-level singleton)
 - Modify: `backend/app/modules/user/parent_service.py` (remove init, replace all `self.child_repo`, add docstring)
 - Modify: `backend/app/modules/user/child_schemas.py` (Pydantic v2 style)
-- Test: `backend/app/modules/user/tests/test_child_service.py` (add singleton test)
+- Create: `backend/app/modules/user/tests/test_child_repository.py` (singleton test)
+- Modify: `backend/app/modules/user/tests/test_parent_service.py` (init + schema tests)
 
 - [ ] **Step 1: Read all affected files before touching anything**
 
@@ -41,25 +42,30 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
 
   Count exactly how many times `self.child_repo` appears in `parent_service.py` (there should be ~6 call sites). Note each line number.
 
-- [ ] **Step 2: Write the failing test**
+- [ ] **Step 2: Write the failing tests (in two files)**
 
-  Open `backend/app/modules/user/tests/test_child_service.py` and add:
+  Create `backend/app/modules/user/tests/test_child_repository.py`:
 
   ```python
+  """Tests for child_repository singleton pattern."""
+
+
   def test_child_repository_is_module_level_singleton():
-      """child_repository.py must export a singleton, not just a class."""
+      """child_repository.py must export a module-level singleton instance."""
       from app.modules.user import child_repository as cr_module
-      # The module must have a module-level instance named 'child_repository'
       assert hasattr(cr_module, 'child_repository'), (
           "child_repository.py must define: child_repository = ChildRepository() "
           "at module level (singleton pattern per CLAUDE.md)"
       )
       from app.modules.user.child_repository import child_repository
       assert isinstance(child_repository, cr_module.ChildRepository)
+  ```
 
+  Append to `backend/app/modules/user/tests/test_parent_service.py`:
 
+  ```python
   def test_parent_service_does_not_instantiate_child_repo_in_init():
-      """ParentService.__init__ must not create ChildRepository() — use the singleton."""
+      """ParentService.__init__ must not create ChildRepository() — import the singleton."""
       import inspect
       from app.modules.user.parent_service import ParentService
       init_source = inspect.getsource(ParentService.__init__)
@@ -72,7 +78,6 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
   def test_child_schema_uses_pydantic_v2_model_config():
       """child_schemas.py must use Pydantic v2 model_config, not v1 class Config."""
       from app.modules.user.child_schemas import ChildProfileSchema
-      # Pydantic v2: model_config is a dict-like attribute, not a nested class
       assert hasattr(ChildProfileSchema, 'model_config'), (
           "ChildProfileSchema must use model_config = ConfigDict(...) not class Config"
       )
@@ -81,7 +86,11 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
 - [ ] **Step 3: Run tests to verify they fail**
 
   ```bash
-  DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/modules/user/tests/test_child_service.py::test_child_repository_is_module_level_singleton backend/app/modules/user/tests/test_child_service.py::test_parent_service_does_not_instantiate_child_repo_in_init backend/app/modules/user/tests/test_child_service.py::test_child_schema_uses_pydantic_v2_model_config -v
+  DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest \
+    backend/app/modules/user/tests/test_child_repository.py::test_child_repository_is_module_level_singleton \
+    backend/app/modules/user/tests/test_parent_service.py::test_parent_service_does_not_instantiate_child_repo_in_init \
+    backend/app/modules/user/tests/test_parent_service.py::test_child_schema_uses_pydantic_v2_model_config \
+    -v
   ```
   Expected: All 3 `FAILED`.
 
@@ -164,7 +173,11 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
 - [ ] **Step 8: Run tests to verify they pass**
 
   ```bash
-  DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/modules/user/tests/test_child_service.py::test_child_repository_is_module_level_singleton backend/app/modules/user/tests/test_child_service.py::test_parent_service_does_not_instantiate_child_repo_in_init backend/app/modules/user/tests/test_child_service.py::test_child_schema_uses_pydantic_v2_model_config -v
+  DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest \
+    backend/app/modules/user/tests/test_child_repository.py::test_child_repository_is_module_level_singleton \
+    backend/app/modules/user/tests/test_parent_service.py::test_parent_service_does_not_instantiate_child_repo_in_init \
+    backend/app/modules/user/tests/test_parent_service.py::test_child_schema_uses_pydantic_v2_model_config \
+    -v
   ```
   Expected: `3 passed`
 
@@ -181,7 +194,8 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
   git add backend/app/modules/user/child_repository.py \
           backend/app/modules/user/parent_service.py \
           backend/app/modules/user/child_schemas.py \
-          backend/app/modules/user/tests/test_child_service.py
+          backend/app/modules/user/tests/test_child_repository.py \
+          backend/app/modules/user/tests/test_parent_service.py
   git commit -m "fix: child_repository singleton, replace self.child_repo callsites, Pydantic v2 child_schemas"
   ```
 
@@ -224,6 +238,7 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
       # Mock the repo to return 10 fake rows and count=25
       fake_rows = [{"attempt_id": str(uuid4()), "exam_title_en": f"Exam {i}"} for i in range(10)]
 
+      # The service uses child_repo.get_by_id for ownership (ADR-013 flow)
       with patch(
           'app.modules.user.parent_service.parent_repository.get_child_attempts',
           new_callable=AsyncMock,
@@ -233,9 +248,9 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
           new_callable=AsyncMock,
           return_value=25,
       ) as mock_count, patch(
-          'app.modules.user.parent_service.parent_repository.get_link',
+          'app.modules.user.parent_service.child_repository.get_by_id',
           new_callable=AsyncMock,
-          return_value={"id": 1, "is_active": True},
+          return_value={"id": str(child_id), "parent_id": str(parent_id)},
       ):
           result = await parent_service.get_child_attempts_paged(
               mock_db, parent_id, child_id, page=2, page_size=10
@@ -247,10 +262,11 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
       assert call_kwargs.get('offset') == 10, f"Expected offset=10, got {call_kwargs}"
       assert call_kwargs.get('limit') == 10
 
-      # Result must include pagination metadata
+      # Result must include pagination metadata.
+      # Key is "size" (not "page_size") to preserve existing API contract with frontend.
       assert result['total'] == 25
       assert result['page'] == 2
-      assert result['page_size'] == 10
+      assert result['size'] == 10
       assert len(result['items']) == 10
 
 
@@ -314,6 +330,11 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
       return result.scalar() or 0
   ```
 
+  **Note:** The `parent_repository` singleton must be exported at the bottom of `parent_repository.py` if it isn't already. Check with:
+  ```bash
+  grep -n "^parent_repository = " backend/app/modules/user/parent_repository.py
+  ```
+
 - [ ] **Step 5: Fix parent_service.get_child_attempts_paged()**
 
   Find the `get_child_attempts_paged` method in `parent_service.py`. Replace the current implementation with:
@@ -327,9 +348,10 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
       page: int = 1,
       page_size: int = 10,
   ) -> dict:
-      """Paginated attempt history for a child profile. Link verified before fetch."""
-      link = await parent_repository.get_link(db, parent_id, child_profile_id)
-      if not link:
+      """Paginated attempt history for a child profile. Ownership verified via child_repo (ADR-013)."""
+      # Verify parent owns this child_profile (ADR-013 flow uses child_repo, not parent_repository)
+      child = await child_repository.get_by_id(child_profile_id, parent_id, db)
+      if not child:
           raise Forbidden("You are not linked to this child profile")
 
       offset = (page - 1) * page_size
@@ -344,7 +366,7 @@ DEBUG=true PYTHONPATH=backend backend/.venv/bin/python -m pytest backend/app/mod
           "items": [dict(r) for r in rows],
           "total": total,
           "page": page,
-          "page_size": page_size,
+          "size": page_size,   # key is "size" — preserves existing API contract with frontend
       }
   ```
 

@@ -10,6 +10,8 @@ Routes:
   GET    /api/parent/children/{student_id}               → ChildDetailSchema
   GET    /api/parent/children/{student_id}/attempts      → paginated dict
   GET    /api/parent/children/{student_id}/topics        → list[WeakTopicSchema]
+  GET    /api/parent/children/{child_id}/attempts/{attempt_id}/wrong-answers → WrongAnswersSummary
+  GET    /api/parent/children/{child_id}/recent-mistakes → RecentMistakesSchema
 """
 
 from uuid import UUID
@@ -19,10 +21,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.modules.auth.dependencies import UserIdentity, require_parent
+from app.modules.analysis.schemas import WrongAnswersSummary
 from app.modules.user.parent_schemas import (
     ChildDetailSchema,
     ChildProfileSchema,
     ParentDashboardSchema,
+    RecentMistakesSchema,
     WeakTopicSchema,
 )
 from app.modules.user.parent_service import parent_service
@@ -46,7 +50,6 @@ async def get_children(
 ):
     """List all children linked to this parent."""
     return await parent_service.get_children(db, current_user.id)
-
 
 
 
@@ -85,4 +88,34 @@ async def get_child_topics(
     return await parent_service.get_child_topics(db, current_user.id, student_id)
 
 
+# ── Wrong Answers Review ─────────────────────────────────────────────────────
 
+@router.get(
+    "/children/{child_id}/attempts/{attempt_id}/wrong-answers",
+    response_model=WrongAnswersSummary,
+)
+async def get_attempt_wrong_answers(
+    child_id: UUID,
+    attempt_id: UUID,
+    current_user: UserIdentity = Depends(require_parent),
+    db: AsyncSession = Depends(get_db),
+):
+    """Wrong answers for a specific submitted attempt. Paid tier: full details."""
+    return await parent_service.get_attempt_wrong_answers(
+        current_user.id, child_id, attempt_id, db
+    )
+
+
+@router.get(
+    "/children/{child_id}/recent-mistakes",
+    response_model=RecentMistakesSchema,
+)
+async def get_recent_mistakes(
+    child_id: UUID,
+    current_user: UserIdentity = Depends(require_parent),
+    db: AsyncSession = Depends(get_db),
+):
+    """Most recent 5 wrong questions for dashboard card. Paid tier: details."""
+    return await parent_service.get_recent_mistakes_summary(
+        current_user.id, child_id, db
+    )

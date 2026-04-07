@@ -8,7 +8,8 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate, Link } from 'react-router-dom'
 import { useAuthStore } from '@/modules/auth'
 import { ProtectedRoute } from '@/modules/auth'
-import { LoginPage, RegisterPage, OnboardingPage } from '@/modules/auth'
+import { LoginPage, RegisterPage } from '@/modules/auth'
+import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
 import { ExamStartPage, ExamPage, ExamSubmittedPage } from '@/modules/attempt'
@@ -77,12 +78,12 @@ export default function App() {
                     <Route path="/dashboard" element={<StudentDashboardPage />} />
                     <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
                     <Route path="/results" element={<GenericPlaceholder title="Results" />} />
-                    <Route path="/profile" element={<GenericPlaceholder title="Profile" />} />
+                    <Route path="/profile" element={<OnboardingGuard><ProfilePage /></OnboardingGuard>} />
 
-                    {/* Payment routes */}
-                    <Route path="/upgrade" element={<UpgradePage />} />
-                    <Route path="/payment/success" element={<PaymentSuccessPage />} />
-                    <Route path="/payment/failed" element={<PaymentFailedPage />} />
+                    {/* Payment routes — require onboarding */}
+                    <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
+                    <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
+                    <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
 
                     {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
                     <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
@@ -93,9 +94,9 @@ export default function App() {
                     <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
                     <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
 
-                    {/* Parent routes — guarded by ParentRoute (redirects non-parents) */}
-                    <Route path="/parent" element={<ParentRoute><ParentDashboardPage /></ParentRoute>} />
-                    <Route path="/parent/children/:studentId" element={<ParentRoute><ChildDetailPage /></ParentRoute>} />
+                    {/* Parent routes — guarded by ParentRoute + OnboardingGuard */}
+                    <Route path="/parent" element={<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>} />
+                    <Route path="/parent/children/:studentId" element={<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>} />
                 </Route>
             </Route>
         </Routes>

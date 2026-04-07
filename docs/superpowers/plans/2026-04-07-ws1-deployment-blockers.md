@@ -112,7 +112,14 @@
 **Files:**
 - Modify: `backend/app/config.py`
 - Modify: `backend/app/main.py`
+- Create: `backend/app/tests/__init__.py` (new directory)
 - Create: `backend/app/tests/test_main_cors.py`
+
+- [ ] **Step 0: Create the tests directory**
+
+  ```bash
+  mkdir -p backend/app/tests && touch backend/app/tests/__init__.py
+  ```
 
 - [ ] **Step 1: Write the failing test**
 
@@ -228,9 +235,11 @@
   Create `frontend/src/modules/payment/api/paymentApi.test.js`:
 
   ```javascript
-  import { describe, it, expect, vi, beforeEach } from 'vitest'
+  import { describe, it, expect, vi } from 'vitest'
+  import apiClient from '@/config/apiClient'
+  import { paymentApi } from './paymentApi'
 
-  // Mock apiClient before importing paymentApi
+  // Static mock — must be declared at top level so vitest can hoist it
   vi.mock('@/config/apiClient', () => ({
     default: {
       get: vi.fn(),
@@ -239,15 +248,6 @@
   }))
 
   describe('paymentApi', () => {
-    let apiClient
-    let paymentApi
-
-    beforeEach(async () => {
-      vi.resetModules()
-      apiClient = (await import('@/config/apiClient')).default
-      paymentApi = (await import('./paymentApi')).paymentApi
-    })
-
     it('getStatus calls /api/payment/subscription (not /status)', async () => {
       apiClient.get.mockResolvedValue({ data: {} })
       await paymentApi.getStatus()
@@ -601,10 +601,13 @@
   import { MemoryRouter } from 'react-router-dom'
 
   // Mock all store dependencies
+  // AppLayout uses the Zustand selector pattern: useAuthStore((s) => s.field)
+  // The mock must accept a selector function and call it against the state object.
   vi.mock('@/modules/auth', () => ({
-    useAuthStore: () => ({
+    useAuthStore: (selector) => selector({
       user: { full_name: 'Test User', role: 'student', avatar_url: null },
       isAuthenticated: true,
+      logout: vi.fn(),
     }),
   }))
   vi.mock('@/modules/payment', () => ({
@@ -632,7 +635,8 @@
         </MemoryRouter>
       )
       const mobileSidebar = screen.getByTestId('mobile-sidebar')
-      expect(mobileSidebar.className).toMatch(/hidden|translate-x-full|-translate-x-full/)
+      // Hidden state uses -translate-x-full (slides off to the left)
+      expect(mobileSidebar.className).toContain('-translate-x-full')
     })
 
     it('clicking hamburger shows mobile sidebar', async () => {
@@ -644,8 +648,8 @@
       )
       fireEvent.click(screen.getByTestId('hamburger-btn'))
       const mobileSidebar = screen.getByTestId('mobile-sidebar')
-      // Should no longer be hidden
-      expect(mobileSidebar.className).not.toMatch(/translate-x-full/)
+      // Open state uses translate-x-0 (fully visible)
+      expect(mobileSidebar.className).toContain('translate-x-0')
     })
 
     it('clicking backdrop closes mobile sidebar', async () => {
@@ -660,7 +664,8 @@
       // Close via backdrop
       fireEvent.click(screen.getByTestId('mobile-backdrop'))
       const mobileSidebar = screen.getByTestId('mobile-sidebar')
-      expect(mobileSidebar.className).toMatch(/translate-x-full/)
+      // Back to hidden state
+      expect(mobileSidebar.className).toContain('-translate-x-full')
     })
   })
   ```

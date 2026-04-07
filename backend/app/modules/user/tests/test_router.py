@@ -267,3 +267,170 @@ class TestLinkChild:
             "/api/users/link-child", json={"email": "x@x.com"}
         )
         assert response.status_code == 401
+
+
+# ── GET /api/users/me — profile response shape ──────────────────────────────
+
+class TestGetMeProfileShape:
+    """User spec: test_get_me_200_returns_profile."""
+
+    async def test_response_includes_expected_fields(self, student_client):
+        profile = _mock_profile()
+        with patch.object(
+            _user_service, "get_my_profile", new=AsyncMock(return_value=profile)
+        ):
+            response = await student_client.get("/api/users/me")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert "full_name" in body
+        assert "preferred_language" in body
+        assert "is_onboarded" in body
+        assert "auth_provider" in body
+        # Sensitive fields should NOT be present
+        assert "password" not in body
+        assert "password_hash" not in body
+
+
+# ── PUT /api/users/me — update fields ────────────────────────────────────────
+
+class TestPutMeUpdatesFields:
+    """User spec: test_put_me_200_updates_fields."""
+
+    async def test_returns_updated_full_name_in_response(self, student_client):
+        profile = _mock_profile()
+        profile.full_name = "New Name"
+        with patch.object(
+            _user_service, "update_my_profile", new=AsyncMock(return_value=profile)
+        ):
+            response = await student_client.put(
+                "/api/users/me", json={"full_name": "New Name"}
+            )
+        assert response.status_code == 200
+        assert response.json()["full_name"] == "New Name"
+
+
+# ── POST /api/users/me/avatar ────────────────────────────────────────────────
+
+class TestAvatarUpload:
+    """User spec: test_avatar_upload_200_returns_updated_profile,
+    test_avatar_upload_too_large_rejected."""
+
+    async def test_returns_200_with_valid_image(self, student_client):
+        profile = _mock_profile()
+        profile.avatar_url = "https://example.com/avatars/new.jpg"
+
+        with patch.object(
+            _user_service, "get_my_profile", new=AsyncMock(return_value=profile)
+        ), patch.object(
+            _user_service, "update_avatar", new=AsyncMock(return_value=profile)
+        ), patch(
+            "app.modules.media.service.media_service"
+        ) as mock_media:
+            mock_media.upload_file = AsyncMock(
+                return_value={"file_url": "https://example.com/avatars/new.jpg"}
+            )
+
+            # Create a small valid PNG-like file
+            from io import BytesIO
+            small_img = BytesIO(b"\x89PNG\r\n\x1a\n" + b"\x00" * 100)
+            response = await student_client.post(
+                "/api/users/me/avatar",
+                files={"file": ("avatar.png", small_img, "image/png")},
+            )
+
+        assert response.status_code == 200
+
+    async def test_rejects_file_over_2mb(self, student_client):
+        """User spec: test_avatar_upload_too_large_rejected."""
+        # Create file just over 2MB
+        from io import BytesIO
+        large_file = BytesIO(b"\x89PNG\r\n\x1a\n" + b"\x00" * (2 * 1024 * 1024 + 1))
+        response = await student_client.post(
+            "/api/users/me/avatar",
+            files={"file": ("big.png", large_file, "image/png")},
+        )
+        assert response.status_code == 400
+
+    async def test_rejects_unsupported_content_type(self, student_client):
+        from io import BytesIO
+        gif_file = BytesIO(b"GIF89a" + b"\x00" * 50)
+        response = await student_client.post(
+            "/api/users/me/avatar",
+            files={"file": ("anim.gif", gif_file, "image/gif")},
+        )
+        assert response.status_code == 400
+
+
+# ── POST /api/users/me/change-password ───────────────────────────────────────
+
+class TestChangePasswordRouter:
+    """User spec: test_change_password_200_for_email_user,
+    test_change_password_403_for_google_user."""
+
+    async def test_returns_200_for_email_user(self, student_client):
+        """Email user can change password."""
+        profile = _mock_profile()
+        profile.auth_provider = "email"
+
+        with patch.object(
+            _user_service, "get_my_profile", new=AsyncMock(return_value=profile)
+        ), patch.object(
+            _user_service, "change_password", new=AsyncMock(return_value={"success": True})
+        ):
+            response = await student_client.post(
+                "/api/users/me/change-password",
+                json={
+                    "current_password": "oldpass123",
+                    "new_password": "newpass1234",
+                    "confirm_password": "newpass1234",
+                },
+            )
+        assert response.status_code == 200
+        assert response.json()["success"] is True
+
+    async def test_returns_400_for_google_user(self, student_client):
+        """Google user cannot change password."""
+        profile = _mock_profile()
+        profile.auth_provider = "google"
+
+        with patch.object(
+            _user_service, "get_my_profile", new=AsyncMock(return_value=profile)
+        ):
+            response = await student_client.post(
+                "/api/users/me/change-password",
+                json={
+                    "current_password": "anything",
+                    "new_password": "newpass1234",
+                    "confirm_password": "newpass1234",
+                },
+            )
+        assert response.status_code == 400
+        body = response.json()
+        # Error may be in 'detail' or 'message' depending on exception handler
+        error_text = body.get("detail", body.get("message", str(body))).lower()
+        assert "social login" in error_text or "email" in error_text
+
+    async def test_returns_401_without_token(self, anon_client):
+        response = await anon_client.post(
+            "/api/users/me/change-password",
+            json={
+                "current_password": "x",
+                "new_password": "newpass1234",
+                "confirm_password": "newpass1234",
+            },
+        )
+        assert response.status_code == 401
+
+    async def test_mismatched_passwords_returns_422(self, student_client):
+        """Pydantic model_validator catches mismatch before router."""
+        response = await student_client.post(
+            "/api/users/me/change-password",
+            json={
+                "current_password": "current123",
+                "new_password": "newpass1234",
+                "confirm_password": "different_pass",
+            },
+        )
+        assert response.status_code == 422
+
