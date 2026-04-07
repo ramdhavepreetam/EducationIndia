@@ -6,7 +6,7 @@
  */
 import { Outlet, useNavigate, NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/modules/auth'
 import { SubscriptionStatus, usePaymentStore } from '@/modules/payment'
 
@@ -25,6 +25,10 @@ export default function AppLayout() {
             loadStatus()
         }
     }, [isParent, loadStatus])
+
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
+    const closeMobileMenu = () => setIsMobileMenuOpen(false)
 
     const handleLogout = async () => {
         await logout()
@@ -52,8 +56,17 @@ export default function AppLayout() {
 
     return (
         <div className="min-h-screen flex bg-surface-50">
+            {/* Mobile menu overlay */}
+            {isMobileMenuOpen && (
+                <div 
+                    data-testid="mobile-overlay"
+                    className="fixed inset-0 bg-gray-800 bg-opacity-50 z-40 md:hidden transition-opacity"
+                    onClick={closeMobileMenu}
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className="hidden md:flex w-64 flex-col bg-white border-r border-surface-100">
+            <aside className={`flex flex-col w-64 bg-white border-r border-surface-100 fixed md:static inset-y-0 left-0 z-50 transform transition-transform duration-300 md:transform-none ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 {/* Sidebar header */}
                 <div className="h-16 flex items-center gap-3 px-6 border-b border-surface-100">
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
@@ -68,6 +81,7 @@ export default function AppLayout() {
                         <NavLink
                             key={item.to}
                             to={item.to}
+                            onClick={closeMobileMenu}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
                                     ? 'bg-brand-50 text-brand-700'
@@ -122,10 +136,19 @@ export default function AppLayout() {
             </aside>
 
             {/* Mobile header */}
-            <div className="flex-1 flex flex-col">
-                <header className="md:hidden h-16 flex items-center justify-between px-4 bg-white border-b border-surface-100">
+            <div className="flex-1 flex flex-col min-w-0">
+                <header className="md:hidden h-16 flex items-center justify-between px-4 bg-white border-b border-surface-100 sticky top-0 z-30">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
+                        <button 
+                            onClick={toggleMobileMenu}
+                            aria-label="Open menu"
+                            className="p-2 -ml-2 rounded-lg text-surface-500 hover:bg-surface-50 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                        >
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <div className="w-8 h-8 ml-1 rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
                             <span className="text-xs font-extrabold text-white">S</span>
                         </div>
                         <span className="text-base font-bold text-gradient">{t('app.name')}</span>
