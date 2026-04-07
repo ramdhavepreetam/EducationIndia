@@ -60,6 +60,7 @@ app.add_middleware(
         "http://localhost:5173",   # Vite dev server (default)
         "http://localhost:5174",   # Vite dev server (fallback port)
         "http://localhost:3000",   # alternative dev port
+        settings.FRONTEND_URL,     # Production / staging URL
     ],
     allow_credentials=True,
     allow_methods=["*"],
