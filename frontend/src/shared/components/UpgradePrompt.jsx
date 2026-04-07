@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import apiClient from '@/config/apiClient'
+import { usePaymentStore } from '@/modules/payment/store/paymentStore'
 
 const messages = {
     upgrade_required_exam: {
@@ -30,14 +30,17 @@ const messages = {
 export const UpgradePrompt = ({ reason = 'upgrade_required_exam', onUpgrade }) => {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const [priceInr, setPriceInr] = useState(null)
+    
+    const plan = usePaymentStore((state) => state.plan)
+    const loadPlan = usePaymentStore((state) => state.loadPlan)
 
     useEffect(() => {
-        apiClient
-            .get('/api/catalog/settings/payment_amount_inr')
-            .then((res) => setPriceInr(res.data?.value))
-            .catch(() => setPriceInr(null))
-    }, [])
+        if (!plan) {
+            loadPlan()
+        }
+    }, [plan, loadPlan])
+    
+    const priceInr = plan?.price_inr
 
     const msg = messages[reason] || messages.upgrade_required_exam
 
