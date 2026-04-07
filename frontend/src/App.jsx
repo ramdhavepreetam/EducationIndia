@@ -12,6 +12,7 @@ import { LoginPage, RegisterPage } from '@/modules/auth'
 import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
 import { ExamStartPage, ExamPage, ExamSubmittedPage } from '@/modules/attempt'
 import { ResultPage } from '@/modules/analysis'
 import { StudentDashboardPage } from '@/modules/dashboard'
@@ -46,60 +47,62 @@ export default function App() {
     // always render immediately. isLoading guard lives in ProtectedRoute and
     // AuthRedirect only, so Supabase init latency never blocks auth pages.
     return (
-        <Routes>
-            {/* Root + catch-all: smart redirect based on auth state.
-                Handles OAuth callback landing at "/" and any unknown routes. */}
-            <Route index element={<AuthRedirect />} />
-            <Route path="*" element={<AuthRedirect />} />
+        <ErrorBoundary>
+            <Routes>
+                {/* Root + catch-all: smart redirect based on auth state.
+                    Handles OAuth callback landing at "/" and any unknown routes. */}
+                <Route index element={<AuthRedirect />} />
+                <Route path="*" element={<AuthRedirect />} />
 
-            {/* Public auth routes — redirect away if already authenticated */}
-            <Route element={<AuthLayout />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-            </Route>
-
-            {/* Protected routes — require authentication */}
-            <Route element={<ProtectedRoute />}>
-                {/* Onboarding uses AuthLayout (no sidebar yet) */}
+                {/* Public auth routes — redirect away if already authenticated */}
                 <Route element={<AuthLayout />}>
-                    <Route path="/onboarding" element={<OnboardingPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
                 </Route>
 
-                {/* Exam taking flow (full screen, no sidebar) */}
-                <Route path="/exam/:examId/start" element={<ExamStartPage />} />
-                <Route path="/exam/:examId/attempt" element={<ExamPage />} />
-                <Route path="/exam/submitted/:id" element={<ExamSubmittedPage />} />
+                {/* Protected routes — require authentication */}
+                <Route element={<ProtectedRoute />}>
+                    {/* Onboarding uses AuthLayout (no sidebar yet) */}
+                    <Route element={<AuthLayout />}>
+                        <Route path="/onboarding" element={<OnboardingPage />} />
+                    </Route>
 
-                {/* Exam result analysis (full screen container, might want sidebar later but keeping consistent with attempt for now) */}
-                <Route path="/attempts/:attemptId/result" element={<ResultPage />} />
+                    {/* Exam taking flow (full screen, no sidebar) */}
+                    <Route path="/exam/:examId/start" element={<ExamStartPage />} />
+                    <Route path="/exam/:examId/attempt" element={<ExamPage />} />
+                    <Route path="/exam/submitted/:id" element={<ExamSubmittedPage />} />
 
-                {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
-                <Route element={<AppLayout />}>
-                    <Route path="/dashboard" element={<StudentDashboardPage />} />
-                    <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
-                    <Route path="/results" element={<GenericPlaceholder title="Results" />} />
-                    <Route path="/profile" element={<OnboardingGuard><ProfilePage /></OnboardingGuard>} />
+                    {/* Exam result analysis (full screen container, might want sidebar later but keeping consistent with attempt for now) */}
+                    <Route path="/attempts/:attemptId/result" element={<ResultPage />} />
 
-                    {/* Payment routes — require onboarding */}
-                    <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
-                    <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
-                    <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
+                    {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
+                    <Route element={<AppLayout />}>
+                        <Route path="/dashboard" element={<StudentDashboardPage />} />
+                        <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
+                        <Route path="/results" element={<GenericPlaceholder title="Results" />} />
+                        <Route path="/profile" element={<OnboardingGuard><ProfilePage /></OnboardingGuard>} />
 
-                    {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
-                    <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
-                    <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
-                    <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
-                    <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
-                    <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
-                    <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
-                    <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
+                        {/* Payment routes — require onboarding */}
+                        <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
+                        <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
+                        <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
 
-                    {/* Parent routes — guarded by ParentRoute + OnboardingGuard */}
-                    <Route path="/parent" element={<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>} />
-                    <Route path="/parent/children/:studentId" element={<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>} />
+                        {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
+                        <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
+                        <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
+                        <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
+                        <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
+                        <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
+                        <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
+                        <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
+
+                        {/* Parent routes — guarded by ParentRoute + OnboardingGuard */}
+                        <Route path="/parent" element={<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>} />
+                        <Route path="/parent/children/:studentId" element={<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>} />
+                    </Route>
                 </Route>
-            </Route>
-        </Routes>
+            </Routes>
+        </ErrorBoundary>
     )
 }
 
