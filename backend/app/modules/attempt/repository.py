@@ -282,6 +282,7 @@ class AttemptRepository:
             ),
             {"sid": student_id},
         )
+        await db.flush()
 
     async def bulk_create_assignments(
         self, db: AsyncSession, rows: list[dict]
@@ -309,6 +310,7 @@ class AttemptRepository:
                 ),
                 {"exam_id": row["exam_id"], "student_id": row["student_id"]},
             )
+        await db.flush()
 
 
 # Module-level singleton
