@@ -68,27 +68,31 @@ class AttemptService:
         # 1. Validate exam is active
         exam = await catalog_service.get_active_exam(db, request.exam_id)
 
-        # 1.5 Validate child profile belongs to parent
-        from app.modules.user.child_repository import ChildRepository
-        child_repo = ChildRepository()
-        is_owner = await child_repo.validate_ownership(
-            request.child_profile_id, parent_id, db
-        )
-        if not is_owner:
-            raise Forbidden("Child profile not found")
+        # 1.5 Resolve effective student ID
+        if request.child_profile_id is not None:
+            from app.modules.user.child_repository import ChildRepository
+            child_repo = ChildRepository()
+            is_owner = await child_repo.validate_ownership(
+                request.child_profile_id, parent_id, db
+            )
+            if not is_owner:
+                raise Forbidden("Child profile not found")
+            effective_student_id = request.child_profile_id
+        else:
+            effective_student_id = parent_id   # caller IS the student
 
         # 1.6 Access control gate (ADR-014)
         from app.shared.access_control import get_access_context, can_start_exam as check_start
         ctx = await get_access_context(parent_id, db)
         allowed, reason = await check_start(
-            ctx, request.exam_id, request.child_profile_id, db
+            ctx, request.exam_id, effective_student_id, db
         )
         if not allowed:
             raise Forbidden(reason)
 
         # 2. Ensure no duplicate ongoing attempt
         existing = await attempt_repository.get_ongoing_attempt(
-            db, request.child_profile_id, request.exam_id
+            db, effective_student_id, request.exam_id
         )
         if existing is not None:
             raise Conflict(
@@ -98,16 +102,17 @@ class AttemptService:
 
         # 3. Validate assignment if provided
         if request.assignment_id is not None:
-            await self._validate_assignment(db, request.assignment_id, request.child_profile_id)
+            await self._validate_assignment(db, request.assignment_id, effective_student_id)
 
-        # 4. Create attempt
+        # 4. Create attempt — set student_id for direct flow so DB trigger fires
         attempt_number = await attempt_repository.get_attempt_number(
-            db, request.child_profile_id, request.exam_id
+            db, effective_student_id, request.exam_id
         )
+        is_direct = request.child_profile_id is None
         attempt = await attempt_repository.create_attempt(
             db,
             child_profile_id=request.child_profile_id,
-            student_id=None,
+            student_id=parent_id if is_direct else None,
             exam_id=request.exam_id,
             assignment_id=request.assignment_id,
             attempt_number=attempt_number,

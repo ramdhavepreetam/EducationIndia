@@ -70,8 +70,23 @@ class AttemptRepository:
     ) -> Attempt | None:
         """
         Return the active ongoing attempt for a student+exam, or None.
-        Used by start_exam() to prevent duplicate active attempts.
+        Handles two flows:
+          - direct-student flow: filters on student_id with child_profile_id IS NULL
+          - child_profile_id flow (parent-for-child): filters on child_profile_id
         """
+        # Try direct-student path first
+        result = await db.execute(
+            select(Attempt).where(
+                Attempt.student_id == student_id,
+                Attempt.child_profile_id == None,
+                Attempt.exam_id == exam_id,
+                Attempt.status == "ongoing",
+            )
+        )
+        found = result.scalar_one_or_none()
+        if found:
+            return found
+        # Fall through to child_profile_id path (parent-for-child flow)
         result = await db.execute(
             select(Attempt).where(
                 Attempt.child_profile_id == student_id,
@@ -86,16 +101,27 @@ class AttemptRepository:
     ) -> int:
         """
         Return the next attempt number for this student+exam.
-        Count all previous attempts (any status) + 1.
+        Checks both direct-student rows (student_id) and child_profile_id rows.
+        Note: student_id param serves dual purpose — it's the student's UUID for
+        direct flow, or the child_profile_id for parent-for-child flow.
         """
-        result = await db.execute(
+        # Direct-student rows (student_id set, child_profile_id NULL)
+        r1 = await db.execute(
+            select(func.count(Attempt.id)).where(
+                Attempt.student_id == student_id,
+                Attempt.child_profile_id == None,
+                Attempt.exam_id == exam_id,
+            )
+        )
+        # Child-profile rows
+        r2 = await db.execute(
             select(func.count(Attempt.id)).where(
                 Attempt.child_profile_id == student_id,
                 Attempt.exam_id == exam_id,
             )
         )
-        count = result.scalar_one()
-        return (count or 0) + 1
+        count = (r1.scalar_one() or 0) + (r2.scalar_one() or 0)
+        return count + 1
 
     async def get_student_attempts(
         self, db: AsyncSession, student_id: UUID, exam_id: int
