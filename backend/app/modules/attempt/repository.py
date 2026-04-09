@@ -20,7 +20,7 @@ Public functions consumed by service.py:
 from datetime import datetime, timezone
 from uuid import UUID
 
-from sqlalchemy import case, func, select, update
+from sqlalchemy import case, func, select, text, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -263,6 +263,52 @@ class AttemptRepository:
             )
         )
         return result.scalar_one()
+
+    # ── Auto-assignment methods (called by user_service and catalog_service) ──────
+
+    async def deactivate_auto_assignments_for_student(
+        self, db: AsyncSession, student_id: UUID
+    ) -> None:
+        """
+        Set is_active=false on all system-created assignments for this student.
+        Called when a student changes their grade — clears old grade's exams.
+        ONLY touches rows where assigned_by IS NULL (system-assigned).
+        Teacher-assigned rows (assigned_by IS NOT NULL) are never touched.
+        """
+        await db.execute(
+            text(
+                "UPDATE exam_assignments SET is_active = false "
+                "WHERE student_id = :sid AND assigned_by IS NULL"
+            ),
+            {"sid": student_id},
+        )
+
+    async def bulk_create_assignments(
+        self, db: AsyncSession, rows: list[dict]
+    ) -> None:
+        """
+        Upsert exam_assignments rows for auto-assignment by grade.
+        Each row: {"exam_id": int, "student_id": UUID}
+
+        Uses ON CONFLICT (exam_id, student_id) DO UPDATE SET is_active=true
+        WHERE exam_assignments.assigned_by IS NULL
+        — meaning: if a manually-assigned row exists for this pair, leave it alone.
+        The student already has access; we don't create a duplicate auto row.
+
+        Note: exam_assignments has NO updated_at column — do not add it.
+        """
+        for row in rows:
+            await db.execute(
+                text(
+                    "INSERT INTO exam_assignments "
+                    "(exam_id, student_id, assignment_type, assigned_by, max_attempts, is_active) "
+                    "VALUES (:exam_id, :student_id, 'practice', NULL, 10, true) "
+                    "ON CONFLICT (exam_id, student_id) DO UPDATE "
+                    "SET is_active = true "
+                    "WHERE exam_assignments.assigned_by IS NULL"
+                ),
+                {"exam_id": row["exam_id"], "student_id": row["student_id"]},
+            )
 
 
 # Module-level singleton
