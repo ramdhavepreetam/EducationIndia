@@ -70,8 +70,7 @@ class AttemptService:
 
         # 1.5 Resolve effective student ID
         if request.child_profile_id is not None:
-            from app.modules.user.child_repository import ChildRepository
-            child_repo = ChildRepository()
+            from app.modules.user.child_repository import child_repository as child_repo
             is_owner = await child_repo.validate_ownership(
                 request.child_profile_id, parent_id, db
             )
@@ -363,8 +362,7 @@ class AttemptService:
         if attempt is None:
             raise NotFound(f"Attempt {attempt_id} not found")
         if attempt.child_profile_id:
-            from app.modules.user.child_repository import ChildRepository
-            child_repo = ChildRepository()
+            from app.modules.user.child_repository import child_repository as child_repo
             is_owner = await child_repo.validate_ownership(
                 attempt.child_profile_id, parent_id, db
             )
