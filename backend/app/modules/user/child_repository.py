@@ -72,3 +72,6 @@ class ChildRepository:
         """Returns True if this child belongs to this parent."""
         child = await self.get_by_id(child_profile_id, parent_id, db)
         return child is not None
+
+
+child_repository = ChildRepository()
