@@ -58,6 +58,39 @@ export const useAdminStore = create((set, get) => ({
         }
     },
 
+    // ── Create Test (Event) ───────────────────────────────────────────────────
+    createTestLoading: false,
+    createTestError: null,
+
+    createTest: async (data) => {
+        set({ createTestLoading: true, createTestError: null })
+        try {
+            const result = await adminApi.createEvent(data)
+            set({ createTestLoading: false })
+            // Re-fetch exams so the new ones show in the publisher
+            get().fetchAllExams()
+            return result
+        } catch (e) {
+            set({ createTestError: e.response?.data?.detail || 'Failed to create test', createTestLoading: false })
+            throw e
+        }
+    },
+
+    // ── Boards (for CreateTestPage) ───────────────────────────────────────────
+    boards: [],
+    boardsLoading: false,
+
+    fetchBoards: async () => {
+        if (get().boards.length > 0) return // already loaded
+        set({ boardsLoading: true })
+        try {
+            const boards = await adminApi.listBoards()
+            set({ boards, boardsLoading: false })
+        } catch (e) {
+            set({ boardsLoading: false })
+        }
+    },
+
     // ── Questions ─────────────────────────────────────────────────────────────
     questions: [],
     selectedExamId: null,
@@ -80,6 +113,13 @@ export const useAdminStore = create((set, get) => ({
             questions: state.questions.map(q => q.id === questionId ? updated : q)
         }))
         return updated
+    },
+
+    deleteQuestion: async (questionId) => {
+        await adminApi.deleteQuestion(questionId)
+        set(state => ({
+            questions: state.questions.filter(q => q.id !== questionId)
+        }))
     },
 
     bulkImportResult: null,
@@ -124,5 +164,7 @@ export const useAdminStore = create((set, get) => ({
         questions: [], selectedExamId: null, questionsLoading: false, questionsError: null,
         bulkImportResult: null, bulkImporting: false,
         questionStats: [], statsLoading: false, statsError: null, statsExamId: null,
+        boards: [], boardsLoading: false,
+        createTestLoading: false, createTestError: null,
     }),
 }))

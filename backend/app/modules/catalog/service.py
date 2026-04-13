@@ -108,16 +108,25 @@ class CatalogService:
 
     # ── Admin operations ──────────────────────────────────────────────────────
 
-    async def publish_exam(self, db: AsyncSession, exam_id: int) -> Exam:
+    async def publish_exam(self, db: AsyncSession, exam_id: int) -> dict:
         """
         Set is_active=True on an exam, making it visible to students.
+        Also auto-assigns the exam to all students of the matching grade.
         Admin only — router enforces require_admin.
-        Raises NotFound if exam_id does not exist.
+        Returns: {"exam_id", "is_active", "auto_assigned_count"}
         """
-        # Verify exam exists before attempting update
-        await self.get_exam(db, exam_id)
-        exam = await catalog_repository.set_exam_active(db, exam_id, is_active=True)
-        return exam  # type: ignore[return-value]  # get_exam above guarantees non-None
+        exam = await self.get_exam(db, exam_id)
+        await catalog_repository.set_exam_active(db, exam_id, is_active=True)
+        await db.commit()   # always commit is_active=True regardless of auto-assignment
+
+        # Get std_class from exam_event — event is eager-loaded with the exam
+        event = exam.event
+        std_class = event.std_class if event else None
+        auto_count = 0
+        if std_class in (5, 8):
+            auto_count = await self.auto_assign_exam_to_grade(db, exam_id, std_class)
+
+        return {"exam_id": exam_id, "is_active": True, "auto_assigned_count": auto_count}
 
     async def unpublish_exam(self, db: AsyncSession, exam_id: int) -> Exam:
         """
@@ -127,6 +136,113 @@ class CatalogService:
         await self.get_exam(db, exam_id)
         exam = await catalog_repository.set_exam_active(db, exam_id, is_active=False)
         return exam  # type: ignore[return-value]
+
+    async def create_event_with_papers(
+        self,
+        db: AsyncSession,
+        data: "CreateEventRequest",
+    ) -> "EventWithExamsResponse":
+        """
+        Create a new exam_event with Paper I (501) and Paper II (502).
+        set_code is set to the 4-digit year to avoid UNIQUE(paper_code, set_code) collisions.
+        Sections and topics are cloned from the existing Paper I of the same board.
+        """
+        from app.modules.catalog.schemas import CreateEventRequest, EventWithExamsResponse, ExamSummaryResponse
+
+        event = await catalog_repository.create_event(
+            db,
+            board_id=data.board_id,
+            category_id=data.category_id,
+            title_en=data.title_en,
+            title_mr=data.title_mr,
+            std_class=data.std_class,
+            year=data.year,
+        )
+
+        set_code = str(data.year)
+
+        paper1 = await catalog_repository.create_exam_under_event(
+            db,
+            event_id=event.id,
+            paper_code="501",
+            set_code=set_code,
+            title_en=f"{data.title_en} — Paper I",
+            title_mr=f"{data.title_mr} — Paper I" if data.title_mr else None,
+        )
+        paper2 = await catalog_repository.create_exam_under_event(
+            db,
+            event_id=event.id,
+            paper_code="502",
+            set_code=set_code,
+            title_en=f"{data.title_en} — Paper II",
+            title_mr=f"{data.title_mr} — Paper II" if data.title_mr else None,
+        )
+
+        # Clone sections + topics from existing papers of same board as template
+        existing = await catalog_repository.list_exams(
+            db, board_id=data.board_id, include_inactive=True
+        )
+        paper1_template = next((e for e in existing if e.paper_code == "501" and e.id != paper1.id), None)
+        paper2_template = next((e for e in existing if e.paper_code == "502" and e.id != paper2.id), None)
+
+        if paper1_template:
+            await catalog_repository.clone_sections_and_topics(
+                db, source_exam_id=paper1_template.id, target_exam_id=paper1.id
+            )
+        if paper2_template:
+            await catalog_repository.clone_sections_and_topics(
+                db, source_exam_id=paper2_template.id, target_exam_id=paper2.id
+            )
+
+        await db.commit()
+
+        paper1_fresh = await self.get_exam(db, paper1.id)
+        paper2_fresh = await self.get_exam(db, paper2.id)
+
+        return EventWithExamsResponse(
+            id=event.id,
+            title_en=event.title_en,
+            title_mr=event.title_mr,
+            std_class=event.std_class,
+            year=event.year,
+            exams=[
+                ExamSummaryResponse.model_validate(paper1_fresh),
+                ExamSummaryResponse.model_validate(paper2_fresh),
+            ],
+        )
+
+    async def auto_assign_exam_to_grade(
+        self,
+        db: AsyncSession,
+        exam_id: int,
+        std_class: int,
+    ) -> int:
+        """
+        Auto-assign an exam to all students whose std_class matches.
+        Returns the count of students assigned.
+        Called by publish_exam() after activating a paper.
+        Calls attempt_repository.bulk_create_assignments (attempt module owns exam_assignments).
+        """
+        from sqlalchemy import text
+        from app.modules.attempt.repository import attempt_repository
+
+        # Fetch all student UUIDs with matching std_class
+        result = await db.execute(
+            text(
+                "SELECT id FROM user_profiles "
+                "WHERE std_class = :cls AND role = 'student' AND is_active = true"
+            ),
+            {"cls": std_class},
+        )
+        student_ids = [row[0] for row in result.fetchall()]
+
+        if not student_ids:
+            return 0
+
+        rows = [{"exam_id": exam_id, "student_id": sid} for sid in student_ids]
+        await attempt_repository.bulk_create_assignments(db, rows)
+        await db.commit()
+        return len(student_ids)
 
 
 # Module-level singleton — import this in router.py and other modules

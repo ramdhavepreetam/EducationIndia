@@ -5,7 +5,7 @@ import os
 def test_cors_production_url():
     # Force the app configuration for the duration of the test
     from app.config import settings
-    settings.FRONTEND_URL = "https://scholarpath-staging.vercel.app"
+    settings.FRONTEND_URL = "https://scholarpath-staging.web.app"
     
     # We must explicitly rebuild the CORSMiddleware since it was already loaded
     from app.main import app
@@ -37,11 +37,11 @@ def test_cors_production_url():
     response = client.options(
         "/api/users/me",
         headers={
-            "Origin": "https://scholarpath-staging.vercel.app",
+            "Origin": "https://scholarpath-staging.web.app",
             "Access-Control-Request-Method": "GET"
         }
     )
     
     assert response.status_code == 200
     assert "access-control-allow-origin" in response.headers
-    assert response.headers["access-control-allow-origin"] == "https://scholarpath-staging.vercel.app"
+    assert response.headers["access-control-allow-origin"] == "https://scholarpath-staging.web.app"

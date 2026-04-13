@@ -45,11 +45,21 @@ class UserService:
         Partial update — only fields present in the request body are changed.
         Uses exclude_unset so missing fields are not overwritten with None.
         Also used for onboarding: client sends { is_onboarded: true, ... }.
+
+        Side-effect (ADR-014):
+          If std_class changes, old system-auto-assigned exams are deactivated
+          and new exams for the new grade are auto-assigned.
         """
         updates = data.model_dump(exclude_unset=True)
         if not updates:
-            # Nothing to change — return current state
             return await self.get_my_profile(db, user_id)
+
+        # Detect std_class change to trigger re-assignment
+        new_std_class = updates.get("std_class")
+        if new_std_class is not None:
+            current = await user_repository.get_by_id(db, user_id)
+            if current and current.std_class != new_std_class:
+                await self._swap_grade_assignments(db, user_id, new_std_class)
 
         profile = await user_repository.update(db, user_id, updates)
         if not profile:
@@ -66,6 +76,9 @@ class UserService:
         Onboarding step — sets is_onboarded = True.
         std_class is required for student accounts.
         Safe to call more than once (idempotent apart from overwriting fields).
+
+        Side-effect (ADR-014):
+          If std_class is provided, auto-assign all active exams for that grade.
         """
         profile = await user_repository.get_by_id(db, user_id)
         if not profile:
@@ -78,7 +91,13 @@ class UserService:
         updates["is_onboarded"] = True  # always flip, regardless of what was sent
 
         updated = await user_repository.update(db, user_id, updates)
-        return updated  # type: ignore[return-value]  # profile existed, so update returns it
+
+        # Auto-assign active exams for student's grade on first onboarding (ADR-014)
+        std_class = data.std_class or (profile.std_class if profile.role == UserRoleEnum.student else None)
+        if std_class and not profile.is_onboarded:
+            await self._assign_grade_exams(db, user_id, std_class)
+
+        return updated  # type: ignore[return-value]
 
     async def update_avatar(
         self,
@@ -220,6 +239,55 @@ class UserService:
         )
 
 
+    # ── Private helpers ───────────────────────────────────────────────────────
+
+    async def _assign_grade_exams(
+        self,
+        db: AsyncSession,
+        student_id: uuid.UUID,
+        std_class: int,
+    ) -> None:
+        """
+        Auto-assign all active exams matching std_class to this student.
+        Called on first onboarding. Uses attempt_repository to stay within
+        module boundaries (attempt module owns exam_assignments).
+        """
+        from sqlalchemy import text
+        from app.modules.attempt.repository import attempt_repository
+
+        result = await db.execute(
+            text(
+                "SELECT e.id FROM exams e "
+                "JOIN exam_events ev ON ev.id = e.event_id "
+                "WHERE e.is_active = true AND ev.std_class = :cls"
+            ),
+            {"cls": std_class},
+        )
+        exam_ids = [row[0] for row in result.fetchall()]
+        if not exam_ids:
+            return
+
+        rows = [{"exam_id": eid, "student_id": student_id} for eid in exam_ids]
+        await attempt_repository.bulk_create_assignments(db, rows)
+        await db.commit()
+
+    async def _swap_grade_assignments(
+        self,
+        db: AsyncSession,
+        student_id: uuid.UUID,
+        new_std_class: int,
+    ) -> None:
+        """
+        Called when std_class changes:
+          1. Deactivate all system-auto-assigned rows (assigned_by IS NULL)
+          2. Assign active exams for the new grade
+        Manually-assigned rows (assigned_by IS NOT NULL) are untouched.
+        """
+        from app.modules.attempt.repository import attempt_repository
+
+        await attempt_repository.deactivate_auto_assignments_for_student(db, student_id)
+        await self._assign_grade_exams(db, student_id, new_std_class)
+
+
 # Module-level singleton — import this in router.py
 user_service = UserService()
-

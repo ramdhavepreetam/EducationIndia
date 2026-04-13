@@ -61,7 +61,7 @@ class AdminAttemptRow(BaseModel):
 # ── Question stats row ────────────────────────────────────────────────────────
 
 class AdminExamRow(BaseModel):
-    """Exam row for admin ExamPublisherPage — includes question count."""
+    """Exam row for admin ExamPublisherPage — includes question count and grade."""
     id: int
     paper_code: str
     set_code: str
@@ -72,6 +72,7 @@ class AdminExamRow(BaseModel):
     question_count: int               # actual count in questions table
     event_title: Optional[str]
     event_year: Optional[int]
+    std_class: Optional[int] = None   # 5 or 8 — for grouping in ExamPublisherPage
 
 
 class QuestionStatRow(BaseModel):

@@ -52,7 +52,7 @@ app = FastAPI(
 
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-# In production, replace with the deployed Vercel frontend URL.
+# In production, replace with the deployed Firebase Hosting frontend URL.
 
 app.add_middleware(
     CORSMiddleware,

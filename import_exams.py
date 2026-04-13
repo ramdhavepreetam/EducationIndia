@@ -8,7 +8,7 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
-app_url = "http://localhost:8000"
+app_url = "https://scholarpath-backend-470258820905.us-central1.run.app"
 url = ""
 key = ""
 

@@ -1,0 +1,13 @@
+# Files to ignore when building the Docker image for Cloud Run
+.venv
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.benchmarks
+tests/
+data/
+scripts/
+*.md
+.env*
+uploads/

@@ -45,7 +45,7 @@ export default function AppLayout() {
         { to: '/admin/images', label: 'Images', icon: AdminIcon },
     ] : isParent ? [
         { to: '/parent', label: 'Dashboard', icon: DashboardIcon },
-        { to: '/parent', label: 'My Children', icon: ProfileIcon },
+        { to: '/payment/history', label: 'Payment History', icon: SubscriptionsIcon },
         { to: '/profile', label: t('nav.profile', 'Profile'), icon: SettingsIcon },
     ] : [
         { to: '/dashboard', label: t('nav.dashboard'), icon: DashboardIcon },

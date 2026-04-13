@@ -18,6 +18,14 @@ export const adminApi = {
     unpublishExam: (examId) =>
         apiClient.put(`/api/admin/catalog/exams/${examId}/unpublish`).then(r => r.data),
 
+    // ── Create new test set (event + Paper I + II) ───────────────────────────
+    createEvent: (data) =>
+        apiClient.post('/api/admin/catalog/events', data).then(r => r.data),
+
+    // ── Exam boards (public, for CreateTestPage board selector) ──────────────
+    listBoards: () =>
+        apiClient.get('/api/catalog/boards').then(r => r.data),
+
     // ── Questions ─────────────────────────────────────────────────────────────
     listQuestionsAdmin: (examId) =>
         apiClient.get('/api/admin/questions/', { params: { exam_id: examId } }).then(r => r.data),
@@ -34,6 +42,10 @@ export const adminApi = {
     // ── Question stats ─────────────────────────────────────────────────────────
     getQuestionStats: (examId) =>
         apiClient.get('/api/admin/questions/stats', { params: { exam_id: examId } }).then(r => r.data),
+
+    // ── Exam sections + topics (catalog, active exams only) ────────────────────
+    getExamDetail: (examId) =>
+        apiClient.get(`/api/catalog/exams/${examId}`).then(r => r.data).catch(() => null),
 
     // ── Media upload ───────────────────────────────────────────────────────────
     uploadImage: (file, uploadType, entityId) => {

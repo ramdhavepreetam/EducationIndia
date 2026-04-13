@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { paymentApi } from '../api/paymentApi'
+import { useAuthStore } from '@/modules/auth/store/authStore'
 
 /**
  * Global store for Payment module (ADR-014).
@@ -9,7 +10,10 @@ import { paymentApi } from '../api/paymentApi'
 export const usePaymentStore = create((set, get) => ({
     plan: null,
     status: null,
+    lastPayment: null,   // populated after successful payment for receipt display
+    history: [],
     isLoading: false,
+    isLoadingHistory: false,
     isProcessing: false,
     error: null,
 
@@ -33,13 +37,26 @@ export const usePaymentStore = create((set, get) => ({
         }
     },
 
+    loadHistory: async () => {
+        set({ isLoadingHistory: true })
+        try {
+            const history = await paymentApi.getHistory()
+            set({ history, isLoadingHistory: false })
+        } catch {
+            set({ isLoadingHistory: false })
+        }
+    },
+
     initiatePayment: async (navigate) => {
         set({ isProcessing: true, error: null })
         try {
             // 1. Create order on backend
             const order = await paymentApi.createOrder()
 
-            // 2. Open Razorpay modal
+            // 2. Get user details for prefill
+            const { user } = useAuthStore.getState()
+
+            // 3. Open Razorpay modal
             const options = {
                 key: order.key_id,
                 amount: order.amount,
@@ -47,15 +64,29 @@ export const usePaymentStore = create((set, get) => ({
                 name: 'ScholarPath',
                 description: 'Standard Access Subscription',
                 order_id: order.order_id,
+                prefill: {
+                    name: user?.full_name || '',
+                    email: user?.email || '',
+                    contact: user?.phone || '',
+                },
                 handler: async (response) => {
                     try {
-                        // 3. Verify payment on backend
+                        // 4. Verify payment on backend
                         const result = await paymentApi.verifyPayment({
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
                         })
-                        set({ status: result, isProcessing: false })
+                        set({
+                            status: result,
+                            isProcessing: false,
+                            lastPayment: {
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                amount_inr: get().plan?.price_inr,
+                                plan_name: result.plan_name,
+                                paid_at: new Date().toISOString(),
+                            },
+                        })
 
                         if (result.is_active) {
                             navigate('/payment/success', { replace: true })
@@ -92,5 +123,5 @@ export const usePaymentStore = create((set, get) => ({
         }
     },
 
-    reset: () => set({ plan: null, status: null, error: null, isLoading: false, isProcessing: false }),
+    reset: () => set({ plan: null, status: null, lastPayment: null, history: [], error: null, isLoading: false, isLoadingHistory: false, isProcessing: false }),
 }))

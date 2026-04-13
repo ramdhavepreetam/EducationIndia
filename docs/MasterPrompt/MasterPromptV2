@@ -22,7 +22,7 @@ fe     = "React 18 + Vite + Tailwind 3 + Zustand + react-i18next"
 http   = "Axios + request interceptor (JWT) + response interceptor (401→logout)"
 test   = "pytest + pytest-asyncio | Vitest + RTL"
 media  = "LocalProvider(dev) → CloudinaryProvider(prod) via MEDIA_PROVIDER env"
-deploy = "Vercel(fe) + Render(be) + Supabase(db)"
+deploy = "Cloudflare Pages(fe) + Render(be) + Supabase(db)"
 payment= "Razorpay — one-time orders, INR, UPI+cards+netbanking"
 
 # ── WHO USES THE APP ──────────────────────────────────────────────────────

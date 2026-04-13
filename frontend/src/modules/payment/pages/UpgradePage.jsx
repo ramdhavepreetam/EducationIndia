@@ -105,6 +105,16 @@ export const UpgradePage = () => {
                     <div className="mt-4 text-xs text-gray-400 font-medium">
                         UPI · Credit Cards · Debit Cards · Netbanking
                     </div>
+
+                    {/* Refund policy — legal requirement */}
+                    <p className="mt-6 text-xs text-gray-400 leading-relaxed max-w-sm mx-auto">
+                        {t('payment.refund_note',
+                            'By completing payment you agree to our terms. Payments are non-refundable once access is activated. For payment issues contact'
+                        )}{' '}
+                        <a href="mailto:support@scholarpath.in" className="underline hover:text-gray-600">
+                            support@scholarpath.in
+                        </a>.
+                    </p>
                 </div>
             )}
         </div>
