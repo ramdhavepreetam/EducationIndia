@@ -18,4 +18,23 @@ export const settingsApi = {
 
     fetchPlans: () =>
         apiClient.get('/api/payment/plans').then(r => r.data),
+
+    // Payment analytics
+    fetchPaymentStats: () =>
+        apiClient.get('/api/admin/payments/stats').then(r => r.data),
+
+    fetchAllPayments: ({ status, search, page = 1, limit = 50 } = {}) => {
+        const params = new URLSearchParams()
+        if (status && status !== 'all') params.set('status', status)
+        if (search) params.set('search', search)
+        params.set('page', page)
+        params.set('limit', limit)
+        return apiClient.get(`/api/admin/payments?${params}`).then(r => r.data)
+    },
+
+    fetchMonthlyRevenue: (months = 6) =>
+        apiClient.get(`/api/admin/payments/monthly?months=${months}`).then(r => r.data),
+
+    fetchPaymentsByParent: (parentId) =>
+        apiClient.get(`/api/admin/payments/user/${parentId}`).then(r => r.data),
 }

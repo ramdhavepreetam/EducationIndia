@@ -371,6 +371,56 @@ async def cancel_subscription(
     return {"status": "cancelled", "id": str(result.get("id"))}
 
 
+# ── Payment analytics endpoints ───────────────────────────────────────────────
+
+@router.get("/payments/stats")
+async def get_payment_stats(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Revenue summary: totals, active count, monthly revenue. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_payment_stats_admin(db)
+
+
+@router.get("/payments")
+async def list_all_payments(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+    status: str | None = None,
+    search: str | None = None,
+    page: int = 1,
+    limit: int = 50,
+):
+    """All payment transactions with optional filters. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_payments_admin(
+        db, status=status, search=search, page=page, limit=limit
+    )
+
+
+@router.get("/payments/monthly")
+async def get_monthly_revenue(
+    months: int = 6,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Month-by-month revenue chart data for last N months. Admin only."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_monthly_revenue_admin(db, months=months)
+
+
+@router.get("/payments/user/{parent_id}")
+async def get_payments_by_parent(
+    parent_id: str,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """All payments for a specific parent. Admin drill-down."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_payments_by_parent_admin(db, parent_id)
+
+
 @router.post("/subscriptions/grant")
 async def grant_subscription(
     body: dict,
