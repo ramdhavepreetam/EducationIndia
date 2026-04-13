@@ -18,7 +18,7 @@ fe  = "React 18 + Vite + Tailwind 3 + Zustand + react-i18next"
 http= "Axios + request interceptor (JWT) + response interceptor (401→logout)"
 test= "pytest + pytest-asyncio | Vitest + RTL"
 media="LocalProvider(dev) → CloudinaryProvider(prod) via MEDIA_PROVIDER env"
-deploy="Vercel(fe) + Render(be) + Supabase(db)"
+deploy="Cloudflare Pages(fe) + Render(be) + Supabase(db)"
 
 # ── MODULES ────────────────────────────────────────────────────────────────
 # Format: owns | exposes | consumes | hard-rules
@@ -390,7 +390,7 @@ done = [
 ]
 next = [
   "Day6:  Seed 150 MSCE questions via importer (Pending Data Task)",
-  "Day14: Deploy Vercel + Render + UptimeRobot keepalive"
+  "Day14: Deploy Cloudflare Pages + Render + UptimeRobot keepalive"
 ]
 rule = "complete verification checklist before advancing to next day"
 

@@ -89,5 +89,95 @@ class CatalogRepository:
         return await self.get_exam_by_id(db, exam_id)
 
 
+    async def create_event(
+        self,
+        db: AsyncSession,
+        *,
+        board_id: int,
+        category_id: int,
+        title_en: str,
+        title_mr: str | None,
+        std_class: int,
+        year: int,
+    ) -> ExamEvent:
+        """Insert a new exam_event row (draft state, is_active defaults to False)."""
+        event = ExamEvent(
+            board_id=board_id,
+            category_id=category_id,
+            title_en=title_en,
+            title_mr=title_mr,
+            std_class=std_class,
+            year=year,
+            is_active=False,
+        )
+        db.add(event)
+        await db.flush()
+        await db.refresh(event)
+        return event
+
+    async def create_exam_under_event(
+        self,
+        db: AsyncSession,
+        *,
+        event_id: int,
+        paper_code: str,
+        set_code: str,
+        title_en: str,
+        title_mr: str | None = None,
+    ) -> Exam:
+        """Insert an exam (paper) under an event. Returns the new Exam row."""
+        exam = Exam(
+            event_id=event_id,
+            paper_code=paper_code,
+            set_code=set_code,
+            title_en=title_en,
+            title_mr=title_mr,
+            is_active=False,
+        )
+        db.add(exam)
+        await db.flush()
+        await db.refresh(exam)
+        return exam
+
+    async def clone_sections_and_topics(
+        self,
+        db: AsyncSession,
+        *,
+        source_exam_id: int,
+        target_exam_id: int,
+    ) -> None:
+        """
+        Clone sections + topics from source_exam_id into target_exam_id.
+        Used when creating a new test to replicate the existing structure.
+        """
+        source = await self.get_exam_by_id(db, source_exam_id)
+        if source is None:
+            return
+        for src_section in source.sections:
+            new_section = Section(
+                exam_id=target_exam_id,
+                section_label=src_section.section_label,
+                subject_en=src_section.subject_en,
+                subject_mr=src_section.subject_mr,
+                question_from=src_section.question_from,
+                question_to=src_section.question_to,
+                order_index=src_section.order_index,
+                color_hex=src_section.color_hex,
+            )
+            db.add(new_section)
+            await db.flush()
+            await db.refresh(new_section)
+            for src_topic in src_section.topics:
+                db.add(Topic(
+                    section_id=new_section.id,
+                    name_en=src_topic.name_en,
+                    name_mr=src_topic.name_mr,
+                    description_en=src_topic.description_en,
+                    description_mr=src_topic.description_mr,
+                    order_index=src_topic.order_index,
+                ))
+        await db.flush()
+
+
 # Module-level singleton — import this in service.py
 catalog_repository = CatalogRepository()

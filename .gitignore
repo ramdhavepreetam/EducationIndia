@@ -50,3 +50,15 @@ id_ed25519
 # Local caches
 *.sqlite3
 *.db
+
+# Graphify generated artifacts
+graphify-out/
+backend/graphify-out/
+frontend/graphify-out/
+frontend/src/graphify-out/
+
+# Old build artifacts
+frontend/dist.old_61744/
+
+# Firebase deploy cache
+frontend/.firebase/

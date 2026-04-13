@@ -25,7 +25,7 @@ Frontend:  React 18 + Vite + Tailwind CSS 3 + Zustand + react-i18next
 HTTP:      Axios with request/response interceptors
 Charts:    Recharts
 PDF:       jsPDF + html2canvas (exam result report cards)
-Deploy:    Vercel (frontend) + Render (backend) + Supabase (DB + Auth)
+Deploy:    Firebase Hosting (frontend) + Render (backend) + Supabase (DB + Auth)
 Media:     Local filesystem (dev) → Cloudinary (prod) via provider pattern
 Payment:   Razorpay (orders, subscriptions, webhooks)
 ```
@@ -991,14 +991,45 @@ modules/dashboard/ ✅ COMPLETE
 modules/admin/     ✅ COMPLETE
   AdminRoute guard: checks role ∈ ['exam_admin','super_admin'], shows AccessDenied otherwise
   pages/AdminDashboardPage.jsx    → platform stats (4 count cards + recent activity table)
-  pages/QuestionManagerPage.jsx   → browse all questions, BulkImportButton, QuestionEditForm modal
+  pages/QuestionManagerPage.jsx   → 3-tab shell: Browse / Add Question / Import
+                                    (tab state only — delegates to 3 sub-components)
   pages/ExamPublisherPage.jsx     → list all exams, publish/unpublish toggle
   pages/ImageUploaderPage.jsx     → upload images for Intelligence Test questions
   pages/StatsPage.jsx             → per-question performance, CSV export
   pages/AdminSettingsPage.jsx     → system settings management
   pages/AdminSubscriptionsPage.jsx→ user subscription management, cancel subscription
-  store/adminStore.js             → Zustand store for all admin data
-  api/adminApi.js                 → API calls for all admin endpoints
+  components/QuestionBrowser.jsx  → Browse tab: live exam list (from adminStore.exams),
+                                    text search, difficulty/type filters, EN/MR toggle,
+                                    expandable rows (full text + options inline),
+                                    delete with confirm dialog, edit modal
+  components/QuestionTable.jsx    → enhanced: accepts searchTerm prop, EN/MR language
+                                    toggle button, 📄 context badge, expandable rows,
+                                    correct answer shown as A/B/C/D, delete wired
+  components/QuestionCreatorForm.jsx → Add Question tab: single-question form UI
+                                    (no JSON needed). Loads sections/topics from
+                                    GET /api/catalog/exams/{id} (falls back to manual
+                                    ID entry for inactive exams). Auto-suggests Q.No
+                                    from max existing in section. Submits via bulkImport.
+  components/QuestionImporter.jsx → Import tab: replaces BulkImportButton
+                                    JSON + CSV format toggle, Auto/Override exam mode
+                                    (fixes exam_id override bug), drag-and-drop zone,
+                                    validation preview before import, template downloads
+                                    CSV format: one row per question (no context support)
+                                    JSON format: full BulkImportSchema (all types)
+  components/QuestionEditForm.jsx → enhanced: resizable textareas with char counter,
+                                    A/B/C/D option labels with EN+MR display,
+                                    note about re-importing to edit option text
+  components/BulkImportButton.jsx → DEPRECATED — kept for backward compat but
+                                    replaced by QuestionImporter in the UI
+  store/adminStore.js             → Zustand store: added deleteQuestion() action
+  api/adminApi.js                 → added getExamDetail(examId) for section/topic data
+
+  Key patterns:
+    Exam selector uses adminStore.exams (from listAllExams) — includes inactive exams
+    Sections/topics fetched from GET /api/catalog/exams/{id} — 404 for inactive →
+      falls back to manual numeric input with hardcoded hint text
+    BulkImportSchema used for single-question creation (contexts:[], 1-element questions[])
+    CSV tags use semicolon (;) separator (comma is field delimiter)
 
 modules/exam/      ⬜ NOT STARTED (catalog browsing — separate from admin)
 
@@ -1068,7 +1099,7 @@ TODO: Enable Facebook OAuth in Supabase dashboard
       → Google OAuth is already enabled and working
 
 TODO: Deploy (Day 14)
-      → Vercel (frontend) + Render (backend) + UptimeRobot keepalive
+      → Firebase Hosting (frontend) + Render (backend) + UptimeRobot keepalive
       → UptimeRobot required to prevent Render free-tier sleep (ADR-008)
 ```
 
@@ -1233,3 +1264,30 @@ Do NOT wrap: /onboarding (causes infinite redirect loop)
 
 The guard uses useUserStore.loadProfile() and syncs with authStore.
 ```
+
+## graphify
+
+This project has a graphify knowledge graph at graphify-out/.
+
+Rules:
+- Before answering architecture or codebase questions, read graphify-out/GRAPH_REPORT.md for god nodes and community structure
+- If graphify-out/wiki/index.md exists, navigate it instead of reading raw files
+- After modifying code files in this session, run `python3 -c "from graphify.watch import _rebuild_code; from pathlib import Path; _rebuild_code(Path('.'))"` to keep the graph current
+
+## Graphify Graphs (ScholarPath)
+
+This project has TWO separate graphs. Before running any `/graphify query`, `/graphify path`, or `/graphify explain` command, switch to the correct graph first:
+
+```bash
+# Before working on FastAPI/Supabase/Python
+./scripts/graphify-switch.sh backend
+
+# Before working on React components/stores/pages
+./scripts/graphify-switch.sh frontend
+```
+
+Graphs located at:
+- `graphify-out/backend/GRAPH_REPORT.md`  → 1,175 nodes, 38 communities (Python backend)
+- `graphify-out/frontend/GRAPH_REPORT.md` → 217 nodes, 15 communities (React frontend/src)
+
+`graphify-out/graph.json` is the active graph (whichever was last switched to). Always remind the user to switch if their question is clearly about the other layer.

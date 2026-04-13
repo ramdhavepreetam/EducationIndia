@@ -11,6 +11,9 @@ alembic==1.13.1                # migrations
 # ── Auth / JWT ───────────────────────────────────────────────
 python-jose[cryptography]==3.3.0   # Supabase JWT validation
 
+# ── Supabase client ──────────────────────────────────────────
+supabase==2.4.1                # Supabase Python client
+
 # ── Config ───────────────────────────────────────────────────
 pydantic==2.7.1
 pydantic-settings==2.2.1
@@ -20,4 +23,10 @@ httpx==0.27.0
 
 # ── Media / file uploads ──────────────────────────────────────
 aiofiles==23.2.1               # async file I/O for local media provider
-# cloudinary==1.40.0           # uncomment when MEDIA_PROVIDER=cloudinary
+cloudinary==1.40.0             # Cloudinary media provider (used even when local)
+
+# ── Payment ───────────────────────────────────────────────────
+razorpay==1.4.2                # Razorpay payment gateway
+
+# ── Date utilities ────────────────────────────────────────────
+python-dateutil==2.9.0         # relativedelta for subscription billing

@@ -13,6 +13,15 @@ import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
+
+/** Returns the correct landing page for a given user profile, based on role.
+ *  Shared between AuthRedirect (OAuth callback) and LoginPage (email/password). */
+export function getRoleHome(profile) {
+    if (!profile?.is_onboarded) return '/onboarding'
+    if (['exam_admin', 'super_admin'].includes(profile?.role)) return '/admin'
+    if (profile?.role === 'parent') return '/parent'
+    return '/dashboard'
+}
 import { ExamStartPage, ExamPage, ExamSubmittedPage } from '@/modules/attempt'
 import { ResultPage } from '@/modules/analysis'
 import { StudentDashboardPage } from '@/modules/dashboard'
@@ -21,6 +30,7 @@ import {
     AdminDashboardPage,
     QuestionManagerPage,
     ExamPublisherPage,
+    CreateTestPage,
     ImageUploaderPage,
     StatsPage,
     AdminSettingsPage,
@@ -34,6 +44,7 @@ import {
     UpgradePage,
     PaymentSuccessPage,
     PaymentFailedPage,
+    PaymentHistoryPage,
 } from '@/modules/payment'
 
 export default function App() {
@@ -86,11 +97,13 @@ export default function App() {
                         <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
                         <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
                         <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
+                        <Route path="/payment/history" element={<OnboardingGuard><PaymentHistoryPage /></OnboardingGuard>} />
 
                         {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
                         <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
                         <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
                         <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
+                        <Route path="/admin/publish/create" element={<AdminRoute><CreateTestPage /></AdminRoute>} />
                         <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
                         <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
                         <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
@@ -127,8 +140,8 @@ function AuthRedirect() {
         )
     }
     if (!isAuthenticated) return <Navigate to="/login" replace />
-    if (!user?.is_onboarded) return <Navigate to="/onboarding" replace />
-    return <Navigate to="/dashboard" replace />
+    // Role-aware redirect: admin → /admin, parent → /parent, student → /dashboard
+    return <Navigate to={getRoleHome(user)} replace />
 }
 
 /**

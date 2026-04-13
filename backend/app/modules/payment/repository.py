@@ -229,7 +229,6 @@ class PaymentRepository:
         row = result.mappings().first()
         if not row:
             return {}
-        await db.commit()
         return dict(row)
 
     async def find_parent_by_email(self, db: AsyncSession, email: str) -> dict | None:

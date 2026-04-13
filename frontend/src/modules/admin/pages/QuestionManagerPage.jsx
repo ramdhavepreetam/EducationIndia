@@ -1,93 +1,86 @@
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useAdminStore } from '../store/adminStore'
-import { QuestionTable } from '../components/QuestionTable'
-import { QuestionEditForm } from '../components/QuestionEditForm'
-import { BulkImportButton } from '../components/BulkImportButton'
+import { useState } from 'react'
+import { QuestionBrowser } from '../components/QuestionBrowser'
+import { QuestionCreatorForm } from '../components/QuestionCreatorForm'
+import { QuestionImporter } from '../components/QuestionImporter'
 
-const EXAM_OPTIONS = [
-    { id: 1, label: 'Paper I (501)' },
-    { id: 2, label: 'Paper II (502)' },
+const TABS = [
+    {
+        id: 'browse',
+        label: 'Browse Questions',
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+        ),
+    },
+    {
+        id: 'add',
+        label: 'Add Question',
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 4v16m8-8H4" />
+            </svg>
+        ),
+    },
+    {
+        id: 'import',
+        label: 'Import',
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+        ),
+    },
 ]
 
 /**
- * QuestionManagerPage — browse, edit, delete, and bulk import questions.
- * Admin only. Fetches all questions with correct_option visible (QuestionAdminSchema).
+ * QuestionManagerPage — tabbed admin page for managing questions.
+ *
+ * Tabs:
+ *   Browse   — search, filter, edit, and delete questions
+ *   Add      — form UI for creating a single question (no JSON needed)
+ *   Import   — JSON and CSV bulk import with validation preview
  */
 export function QuestionManagerPage() {
-    const { t } = useTranslation()
-    const {
-        questions, selectedExamId, questionsLoading, questionsError,
-        fetchQuestions,
-    } = useAdminStore()
-    const [examId, setExamId] = useState(EXAM_OPTIONS[0].id)
-    const [editingQuestion, setEditingQuestion] = useState(null)
-
-    useEffect(() => {
-        fetchQuestions(examId)
-    }, [examId, fetchQuestions])
-
-    const handleExamChange = (e) => {
-        setExamId(Number(e.target.value))
-    }
+    const [activeTab, setActiveTab] = useState('browse')
 
     return (
         <div className="p-4 sm:p-8 max-w-7xl mx-auto pb-24">
+            {/* Page header */}
             <div className="mb-6">
-                <h1 className="text-2xl font-bold text-surface-900">
-                    {t('admin.questionManager', 'Question Manager')}
-                </h1>
-                <p className="text-surface-500 mt-1">{t('admin.questionManagerSub', 'Browse and edit all questions. Correct answers visible.')}</p>
+                <h1 className="text-2xl font-bold text-surface-900">Question Manager</h1>
+                <p className="text-surface-500 mt-1">
+                    Browse, edit, and import exam questions. Correct answers are visible to admin.
+                </p>
             </div>
 
-            {/* Toolbar */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-                <select
-                    value={examId}
-                    onChange={handleExamChange}
-                    className="text-sm border border-surface-200 rounded-xl px-4 py-2 text-surface-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white"
-                >
-                    {EXAM_OPTIONS.map(ex => (
-                        <option key={ex.id} value={ex.id}>{ex.label}</option>
-                    ))}
-                </select>
-
-                <div className="flex items-center gap-2 bg-surface-100 px-3 py-2 rounded-xl text-sm text-surface-600">
-                    <span className="font-bold text-surface-900">{questions.length}</span> questions
-                </div>
-
-                <div className="ml-auto">
-                    <BulkImportButton examId={examId} />
-                </div>
+            {/* Tab strip */}
+            <div className="flex gap-1 bg-surface-100 p-1 rounded-xl mb-6 w-fit">
+                {TABS.map(tab => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
+                            activeTab === tab.id
+                                ? 'bg-white text-surface-900 shadow-sm'
+                                : 'text-surface-500 hover:text-surface-700'
+                        }`}
+                    >
+                        {tab.icon}
+                        {tab.label}
+                    </button>
+                ))}
             </div>
 
-            {/* State */}
-            {questionsLoading && (
-                <div className="flex items-center justify-center py-20">
-                    <div className="w-8 h-8 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
-                </div>
+            {/* Tab content */}
+            {activeTab === 'browse' && <QuestionBrowser />}
+            {activeTab === 'add' && (
+                <QuestionCreatorForm onSuccess={() => setActiveTab('browse')} />
             )}
-
-            {questionsError && !questionsLoading && (
-                <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-200">{questionsError}</div>
-            )}
-
-            {!questionsLoading && !questionsError && (
-                <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-4">
-                    <QuestionTable
-                        questions={questions}
-                        onEdit={setEditingQuestion}
-                    />
-                </div>
-            )}
-
-            {/* Edit modal */}
-            {editingQuestion && (
-                <QuestionEditForm
-                    question={editingQuestion}
-                    onClose={() => setEditingQuestion(null)}
-                />
-            )}
+            {activeTab === 'import' && <QuestionImporter />}
         </div>
     )
 }

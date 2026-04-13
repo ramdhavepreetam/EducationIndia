@@ -107,9 +107,9 @@ async def publish_exam(
     Returns 404 if exam_id does not exist.
     Returns 403 if caller is not an admin.
     """
-    exam = await catalog_service.publish_exam(db, exam_id)
+    result = await catalog_service.publish_exam(db, exam_id)
     return PublishExamResponse(
-        id=exam.id,
-        is_active=exam.is_active,
-        message=f"Exam '{exam.title_en}' is now published and visible to students.",
+        id=result["exam_id"],
+        is_active=result["is_active"],
+        message=f"Exam is now published and visible to students.",
     )

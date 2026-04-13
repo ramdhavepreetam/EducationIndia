@@ -6,14 +6,17 @@ import { usePaymentStore } from '../store/paymentStore'
 export const PaymentSuccessPage = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const { status, loadStatus } = usePaymentStore()
+    const { status, lastPayment, loadStatus } = usePaymentStore()
 
     // Make sure we have the latest status when arriving on this page
     useEffect(() => {
         loadStatus()
     }, [loadStatus])
 
-    const dateStr = status?.expires_at ? new Date(status.expires_at).toLocaleDateString() : ''
+    const dateStr = status?.expires_at ? new Date(status.expires_at).toLocaleDateString('en-IN') : ''
+    const paidAtStr = lastPayment?.paid_at
+        ? new Date(lastPayment.paid_at).toLocaleString('en-IN')
+        : new Date().toLocaleString('en-IN')
 
     return (
         <div className="min-h-[70vh] flex flex-col items-center justify-center p-4">
@@ -31,6 +34,34 @@ export const PaymentSuccessPage = () => {
                 <p className="text-lg text-gray-600 mb-6">
                     {t('payment.success_subtitle', 'Thank you. Your premium access is now active.')}
                 </p>
+
+                {/* Receipt details */}
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 text-left space-y-2">
+                    {lastPayment?.plan_name && (
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">{t('payment.plan', 'Plan')}</span>
+                            <span className="font-medium text-gray-900">{lastPayment.plan_name}</span>
+                        </div>
+                    )}
+                    {lastPayment?.amount_inr && (
+                        <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">{t('payment.amount_paid', 'Amount Paid')}</span>
+                            <span className="font-medium text-gray-900">₹{lastPayment.amount_inr}</span>
+                        </div>
+                    )}
+                    <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">{t('payment.date', 'Date')}</span>
+                        <span className="font-medium text-gray-900">{paidAtStr}</span>
+                    </div>
+                    {lastPayment?.razorpay_payment_id && (
+                        <div className="flex justify-between text-sm border-t border-gray-200 pt-2 mt-2">
+                            <span className="text-gray-500">{t('payment.transaction_id', 'Transaction ID')}</span>
+                            <span className="font-mono text-xs text-gray-700 break-all text-right max-w-[200px]">
+                                {lastPayment.razorpay_payment_id}
+                            </span>
+                        </div>
+                    )}
+                </div>
 
                 {dateStr && (
                     <div className="bg-green-50 border border-green-200 rounded p-4 mb-8">

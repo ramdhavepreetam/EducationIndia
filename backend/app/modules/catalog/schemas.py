@@ -8,7 +8,7 @@ The frontend decides which language to display; the API never filters.
 from datetime import date, datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 # ── Topic ─────────────────────────────────────────────────────────────────────
@@ -130,3 +130,34 @@ class PublishExamResponse(BaseModel):
     id: int
     is_active: bool
     message: str
+
+
+# ── Admin: Create Event (Test Set) ────────────────────────────────────────────
+
+class CreateEventRequest(BaseModel):
+    """Body for POST /api/admin/catalog/events."""
+    title_en: str
+    title_mr: Optional[str] = None
+    std_class: int
+    year: int
+    board_id: int
+    category_id: int
+
+    @field_validator("std_class")
+    @classmethod
+    def validate_std_class(cls, v: int) -> int:
+        if v not in (5, 8):
+            raise ValueError("std_class must be 5 or 8")
+        return v
+
+
+class EventWithExamsResponse(BaseModel):
+    """Admin view of an event (test) with its papers' status."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    title_en: str
+    title_mr: Optional[str] = None
+    std_class: int
+    year: int
+    exams: list[ExamSummaryResponse] = []

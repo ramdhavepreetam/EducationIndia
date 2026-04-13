@@ -66,15 +66,20 @@ export function QuestionEditForm({ question, onClose }) {
         }
     }
 
-    const Field = ({ label, name, textarea, type = 'text' }) => (
+    const Field = ({ label, name, textarea, rows = 4, type = 'text' }) => (
         <div>
-            <label className="block text-xs font-semibold text-surface-600 mb-1">{label}</label>
+            <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-surface-600">{label}</label>
+                {textarea && form[name] && (
+                    <span className="text-xs text-surface-400">{form[name].length} chars</span>
+                )}
+            </div>
             {textarea ? (
                 <textarea
-                    rows={3}
+                    rows={rows}
                     value={form[name]}
                     onChange={e => setForm(f => ({ ...f, [name]: e.target.value }))}
-                    className="w-full text-sm border border-surface-200 rounded-lg px-3 py-2 text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-400 resize-none"
+                    className="w-full text-sm border border-surface-200 rounded-lg px-3 py-2 text-surface-800 focus:outline-none focus:ring-2 focus:ring-brand-400 resize-y"
                 />
             ) : (
                 <input
@@ -113,8 +118,8 @@ export function QuestionEditForm({ question, onClose }) {
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Field label="Question Text (English)" name="text_en" textarea />
-                        <Field label="Question Text (Marathi)" name="text_mr" textarea />
+                        <Field label="Question Text (English)" name="text_en" textarea rows={5} />
+                        <Field label="Question Text (Marathi मराठी)" name="text_mr" textarea rows={5} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -157,16 +162,30 @@ export function QuestionEditForm({ question, onClose }) {
                     {/* Option preview (read-only) */}
                     {question?.options?.length > 0 && (
                         <div>
-                            <label className="block text-xs font-semibold text-surface-600 mb-2">Options (read-only)</label>
-                            <div className="grid grid-cols-1 gap-1">
-                                {question.options.map(opt => (
-                                    <div key={opt.option_no} className={`flex items-start gap-2 px-3 py-2 rounded-lg text-sm ${opt.option_no === question.correct_option ? 'bg-green-50 border border-green-200' : 'bg-surface-50'}`}>
-                                        <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold ${opt.option_no === question.correct_option ? 'bg-green-500 text-white' : 'bg-surface-200 text-surface-600'}`}>
-                                            {opt.option_no}
-                                        </span>
-                                        <span className="text-surface-700">{opt.text_en || opt.text_mr || '(image)'}</span>
-                                    </div>
-                                ))}
+                            <div className="flex items-center justify-between mb-2">
+                                <label className="block text-xs font-semibold text-surface-600">Options (read-only)</label>
+                                <span className="text-xs text-surface-400">
+                                    To edit option text: delete this question and re-import with updated JSON/CSV
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-1 gap-1.5">
+                                {question.options.map(opt => {
+                                    const label = ['A', 'B', 'C', 'D'][opt.option_no - 1] || String(opt.option_no)
+                                    const isCorrect = opt.option_no === question.correct_option
+                                    return (
+                                        <div key={opt.option_no} className={`flex items-start gap-2 px-3 py-2 rounded-lg text-sm ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-surface-50 border border-surface-100'}`}>
+                                            <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold ${isCorrect ? 'bg-green-500 text-white' : 'bg-surface-200 text-surface-600'}`}>
+                                                {label}
+                                            </span>
+                                            <div className="flex-1 min-w-0">
+                                                {opt.text_en && <p className="text-surface-700 truncate">{opt.text_en}</p>}
+                                                {opt.text_mr && <p className="text-surface-500 text-xs truncate">{opt.text_mr}</p>}
+                                                {!opt.text_en && !opt.text_mr && <p className="text-surface-400 italic">(image option)</p>}
+                                            </div>
+                                            {isCorrect && <span className="text-xs text-green-600 font-semibold flex-shrink-0">✓ correct</span>}
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
                     )}

@@ -8,14 +8,7 @@ import { useState } from 'react'
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '../store/authStore'
-
-/** Returns the correct landing page for a given user profile, based on role. */
-function getRoleHome(profile) {
-    if (!profile?.is_onboarded) return '/onboarding'
-    if (['exam_admin', 'super_admin'].includes(profile?.role)) return '/admin'
-    if (profile?.role === 'parent') return '/parent'
-    return '/dashboard'
-}
+import { getRoleHome } from '@/App'
 
 export default function LoginPage() {
     const { t } = useTranslation()

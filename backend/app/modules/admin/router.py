@@ -8,9 +8,10 @@ Routes:
   GET  /api/admin/dashboard/overview        → aggregate stats for admin panel
   GET  /api/admin/dashboard/attempts/recent → last 20 attempts across all students
   GET  /api/admin/questions/stats           → question_stats table with question_no
+  POST /api/admin/catalog/events            → create new test (event + Paper I + II)
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 from typing import List
@@ -21,7 +22,7 @@ from app.modules.auth.dependencies import require_student, require_admin, requir
 from app.modules.catalog.service import catalog_service
 from app.modules.attempt.repository import attempt_repository
 from app.modules.attempt.schemas import AttemptSummary
-from app.modules.catalog.schemas import ExamSummaryResponse, PublishExamResponse
+from app.modules.catalog.schemas import ExamSummaryResponse, PublishExamResponse, EventWithExamsResponse, CreateEventRequest
 from app.modules.admin.schemas import (
     StudentDashboardResponse,
     StudentDashboardStats,
@@ -205,6 +206,7 @@ async def list_all_exams_admin(
                     e.is_active, e.total_questions,
                     ev.title_en AS event_title,
                     ev.year     AS event_year,
+                    ev.std_class AS std_class,
                     COUNT(q.id) AS question_count
                 FROM exams e
                 LEFT JOIN exam_events ev ON ev.id = e.event_id
@@ -225,11 +227,12 @@ async def admin_publish_exam(
     _: UserIdentity = Depends(require_admin),
 ):
     """Publish exam — sets is_active=True. Admin only."""
-    exam = await catalog_service.publish_exam(db, exam_id)
+    result = await catalog_service.publish_exam(db, exam_id)
+    count = result.get("auto_assigned_count", 0)
     return PublishExamResponse(
-        id=exam.id,
-        is_active=exam.is_active,
-        message=f"Exam '{exam.title_en}' is now published.",
+        id=result["exam_id"],
+        is_active=result["is_active"],
+        message=f"Exam is now published. Auto-assigned to {count} student(s).",
     )
 
 
@@ -407,3 +410,27 @@ async def grant_subscription(
         "parent_email": email,
         "expires_at": str(result.get("expires_at")),
     }
+
+
+# ── Catalog admin — create new test (event + papers) ─────────────────────────
+
+@router.post(
+    "/catalog/events",
+    response_model=EventWithExamsResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a new test set (exam event + Paper I + Paper II)",
+)
+async def create_exam_event(
+    data: CreateEventRequest,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """
+    Admin-only: Create a new exam event with Paper I (501) and Paper II (502).
+    Sections + topics are cloned from the existing paper of the same board.
+    Returns the new event with its two papers.
+
+    Raises 400 if std_class not in (5, 8).
+    Raises 409 if a paper_code + set_code collision occurs.
+    """
+    return await catalog_service.create_event_with_papers(db, data)
