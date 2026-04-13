@@ -5,7 +5,7 @@
  * Supabase session and set up the auth state change listener.
  */
 import { useEffect } from 'react'
-import { Routes, Route, Navigate, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/modules/auth'
 import { ProtectedRoute } from '@/modules/auth'
 import { LoginPage, RegisterPage } from '@/modules/auth'
@@ -78,40 +78,42 @@ export default function App() {
                         <Route path="/onboarding" element={<OnboardingPage />} />
                     </Route>
 
-                    {/* Exam taking flow (full screen, no sidebar) */}
-                    <Route path="/exam/:examId/start" element={<ExamStartPage />} />
-                    <Route path="/exam/:examId/attempt" element={<ExamPage />} />
-                    <Route path="/exam/submitted/:id" element={<ExamSubmittedPage />} />
+                    {/* Exam taking flow (full screen, no sidebar) — OnboardingGuard ensures
+                        std_class and medium are set before the student enters an exam */}
+                    <Route path="/exam/:examId/start" element={<ErrorBoundary><OnboardingGuard><ExamStartPage /></OnboardingGuard></ErrorBoundary>} />
+                    <Route path="/exam/:examId/attempt" element={<ErrorBoundary><OnboardingGuard><ExamPage /></OnboardingGuard></ErrorBoundary>} />
+                    <Route path="/exam/submitted/:id" element={<ErrorBoundary><OnboardingGuard><ExamSubmittedPage /></OnboardingGuard></ErrorBoundary>} />
 
-                    {/* Exam result analysis (full screen container, might want sidebar later but keeping consistent with attempt for now) */}
-                    <Route path="/attempts/:attemptId/result" element={<ResultPage />} />
+                    {/* Exam result analysis */}
+                    <Route path="/attempts/:attemptId/result" element={<ErrorBoundary><OnboardingGuard><ResultPage /></OnboardingGuard></ErrorBoundary>} />
 
                     {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
                     <Route element={<AppLayout />}>
-                        <Route path="/dashboard" element={<StudentDashboardPage />} />
-                        <Route path="/exams" element={<GenericPlaceholder title="Exams" />} />
-                        <Route path="/results" element={<GenericPlaceholder title="Results" />} />
-                        <Route path="/profile" element={<OnboardingGuard><ProfilePage /></OnboardingGuard>} />
+                        <Route path="/dashboard" element={<ErrorBoundary><StudentDashboardPage /></ErrorBoundary>} />
+                        {/* /exams and /results have no dedicated module yet — redirect to dashboard */}
+                        <Route path="/exams" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/results" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/profile" element={<ErrorBoundary><OnboardingGuard><ProfilePage /></OnboardingGuard></ErrorBoundary>} />
 
                         {/* Payment routes — require onboarding */}
-                        <Route path="/upgrade" element={<OnboardingGuard><UpgradePage /></OnboardingGuard>} />
-                        <Route path="/payment/success" element={<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>} />
-                        <Route path="/payment/failed" element={<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>} />
-                        <Route path="/payment/history" element={<OnboardingGuard><PaymentHistoryPage /></OnboardingGuard>} />
+                        <Route path="/upgrade" element={<ErrorBoundary><OnboardingGuard><UpgradePage /></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/payment/success" element={<ErrorBoundary><OnboardingGuard><PaymentSuccessPage /></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/payment/failed" element={<ErrorBoundary><OnboardingGuard><PaymentFailedPage /></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/payment/history" element={<ErrorBoundary><OnboardingGuard><PaymentHistoryPage /></OnboardingGuard></ErrorBoundary>} />
 
-                        {/* Admin routes — guarded by AdminRoute (redirects non-admins) */}
-                        <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
-                        <Route path="/admin/questions" element={<AdminRoute><QuestionManagerPage /></AdminRoute>} />
-                        <Route path="/admin/publish" element={<AdminRoute><ExamPublisherPage /></AdminRoute>} />
-                        <Route path="/admin/publish/create" element={<AdminRoute><CreateTestPage /></AdminRoute>} />
-                        <Route path="/admin/images" element={<AdminRoute><ImageUploaderPage /></AdminRoute>} />
-                        <Route path="/admin/stats" element={<AdminRoute><StatsPage /></AdminRoute>} />
-                        <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
-                        <Route path="/admin/subscriptions" element={<AdminRoute><AdminSubscriptionsPage /></AdminRoute>} />
+                        {/* Admin routes — guarded by AdminRoute + per-route ErrorBoundary */}
+                        <Route path="/admin" element={<ErrorBoundary><AdminRoute><AdminDashboardPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/questions" element={<ErrorBoundary><AdminRoute><QuestionManagerPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/publish" element={<ErrorBoundary><AdminRoute><ExamPublisherPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/publish/create" element={<ErrorBoundary><AdminRoute><CreateTestPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/images" element={<ErrorBoundary><AdminRoute><ImageUploaderPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/stats" element={<ErrorBoundary><AdminRoute><StatsPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/settings" element={<ErrorBoundary><AdminRoute><AdminSettingsPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin/subscriptions" element={<ErrorBoundary><AdminRoute><AdminSubscriptionsPage /></AdminRoute></ErrorBoundary>} />
 
-                        {/* Parent routes — guarded by ParentRoute + OnboardingGuard */}
-                        <Route path="/parent" element={<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>} />
-                        <Route path="/parent/children/:studentId" element={<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>} />
+                        {/* Parent routes — guarded by ParentRoute + OnboardingGuard + per-route ErrorBoundary */}
+                        <Route path="/parent" element={<ErrorBoundary><OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/parent/children/:studentId" element={<ErrorBoundary><OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard></ErrorBoundary>} />
                     </Route>
                 </Route>
             </Routes>
@@ -158,22 +160,3 @@ function ParentRoute({ children }) {
     return children
 }
 
-/** Placeholder for missing modules (Exams, Results, Profile) */
-function GenericPlaceholder({ title }) {
-    return (
-        <div className="p-8">
-            <h1 className="text-2xl font-bold text-surface-900 mb-4">{title}</h1>
-            <p className="mt-2 text-surface-500 mb-8">
-                The {title} module is coming soon or handled directly by the Dashboard right now.
-            </p>
-            <div className="p-6 bg-white border border-brand-200 rounded-xl shadow-sm max-w-md">
-                <Link
-                    to="/dashboard"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-surface-100 text-surface-700 font-bold rounded-lg hover:bg-surface-200 transition"
-                >
-                    Back to Dashboard
-                </Link>
-            </div>
-        </div>
-    )
-}

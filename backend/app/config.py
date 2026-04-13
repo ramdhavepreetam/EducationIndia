@@ -1,3 +1,4 @@
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,7 +14,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str
 
     # ── FastAPI JWT ──────────────────────────────────────────
-    SECRET_KEY: str = "change-me-in-production-min-32-chars"
+    # No default — app refuses to start if SECRET_KEY is not set or is too short.
+    SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
@@ -33,12 +35,22 @@ class Settings(BaseSettings):
     RAZORPAY_WEBHOOK_SECRET: str = ""
 
     # ── Frontend ─────────────────────────────────────────────
-    FRONTEND_URL: str = "http://localhost:5173"
+    # No default — must be set explicitly so production CORS is never localhost.
+    FRONTEND_URL: str
 
     # ── App ──────────────────────────────────────────────────
     DEBUG: bool = False
     APP_NAME: str = "ScholarPath"
     APP_VERSION: str = "1.0.0"
+
+    @model_validator(mode="after")
+    def validate_critical_settings(self) -> "Settings":
+        if len(self.SECRET_KEY) < 32:
+            raise ValueError(
+                "SECRET_KEY must be at least 32 characters. "
+                "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+            )
+        return self
 
 
 # Single shared instance — import this everywhere

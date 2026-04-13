@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.main import limiter
 from app.modules.auth.dependencies import UserIdentity, verify_token
 from app.modules.payment.schemas import (
     CreateOrderResponse,
@@ -47,7 +48,9 @@ async def get_status(
 
 
 @router.post("/create-order", response_model=CreateOrderResponse)
+@limiter.limit("5/minute")
 async def create_order(
+    request: Request,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
@@ -56,13 +59,15 @@ async def create_order(
 
 
 @router.post("/verify", response_model=SubscriptionStatusResponse)
+@limiter.limit("10/minute")
 async def verify_payment(
-    request: VerifyPaymentRequest,
+    request: Request,
+    body: VerifyPaymentRequest,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
     """Verifies Razorpay signature and activates subscription."""
-    return await payment_service.verify_and_activate(identity.id, request, db)
+    return await payment_service.verify_and_activate(identity.id, body, db)
 
 
 @router.post("/webhook")
@@ -83,8 +88,10 @@ async def webhook(
 
 @router.get("/history", response_model=list[PaymentHistoryRow])
 async def get_history(
+    page: int = 1,
+    limit: int = 50,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
-    """Returns the calling parent's payment history."""
-    return await payment_service.get_payment_history(identity.id, db)
+    """Returns the calling parent's payment history. Paginated (default 50/page)."""
+    return await payment_service.get_payment_history(identity.id, db, page=page, limit=limit)

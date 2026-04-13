@@ -30,3 +30,6 @@ razorpay==1.4.2                # Razorpay payment gateway
 
 # ── Date utilities ────────────────────────────────────────────
 python-dateutil==2.9.0         # relativedelta for subscription billing
+
+# ── Rate limiting ─────────────────────────────────────────────
+slowapi==0.1.9                 # ASGI-compatible rate limiter (backed by in-memory store)
