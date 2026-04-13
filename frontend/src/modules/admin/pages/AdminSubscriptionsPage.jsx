@@ -145,6 +145,7 @@ function TransactionsTab() {
         setLoading(true)
         settingsApi.fetchAllPayments({ status: statusFilter, search, page, limit: LIMIT })
             .then(setRows)
+            .catch(() => setRows([]))
             .finally(() => setLoading(false))
     }, [statusFilter, search, page])
 
@@ -296,6 +297,7 @@ function RevenueChart() {
                 revenue: Number(r.revenue),
                 count: Number(r.count),
             }))))
+            .catch(() => setData([]))
             .finally(() => setLoading(false))
     }, [months])
 
@@ -367,18 +369,29 @@ export const AdminSubscriptionsPage = () => {
         setIsLoading(true)
         setError(null)
         try {
-            const [subs, statsData, plansData] = await Promise.all([
+            const [subsResult, statsResult, plansResult] = await Promise.allSettled([
                 settingsApi.fetchSubscriptions(),
                 settingsApi.fetchPaymentStats(),
                 settingsApi.fetchPlans(),
             ])
-            setSubscriptions(subs)
-            setStats(statsData)
-            const arr = Array.isArray(plansData) ? plansData : plansData?.plans ? plansData.plans : [plansData]
-            setPlans(arr.filter(Boolean))
-            if (arr[0]?.id) setGrantPlanId(arr[0].id)
-        } catch (err) {
-            setError('Failed to load subscription data.')
+
+            if (subsResult.status === 'fulfilled') {
+                setSubscriptions(subsResult.value)
+            } else {
+                setError('Failed to load subscriptions.')
+            }
+
+            if (statsResult.status === 'fulfilled') {
+                setStats(statsResult.value)
+            }
+            // stats silently fails — page still works without it
+
+            if (plansResult.status === 'fulfilled') {
+                const plansData = plansResult.value
+                const arr = Array.isArray(plansData) ? plansData : plansData?.plans ? plansData.plans : [plansData]
+                setPlans(arr.filter(Boolean))
+                if (arr[0]?.id) setGrantPlanId(arr[0].id)
+            }
         } finally {
             setIsLoading(false)
         }
