@@ -245,6 +245,106 @@ class PaymentRepository:
         row = result.mappings().first()
         return dict(row) if row else None
 
+    # ── Admin analytics ──────────────────────────────────────────────────────
+
+    async def get_payment_stats_admin(self, db: AsyncSession) -> dict:
+        """Revenue summary stats for admin dashboard."""
+        result = await db.execute(text("""
+            SELECT
+                COALESCE(SUM(CASE WHEN p.status = 'captured' THEN p.amount_inr ELSE 0 END), 0)
+                    AS total_revenue_inr,
+                COUNT(DISTINCT CASE WHEN s.status = 'active' AND s.expires_at > now() THEN s.id END)
+                    AS active_subscriptions,
+                COUNT(DISTINCT CASE WHEN s.status = 'expired' OR (s.status = 'active' AND s.expires_at <= now()) THEN s.id END)
+                    AS expired_subscriptions,
+                COUNT(DISTINCT CASE WHEN s.status = 'cancelled' THEN s.id END)
+                    AS cancelled_subscriptions,
+                COUNT(p.id)                                                     AS total_transactions,
+                COUNT(CASE WHEN p.status = 'failed' THEN 1 END)                AS failed_transactions,
+                COALESCE(SUM(CASE
+                    WHEN p.status = 'captured'
+                     AND date_trunc('month', p.paid_at) = date_trunc('month', now())
+                    THEN p.amount_inr ELSE 0 END), 0)                          AS this_month_revenue,
+                COALESCE(SUM(CASE
+                    WHEN p.status = 'captured'
+                     AND date_trunc('month', p.paid_at) = date_trunc('month', now() - interval '1 month')
+                    THEN p.amount_inr ELSE 0 END), 0)                          AS last_month_revenue
+            FROM subscriptions s
+            FULL OUTER JOIN payments p ON p.subscription_id = s.id
+        """))
+        row = result.mappings().first()
+        return dict(row) if row else {}
+
+    async def get_all_payments_admin(
+        self, db: AsyncSession,
+        status: str | None = None,
+        search: str | None = None,
+        page: int = 1,
+        limit: int = 50,
+    ) -> list[dict]:
+        """All payment transactions with optional filters. Admin only."""
+        conditions = []
+        params: dict = {"offset": (page - 1) * limit, "limit": limit}
+
+        if status and status != "all":
+            conditions.append("p.status = :status")
+            params["status"] = status
+        if search:
+            conditions.append("(up.full_name ILIKE :search OR au.email ILIKE :search)")
+            params["search"] = f"%{search}%"
+
+        where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+
+        result = await db.execute(text(f"""
+            SELECT p.id, p.amount_inr, p.currency, p.status,
+                   p.razorpay_order_id, p.razorpay_payment_id,
+                   p.failure_reason, p.paid_at, p.created_at,
+                   up.full_name AS parent_name,
+                   au.email    AS parent_email,
+                   s.id        AS subscription_id
+            FROM payments p
+            LEFT JOIN subscriptions s  ON s.id  = p.subscription_id
+            LEFT JOIN user_profiles up ON up.id = p.parent_id
+            LEFT JOIN auth.users au    ON au.id = p.parent_id
+            {where}
+            ORDER BY p.created_at DESC
+            LIMIT :limit OFFSET :offset
+        """), params)
+        return [dict(row) for row in result.mappings().all()]
+
+    async def get_payments_by_parent_admin(
+        self, db: AsyncSession, parent_id: str
+    ) -> list[dict]:
+        """All payments for a specific parent. Admin drill-down."""
+        result = await db.execute(text("""
+            SELECT p.id, p.amount_inr, p.currency, p.status,
+                   p.razorpay_order_id, p.razorpay_payment_id,
+                   p.failure_reason, p.paid_at, p.created_at,
+                   s.expires_at AS subscription_expires_at
+            FROM payments p
+            LEFT JOIN subscriptions s ON s.id = p.subscription_id
+            WHERE p.parent_id = :pid
+            ORDER BY p.created_at DESC
+        """), {"pid": parent_id})
+        return [dict(row) for row in result.mappings().all()]
+
+    async def get_monthly_revenue_admin(
+        self, db: AsyncSession, months: int = 6
+    ) -> list[dict]:
+        """Month-by-month revenue for the last N months. Admin only."""
+        result = await db.execute(text("""
+            SELECT
+                to_char(date_trunc('month', paid_at), 'YYYY-MM') AS month,
+                COALESCE(SUM(amount_inr), 0)                     AS revenue,
+                COUNT(*)                                         AS count
+            FROM payments
+            WHERE status = 'captured'
+              AND paid_at >= date_trunc('month', now()) - ((:months - 1) || ' months')::interval
+            GROUP BY date_trunc('month', paid_at)
+            ORDER BY date_trunc('month', paid_at)
+        """), {"months": months})
+        return [dict(row) for row in result.mappings().all()]
+
 
 # Module-level singleton
 payment_repository = PaymentRepository()
