@@ -52,7 +52,14 @@ class PaymentRepository:
     async def activate_subscription(
         self, db: AsyncSession, *, subscription_id: UUID,
         razorpay_payment_id: str, expires_at: datetime,
-    ) -> dict:
+    ) -> dict | None:
+        """
+        Conditional UPDATE — only activates if status is not already 'active'.
+        Returns None if the row was already active (idempotent, not an error).
+        This prevents the double-activation race condition: concurrent verify
+        calls both see 'pending', but only one UPDATE wins because of the
+        WHERE status != 'active' guard.
+        """
         result = await db.execute(
             text("""
                 UPDATE subscriptions
@@ -61,7 +68,7 @@ class PaymentRepository:
                     expires_at = :expires_at,
                     razorpay_payment_id = :rpay_id,
                     updated_at = now()
-                WHERE id = :sid
+                WHERE id = :sid AND status != 'active'
                 RETURNING *
             """),
             {
@@ -70,7 +77,8 @@ class PaymentRepository:
                 "expires_at": expires_at,
             },
         )
-        return dict(result.mappings().first())
+        row = result.mappings().first()
+        return dict(row) if row else None
 
     async def get_active_subscription(self, db: AsyncSession, parent_id: UUID) -> dict | None:
         result = await db.execute(
@@ -92,6 +100,11 @@ class PaymentRepository:
         amount_inr: int, razorpay_order_id: str, razorpay_payment_id: str,
         razorpay_signature: str, status: str = "captured",
     ) -> dict:
+        """
+        ON CONFLICT DO NOTHING on razorpay_payment_id prevents duplicate payment
+        records if verify_payment is called twice concurrently for the same order.
+        Returns the existing row on conflict so callers always get a usable dict.
+        """
         result = await db.execute(
             text("""
                 INSERT INTO payments
@@ -100,6 +113,7 @@ class PaymentRepository:
                 VALUES
                     (:sub_id, :pid, :amount, :order_id, :pay_id, :sig, :status,
                      CASE WHEN :status = 'captured' THEN now() ELSE NULL END)
+                ON CONFLICT (razorpay_payment_id) DO NOTHING
                 RETURNING *
             """),
             {
@@ -112,7 +126,15 @@ class PaymentRepository:
                 "status": status,
             },
         )
-        return dict(result.mappings().first())
+        row = result.mappings().first()
+        if row:
+            return dict(row)
+        # Conflict — fetch the existing row
+        existing = await db.execute(
+            text("SELECT * FROM payments WHERE razorpay_payment_id = :pay_id"),
+            {"pay_id": razorpay_payment_id},
+        )
+        return dict(existing.mappings().first())
 
     async def update_payment_status(
         self, db: AsyncSession, razorpay_payment_id: str,
@@ -127,7 +149,9 @@ class PaymentRepository:
             {"status": status, "reason": failure_reason, "rpay_id": razorpay_payment_id},
         )
 
-    async def get_payment_history(self, db: AsyncSession, parent_id: UUID) -> list[dict]:
+    async def get_payment_history(
+        self, db: AsyncSession, parent_id: UUID, page: int = 1, limit: int = 50
+    ) -> list[dict]:
         result = await db.execute(
             text("""
                 SELECT id, amount_inr, currency, status, razorpay_order_id,
@@ -135,8 +159,9 @@ class PaymentRepository:
                 FROM payments
                 WHERE parent_id = :pid
                 ORDER BY created_at DESC
+                LIMIT :limit OFFSET :offset
             """),
-            {"pid": str(parent_id)},
+            {"pid": str(parent_id), "limit": limit, "offset": (page - 1) * limit},
         )
         return [dict(row) for row in result.mappings().all()]
 
@@ -164,7 +189,9 @@ class PaymentRepository:
             {"val": value, "uid": str(admin_id), "k": key},
         )
 
-    async def get_all_subscriptions_admin(self, db: AsyncSession) -> list[dict]:
+    async def get_all_subscriptions_admin(
+        self, db: AsyncSession, page: int = 1, limit: int = 50
+    ) -> list[dict]:
         result = await db.execute(text("""
             SELECT s.id, s.parent_id, up.full_name AS parent_name,
                    sp.name AS plan_name, s.status, s.amount_paid_inr,
@@ -173,7 +200,8 @@ class PaymentRepository:
             LEFT JOIN user_profiles up ON up.id = s.parent_id
             LEFT JOIN subscription_plans sp ON sp.id = s.plan_id
             ORDER BY s.created_at DESC
-        """))
+            LIMIT :limit OFFSET :offset
+        """), {"limit": limit, "offset": (page - 1) * limit})
         return [dict(row) for row in result.mappings().all()]
 
     async def extend_subscription(self, db: AsyncSession, sub_id: UUID, months: int) -> dict:

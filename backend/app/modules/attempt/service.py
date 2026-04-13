@@ -199,31 +199,22 @@ class AttemptService:
         """
         attempt = await self._get_owned_attempt(db, attempt_id, student_id)
 
-        # Auto-expire if timer ran out
-        current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
-        if current_status == "ongoing":
-            remaining = self._compute_time_remaining(attempt, 90)  # default 90min
-            # Try to load exam duration
-            try:
-                from app.modules.catalog.service import catalog_service as cs
-                exam = await cs.get_exam(db, attempt.exam_id)
-                remaining = self._compute_time_remaining(attempt, exam.duration_minutes)
-            except Exception:
-                pass
-
-            if remaining <= 0:
-                attempt = await transition(attempt, "expired", db)
-                current_status = "expired"
-
-        # Re-load with updated status
-        current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
-
-        # Load exam for duration
+        # Load exam once — used for both auto-expire check and time remaining
         try:
             exam = await catalog_service.get_exam(db, attempt.exam_id)
             duration_minutes = exam.duration_minutes
         except Exception:
             duration_minutes = 90
+
+        # Auto-expire if timer ran out
+        current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
+        if current_status == "ongoing":
+            remaining = self._compute_time_remaining(attempt, duration_minutes)
+            if remaining <= 0:
+                attempt = await transition(attempt, "expired", db)
+
+        # Re-read status from (possibly mutated) attempt object
+        current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
 
         time_remaining = self._compute_time_remaining(attempt, duration_minutes)
 
@@ -275,7 +266,27 @@ class AttemptService:
           Forbidden if not owned by this student or not ongoing
           BadRequest if timer expired (beyond 30s grace)
         """
-        attempt = await self._get_owned_attempt(db, attempt_id, student_id)
+        # Use SELECT FOR UPDATE to prevent concurrent double-submit
+        locked_attempt = await attempt_repository.get_attempt_for_submit(db, attempt_id)
+        if locked_attempt is None:
+            # Either not found, or another request holds the lock right now
+            existing = await attempt_repository.get_attempt_by_id(db, attempt_id)
+            if existing is None:
+                raise NotFound(f"Attempt {attempt_id} not found")
+            raise Conflict("This attempt is currently being submitted. Please wait a moment.")
+
+        attempt = locked_attempt
+        # Re-run ownership check on the locked row
+        if attempt.child_profile_id:
+            from app.modules.user.child_repository import child_repository as child_repo
+            is_owner = await child_repo.validate_ownership(
+                attempt.child_profile_id, student_id, db
+            )
+            if not is_owner:
+                raise Forbidden("This attempt does not belong to your child")
+        elif attempt.student_id != student_id:
+            raise Forbidden("This attempt does not belong to you")
+
         self._assert_ongoing(attempt)
 
         # Timer check with 30-second grace

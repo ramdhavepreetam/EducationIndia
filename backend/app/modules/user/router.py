@@ -7,11 +7,12 @@ Rules:
   - Language header set from profile.preferred_language on responses (ADR-003).
 """
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.main import limiter
 from app.modules.auth.dependencies import UserIdentity, require_parent, verify_token
 from app.modules.user.schemas import (
     ChangePasswordRequest,
@@ -112,7 +113,9 @@ async def upload_avatar(
 
 
 @router.post("/me/change-password")
+@limiter.limit("10/hour")
 async def change_password(
+    request: Request,
     data: ChangePasswordRequest,
     identity: UserIdentity = Depends(verify_token),
     db: AsyncSession = Depends(get_db),

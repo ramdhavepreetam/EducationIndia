@@ -5,6 +5,9 @@ import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from app.config import settings
 from app.database import engine
@@ -14,6 +17,10 @@ from app.shared.exceptions import (
     generic_exception_handler,
     scholarpath_exception_handler,
 )
+
+# Global rate limiter instance — imported by routers that need it.
+# Keyed by client IP address. Uses in-memory store (suitable for single-process Render deploy).
+limiter = Limiter(key_func=get_remote_address)
 
 # ── Lifespan ──────────────────────────────────────────────────────────────────
 
@@ -49,6 +56,9 @@ app = FastAPI(
     docs_url="/docs" if settings.DEBUG else None,
     redoc_url="/redoc" if settings.DEBUG else None,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 # ── CORS ──────────────────────────────────────────────────────────────────────

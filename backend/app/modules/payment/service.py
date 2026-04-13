@@ -105,7 +105,7 @@ class PaymentService:
             raise NotFound("Subscription not found for this order")
 
         if sub["status"] == "active":
-            # Idempotent — already activated
+            # Idempotent — already activated (e.g. webhook beat the verify call)
             return await self.get_status(parent_id, db)
 
         # 3. Calculate expiry
@@ -113,7 +113,8 @@ class PaymentService:
         duration_months = int(duration_str) if duration_str else 5
         expires_at = datetime.now(timezone.utc) + relativedelta(months=duration_months)
 
-        # 4. Activate subscription
+        # 4. Activate subscription (conditional UPDATE — returns None if already active,
+        # which means a concurrent verify call beat us here; both outcomes are fine)
         await payment_repository.activate_subscription(
             db,
             subscription_id=sub["id"],
@@ -121,7 +122,7 @@ class PaymentService:
             expires_at=expires_at,
         )
 
-        # 5. Create payment record
+        # 5. Create payment record (ON CONFLICT DO NOTHING — safe to call twice)
         await payment_repository.create_payment(
             db,
             subscription_id=sub["id"],
@@ -157,9 +158,9 @@ class PaymentService:
         )
 
     async def get_payment_history(
-        self, parent_id: UUID, db: AsyncSession
+        self, parent_id: UUID, db: AsyncSession, page: int = 1, limit: int = 50
     ) -> list[PaymentHistoryRow]:
-        rows = await payment_repository.get_payment_history(db, parent_id)
+        rows = await payment_repository.get_payment_history(db, parent_id, page=page, limit=limit)
         return [PaymentHistoryRow(**{**r, "id": str(r["id"])}) for r in rows]
 
 

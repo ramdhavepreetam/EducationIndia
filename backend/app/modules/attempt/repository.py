@@ -65,6 +65,22 @@ class AttemptRepository:
         )
         return result.scalar_one_or_none()
 
+    async def get_attempt_for_submit(
+        self, db: AsyncSession, attempt_id: UUID
+    ) -> Attempt | None:
+        """
+        SELECT FOR UPDATE SKIP LOCKED — acquires a row-level lock to prevent
+        the double-submit race condition. If another request already holds the
+        lock (concurrent submit), SKIP LOCKED returns None immediately so the
+        caller can return a Conflict response rather than blocking.
+        """
+        result = await db.execute(
+            select(Attempt)
+            .where(Attempt.id == attempt_id)
+            .with_for_update(skip_locked=True)
+        )
+        return result.scalar_one_or_none()
+
     async def get_ongoing_attempt(
         self, db: AsyncSession, student_id: UUID, exam_id: int
     ) -> Attempt | None:

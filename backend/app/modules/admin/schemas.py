@@ -7,10 +7,26 @@ from datetime import datetime
 from typing import Any, List, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.modules.catalog.schemas import ExamSummaryResponse
 from app.modules.attempt.schemas import AttemptSummary
+
+
+# ── Admin request bodies (typed — replaces raw body: dict) ───────────────────
+
+class UpdateSettingRequest(BaseModel):
+    value: str
+
+
+class ExtendSubscriptionRequest(BaseModel):
+    months: int = Field(ge=1, le=120, description="Number of months to extend (1–120)")
+
+
+class GrantSubscriptionRequest(BaseModel):
+    email: EmailStr
+    plan_id: int
+    months: int = Field(default=5, ge=1, le=120)
 
 
 # ── Student dashboard ──────────────────────────────────────────────────────────
