@@ -58,12 +58,12 @@ async def build_wrong_answers_summary(
         text("""
             SELECT
                 COUNT(CASE
-                    WHEN r.selected_option IS NOT NULL
-                     AND r.selected_option != va.correct_option
+                    WHEN (r.selected_option IS NOT NULL AND va.is_multi_select = FALSE AND r.selected_option != va.correct_option) OR
+                         (r.selected_options IS NOT NULL AND va.is_multi_select = TRUE AND NOT (r.selected_options @> va.correct_options AND r.selected_options <@ va.correct_options))
                     THEN 1
                 END) AS total_wrong,
                 COUNT(CASE
-                    WHEN r.selected_option IS NULL
+                    WHEN r.selected_option IS NULL AND r.selected_options IS NULL
                     THEN 1
                 END) AS total_skipped
             FROM responses r
@@ -91,9 +91,12 @@ async def build_wrong_answers_summary(
             SELECT
                 r.question_no,
                 r.selected_option,
+                r.selected_options,
                 q.text_en          AS question_text_en,
                 q.text_mr          AS question_text_mr,
                 va.correct_option,
+                va.correct_options,
+                va.is_multi_select,
                 va.explanation_en,
                 va.explanation_mr,
                 q.question_image_url,
@@ -109,8 +112,10 @@ async def build_wrong_answers_summary(
             LEFT JOIN sections s   ON s.id = q.section_id
             LEFT JOIN topics t     ON t.id = q.topic_id
             WHERE r.attempt_id = :attempt_id
-              AND r.selected_option IS NOT NULL
-              AND r.selected_option != va.correct_option
+              AND (
+                  (r.selected_option IS NOT NULL AND va.is_multi_select = FALSE AND r.selected_option != va.correct_option) OR
+                  (r.selected_options IS NOT NULL AND va.is_multi_select = TRUE AND NOT (r.selected_options @> va.correct_options AND r.selected_options <@ va.correct_options))
+              )
             ORDER BY r.question_no ASC
             {limit_clause}
         """),
@@ -170,7 +175,10 @@ async def build_wrong_answers_summary(
                 question_text_mr=row["question_text_mr"],
                 question_image_url=row["question_image_url"],
                 selected_option=row["selected_option"],
+                selected_options=row["selected_options"],
                 correct_option=row["correct_option"],
+                correct_options=row["correct_options"],
+                is_multi_select=row["is_multi_select"],
                 explanation_en=row["explanation_en"],
                 explanation_mr=row["explanation_mr"],
                 section_subject_en=row["section_subject_en"],

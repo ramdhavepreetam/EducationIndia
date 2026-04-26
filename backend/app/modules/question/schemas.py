@@ -88,6 +88,7 @@ class QuestionDeliverySchema(BaseModel):
     marks: int
     difficulty: str
     tags: list[str]
+    is_multi_select: bool
 
     # Nested
     options: list[OptionDeliverySchema] = []
@@ -121,7 +122,9 @@ class QuestionReviewSchema(BaseModel):
     tags: list[str]
 
     # Available post-exam
-    correct_option: int
+    correct_option: Optional[int]
+    correct_options: Optional[list[int]]
+    is_multi_select: bool
     explanation_en: Optional[str]
     explanation_mr: Optional[str]
 
@@ -148,7 +151,9 @@ class QuestionAdminSchema(BaseModel):
     question_image_url: Optional[str]
     question_image_alt_en: Optional[str]
     question_image_alt_mr: Optional[str]
-    correct_option: int
+    correct_option: Optional[int]
+    correct_options: Optional[list[int]]
+    is_multi_select: bool
     explanation_en: Optional[str]
     explanation_mr: Optional[str]
     hint_en: Optional[str]
@@ -171,6 +176,8 @@ class QuestionUpdateRequest(BaseModel):
     text_en: Optional[str] = None
     text_mr: Optional[str] = None
     correct_option: Optional[int] = None
+    correct_options: Optional[list[int]] = None
+    is_multi_select: Optional[bool] = None
     explanation_en: Optional[str] = None
     explanation_mr: Optional[str] = None
     hint_en: Optional[str] = None
@@ -225,7 +232,9 @@ class QuestionImportItem(BaseModel):
     question_image_url: Optional[str] = None
     question_image_alt_en: Optional[str] = None
     question_image_alt_mr: Optional[str] = None
-    correct_option: int                     # 1-4, REQUIRED
+    correct_option: Optional[int] = None
+    correct_options: Optional[list[int]] = None
+    is_multi_select: bool = False
     explanation_en: Optional[str] = None
     explanation_mr: Optional[str] = None
     hint_en: Optional[str] = None

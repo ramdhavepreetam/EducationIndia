@@ -23,11 +23,12 @@ export const attemptApi = {
     },
 
     /** Autosave a single response interactively */
-    saveResponse: async (attemptId, questionId, questionNo, selectedOption, isMarkedReview, timeTakenSeconds = 0) => {
+    saveResponse: async (attemptId, questionId, questionNo, selectedOption, selectedOptions, isMarkedReview, timeTakenSeconds = 0) => {
         const response = await apiClient.post(`/api/attempts/${attemptId}/responses`, {
             question_id: questionId,
             question_no: questionNo,
             selected_option: selectedOption,
+            selected_options: selectedOptions,
             is_marked_review: isMarkedReview,
             time_taken_seconds: timeTakenSeconds
         })

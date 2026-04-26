@@ -138,8 +138,10 @@ class Question(Base):
     question_image_alt_mr: Mapped[str | None] = mapped_column(Text)
 
     # ── SECURITY BOUNDARY ────────────────────────────────────────────────────
-    correct_option: Mapped[int] = mapped_column(SmallInteger, nullable=False)
-    # ^ Never read this field in exam delivery code paths. See ADR-012.
+    is_multi_select: Mapped[bool] = mapped_column(Boolean, server_default="false")
+    correct_option: Mapped[int | None] = mapped_column(SmallInteger)
+    correct_options: Mapped[list[int] | None] = mapped_column(ARRAY(SmallInteger))
+    # ^ Never read these fields in exam delivery code paths. See ADR-012.
     # ─────────────────────────────────────────────────────────────────────────
 
     explanation_en: Mapped[str | None] = mapped_column(Text)  # shown after exam

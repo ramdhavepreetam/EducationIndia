@@ -165,6 +165,7 @@ class AttemptService:
             question_id=request.question_id,
             question_no=await self._get_question_no(db, request.question_id),
             selected_option=request.selected_option,
+            selected_options=request.selected_options,
             is_marked_review=request.is_marked_review,
             time_taken_seconds=request.time_taken_seconds,
         )
@@ -175,6 +176,7 @@ class AttemptService:
             question_no=response.question_no,
             question_id=response.question_id,
             selected_option=response.selected_option,
+            selected_options=response.selected_options,
             is_marked_review=response.is_marked_review,
             visit_count=response.visit_count,
         )
@@ -224,6 +226,7 @@ class AttemptService:
                 question_no=r.question_no,
                 question_id=r.question_id,
                 selected_option=r.selected_option,
+                selected_options=r.selected_options,
                 is_marked_review=r.is_marked_review,
                 visit_count=r.visit_count,
             )

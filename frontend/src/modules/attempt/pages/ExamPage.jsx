@@ -82,16 +82,25 @@ export function ExamPage() {
     }, [questions, activeSectionId])
 
     const handleAnswer = (questionNo, questionId, selectedOption) => {
-        selectOption(questionNo, questionId, selectedOption)
-        const isMarked = responses[questionNo]?.isMarkedReview || false
-        scheduleSave(questionNo, questionId, selectedOption, isMarked, 5) // dummy timeTaken
+        const isMulti = !!currentQuestion?.is_multi_select
+        selectOption(questionNo, questionId, selectedOption, isMulti)
+        
+        // Use updated state from store for saving
+        const updatedResponse = useAttemptStore.getState().responses[questionNo]
+        const isMarked = updatedResponse?.isMarkedReview || false
+        const opts = updatedResponse?.selectedOptions || []
+        const opt = updatedResponse?.selectedOption || null
+        
+        scheduleSave(questionNo, questionId, opt, opts, isMarked, 5) // dummy timeTaken
     }
 
     const handleMarkReview = (questionNo, questionId) => {
         toggleMarkReview(questionNo, questionId)
-        const isMarked = !(responses[questionNo]?.isMarkedReview || false)
-        const opt = responses[questionNo]?.selectedOption || null
-        scheduleSave(questionNo, questionId, opt, isMarked, 1)
+        const updatedResponse = useAttemptStore.getState().responses[questionNo]
+        const isMarked = updatedResponse?.isMarkedReview || false
+        const opts = updatedResponse?.selectedOptions || []
+        const opt = updatedResponse?.selectedOption || null
+        scheduleSave(questionNo, questionId, opt, opts, isMarked, 1)
     }
 
     const handleSubmit = async () => {

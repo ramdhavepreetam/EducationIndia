@@ -111,9 +111,10 @@ class QuestionService:
         if not updates:
             return await self.get_admin_question(db, question_id)
 
-        # Validate correct_option range if being updated
-        if "correct_option" in updates and updates["correct_option"] not in (1, 2, 3, 4):
-            raise BadRequest("correct_option must be 1, 2, 3, or 4")
+        # Validate correct_option range if being updated (None is valid for multi-answer)
+        if "correct_option" in updates and updates["correct_option"] is not None:
+            if updates["correct_option"] not in (1, 2, 3, 4):
+                raise BadRequest("correct_option must be 1, 2, 3, or 4 (or null for multi-answer)")
 
         updated = await question_repository.update_question(db, question_id, updates)
         if updated is None:

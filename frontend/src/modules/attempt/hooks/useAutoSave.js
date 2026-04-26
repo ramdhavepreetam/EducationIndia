@@ -32,6 +32,7 @@ export function useAutoSave() {
                     payload.questionId,
                     payload.questionNo,
                     payload.selectedOption,
+                    payload.selectedOptions,
                     payload.isMarkedReview,
                     payload.timeTakenSeconds
                 )
@@ -55,12 +56,13 @@ export function useAutoSave() {
         }
     }, [currentAttempt, setSavingState])
 
-    const scheduleSave = useCallback((questionNo, questionId, selectedOption, isMarkedReview, timeTaken = 0) => {
+    const scheduleSave = useCallback((questionNo, questionId, selectedOption, selectedOptions, isMarkedReview, timeTaken = 0) => {
         // Debounce mechanism: overwrite the payload for this question if it already exists in the queue
         pendingSaves.current.set(questionNo, {
             questionNo,
             questionId,
             selectedOption,
+            selectedOptions,
             isMarkedReview,
             timeTakenSeconds: timeTaken
         })

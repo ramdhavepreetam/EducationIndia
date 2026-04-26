@@ -5,7 +5,7 @@ export const useAttemptStore = create((set, get) => ({
     // State shape
     currentAttempt: null,
     questions: [],
-    responses: {}, // { [questionNo]: { selectedOption, isMarkedReview, visitCount, questionId } }
+    responses: {}, // { [questionNo]: { selectedOption, selectedOptions, isMarkedReview, visitCount, questionId } }
     currentQuestionNo: 1,
     timeRemaining: null,
     isLoading: false,
@@ -73,6 +73,7 @@ export const useAttemptStore = create((set, get) => ({
                 state.responses.forEach(r => {
                     responsesMap[r.question_no] = {
                         selectedOption: r.selected_option,
+                        selectedOptions: r.selected_options || [],
                         isMarkedReview: r.is_marked_review,
                         visitCount: r.visit_count,
                         questionId: r.question_id
@@ -101,16 +102,35 @@ export const useAttemptStore = create((set, get) => ({
         }
     },
 
-    selectOption: (questionNo, questionId, selectedOption) => {
+    selectOption: (questionNo, questionId, selectedOption, isMultiSelect = false) => {
         // Optimistic update
         set(state => {
             const existing = state.responses[questionNo] || {}
+            let newOptions = existing.selectedOptions || []
+
+            if (isMultiSelect) {
+                if (newOptions.includes(selectedOption)) {
+                    newOptions = newOptions.filter(o => o !== selectedOption)
+                } else {
+                    if (newOptions.length < 2) {
+                        newOptions = [...newOptions, selectedOption]
+                    } else {
+                        // Replace the last one if we already have 2? 
+                        // Or just ignore? Scholarship rules: Select TWO.
+                        newOptions = [newOptions[1], selectedOption]
+                    }
+                }
+            } else {
+                newOptions = [selectedOption]
+            }
+
             return {
                 responses: {
                     ...state.responses,
                     [questionNo]: {
                         ...existing,
-                        selectedOption,
+                        selectedOption: isMultiSelect ? null : selectedOption,
+                        selectedOptions: newOptions,
                         questionId
                     }
                 }

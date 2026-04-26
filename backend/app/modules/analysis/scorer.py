@@ -1,8 +1,39 @@
 """
 Pure functions for score computation. No database access.
 """
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from app.modules.analysis.schemas import ResponseData
+
+
+def _is_correct(r: ResponseData) -> bool:
+    """
+    Determine if a response is correct.
+    - Multi-select question (is_multi_select=True):
+      selected_options must exactly match correct_options (order doesn't matter).
+    - Multi-answer fallback (correct_options set, is_multi_select=False):
+      selected_option must be IN the list (either/or).
+    - Single-answer (correct_option set): exact equality.
+    """
+    # 1. Handle strict multi-select (Select Two)
+    if getattr(r, 'is_multi_select', False):
+        if not r.selected_options or not r.correct_options:
+            return False
+        return set(r.selected_options) == set(r.correct_options)
+
+    # 2. Handle simple selected option
+    if r.selected_option is None:
+        return False
+        
+    # Either/Or logic (fallback for 5th grade or legacy)
+    if r.correct_options:
+        return r.selected_option in r.correct_options
+        
+    # Standard single answer
+    if r.correct_option is not None:
+        return r.selected_option == r.correct_option
+        
+    return False
+
 
 def calculate_total_score(responses: List[ResponseData]) -> Dict[str, Any]:
     total_score = 0
@@ -15,7 +46,7 @@ def calculate_total_score(responses: List[ResponseData]) -> Dict[str, Any]:
         total_possible_marks += r.marks
         if r.selected_option is None:
             total_skipped += 1
-        elif r.selected_option == r.correct_option:
+        elif _is_correct(r):
             total_correct += 1
             total_score += r.marks
         else:
@@ -63,7 +94,7 @@ def calculate_section_scores(responses: List[ResponseData]) -> List[Dict[str, An
         sec["total_questions"] += 1
         sec["total_marks"] += r.marks
 
-        if r.selected_option is not None and r.selected_option == r.correct_option:
+        if r.selected_option is not None and _is_correct(r):
             sec["correct"] += 1
             sec["score"] += r.marks
             
@@ -95,7 +126,7 @@ def calculate_topic_scores(responses: List[ResponseData]) -> List[Dict[str, Any]
         top = topics[r.topic_id]
         top["total"] += 1
         
-        if r.selected_option is not None and r.selected_option == r.correct_option:
+        if r.selected_option is not None and _is_correct(r):
             top["correct"] += 1
 
     result = []

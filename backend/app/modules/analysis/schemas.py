@@ -7,7 +7,10 @@ class ResponseData:
     question_no: int
     question_id: int
     selected_option: Optional[int]   # None = skipped
-    correct_option: int
+    selected_options: Optional[List[int]] = None
+    is_multi_select: bool = False
+    correct_option: Optional[int]    # None if multi-answer question
+    correct_options: Optional[List[int]] = None  # e.g. [1,3] for "1 OR 3" / "1 AND 3"
     topic_id: int
     topic_name_en: str
     topic_name_mr: Optional[str]
@@ -103,8 +106,11 @@ class WrongAnswerItem(BaseModel):
     question_text_en: Optional[str] = None
     question_text_mr: Optional[str] = None
     question_image_url: Optional[str] = None
-    selected_option: int
-    correct_option: int
+    selected_option: Optional[int] = None
+    selected_options: Optional[List[int]] = None
+    correct_option: Optional[int] = None
+    correct_options: Optional[List[int]] = None
+    is_multi_select: bool = False
     explanation_en: Optional[str] = None
     explanation_mr: Optional[str] = None
     section_subject_en: Optional[str] = None

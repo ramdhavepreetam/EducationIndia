@@ -13,6 +13,7 @@ import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
+import LandingPage from '@/pages/LandingPage'
 
 /** Returns the correct landing page for a given user profile, based on role.
  *  Shared between AuthRedirect (OAuth callback) and LoginPage (email/password). */
@@ -60,9 +61,9 @@ export default function App() {
     return (
         <ErrorBoundary>
             <Routes>
-                {/* Root + catch-all: smart redirect based on auth state.
-                    Handles OAuth callback landing at "/" and any unknown routes. */}
-                <Route index element={<AuthRedirect />} />
+                {/* Landing page: public for unauthenticated, redirect to app if logged in */}
+                <Route index element={<LandingOrRedirect />} />
+                {/* Catch-all for unknown routes */}
                 <Route path="*" element={<AuthRedirect />} />
 
                 {/* Public auth routes — redirect away if already authenticated */}
@@ -122,8 +123,26 @@ export default function App() {
 }
 
 /**
+ * Landing gate: shows LandingPage to unauthenticated users.
+ * Authenticated users go directly to their role-home page.
+ * While auth is initializing, shows the landing page (avoids flash redirect).
+ */
+function LandingOrRedirect() {
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+    const isLoading = useAuthStore((s) => s.isLoading)
+    const user = useAuthStore((s) => s.user)
+
+    // Auth still initializing → show landing page (not a blank spinner)
+    if (isLoading) return <LandingPage />
+    // Logged-in → go to their role home
+    if (isAuthenticated) return <Navigate to={getRoleHome(user)} replace />
+    // Not logged in → show the marketing landing page
+    return <LandingPage />
+}
+
+/**
  * Smart redirect: sends the user to the right place based on auth state.
- * Used for "/" (OAuth callback landing) and "/*" (unknown routes).
+ * Used for "/*" (unknown routes).
  *   - Not authenticated          → /login
  *   - Authenticated, onboarded   → /dashboard
  *   - Authenticated, not yet     → /onboarding

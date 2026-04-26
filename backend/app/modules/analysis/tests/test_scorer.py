@@ -12,6 +12,7 @@ def _make_response(selected, correct, marks=2, q_no=1, time=60, topic=1, sec=1, 
         question_id=100 + q_no,
         selected_option=selected,
         correct_option=correct,
+        correct_options=None,   # single-answer by default; set explicitly for multi-answer tests
         topic_id=topic,
         topic_name_en=f"Topic {topic}",
         topic_name_mr=None,

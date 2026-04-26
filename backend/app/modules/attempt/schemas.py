@@ -37,6 +37,7 @@ class SaveResponseRequest(BaseModel):
     """
     question_id: int
     selected_option: Optional[int] = Field(None, ge=1, le=4)
+    selected_options: Optional[list[int]] = None
     is_marked_review: bool = False
     time_taken_seconds: Optional[int] = Field(None, ge=0)
 
@@ -53,6 +54,7 @@ class ResponseStateItem(BaseModel):
     question_no: int
     question_id: int
     selected_option: Optional[int]
+    selected_options: Optional[list[int]] = None
     is_marked_review: bool
     visit_count: int
 

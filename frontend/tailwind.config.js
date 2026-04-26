@@ -7,30 +7,42 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // ScholarPath landing page colors
+        sp: {
+          blue:    '#1B3A6B',
+          'blue-light': '#2351A0',
+          'blue-dark':  '#0F2347',
+          saffron: '#FF6B35',
+          'saffron-light': '#FF8A5B',
+          'saffron-dark':  '#E5501A',
+          emerald: '#10B981',
+          gray:    '#F8FAFC',
+          navy:    '#0F2040',
+        },
         brand: {
-          50:  '#eef2ff',
-          100: '#e0e7ff',
-          200: '#c7d2fe',
-          300: '#a5b4fc',
-          400: '#818cf8',
-          500: '#6366f1',
-          600: '#4f46e5',
-          700: '#4338ca',
-          800: '#3730a3',
-          900: '#312e81',
-          950: '#1e1b4b',
+          50:  '#eff5ff',
+          100: '#ddeaff',
+          200: '#b3cfff',
+          300: '#7aaaff',
+          400: '#3d80f0',
+          500: '#2351A0',   // sp.blue-light
+          600: '#1B3A6B',   // sp.blue — primary
+          700: '#163060',
+          800: '#102346',
+          900: '#0d1a35',
+          950: '#0F2347',   // sp.blue-dark
         },
         accent: {
-          50:  '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9',
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
+          50:  '#fff8f5',
+          100: '#fff0e8',
+          200: '#ffd9c0',
+          300: '#ffb896',
+          400: '#FF8A5B',   // sp.saffron-light
+          500: '#FF6B35',   // sp.saffron — CTA
+          600: '#E5501A',   // sp.saffron-dark
+          700: '#c44018',
+          800: '#9d3214',
+          900: '#7d280f',
         },
         surface: {
           50:  '#f8fafc',
@@ -47,9 +59,9 @@ export default {
         },
       },
       boxShadow: {
-        'glass':    '0 8px 32px rgba(99, 102, 241, 0.12)',
-        'glass-lg': '0 16px 48px rgba(99, 102, 241, 0.18)',
-        'glow':     '0 0 24px rgba(99, 102, 241, 0.25)',
+        'glass':    '0 8px 32px rgba(27, 58, 107, 0.12)',
+        'glass-lg': '0 16px 48px rgba(27, 58, 107, 0.18)',
+        'glow':     '0 0 24px rgba(255, 107, 53, 0.25)',
       },
       animation: {
         'fade-in':  'fadeIn 0.5s ease-out',

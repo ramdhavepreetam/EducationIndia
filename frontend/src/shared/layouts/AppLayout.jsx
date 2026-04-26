@@ -168,6 +168,14 @@ export default function AppLayout() {
                 <main className="flex-1 overflow-y-auto">
                     <Outlet />
                 </main>
+
+                {/* Disclaimer footer */}
+                <footer className="px-4 py-2 bg-surface-50 border-t border-surface-100">
+                    <p className="text-xs text-surface-400 text-center leading-relaxed">
+                        ScholarPath is a practice platform only. It does not guarantee any exam outcome, score, or selection.
+                        All results are for self-assessment purposes only and have no official standing.
+                    </p>
+                </footer>
             </div>
         </div>
     )

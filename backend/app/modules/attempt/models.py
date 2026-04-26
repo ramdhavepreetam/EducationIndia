@@ -156,6 +156,7 @@ class Response(Base):
 
     # ── Answer state ──────────────────────────────────────────────────────────
     selected_option: Mapped[int | None] = mapped_column(SmallInteger)  # 1-4 or None
+    selected_options: Mapped[list[int] | None] = mapped_column(ARRAY(SmallInteger))
     is_correct: Mapped[bool | None] = mapped_column(Boolean)    # set on submit
     marks_obtained: Mapped[int] = mapped_column(SmallInteger, server_default="0")
 

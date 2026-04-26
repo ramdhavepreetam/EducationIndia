@@ -27,11 +27,11 @@ class AnalysisService:
             
         responses = await attempt_repository.get_all_responses(db, attempt_id)
         
-        # 2. Get question data (correct_option, topic, section)
+        # 2. Get question data (correct_option, correct_options, topic, section)
         query = text("""
-            SELECT q.id, q.question_no, q.correct_option, q.marks,
+            SELECT q.id, q.question_no, q.correct_option, q.correct_options, q.marks,
                    q.topic_id, t.name_en as topic_name_en, t.name_mr as topic_name_mr,
-                   q.section_id, s.section_label, s.subject_en
+                   q.section_id, s.section_label, s.subject_en, q.is_multi_select
             FROM questions q
             JOIN topics t ON q.topic_id = t.id
             JOIN sections s ON q.section_id = s.id
@@ -51,7 +51,10 @@ class AnalysisService:
                 question_no=qd.question_no,
                 question_id=r.question_id,
                 selected_option=r.selected_option,
+                selected_options=r.selected_options,
+                is_multi_select=qd.is_multi_select,
                 correct_option=qd.correct_option,
+                correct_options=list(qd.correct_options) if qd.correct_options else None,
                 topic_id=qd.topic_id,
                 topic_name_en=qd.topic_name_en,
                 topic_name_mr=qd.topic_name_mr,
@@ -70,7 +73,10 @@ class AnalysisService:
                     question_no=qd.question_no,
                     question_id=q_id,
                     selected_option=None,
+                    selected_options=None,
+                    is_multi_select=qd.is_multi_select,
                     correct_option=qd.correct_option,
+                    correct_options=list(qd.correct_options) if qd.correct_options else None,
                     topic_id=qd.topic_id,
                     topic_name_en=qd.topic_name_en,
                     topic_name_mr=qd.topic_name_mr,

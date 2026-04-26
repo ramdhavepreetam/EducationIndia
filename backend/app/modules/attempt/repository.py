@@ -203,6 +203,7 @@ class AttemptRepository:
         question_id: int,
         question_no: int,
         selected_option: int | None,
+        selected_options: list[int] | None,
         is_marked_review: bool,
         time_taken_seconds: int | None,
     ) -> Response:
@@ -225,10 +226,11 @@ class AttemptRepository:
             question_id=question_id,
             question_no=question_no,
             selected_option=selected_option,
+            selected_options=selected_options,
             is_marked_review=is_marked_review,
             time_taken_seconds=time_taken_seconds,
             first_visited_at=now,
-            answered_at=now if selected_option is not None else None,
+            answered_at=now if (selected_option is not None or selected_options) else None,
             visit_count=1,
         )
 
@@ -236,6 +238,7 @@ class AttemptRepository:
             index_elements=["attempt_id", "question_id"],
             set_={
                 "selected_option": stmt.excluded.selected_option,
+                "selected_options": stmt.excluded.selected_options,
                 "is_marked_review": stmt.excluded.is_marked_review,
                 "time_taken_seconds": stmt.excluded.time_taken_seconds,
                 # first_visited_at: keep original (COALESCE preserves first visit)
@@ -244,7 +247,7 @@ class AttemptRepository:
                 ),
                 # answered_at: update only when an option is selected
                 "answered_at": case(
-                    (stmt.excluded.selected_option.isnot(None), stmt.excluded.answered_at),
+                    ((stmt.excluded.selected_option.isnot(None) | (stmt.excluded.selected_options != None)), stmt.excluded.answered_at),
                     else_=Response.answered_at,
                 ),
                 "visit_count": Response.visit_count + 1,

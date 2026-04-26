@@ -31,7 +31,7 @@ export default function QuestionCard({
     const imgAltEn = question.question_image_alt_en
     const imgAltMr = question.question_image_alt_mr
 
-    const selectedOption = response?.selectedOption || null
+    const selectedOptions = response?.selectedOptions || []
     const isMarkedReview = response?.isMarkedReview || false
 
     const handleOptionSelect = (optNumber) => {
@@ -46,9 +46,16 @@ export default function QuestionCard({
         <div className="flex-1 flex flex-col h-full bg-white rounded-xl shadow-sm border border-surface-200 overflow-hidden">
             <div className="p-6 flex-1 overflow-y-auto">
                 <div className="flex justify-between items-start mb-6">
-                    <h2 className="text-xl font-bold tracking-tight text-surface-900 border-b-2 border-brand-500 pb-1 inline-block">
-                        {t('exam.questionNumber', { number: question.question_no })}
-                    </h2>
+                    <div className="flex flex-col gap-1">
+                        <h2 className="text-xl font-bold tracking-tight text-surface-900 border-b-2 border-brand-500 pb-1 inline-block">
+                            {t('exam.questionNumber', { number: question.question_no })}
+                        </h2>
+                        {question.is_multi_select && (
+                            <span className="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
+                                {t('exam.selectTwo', 'SELECT TWO CORRECT OPTIONS')}
+                            </span>
+                        )}
+                    </div>
 
                     <button
                         type="button"
@@ -97,7 +104,7 @@ export default function QuestionCard({
                             key={opt.id}
                             option={opt}
                             language={isMarathiOnly ? 'mr' : language}
-                            isSelected={selectedOption === opt.option_no}
+                            isSelected={selectedOptions.includes(opt.option_no)}
                             onClick={() => handleOptionSelect(opt.option_no)}
                         />
                     ))}
