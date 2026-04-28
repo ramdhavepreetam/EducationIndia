@@ -173,8 +173,12 @@ class QuestionAdminSchema(BaseModel):
 
 class QuestionUpdateRequest(BaseModel):
     """Fields that can be updated via PUT /api/admin/questions/{id}."""
+    question_type: Optional[str] = None
     text_en: Optional[str] = None
     text_mr: Optional[str] = None
+    question_image_url: Optional[str] = None
+    question_image_alt_en: Optional[str] = None
+    question_image_alt_mr: Optional[str] = None
     correct_option: Optional[int] = None
     correct_options: Optional[list[int]] = None
     is_multi_select: Optional[bool] = None
