@@ -1,0 +1,480 @@
+[
+  {
+    "q": 29,
+    "text_en": "Anemia : Iron : : Goiter : ?",
+    "opts_en": [
+      "Nicotine",
+      "Phosphorus",
+      "Calcium",
+      "Iodine"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 30,
+    "text_en": "The Bees : William Shakespeare : : The Vet : ?",
+    "opts_en": [
+      "Guy Boas",
+      "Thomas Gisborne",
+      "A.P.J. Abdul Kalam",
+      "James Henry Leigh Hunt"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 31,
+    "text_en": "Question Figures : ? Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 32,
+    "text_en": "AE : 92 : : FJ : ?",
+    "opts_en": [
+      "72",
+      "32",
+      "70",
+      "82"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 33,
+    "text_en": "2543 : 40 : : 3654 : ? (Select two correct alternatives.)",
+    "opts_en": [
+      "45",
+      "360",
+      "120",
+      "90"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 34,
+    "text_en": "Below given are 3 positions of sides of the same cube with letters from A to F. Observe the position of letters on the faces and find which letter will be on the face opposite to letter E. E F E C B A B C D",
+    "opts_en": [
+      "C",
+      "F",
+      "D",
+      "A"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 35,
+    "text_en": "Understand the relation between the numbers arranged and select the number from the alternatives at the place of question mark. 2 4 7 9 13 1 5 31 3 6 ? 8 Q. 36 to 38 Direction : Identify rhythm in the terms of the given series and select the term from the alternatives at the place of question mark.",
+    "opts_en": [
+      "97",
+      "106",
+      "21",
+      "92"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 36,
+    "text_en": "x a y b z c b y a x z a y b x ? ? ?",
+    "opts_en": [
+      "x b y",
+      "y a b",
+      "y b a",
+      "b y x"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 37,
+    "text_en": "\uf0a1 \u2206 \u2207 \uf0a8 \uf0a1 \u2206 \u2207 ? \u2207 \uf0a8 \uf0a1 ? \uf0a1 \u2206 \u2207 ?",
+    "opts_en": [
+      "\uf0a8 \u2206 \uf0a8",
+      "\uf0a1 \u2206 \uf0a1",
+      "\uf0a8 \uf0a1 \uf0a8",
+      "\uf0a8 \u2206 \uf0a1"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 38,
+    "text_en": "8 8 9 6 6 ? 9 9 ? 3 3 6 8 8 9 6 6 3 9 9 8 3 3 ? 8",
+    "opts_en": [
+      "9, 8, 8",
+      "3, 6, 8",
+      "8, 6, 3",
+      "3, 8, 6"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 39,
+    "text_en": "Find the code from the alternatives that represent the word \u2018DREAM\u2019.",
+    "opts_en": [
+      "64879",
+      "659",
+      "38667",
+      "653"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 40,
+    "text_en": "Which alternative of code language from the given, form a meaningful word.",
+    "opts_en": [
+      "735",
+      "498",
+      "48",
+      "7648"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 41,
+    "text_en": "In a code language if 34 = 19, 16 = 13 and 92 = 29 then 76 = ? in that language. Q. 42 to 45 Direction : Find out the term in place of question mark from the given alternatives.",
+    "opts_en": [
+      "55",
+      "69",
+      "57",
+      "53"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 42,
+    "text_en": "99, 98, 97, 95, 92, 88, 81, 75, 64, ?",
+    "opts_en": [
+      "54",
+      "56",
+      "52",
+      "60"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 43,
+    "text_en": "Question Figures : ? , , , Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 44,
+    "text_en": "YSV, SMP, MGJ, ?",
+    "opts_en": [
+      "GAD",
+      "HAD",
+      "GMJ",
+      "FAD"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 45,
+    "text_en": "A, C, F, J, O, ?",
+    "opts_en": [
+      "V",
+      "T",
+      "U",
+      "Y"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 46,
+    "text_en": "How many faces does the adjoining figure have?",
+    "opts_en": [
+      "23",
+      "24",
+      "22",
+      "25"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 47,
+    "text_en": "At what time the angle between an hour hand and the minute hand will be 155\u00ba? (Select two correct alternatives)",
+    "opts_en": [
+      "4:50",
+      "7:10",
+      "8:10",
+      "5:50"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 48,
+    "text_en": "Find the hidden part of the question figure from the alternatives given. Question Figure : Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 49,
+    "text_en": "Observe the given series of symbols and find the terms from the alternatives at the question mark. , ? ? , ? , ? Q. 50 and 51 Direction : A sheet of paper is folded and cut at the shaded places as shown. Then it is unfolded. Which alternative will show the unfolded paper?",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 50,
+    "text_en": "Question Figure : Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 51,
+    "text_en": "Question Figure : Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 52,
+    "text_en": "In a row of girls, Mugdha is standing 12th from left and Shreya is standing 18th from right. If there are 5 girls standing in between them, what is middle girl's position (number) in the row. (Select two correct alternatives)",
+    "opts_en": [
+      "18",
+      "15",
+      "12",
+      "14"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 53,
+    "text_en": "Select water image of the question figure from the alternatives. Question Figure : Answer Figures : Q. 54 to 58 Direction : Find the term not fitting in the group",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 54,
+    "text_en": "(1) Renewable Energy Day : 20th Sept.",
+    "opts_en": [
+      "Environment Day : 5th June",
+      "World Water Day : 22nd March",
+      "Population Day : 11th July"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 55,
+    "text_en": "(1) Steel (2) Silver (3) Bronze (4) Brass",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 56,
+    "text_en": "(1) 24 (2) 340 (3) 1328 (4) 4",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 57,
+    "text_en": "(1) NM (2) XB (3) OK (4) SG 58. Q. 59 to 61 Direction : Observe the pyramid given below. Find the relation between the numbers and alphabets order and find the term in place of question mark. 2 R 19 3 L K Q 17 23 F 5 M J 41 43 P 13 29 G E 59 7 N I 37 47 C B O 11 31 H D 53 61 A",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 59,
+    "text_en": "R \u2013 17 \u2013 13 \u2013 31 \u2013 H : 19 \u2013 23 \u2013 E \u2013 53 \u2013 D : : 11 \u2013 P \u2013 M \u2013 3 \u2013 L : ?",
+    "opts_en": [
+      "53 \u2013 E \u2013 J \u2013 I \u2013 37",
+      "61 \u2013 59 \u2013 41 \u2013 K \u2013 L",
+      "61 \u2013 59 \u2013 F \u2013 23 \u2013 19",
+      "19 \u2013 23 \u2013 E \u2013 53 \u2013 61"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 60,
+    "text_en": "5 \u2013 N \u2013 M \u2013 I : 43 \u2013 C \u2013 41 \u2013 47 : : R \u2013 M \u2013 L \u2013 J : ?",
+    "opts_en": [
+      "19 \u2013 23 \u2013 L \u2013 J",
+      "F \u2013 47 \u2013 G \u2013 37",
+      "J \u2013 23 \u2013 41 \u2013 19",
+      "19 \u2013 41 \u2013 L \u2013 J"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 61,
+    "text_en": "3 \u2013 M \u2013 Q : K \u2013 41 \u2013 F : : 5 \u2013 N \u2013 P : ? (Select two correct alternatives.) Q. 62 and 63 Direction : Identify the correct mirror image of the question figure from the alternatives given.",
+    "opts_en": [
+      "43 \u2013 C \u2013 59",
+      "J \u2013 37 \u2013 I",
+      "41 \u2013 47 \u2013 C",
+      "J \u2013 37 \u2013 G"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 62,
+    "text_en": "Question Figure : Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 63,
+    "text_en": "Question Figure : Answer Figures : Q. 64 and 65 Direction : Find the correct Venn diagram for the units in the questions given below.",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 64,
+    "text_en": "Goa, Tripura, India",
+    "opts_en": [
+      "D",
+      "B",
+      "E",
+      "A"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 65,
+    "text_en": "Parasites, Mushrooms, Algae",
+    "opts_en": [
+      "D",
+      "E",
+      "B",
+      "C"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 66,
+    "text_en": "When Abhishek left his house, setting Sun's rays were falling on his face from his front. He walked 24 m straight from his house and stopped. He turned to his right at right angle and walked 21 m straight. He then turned to his left at right angle and walked 20 m in a straight line. Once again he turned left at right angle and walked 21 m straight and stopped. How far he is from his starting position?",
+    "opts_en": [
+      "44 meter",
+      "74 meter",
+      "53 meter",
+      "45 meter"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 67,
+    "text_en": "How many four lettered words are more or less than three lettered words in the following sentences. \u2018When you want to give a speech : Plan your speech in advance. Note the points and arrange them properly. Rehearse the speech in your mind and go ahead.\u2019",
+    "opts_en": [
+      "less by 4",
+      "more by 4",
+      "more by 3",
+      "less by 3"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 68,
+    "text_en": "Education is the passport to the future, for tomorrow belongs to those who prepare for it today. How many words are there in this statement, with repeated letters in that word?",
+    "opts_en": [
+      "2",
+      "3",
+      "5",
+      "4"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 69,
+    "text_en": "Find the exactly matching figure to the question figure from the alternatives. Question Figure : Answer Figures :",
+    "opts_en": [],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 70,
+    "text_en": "27th December was Monday in some year. Find which days will occure five times in April month of that year. (Select two correct alternatives.)",
+    "opts_en": [
+      "Wednesday",
+      "Friday",
+      "Thursday",
+      "Tuesday"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 71,
+    "text_en": "From the letters V N I T O N M E R E N form a meaningful word. Find the letter adjacent to the left of the middle letter of that meaningful word. Q. 72 and 73 Direction : Identify the relation between the arranged numbers and find the correct alternative at the place of question mark. 72. 116 ? 262 3 5 8 6 9 7",
+    "opts_en": [
+      "R",
+      "O",
+      "N",
+      "I",
+      "208",
+      "476",
+      "125",
+      "152"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 73,
+    "text_en": "8 2 1 300 47 ? 7 5 6 3 9 4",
+    "opts_en": [
+      "32",
+      "50",
+      "22",
+      "6"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 74,
+    "text_en": "If the above given letter series is reversed, then which letter will be immediately to the right of the 17th letter from the end?",
+    "opts_en": [
+      "P",
+      "R",
+      "J",
+      "H"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  },
+  {
+    "q": 75,
+    "text_en": "In the above letter series, if first, third and fifth group letters are placed sequentially, then which correct alternative will give serial numbers of the word opposite to \u2018friend\u2019.",
+    "opts_en": [
+      "13, 10, 8, 1, 9",
+      "8, 5, 4, 1, 7",
+      "5, 9, 5, 8, 15",
+      "7, 5, 8, 10, 9"
+    ],
+    "correct_option": null,
+    "correct_options": null
+  }
+]
