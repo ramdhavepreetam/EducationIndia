@@ -49,7 +49,11 @@ export function QuestionBrowser() {
         }
     }
 
-    const examLabel = (ex) => `${ex.title_en} (${ex.paper_code})`
+    const examLabel = (ex) => {
+        const year = ex.event_year ? ` ${ex.event_year}` : ''
+        const std = ex.std_class ? ` Std ${ex.std_class}` : ''
+        return `${year}${std} — ${ex.title_en} (${ex.paper_code})`
+    }
 
     return (
         <div>

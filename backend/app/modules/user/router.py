@@ -39,7 +39,9 @@ async def get_my_profile(
 ):
     """Return the authenticated user's own profile."""
     profile = await user_service.get_my_profile(db, identity.id)
-    return profile
+    data = UserProfileResponse.model_validate(profile).model_dump()
+    data["email"] = identity.email or None
+    return data
 
 
 @router.put("/me", response_model=UserProfileResponse)

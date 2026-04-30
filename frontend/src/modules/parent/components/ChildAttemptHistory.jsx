@@ -26,12 +26,15 @@ const ChildAttemptHistory = ({
   pageSize = 5,
   showPagination = false,
   highlightedAttemptId = null,
+  isPaid: isPaidProp,
+  isAccessLoading: isAccessLoadingProp,
 }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { user } = useAuthStore()
-  const { status: subscription } = usePaymentStore()
-  const isPaid = subscription?.is_active ?? false
+  const { status: subscription, isLoading: isSubscriptionLoading } = usePaymentStore()
+  const isAccessLoading = isAccessLoadingProp ?? (isSubscriptionLoading || subscription == null)
+  const isPaid = isPaidProp ?? (subscription?.is_active === true)
   const language = user?.preferred_language || 'en'
 
   const [page, setPage] = useState(1)
@@ -188,6 +191,7 @@ const ChildAttemptHistory = ({
                   childId={childId}
                   attemptId={attempt.attempt_id}
                   isPaid={isPaid}
+                  isAccessLoading={isAccessLoading}
                   language={language}
                   onUpgrade={() => navigate('/upgrade')}
                   onClose={() => setExpandedAttemptId(null)}

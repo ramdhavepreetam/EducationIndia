@@ -11,6 +11,7 @@ const fmtINR  = (n) => `₹${Number(n || 0).toLocaleString('en-IN')}`
 
 const SUB_STATUS_BADGE = {
     active:    'bg-green-100 text-green-800 border-green-200',
+    free:      'bg-blue-100 text-blue-800 border-blue-200',
     expired:   'bg-red-100 text-red-800 border-red-200',
     pending:   'bg-yellow-100 text-yellow-800 border-yellow-200',
     cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
@@ -412,6 +413,14 @@ export const AdminSubscriptionsPage = () => {
         }
     }
 
+    const openGrantForParent = (sub) => {
+        setGrantEmail(sub.parent_email || '')
+        setGrantError(null)
+        setGrantSuccess(null)
+        setShowGrant(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
     const handleExtend = async (id, months) => {
         setActionLoadingId(id)
         try {
@@ -439,12 +448,17 @@ export const AdminSubscriptionsPage = () => {
 
     const filteredSubs = subscriptions.filter(sub => {
         if (subFilter === 'Active'    && sub.status !== 'active')    return false
+        if (subFilter === 'Free'      && sub.status !== 'free')      return false
         if (subFilter === 'Expired'   && sub.status !== 'expired')   return false
         if (subFilter === 'Pending'   && sub.status !== 'pending')   return false
         if (subFilter === 'Cancelled' && sub.status !== 'cancelled') return false
         if (searchQuery) {
             const q = searchQuery.toLowerCase()
-            return (sub.parent_name || '').toLowerCase().includes(q)
+            return (
+                (sub.parent_name || '').toLowerCase().includes(q) ||
+                (sub.parent_email || '').toLowerCase().includes(q) ||
+                (sub.parent_id || '').toLowerCase().includes(q)
+            )
         }
         return true
     })
@@ -484,7 +498,7 @@ export const AdminSubscriptionsPage = () => {
                     <StatCard
                         label="Active Subscriptions"
                         value={stats.active_subscriptions ?? 0}
-                        sub={`${stats.expired_subscriptions ?? 0} expired`}
+                        sub={`${stats.free_parent_users ?? 0} free parents`}
                         accent="green"
                     />
                     <StatCard
@@ -536,7 +550,7 @@ export const AdminSubscriptionsPage = () => {
                     {/* Toolbar */}
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
                         <div className="flex gap-2 flex-wrap">
-                            {['All', 'Active', 'Expired', 'Pending', 'Cancelled'].map(tab => (
+                            {['All', 'Active', 'Free', 'Expired', 'Pending', 'Cancelled'].map(tab => (
                                 <button
                                     key={tab}
                                     onClick={() => setSubFilter(tab)}
@@ -552,6 +566,11 @@ export const AdminSubscriptionsPage = () => {
                                             {subscriptions.filter(s => s.status === 'active').length}
                                         </span>
                                     )}
+                                    {tab === 'Free' && (
+                                        <span className="ml-1.5 bg-blue-200 text-blue-800 px-1.5 rounded-full text-xs">
+                                            {subscriptions.filter(s => s.status === 'free').length}
+                                        </span>
+                                    )}
                                 </button>
                             ))}
                         </div>
@@ -559,7 +578,7 @@ export const AdminSubscriptionsPage = () => {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Search parent name..."
+                                    placeholder="Search parent/email..."
                                     value={searchQuery}
                                     onChange={e => setSearchQuery(e.target.value)}
                                     className="pl-8 pr-4 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 w-56"
@@ -637,7 +656,7 @@ export const AdminSubscriptionsPage = () => {
                         <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200">
                             <p className="text-gray-500 text-sm">
                                 {subscriptions.length === 0
-                                    ? 'No subscriptions yet. Use "Grant Access" to create one manually.'
+                                    ? 'No parent accounts found yet.'
                                     : 'No records matching current filters.'}
                             </p>
                         </div>
@@ -658,13 +677,14 @@ export const AdminSubscriptionsPage = () => {
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
                                         {filteredSubs.map(sub => (
-                                            <React.Fragment key={sub.id}>
+                                            <React.Fragment key={sub.id || sub.parent_id}>
                                                 <tr className="hover:bg-gray-50">
                                                     <td className="px-5 py-3">
                                                         <p className="font-medium text-gray-900">{sub.parent_name || 'Unknown'}</p>
+                                                        <p className="text-xs text-gray-500">{sub.parent_email || 'No email'}</p>
                                                         <p className="text-xs text-gray-400 font-mono">{sub.parent_id?.split('-')[0]}…</p>
                                                     </td>
-                                                    <td className="px-5 py-3 text-gray-700">{sub.plan_name || 'Standard'}</td>
+                                                    <td className="px-5 py-3 text-gray-700">{sub.plan_name || (sub.status === 'free' ? 'Free Tier' : 'Standard')}</td>
                                                     <td className="px-5 py-3 font-semibold text-gray-900">{fmtINR(sub.amount_paid_inr)}</td>
                                                     <td className="px-5 py-3">
                                                         <StatusBadge status={sub.status} map={SUB_STATUS_BADGE} />
@@ -672,7 +692,7 @@ export const AdminSubscriptionsPage = () => {
                                                     <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{fmtDate(sub.started_at)}</td>
                                                     <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{fmtDate(sub.expires_at)}</td>
                                                     <td className="px-5 py-3 text-right">
-                                                        {actionLoadingId === sub.id ? (
+                                                        {sub.id && actionLoadingId === sub.id ? (
                                                             <span className="text-gray-400 text-xs">Processing…</span>
                                                         ) : (
                                                             <div className="flex justify-end gap-1.5 flex-wrap">
@@ -689,6 +709,9 @@ export const AdminSubscriptionsPage = () => {
                                                                         <button onClick={() => handleExtend(sub.id, 1)} className="text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded text-xs font-medium">+1M</button>
                                                                         <button onClick={() => handleExtend(sub.id, 3)} className="text-blue-600 hover:text-blue-800 bg-blue-50 px-2 py-1 rounded text-xs font-medium">+3M</button>
                                                                     </>
+                                                                )}
+                                                                {sub.status === 'free' && (
+                                                                    <button onClick={() => openGrantForParent(sub)} className="text-green-600 hover:text-green-800 bg-green-50 px-2 py-1 rounded text-xs font-medium">Grant</button>
                                                                 )}
                                                                 {sub.status === 'active' && (
                                                                     <button onClick={() => handleCancel(sub.id)} className="text-red-600 hover:text-red-800 bg-red-50 px-2 py-1 rounded text-xs font-medium">Cancel</button>

@@ -16,8 +16,13 @@ export default function ParentDashboardPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { user } = useAuthStore()
-  const { status: subscription } = usePaymentStore()
-  const isPaid = subscription?.is_active ?? false
+  const {
+    status: subscription,
+    isLoading: isSubscriptionLoading,
+    loadStatus,
+  } = usePaymentStore()
+  const isAccessLoading = isSubscriptionLoading || subscription == null
+  const isPaid = subscription?.is_active === true
   const language = user?.preferred_language || 'en'
 
   const {
@@ -26,14 +31,16 @@ export default function ParentDashboardPage() {
     isSaving, recentMistakes,
     loadDashboard, selectChild, updateChild, deleteChild,
     loadRecentMistakes,
+    clearWrongAnswerCache,
   } = useParentStore()
 
   const [showLinkModal, setShowLinkModal] = useState(false)
   const [highlightedAttemptId, setHighlightedAttemptId] = useState(null)
 
   useEffect(() => {
+    loadStatus()
     loadDashboard()
-  }, [])
+  }, [loadDashboard, loadStatus])
 
   // Load recent mistakes when a child is selected and dashboard loads
   useEffect(() => {
@@ -41,6 +48,15 @@ export default function ParentDashboardPage() {
       loadRecentMistakes(selectedChildId)
     }
   }, [selectedChildId])
+
+  // Admin-granted access can change while the parent is already logged in.
+  // Clear free-tier summaries so paid details are fetched as soon as status flips.
+  useEffect(() => {
+    if (isPaid && selectedChildId) {
+      clearWrongAnswerCache()
+      loadRecentMistakes(selectedChildId)
+    }
+  }, [isPaid, selectedChildId, clearWrongAnswerCache, loadRecentMistakes])
 
   // ── Loading skeleton ─────────────────────────────
   if (isLoading) {
@@ -165,6 +181,7 @@ export default function ParentDashboardPage() {
             recentMistakes={recentMistakes}
             language={language}
             isPaid={isPaid}
+            isAccessLoading={isAccessLoading}
             onUpgrade={() => navigate('/upgrade')}
             onViewAll={(attemptId) => {
               setHighlightedAttemptId(attemptId)
@@ -184,6 +201,8 @@ export default function ParentDashboardPage() {
               pageSize={5}
               showPagination={false}
               highlightedAttemptId={highlightedAttemptId}
+              isPaid={isPaid}
+              isAccessLoading={isAccessLoading}
             />
           </div>
 

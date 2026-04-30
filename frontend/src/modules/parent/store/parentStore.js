@@ -167,6 +167,11 @@ export const useParentStore = create((set, get) => ({
 
   clearError: () => set({ error: null, saveError: null }),
 
+  clearWrongAnswerCache: () => set({
+    wrongAnswersCache: {},
+    recentMistakes: null,
+  }),
+
   reset: () => set({
     children: [],
     selectedChildId: null,

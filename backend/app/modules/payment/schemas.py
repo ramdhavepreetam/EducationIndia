@@ -63,9 +63,10 @@ class UpdateSettingRequest(BaseModel):
 
 
 class AdminSubscriptionRow(BaseModel):
-    id: str
+    id: Optional[str] = None
     parent_id: str
     parent_name: Optional[str] = None
+    parent_email: Optional[str] = None
     plan_name: Optional[str] = None
     status: str
     amount_paid_inr: Optional[int] = None

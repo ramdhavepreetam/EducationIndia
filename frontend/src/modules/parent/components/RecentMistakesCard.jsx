@@ -119,6 +119,7 @@ const RecentMistakesCard = ({
   recentMistakes,
   language,
   isPaid,
+  isAccessLoading = false,
   onUpgrade,
   onViewAll,
 }) => {
@@ -145,6 +146,8 @@ const RecentMistakesCard = ({
 
   const examTitle = language === 'mr' && exam_title_mr
     ? exam_title_mr : exam_title_en
+  const hasDetailedItems = wrong_answers_summary?.items?.length > 0
+  const canShowDetails = isPaid || hasDetailedItems
 
   const gradeColors = {
     'Excellent':       'text-green-600 bg-green-50',
@@ -190,8 +193,15 @@ const RecentMistakesCard = ({
       {/* Body */}
       <div className="p-6">
 
+        {/* Access status is still loading — avoid showing a false upgrade gate. */}
+        {isAccessLoading && !canShowDetails && (
+          <div className="flex items-center justify-center py-8 text-sm text-gray-500">
+            Checking access...
+          </div>
+        )}
+
         {/* STATE B — FREE TIER */}
-        {!isPaid && (
+        {!isAccessLoading && !canShowDetails && (
           <div className="relative">
             {/* Blurred preview */}
             <div className="filter blur-sm pointer-events-none select-none
@@ -234,7 +244,7 @@ const RecentMistakesCard = ({
         )}
 
         {/* STATE D — PAID TIER, all correct */}
-        {isPaid &&
+        {canShowDetails &&
          wrong_answers_summary?.items?.length === 0 &&
          wrong_answers_summary?.total_skipped === 0 && (
           <div className="text-center py-4">
@@ -246,7 +256,7 @@ const RecentMistakesCard = ({
         )}
 
         {/* STATE C — PAID TIER, wrong answers list (top 5) */}
-        {isPaid && wrong_answers_summary?.items?.length > 0 && (
+        {canShowDetails && wrong_answers_summary?.items?.length > 0 && (
           <div className="space-y-4">
             {wrong_answers_summary.items.map(item => (
               <MiniWrongAnswerRow

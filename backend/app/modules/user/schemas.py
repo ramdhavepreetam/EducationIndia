@@ -19,6 +19,7 @@ class UserProfileResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
+    email: str | None = None
     full_name: str
     role: str
     avatar_url: str | None

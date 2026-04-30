@@ -193,13 +193,45 @@ class PaymentRepository:
         self, db: AsyncSession, page: int = 1, limit: int = 50
     ) -> list[dict]:
         result = await db.execute(text("""
-            SELECT s.id, s.parent_id, up.full_name AS parent_name,
-                   sp.name AS plan_name, s.status, s.amount_paid_inr,
-                   s.started_at, s.expires_at, s.created_at
-            FROM subscriptions s
-            LEFT JOIN user_profiles up ON up.id = s.parent_id
+            SELECT
+                s.id,
+                up.id AS parent_id,
+                up.full_name AS parent_name,
+                au.email AS parent_email,
+                sp.name AS plan_name,
+                CASE
+                    WHEN s.id IS NULL THEN 'free'
+                    WHEN s.status = 'active' AND s.expires_at <= now() THEN 'expired'
+                    ELSE s.status
+                END AS status,
+                s.amount_paid_inr,
+                s.started_at,
+                s.expires_at,
+                COALESCE(s.created_at, up.created_at) AS created_at
+            FROM user_profiles up
+            LEFT JOIN auth.users au ON au.id = up.id
+            LEFT JOIN LATERAL (
+                SELECT *
+                FROM subscriptions s
+                WHERE s.parent_id = up.id
+                ORDER BY
+                    CASE
+                        WHEN s.status = 'active' AND s.expires_at > now() THEN 0
+                        WHEN s.status = 'pending' THEN 1
+                        ELSE 2
+                    END,
+                    s.created_at DESC
+                LIMIT 1
+            ) s ON true
             LEFT JOIN subscription_plans sp ON sp.id = s.plan_id
-            ORDER BY s.created_at DESC
+            WHERE up.role = 'parent'
+              AND up.is_active = true
+            ORDER BY
+                CASE
+                    WHEN s.id IS NULL THEN 1
+                    ELSE 0
+                END,
+                COALESCE(s.created_at, up.created_at) DESC
             LIMIT :limit OFFSET :offset
         """), {"limit": limit, "offset": (page - 1) * limit})
         return [dict(row) for row in result.mappings().all()]
@@ -287,6 +319,21 @@ class PaymentRepository:
                     AS expired_subscriptions,
                 COUNT(DISTINCT CASE WHEN s.status = 'cancelled' THEN s.id END)
                     AS cancelled_subscriptions,
+                (SELECT COUNT(*) FROM user_profiles WHERE role = 'parent' AND is_active = true)
+                    AS total_parent_users,
+                (
+                    SELECT COUNT(*)
+                    FROM user_profiles up
+                    WHERE up.role = 'parent'
+                      AND up.is_active = true
+                      AND NOT EXISTS (
+                          SELECT 1
+                          FROM subscriptions s2
+                          WHERE s2.parent_id = up.id
+                            AND s2.status = 'active'
+                            AND s2.expires_at > now()
+                      )
+                )                                                               AS free_parent_users,
                 COUNT(p.id)                                                     AS total_transactions,
                 COUNT(CASE WHEN p.status = 'failed' THEN 1 END)                AS failed_transactions,
                 COALESCE(SUM(CASE

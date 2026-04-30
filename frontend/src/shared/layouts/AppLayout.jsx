@@ -21,8 +21,22 @@ export default function AppLayout() {
     const isParent = user?.role === 'parent'
 
     useEffect(() => {
-        if (isParent) {
-            loadStatus()
+        if (!isParent) return
+
+        loadStatus()
+
+        const refreshStatus = () => {
+            if (document.visibilityState === 'visible') {
+                loadStatus()
+            }
+        }
+
+        window.addEventListener('focus', loadStatus)
+        document.addEventListener('visibilitychange', refreshStatus)
+
+        return () => {
+            window.removeEventListener('focus', loadStatus)
+            document.removeEventListener('visibilitychange', refreshStatus)
         }
     }, [isParent, loadStatus])
 
@@ -119,8 +133,13 @@ export default function AppLayout() {
                                 {user?.full_name || 'Student'}
                             </p>
                             <p className="text-xs text-surface-400 truncate">
-                                {user?.role || 'student'}
+                                {user?.email || user?.role || 'student'}
                             </p>
+                            {user?.email && (
+                                <p className="text-[11px] text-surface-300 truncate">
+                                    {user?.role || 'student'}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <button
