@@ -7,7 +7,7 @@ State machine is completely deterministic given current + target states.
 Run: pytest backend/app/modules/attempt/tests/test_state_machine.py -v
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 from uuid import uuid4
 
@@ -108,9 +108,7 @@ class TestTransition:
     async def test_submitted_computes_duration_seconds(self, mock_db):
         attempt = make_attempt("ongoing")
         # started 60 seconds ago
-        attempt.started_at = datetime.now(timezone.utc).replace(
-            second=datetime.now(timezone.utc).second - 1
-        )
+        attempt.started_at = datetime.now(timezone.utc) - timedelta(seconds=60)
         with patch("app.modules.attempt.state_machine.update"):
             result = await transition(attempt, "submitted", mock_db)
         assert result.duration_seconds >= 0

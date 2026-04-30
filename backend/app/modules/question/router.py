@@ -133,6 +133,8 @@ async def list_questions_admin(
             question_image_alt_en=q.question_image_alt_en,
             question_image_alt_mr=q.question_image_alt_mr,
             correct_option=q.correct_option,
+            correct_options=q.correct_options,
+            is_multi_select=q.is_multi_select,
             explanation_en=q.explanation_en,
             explanation_mr=q.explanation_mr,
             hint_en=q.hint_en,
@@ -168,7 +170,7 @@ async def update_question(
 async def bulk_import_questions(
     import_data: BulkImportSchema,
     db: AsyncSession = Depends(get_db),
-    # _: UserIdentity = Depends(require_admin),
+    _: UserIdentity = Depends(require_admin),
 ):
     """
     Bulk import questions for an exam from JSON payload.

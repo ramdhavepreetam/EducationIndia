@@ -3,8 +3,8 @@ Media service — provider-agnostic upload/delete.
 Swap providers via MEDIA_PROVIDER env var without code changes (ADR-007).
 
 Allowed types:
-  question  → folder: questions/{question_id}
-  option    → folder: options/{question_id}
+  question  → folder: exams/{exam_id}/questions/{question_id}
+  option    → folder: options/{option_id}
   avatar    → folder: avatars
 """
 
@@ -23,6 +23,9 @@ def _get_provider() -> MediaProvider:
     if settings.MEDIA_PROVIDER == "cloudinary":
         from app.modules.media.providers.cloudinary import CloudinaryProvider
         return CloudinaryProvider()
+    if settings.MEDIA_PROVIDER == "r2":
+        from app.modules.media.providers.r2 import R2Provider
+        return R2Provider()
     from app.modules.media.providers.local import LocalProvider
     return LocalProvider()
 
@@ -63,7 +66,16 @@ class MediaService:
         if len(file_bytes) > _MAX_FILE_SIZE:
             raise BadRequest("File exceeds 5 MB limit")
 
-        folder = self._folder(upload_type, entity_id)
+        # Look up exam_id for question uploads to build structured folder path
+        exam_id: int | None = None
+        if upload_type == "question":
+            row = (await db.execute(
+                text("SELECT exam_id FROM questions WHERE id = :id"),
+                {"id": entity_id},
+            )).mappings().first()
+            exam_id = row["exam_id"] if row else None
+
+        folder = self._folder(upload_type, entity_id, exam_id)
         provider = _get_provider()
         storage_key, public_url = await provider.upload(
             file_bytes=file_bytes,
@@ -113,8 +125,10 @@ class MediaService:
         await db.commit()
         return True
 
-    def _folder(self, upload_type: str, entity_id: int) -> str:
+    def _folder(self, upload_type: str, entity_id: int, exam_id: int | None = None) -> str:
         if upload_type == "question":
+            if exam_id:
+                return f"exams/{exam_id}/questions/{entity_id}"
             return f"questions/{entity_id}"
         if upload_type == "option":
             return f"options/{entity_id}"

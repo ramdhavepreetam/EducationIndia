@@ -7,10 +7,7 @@ class ResponseData:
     question_no: int
     question_id: int
     selected_option: Optional[int]   # None = skipped
-    selected_options: Optional[List[int]] = None
-    is_multi_select: bool = False
     correct_option: Optional[int]    # None if multi-answer question
-    correct_options: Optional[List[int]] = None  # e.g. [1,3] for "1 OR 3" / "1 AND 3"
     topic_id: int
     topic_name_en: str
     topic_name_mr: Optional[str]
@@ -19,6 +16,9 @@ class ResponseData:
     subject_en: str
     marks: int
     time_taken_seconds: Optional[int]
+    selected_options: Optional[List[int]] = None
+    is_multi_select: bool = False
+    correct_options: Optional[List[int]] = None  # e.g. [1,3] for "1 OR 3" / "1 AND 3"
 
 class FastSlowItem(BaseModel):
     question_no: int

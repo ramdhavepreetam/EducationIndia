@@ -14,7 +14,8 @@ Question type rules:
   bilingual     → both text_en and text_mr required
 
 All types:
-  - correct_option must be 1-4
+  - single-answer: correct_option must be 1-4
+  - multi-select: correct_options must contain 1-4 values from option numbers
   - exactly 4 options required
   - image_only options: all 4 must have image_url
   - text/bilingual options: all 4 must have text_en
@@ -34,7 +35,18 @@ def validate_question_import(q: QuestionImportItem) -> list[str]:
 
     # ── Universal rules ───────────────────────────────────────────────────────
 
-    if q.correct_option not in (1, 2, 3, 4):
+    if q.is_multi_select:
+        if not q.correct_options:
+            errors.append(f"{prefix}: multi-select questions require correct_options")
+        else:
+            invalid = [opt for opt in q.correct_options if opt not in (1, 2, 3, 4)]
+            if invalid:
+                errors.append(
+                    f"{prefix}: correct_options values must be 1-4, got {invalid}"
+                )
+            if len(set(q.correct_options)) != len(q.correct_options):
+                errors.append(f"{prefix}: correct_options must not contain duplicates")
+    elif q.correct_option not in (1, 2, 3, 4):
         errors.append(f"{prefix}: correct_option must be 1-4, got {q.correct_option}")
 
     if len(q.options) != 4:

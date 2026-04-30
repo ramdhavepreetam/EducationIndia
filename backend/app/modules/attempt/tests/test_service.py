@@ -90,6 +90,7 @@ def make_attempt(
     a.id = ATTEMPT_ID
     a.exam_id = EXAM_ID
     a.student_id = student_id
+    a.child_profile_id = None
     a.attempt_number = 1
     # Simulate AttemptStatusEnum: .value returns the string
     status_obj = types.SimpleNamespace(value=status)
@@ -243,6 +244,7 @@ class TestSubmitExam:
     async def test_submit_transitions_to_submitted(self, service, mock_db):
         svc, repo, catalog, child_repo = service
         attempt = make_attempt()
+        repo.get_attempt_for_submit.return_value = attempt
         repo.get_attempt_by_id.return_value = attempt
         repo.get_all_responses.return_value = []
         repo.update_attempt_result.return_value = attempt
@@ -259,6 +261,7 @@ class TestSubmitExam:
     async def test_submit_fails_for_other_student_attempt(self, service, mock_db):
         svc, repo, catalog, child_repo = service
         attempt = make_attempt(student_id=OTHER_STUDENT_ID)
+        repo.get_attempt_for_submit.return_value = attempt
         repo.get_attempt_by_id.return_value = attempt
         child_repo.validate_ownership.return_value = False
 
@@ -271,6 +274,7 @@ class TestSubmitExam:
         # started 91 minutes + 31 seconds ago (beyond grace)
         very_old_start = datetime.now(timezone.utc) - timedelta(minutes=91, seconds=31)
         attempt = make_attempt(started_at=very_old_start)
+        repo.get_attempt_for_submit.return_value = attempt
         repo.get_attempt_by_id.return_value = attempt
 
         with pytest.raises(BadRequest, match="expired"):
@@ -281,6 +285,7 @@ class TestSubmitExam:
         svc, repo, catalog, child_repo = service
         recent_start = datetime.now(timezone.utc) - timedelta(minutes=90, seconds=20)
         attempt = make_attempt(started_at=recent_start)
+        repo.get_attempt_for_submit.return_value = attempt
         repo.get_attempt_by_id.return_value = attempt
         repo.get_all_responses.return_value = []
         repo.update_attempt_result.return_value = attempt
@@ -298,6 +303,7 @@ class TestSubmitExam:
         """Security: submit response must not contain correct_option."""
         svc, repo, catalog, child_repo = service
         attempt = make_attempt()
+        repo.get_attempt_for_submit.return_value = attempt
         repo.get_attempt_by_id.return_value = attempt
         repo.get_all_responses.return_value = []
         repo.update_attempt_result.return_value = attempt

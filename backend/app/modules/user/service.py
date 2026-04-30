@@ -160,19 +160,15 @@ class UserService:
         self,
         db: AsyncSession,
         user_id: uuid.UUID,
-    ) -> dict:
+    ):
         """
         Convenience wrapper that returns subscription status for a parent.
-        Uses access_control.get_access_context() as the single source of truth.
+        Delegates to payment_service so /api/user/me/subscription and
+        /api/payment/status return the same status shape.
         """
-        from app.shared.access_control import get_access_context
+        from app.modules.payment.service import payment_service
 
-        ctx = await get_access_context(db, user_id)
-        return {
-            "is_paid": ctx.get("is_paid", False),
-            "expires_at": ctx.get("expires_at"),
-            "days_remaining": ctx.get("days_remaining", 0),
-        }
+        return await payment_service.get_status(user_id, db)
 
     async def get_my_children(
         self, db: AsyncSession, parent_id: uuid.UUID

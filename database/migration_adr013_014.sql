@@ -134,6 +134,19 @@ CREATE TABLE IF NOT EXISTS payments (
 
 CREATE INDEX IF NOT EXISTS idx_payments_parent_id ON payments(parent_id);
 
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'payments_razorpay_payment_id_key'
+    ) THEN
+        ALTER TABLE payments
+            ADD CONSTRAINT payments_razorpay_payment_id_key
+            UNIQUE (razorpay_payment_id);
+    END IF;
+END $$;
+
 -- ══════════════════════════════════════════════════════════════════════════════
 -- ADR-014: Helper function for access_control.py
 -- ══════════════════════════════════════════════════════════════════════════════

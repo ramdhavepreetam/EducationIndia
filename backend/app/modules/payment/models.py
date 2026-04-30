@@ -82,7 +82,7 @@ class Payment(Base):
     amount_inr: Mapped[int] = mapped_column(Integer, nullable=False)
     currency: Mapped[str] = mapped_column(String(5), server_default="INR")
     razorpay_order_id: Mapped[str | None] = mapped_column(Text)
-    razorpay_payment_id: Mapped[str | None] = mapped_column(Text)
+    razorpay_payment_id: Mapped[str | None] = mapped_column(Text, unique=True)
     razorpay_signature: Mapped[str | None] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String(20), server_default="created")
     paid_at: Mapped[datetime | None] = mapped_column(TIMESTAMP(timezone=True))

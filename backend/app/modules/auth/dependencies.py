@@ -6,7 +6,7 @@ Every other module that needs authentication imports from here:
 
 ADR-001 decision: Supabase issues JWTs; FastAPI only validates them.
   - sub      → user UUID (matches auth.users.id and user_profiles.id)
-  - user_metadata.role → app role (student | parent | teacher | exam_admin | super_admin)
+  - user_profiles.role → trusted app role (student | parent | teacher | exam_admin | super_admin)
   - aud      → "authenticated" (always present in Supabase JWTs)
 
 NEVER issue JWTs here. NEVER call Supabase Auth admin API here.
@@ -19,8 +19,11 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwk, jwt
 from pydantic import BaseModel
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.database import get_db
 from app.shared.exceptions import Forbidden, Unauthorized
 
 # Points to Supabase JS client login — not an actual FastAPI endpoint.
@@ -50,19 +53,22 @@ class UserIdentity(BaseModel):
     Passed as a dependency argument to route handlers and services.
     """
     id: UUID          # = auth.users.id = user_profiles.id
-    role: str         # from JWT user_metadata.role
+    role: str         # trusted role loaded from user_profiles.role
     email: str = ""   # from JWT email claim
 
 
 # ── Core dependency ───────────────────────────────────────────────────────────
 
-def verify_token(token: str = Depends(oauth2_scheme)) -> UserIdentity:
+async def verify_token(
+    token: str = Depends(oauth2_scheme),
+    db: AsyncSession = Depends(get_db),
+) -> UserIdentity:
     """
     Validate a Supabase JWT and return the caller's identity.
 
-    Raises 401 if token is missing, expired, or tampered.
-    Role defaults to "student" if not set in user_metadata
-    (new accounts before onboarding completes).
+    Raises 401 if token is missing, expired, tampered, or has no active
+    user_profiles row. The JWT proves identity only; authorization role comes
+    from user_profiles.role, not user-editable user_metadata.
     """
     if not token:
         raise Unauthorized("Authentication required")
@@ -96,24 +102,40 @@ def verify_token(token: str = Depends(oauth2_scheme)) -> UserIdentity:
     except JWTError:
         raise Unauthorized("Invalid or expired token")
 
-    user_id: str | None = payload.get("sub")
-    if not user_id:
+    user_id_raw: str | None = payload.get("sub")
+    if not user_id_raw:
         raise Unauthorized("Invalid token: missing subject")
 
-    # Role is stored in user_metadata by the onboarding flow.
-    # New signups default to "student" until onboarding sets it.
-    user_metadata: dict = payload.get("user_metadata") or {}
-    role = user_metadata.get("role", "student")
+    try:
+        user_id = UUID(user_id_raw)
+    except ValueError:
+        raise Unauthorized("Invalid token: malformed subject")
 
-    # Guard against unexpected role values (e.g. tampered tokens)
+    role = await _load_trusted_role(db, user_id)
+    if role is None:
+        raise Unauthorized("Profile not found or inactive")
+
+    # Guard against unexpected DB values.
     if role not in VALID_ROLES:
         role = "student"
 
     return UserIdentity(
-        id=UUID(user_id),
+        id=user_id,
         role=role,
         email=payload.get("email", ""),
     )
+
+
+async def _load_trusted_role(db: AsyncSession, user_id: UUID) -> str | None:
+    """Return the trusted application role from user_profiles."""
+    result = await db.execute(
+        text(
+            "SELECT role::text FROM user_profiles "
+            "WHERE id = :uid AND is_active = true"
+        ),
+        {"uid": str(user_id)},
+    )
+    return result.scalar_one_or_none()
 
 
 # ── Role-gating factory ───────────────────────────────────────────────────────

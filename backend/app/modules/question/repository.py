@@ -31,7 +31,7 @@ from app.modules.question.schemas import (
 _DELIVERY_COLS = """
     id, exam_id, section_id, topic_id, context_id, question_no, question_type,
     text_en, text_mr, question_image_url, question_image_alt_en, question_image_alt_mr,
-    marks, difficulty, tags
+    marks, difficulty, tags, is_multi_select
 """
 
 
@@ -110,6 +110,7 @@ class QuestionRepository:
                     marks=r["marks"],
                     difficulty=r["difficulty"],
                     tags=r["tags"] or [],
+                    is_multi_select=r["is_multi_select"],
                     options=opts_schema,
                     context=ctx_schema,
                 )
@@ -170,6 +171,7 @@ class QuestionRepository:
             marks=row["marks"],
             difficulty=row["difficulty"],
             tags=row["tags"] or [],
+            is_multi_select=row["is_multi_select"],
             options=opts_schema,
             context=ctx,
         )
@@ -220,6 +222,8 @@ class QuestionRepository:
             difficulty=q.difficulty,
             tags=q.tags or [],
             correct_option=q.correct_option,
+            correct_options=q.correct_options,
+            is_multi_select=q.is_multi_select,
             explanation_en=q.explanation_en,
             explanation_mr=q.explanation_mr,
             options=opts_schema,
@@ -265,6 +269,8 @@ class QuestionRepository:
             question_image_alt_en=q.question_image_alt_en,
             question_image_alt_mr=q.question_image_alt_mr,
             correct_option=q.correct_option,
+            correct_options=q.correct_options,
+            is_multi_select=q.is_multi_select,
             explanation_en=q.explanation_en,
             explanation_mr=q.explanation_mr,
             hint_en=q.hint_en,
@@ -398,6 +404,8 @@ class QuestionRepository:
                     question_image_alt_en=q_item.question_image_alt_en,
                     question_image_alt_mr=q_item.question_image_alt_mr,
                     correct_option=q_item.correct_option,
+                    correct_options=q_item.correct_options,
+                    is_multi_select=q_item.is_multi_select,
                     explanation_en=q_item.explanation_en,
                     explanation_mr=q_item.explanation_mr,
                     hint_en=q_item.hint_en,

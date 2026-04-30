@@ -93,15 +93,15 @@ class TestChildSecurity:
             with pytest.raises(NotFound, match="not found"):
                 await service.get_child(child_of_b, parent_a, db)
 
-    async def test_parent_cannot_create_more_than_10_children(self, service, db):
-        """Service enforces max 10 child profiles per parent."""
+    async def test_parent_cannot_create_more_than_2_children(self, service, db):
+        """Service enforces max 2 child profiles per parent."""
         parent_id = uuid4()
-        req = CreateChildRequest(name="Eleventh Child", std_class=5)
+        req = CreateChildRequest(name="Third Child", std_class=5)
 
         with patch.object(service.repo, 'get_children', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = [_mock_child(parent_id) for _ in range(10)]
+            mock_get.return_value = [_mock_child(parent_id) for _ in range(2)]
 
-            with pytest.raises(BadRequest, match="Maximum 10 child"):
+            with pytest.raises(BadRequest, match="Maximum 2 child"):
                 await service.create_child(parent_id, req, db)
 
     # ── Attempt start with child_profile_id ───────────────────────────────

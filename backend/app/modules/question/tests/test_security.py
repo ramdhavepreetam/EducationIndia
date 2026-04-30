@@ -52,6 +52,7 @@ def make_delivery_question(question_no=1) -> QuestionDeliverySchema:
         question_image_url=None,
         question_image_alt_en=None,
         question_image_alt_mr=None,
+        is_multi_select=False,
         marks=2,
         difficulty="medium",
         tags=[],
@@ -254,7 +255,7 @@ class TestDeliverySchemaFields:
             "id", "exam_id", "section_id", "topic_id", "context_id",
             "question_no", "question_type", "text_en", "text_mr",
             "question_image_url", "question_image_alt_en", "question_image_alt_mr",
-            "marks", "difficulty", "tags", "options", "context",
+            "is_multi_select", "marks", "difficulty", "tags", "options", "context",
         }
         forbidden_fields = {
             "correct_option", "explanation_en", "explanation_mr",

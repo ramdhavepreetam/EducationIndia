@@ -29,6 +29,13 @@ class Settings(BaseSettings):
     MEDIA_PROVIDER: str = "local"
     CLOUDINARY_URL: str = ""
 
+    # ── Cloudflare R2 (ADR-007 provider) ─────────────────────
+    R2_ACCOUNT_ID: str = ""          # from URL: xxx.r2.cloudflarestorage.com
+    R2_ACCESS_KEY_ID: str = ""       # R2 API token key ID
+    R2_SECRET_ACCESS_KEY: str = ""   # R2 API token secret
+    R2_BUCKET_NAME: str = "scolarpath"
+    R2_PUBLIC_URL: str = ""          # e.g. https://<id>.r2.cloudflarestorage.com/scolarpath
+
     # ── Razorpay (ADR-014) ────────────────────────────────────
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""

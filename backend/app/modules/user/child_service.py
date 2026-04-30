@@ -6,6 +6,9 @@ from app.shared.exceptions import BadRequest, NotFound, Forbidden
 from app.modules.user.child_schemas import ChildProfileSchema, CreateChildRequest, UpdateChildRequest
 from app.modules.user.child_repository import ChildRepository
 
+MAX_CHILD_PROFILES_PER_PARENT = 2
+
+
 class ChildService:
     def __init__(self):
         self.repo = ChildRepository()
@@ -22,8 +25,8 @@ class ChildService:
 
     async def create_child(self, parent_id: UUID, data: CreateChildRequest, db: AsyncSession) -> ChildProfileSchema:
         existing = await self.repo.get_children(parent_id, db)
-        if len(existing) >= 10:
-            raise BadRequest("Maximum 10 child profiles allowed")
+        if len(existing) >= MAX_CHILD_PROFILES_PER_PARENT:
+            raise BadRequest("Maximum 2 child profiles allowed")
         child = await self.repo.create(parent_id, data, db)
         return ChildProfileSchema.model_validate(child)
 

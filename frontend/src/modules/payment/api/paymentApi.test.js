@@ -13,8 +13,8 @@ vi.mock('@/config/apiClient', () => {
 })
 
 describe('paymentApi', () => {
-  it('getStatus calls /api/payment/subscription', async () => {
+  it('getStatus calls /api/payment/status', async () => {
     await paymentApi.getStatus()
-    expect(apiClient.get).toHaveBeenCalledWith('/api/payment/subscription')
+    expect(apiClient.get).toHaveBeenCalledWith('/api/payment/status')
   })
 })

@@ -1,4 +1,8 @@
+const MAX_CHILD_PROFILES = 2
+
 const ChildSwitcher = ({ children, selectedChildId, onSelect, onAddChild }) => {
+  const canAddChild = children.length < MAX_CHILD_PROFILES
+
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-1
                     scrollbar-hide mb-6">
@@ -47,17 +51,18 @@ const ChildSwitcher = ({ children, selectedChildId, onSelect, onAddChild }) => {
         )
       })}
 
-      {/* Add child button */}
-      <button
-        onClick={onAddChild}
-        className="flex items-center gap-1 px-4 py-2 rounded-full
-                   text-sm font-medium whitespace-nowrap
-                   border-2 border-dashed border-gray-300
-                   text-gray-400 hover:border-blue-400
-                   hover:text-blue-500 transition-colors"
-      >
-        + Add
-      </button>
+      {canAddChild && (
+        <button
+          onClick={onAddChild}
+          className="flex items-center gap-1 px-4 py-2 rounded-full
+                     text-sm font-medium whitespace-nowrap
+                     border-2 border-dashed border-gray-300
+                     text-gray-400 hover:border-blue-400
+                     hover:text-blue-500 transition-colors"
+        >
+          + Add
+        </button>
+      )}
     </div>
   )
 }

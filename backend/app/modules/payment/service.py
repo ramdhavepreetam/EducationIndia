@@ -103,6 +103,8 @@ class PaymentService:
         )
         if not sub:
             raise NotFound("Subscription not found for this order")
+        if str(sub["parent_id"]) != str(parent_id):
+            raise NotFound("Subscription not found for this order")
 
         if sub["status"] == "active":
             # Idempotent — already activated (e.g. webhook beat the verify call)

@@ -23,7 +23,8 @@ httpx==0.27.0
 
 # ── Media / file uploads ──────────────────────────────────────
 aiofiles==23.2.1               # async file I/O for local media provider
-cloudinary==1.40.0             # Cloudinary media provider (used even when local)
+cloudinary==1.40.0             # Cloudinary media provider
+aioboto3==13.1.0               # async S3-compatible client for Cloudflare R2
 
 # ── Payment ───────────────────────────────────────────────────
 razorpay==1.4.2                # Razorpay payment gateway

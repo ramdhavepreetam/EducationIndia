@@ -78,12 +78,12 @@ class TestChildService:
 
     async def test_create_child_limit_reached(self, service, db):
         parent_id = uuid4()
-        req = CreateChildRequest(name="Tenth Child", std_class=5)
+        req = CreateChildRequest(name="Third Child", std_class=5)
 
         with patch.object(service.repo, 'get_children', new_callable=AsyncMock) as mock_get:
-            mock_get.return_value = [AsyncMock()] * 10
+            mock_get.return_value = [AsyncMock()] * 2
 
-            with pytest.raises(BadRequest, match="Maximum 10 child"):
+            with pytest.raises(BadRequest, match="Maximum 2 child"):
                 await service.create_child(parent_id, req, db)
 
     async def test_update_child_not_found_or_forbidden(self, service, db):

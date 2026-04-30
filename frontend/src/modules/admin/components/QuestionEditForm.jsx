@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAdminStore } from '../store/adminStore'
+import { adminApi } from '../api/adminApi'
 
 const QUESTION_TYPES = [
     { value: 'text',          label: 'Text' },
@@ -39,7 +40,29 @@ export function QuestionEditForm({ question, onClose }) {
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
 
+    // Image upload state — file stored locally, uploaded only when Save is clicked
+    const [imageFile, setImageFile] = useState(null)
+    const [imagePreview, setImagePreview] = useState(null)  // blob URL
+    const fileInputRef = useRef(null)
+
+    const clearImageFile = () => {
+        if (imagePreview) URL.revokeObjectURL(imagePreview)
+        setImageFile(null)
+        setImagePreview(null)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        clearImageFile()
+        setImageFile(file)
+        setImagePreview(URL.createObjectURL(file))
+    }
+
     useEffect(() => {
+        // Reset file selection when modal opens for a different question
+        clearImageFile()
         if (question) {
             const correctOptions = question.correct_options?.length
                 ? question.correct_options
@@ -77,11 +100,24 @@ export function QuestionEditForm({ question, onClose }) {
 
             const showImage = IMAGE_TYPES.has(form.question_type)
 
+            // Upload image to R2 now (only on Save, never on file pick)
+            let imageUrl = form.question_image_url
+            if (showImage && imageFile) {
+                try {
+                    const result = await adminApi.uploadImage(imageFile, 'question', question.id)
+                    imageUrl = result.file_url
+                } catch (uploadErr) {
+                    setError('Image upload failed: ' + (uploadErr.response?.data?.detail || uploadErr.message || 'Unknown error'))
+                    setSaving(false)
+                    return
+                }
+            }
+
             await updateQuestion(question.id, {
                 question_type: form.question_type,
                 text_en: form.text_en || null,
                 text_mr: form.text_mr || null,
-                question_image_url: showImage ? (form.question_image_url || null) : null,
+                question_image_url: showImage ? (imageUrl || null) : null,
                 question_image_alt_en: showImage ? (form.question_image_alt_en || null) : null,
                 question_image_alt_mr: showImage ? (form.question_image_alt_mr || null) : null,
                 is_multi_select: form.is_multi_select,
@@ -96,6 +132,8 @@ export function QuestionEditForm({ question, onClose }) {
                 difficulty: form.difficulty,
                 tags: form.tags ? form.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
             })
+
+            clearImageFile()
             setSuccess(true)
             setTimeout(onClose, 800)
         } catch (e) {
@@ -211,18 +249,72 @@ export function QuestionEditForm({ question, onClose }) {
                     {showImageFields && (
                         <div className="space-y-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
                             <p className="text-xs font-semibold text-amber-700">Image Fields</p>
-                            <Field label="Question Image URL" name="question_image_url" />
+
+                            {/* File picker — upload fires on Save, not here */}
+                            <div>
+                                <label className="block text-xs font-semibold text-surface-600 mb-1">
+                                    Question Image
+                                </label>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium bg-white border border-surface-200 rounded-lg hover:bg-surface-50 text-surface-700 transition-colors">
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                        </svg>
+                                        {imageFile ? 'Change Image' : 'Choose Image'}
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/webp,image/gif"
+                                            onChange={handleFileSelect}
+                                            className="hidden"
+                                        />
+                                    </label>
+
+                                    {imageFile ? (
+                                        <>
+                                            <span className="text-xs text-surface-600 font-medium truncate max-w-[180px]">
+                                                {imageFile.name}
+                                            </span>
+                                            <span className="text-xs text-surface-400">
+                                                ({(imageFile.size / 1024).toFixed(0)} KB)
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={clearImageFile}
+                                                className="text-xs text-red-500 hover:text-red-700 font-medium"
+                                            >
+                                                ✕ Remove
+                                            </button>
+                                        </>
+                                    ) : form.question_image_url ? (
+                                        <span className="text-xs text-surface-400 truncate max-w-[240px]" title={form.question_image_url}>
+                                            Current: {form.question_image_url.split('/').pop()}
+                                        </span>
+                                    ) : (
+                                        <span className="text-xs text-surface-400">No image set</span>
+                                    )}
+                                </div>
+                                <p className="text-xs text-amber-600 mt-1.5">
+                                    JPEG · PNG · WebP · GIF &nbsp;·&nbsp; max 5 MB &nbsp;·&nbsp; uploaded when you click Save
+                                </p>
+                            </div>
+
+                            {/* Alt text */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Field label="Image Alt Text (English)" name="question_image_alt_en" />
                                 <Field label="Image Alt Text (Marathi)" name="question_image_alt_mr" />
                             </div>
-                            {form.question_image_url && (
-                                <div className="mt-2">
-                                    <p className="text-xs text-amber-600 mb-1">Preview</p>
+
+                            {/* Preview — local blob takes priority over stored URL */}
+                            {(imagePreview || form.question_image_url) && (
+                                <div>
+                                    <p className="text-xs text-amber-600 mb-1">
+                                        {imagePreview ? 'New image (not yet saved)' : 'Current image'}
+                                    </p>
                                     <img
-                                        src={form.question_image_url}
+                                        src={imagePreview || form.question_image_url}
                                         alt="question preview"
-                                        className="max-h-40 rounded-lg border border-amber-200 object-contain bg-white"
+                                        className="max-h-48 rounded-lg border border-amber-200 object-contain bg-white"
                                         onError={e => { e.target.style.display = 'none' }}
                                     />
                                 </div>
@@ -366,7 +458,7 @@ export function QuestionEditForm({ question, onClose }) {
                         disabled={saving}
                         className="px-5 py-2 text-sm font-semibold bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 transition-colors"
                     >
-                        {saving ? 'Saving…' : 'Save Changes'}
+                        {saving ? (imageFile ? 'Uploading…' : 'Saving…') : 'Save Changes'}
                     </button>
                 </div>
             </div>

@@ -116,6 +116,14 @@ class QuestionService:
             if updates["correct_option"] not in (1, 2, 3, 4):
                 raise BadRequest("correct_option must be 1, 2, 3, or 4 (or null for multi-answer)")
 
+        if "correct_options" in updates and updates["correct_options"] is not None:
+            correct_options = updates["correct_options"]
+            invalid = [opt for opt in correct_options if opt not in (1, 2, 3, 4)]
+            if invalid:
+                raise BadRequest("correct_options values must be between 1 and 4")
+            if len(set(correct_options)) != len(correct_options):
+                raise BadRequest("correct_options must not contain duplicates")
+
         updated = await question_repository.update_question(db, question_id, updates)
         if updated is None:
             raise NotFound(f"Question {question_id} not found")

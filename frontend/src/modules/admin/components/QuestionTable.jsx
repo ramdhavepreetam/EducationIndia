@@ -65,6 +65,17 @@ export function QuestionTable({ questions, searchTerm = '', onEdit, onDelete }) 
     )
 
     const optionLabel = (no) => ['A', 'B', 'C', 'D'][no - 1] || String(no)
+    const correctLabels = (q) => {
+        const values = q.is_multi_select
+            ? (q.correct_options || [])
+            : [q.correct_option]
+        return values.filter(Boolean).map(optionLabel).join(', ')
+    }
+    const isCorrectOption = (q, optionNo) => (
+        q.is_multi_select
+            ? (q.correct_options || []).includes(optionNo)
+            : optionNo === q.correct_option
+    )
 
     return (
         <div className="space-y-3">
@@ -168,9 +179,16 @@ export function QuestionTable({ questions, searchTerm = '', onEdit, onDelete }) 
                                         </button>
                                     </td>
                                     <td className="px-4 py-3">
-                                        <span className="w-7 h-7 flex items-center justify-center bg-green-100 text-green-700 font-bold rounded-full text-xs">
-                                            {optionLabel(q.correct_option)}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="min-w-7 h-7 px-2 flex items-center justify-center bg-green-100 text-green-700 font-bold rounded-full text-xs">
+                                                {correctLabels(q)}
+                                            </span>
+                                            {q.is_multi_select && (
+                                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold">
+                                                    multi
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="px-4 py-3">
                                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${DIFFICULTY_BADGE[q.difficulty] || ''}`}>
@@ -223,9 +241,9 @@ export function QuestionTable({ questions, searchTerm = '', onEdit, onDelete }) 
                                                         {q.options.map(opt => (
                                                             <div
                                                                 key={opt.option_no}
-                                                                className={`flex items-start gap-2 px-3 py-2 rounded-lg text-sm ${opt.option_no === q.correct_option ? 'bg-green-50 border border-green-200' : 'bg-white border border-surface-100'}`}
+                                                                className={`flex items-start gap-2 px-3 py-2 rounded-lg text-sm ${isCorrectOption(q, opt.option_no) ? 'bg-green-50 border border-green-200' : 'bg-white border border-surface-100'}`}
                                                             >
-                                                                <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold ${opt.option_no === q.correct_option ? 'bg-green-500 text-white' : 'bg-surface-200 text-surface-600'}`}>
+                                                                <span className={`w-5 h-5 flex-shrink-0 flex items-center justify-center rounded-full text-xs font-bold ${isCorrectOption(q, opt.option_no) ? 'bg-green-500 text-white' : 'bg-surface-200 text-surface-600'}`}>
                                                                     {optionLabel(opt.option_no)}
                                                                 </span>
                                                                 <span className="text-surface-700 text-xs">{opt.text_en || opt.text_mr || '(image)'}</span>

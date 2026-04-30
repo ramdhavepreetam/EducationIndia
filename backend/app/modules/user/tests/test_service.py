@@ -119,6 +119,9 @@ class TestCompleteProfile:
         with patch("app.modules.user.service.user_repository") as mock_repo:
             mock_repo.get_by_id = AsyncMock(return_value=student_profile)
             mock_repo.update = AsyncMock(return_value=updated)
+            query_result = MagicMock()
+            query_result.fetchall.return_value = []
+            db.execute.return_value = query_result
 
             data = CompleteProfileRequest(
                 school_name="City School",
@@ -399,4 +402,3 @@ class TestUpdateAvatar:
 
             with pytest.raises(NotFound):
                 await service.update_avatar(db, uuid4(), "https://example.com/a.jpg")
-

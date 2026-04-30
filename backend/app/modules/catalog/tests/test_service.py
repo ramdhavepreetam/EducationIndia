@@ -183,7 +183,8 @@ class TestPublishExam:
 
         result = await svc.publish_exam(mock_db, exam_id=1)
 
-        assert result.is_active is True
+        assert result["is_active"] is True
+        assert result["exam_id"] == 1
         repo.set_exam_active.assert_called_once_with(mock_db, 1, is_active=True)
 
     async def test_raises_not_found_for_missing_exam(self, service, mock_db):
@@ -202,4 +203,5 @@ class TestPublishExam:
 
         result = await svc.publish_exam(mock_db, exam_id=1)
 
-        assert result.is_active is True
+        assert result["is_active"] is True
+        assert result["exam_id"] == 1

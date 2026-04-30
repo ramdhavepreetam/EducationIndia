@@ -65,6 +65,7 @@ def make_delivery_question(question_no=1, **kwargs) -> QuestionDeliverySchema:
         question_image_url=None,
         question_image_alt_en=None,
         question_image_alt_mr=None,
+        is_multi_select=False,
         marks=2,
         difficulty="medium",
         tags=[],
