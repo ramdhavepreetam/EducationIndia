@@ -62,3 +62,11 @@ frontend/dist.old_61744/
 
 # Firebase deploy cache
 frontend/.firebase/
+
+
+# Sensitive local/debug scripts and generated deploy artifacts
+schema_dump.py
+backend/scripts/verify_day7.py
+build_logs.txt
+backend/build_logs.txt
+frontend/dist.old_*/
