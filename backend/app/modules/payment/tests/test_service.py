@@ -12,14 +12,14 @@ from uuid import uuid4
 import pytest
 
 from app.modules.payment.service import PaymentService
-from app.modules.payment.schemas import VerifyPaymentRequest
+from app.modules.payment.schemas import CreateOrderRequest, VerifyPaymentRequest
 from app.shared.exceptions import BadRequest, NotFound
 
 pytestmark = pytest.mark.asyncio
 
 
 def _mock_plan():
-    return {"id": 1, "name": "Standard Access", "duration_months": 5, "price_inr": 499, "features": {}}
+    return {"id": 1, "name": "Standard Access", "duration_months": 5, "price_inr": 499, "features": {}, "entitlements": []}
 
 
 class TestPaymentService:
@@ -32,7 +32,7 @@ class TestPaymentService:
         with patch("app.modules.payment.service.payment_repository") as mock_repo, \
              patch("app.modules.payment.service.get_client") as mock_rpay:
 
-            mock_repo.get_active_plan = AsyncMock(return_value=_mock_plan())
+            mock_repo.get_plan_by_id = AsyncMock(return_value=_mock_plan())
             mock_repo.create_subscription = AsyncMock(return_value={"id": str(uuid4())})
             mock_repo.get_setting = AsyncMock(return_value="rzp_test_key")
 
@@ -40,7 +40,7 @@ class TestPaymentService:
             mock_client.order.create.return_value = {"id": "order_test_123", "amount": 49900}
             mock_rpay.return_value = mock_client
 
-            result = await svc.create_order(parent_id, db)
+            result = await svc.create_order(parent_id, db, CreateOrderRequest(plan_id=1))
 
             assert result.order_id == "order_test_123"
             assert result.amount == 49900
@@ -77,10 +77,11 @@ class TestPaymentService:
             mock_repo.get_setting = AsyncMock(return_value="5")
             mock_repo.activate_subscription = AsyncMock(return_value={})
             mock_repo.create_payment = AsyncMock(return_value={})
-            mock_repo.get_active_subscription = AsyncMock(return_value={
+            mock_repo.get_active_subscriptions = AsyncMock(return_value=[{
                 "expires_at": datetime.now(timezone.utc) + timedelta(days=150),
                 "plan_name": "Standard Access", "amount_paid_inr": 499,
-            })
+                "id": uuid4(),
+            }])
 
             result = await svc.verify_and_activate(parent_id, request, db)
             assert result.is_active is True
@@ -107,7 +108,7 @@ class TestPaymentService:
         db = AsyncMock()
 
         with patch("app.modules.payment.service.payment_repository") as mock_repo:
-            mock_repo.get_active_subscription = AsyncMock(return_value=None)
+            mock_repo.get_active_subscriptions = AsyncMock(return_value=[])
 
             result = await svc.get_status(uuid4(), db)
             assert result.is_active is False
@@ -119,7 +120,7 @@ class TestPaymentService:
 
         with patch("app.modules.payment.service.payment_repository") as mock_repo:
             # Subscription expired 1 day ago
-            mock_repo.get_active_subscription = AsyncMock(return_value=None)
+            mock_repo.get_active_subscriptions = AsyncMock(return_value=[])
 
             result = await svc.get_status(uuid4(), db)
             assert result.is_active is False

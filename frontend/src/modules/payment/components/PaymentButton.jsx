@@ -9,7 +9,7 @@ export const PaymentButton = ({ planId }) => {
     const { initiatePayment, isProcessing } = usePaymentStore()
 
     const handlePay = () => {
-        initiatePayment(navigate)
+        initiatePayment(navigate, planId)
     }
 
     return (

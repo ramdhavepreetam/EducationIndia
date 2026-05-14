@@ -10,6 +10,7 @@ from app.modules.admin.schemas import (
     QuestionStatRow,
     StudentDashboardResponse,
     StudentDashboardStats,
+    UpdateExamAdminRequest,
 )
 from app.modules.attempt.repository import attempt_repository
 from app.modules.attempt.schemas import AttemptSummary
@@ -100,6 +101,17 @@ class AdminService:
     async def list_exams_admin(self, db: AsyncSession) -> list[AdminExamRow]:
         rows = await admin_repository.list_exams_admin(db)
         return [AdminExamRow(**row) for row in rows]
+
+    async def update_exam_admin(
+        self, db: AsyncSession, exam_id: int, data: UpdateExamAdminRequest
+    ) -> AdminExamRow:
+        from app.shared.exceptions import NotFound
+
+        values = data.model_dump(exclude_unset=True)
+        row = await admin_repository.update_exam_admin(db, exam_id, values)
+        if not row:
+            raise NotFound(f"Exam {exam_id} not found")
+        return AdminExamRow(**row)
 
     async def get_question_stats(
         self, db: AsyncSession, exam_id: int

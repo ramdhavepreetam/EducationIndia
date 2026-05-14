@@ -97,10 +97,10 @@ class QuestionService:
         if ongoing.scalar() is not None:
             return
 
-        from app.shared.access_control import get_access_context
+        from app.shared.access_control import get_access_context, has_exam_entitlement
 
         ctx = await get_access_context(parent_id, db)
-        if ctx.is_paid:
+        if ctx.is_paid and await has_exam_entitlement(parent_id, exam_id, db):
             return
         if exam_id != ctx.free_exam_id:
             raise Forbidden("upgrade_required_exam")

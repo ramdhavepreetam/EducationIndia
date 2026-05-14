@@ -73,8 +73,7 @@ async def _handle_payment_captured(data: dict, db: AsyncSession) -> dict:
         return {"status": "ok", "reason": "already_active"}
 
     # Calculate expiry
-    duration_str = await payment_repository.get_setting(db, "access_duration_months")
-    duration_months = int(duration_str) if duration_str else 5
+    duration_months = int(sub.get("duration_months") or 5)
     expires_at = datetime.now(timezone.utc) + relativedelta(months=duration_months)
 
     # Activate

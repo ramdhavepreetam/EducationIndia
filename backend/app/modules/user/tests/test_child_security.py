@@ -175,7 +175,8 @@ class TestChildSecurity:
             # Mock access context as paid user (ADR-014)
             from app.shared.access_control import AccessContext
             mock_ctx.return_value = AccessContext(
-                parent_id=parent_id, is_paid=True, free_exam_id=1, free_max_attempts=3
+                parent_id=parent_id, is_paid=True, free_exam_id=1, free_max_attempts=3,
+                entitled_exam_ids={1}
             )
 
             mock_repo.get_ongoing_attempt = AsyncMock(return_value=None)

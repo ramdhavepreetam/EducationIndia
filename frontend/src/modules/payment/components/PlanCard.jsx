@@ -2,12 +2,13 @@ import React from 'react'
 
 export const PlanCard = ({ plan }) => {
     if (!plan) return null
+    const entitlementLabels = (plan.entitlements || []).map(e => e.label || e.scope_type)
 
     return (
         <div className="bg-white border rounded-lg shadow-sm overflow-hidden flex flex-col h-full transform transition hover:-translate-y-1 hover:shadow-md">
             <div className="px-6 py-8 flex-1">
-                <h3 className="text-xl font-bold text-gray-900 text-center mb-2">Full Access</h3>
-                <p className="text-center text-gray-500 mb-6">Unlock all premium features</p>
+                <h3 className="text-xl font-bold text-gray-900 text-center mb-2">{plan.name}</h3>
+                <p className="text-center text-gray-500 mb-6">{plan.description_en || 'Unlock premium exam access'}</p>
 
                 <div className="flex items-baseline justify-center mb-6">
                     <span className="text-4xl font-extrabold text-blue-600">₹{plan.price_inr}</span>
@@ -17,7 +18,11 @@ export const PlanCard = ({ plan }) => {
                 <ul className="space-y-4 mb-8">
                     <li className="flex items-start">
                         <span className="text-green-500 mr-2">✓</span>
-                        <span className="text-gray-700">All available exams & papers</span>
+                        <span className="text-gray-700">
+                            {entitlementLabels.length > 0
+                                ? entitlementLabels.join(', ')
+                                : 'Configured exam access'}
+                        </span>
                     </li>
                     <li className="flex items-start">
                         <span className="text-green-500 mr-2">✓</span>

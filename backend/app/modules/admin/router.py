@@ -30,6 +30,13 @@ from app.modules.admin.schemas import (
     UpdateSettingRequest,
     ExtendSubscriptionRequest,
     GrantSubscriptionRequest,
+    UpdateExamAdminRequest,
+)
+from app.modules.payment.schemas import (
+    PlanCreateRequest,
+    PlanEntitlementRequest,
+    PlanResponse,
+    PlanUpdateRequest,
 )
 
 router = APIRouter()
@@ -85,6 +92,17 @@ async def list_all_exams_admin(
     List ALL exams (active + inactive) with question counts for ExamPublisherPage.
     """
     return await admin_service.list_exams_admin(db)
+
+
+@router.patch("/catalog/exams/{exam_id}", response_model=AdminExamRow)
+async def admin_update_exam(
+    exam_id: int,
+    data: UpdateExamAdminRequest,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Update admin-editable exam metadata, including duration_minutes."""
+    return await admin_service.update_exam_admin(db, exam_id, data)
 
 
 @router.put("/catalog/exams/{exam_id}/publish", response_model=PublishExamResponse)
@@ -153,17 +171,10 @@ async def update_setting(
 ):
     """
     Updates one app_settings row. Admin only.
-    If key=payment_amount_inr, also syncs subscription_plans.price_inr.
+    Plan pricing is managed through /api/admin/plans.
     """
     from app.modules.payment.repository import payment_repository
     await payment_repository.update_setting(db, key, body.value, admin.id)
-
-    # Sync plan price when amount changes
-    if key == "payment_amount_inr":
-        try:
-            await payment_repository.sync_plan_price(db, int(body.value))
-        except (ValueError, TypeError):
-            pass
 
     return {"key": key, "value": body.value, "status": "updated"}
 
@@ -178,6 +189,73 @@ async def list_subscriptions(
     """All subscriptions with parent info. Admin only. Paginated."""
     from app.modules.payment.repository import payment_repository
     return await payment_repository.get_all_subscriptions_admin(db, page=page, limit=limit)
+
+
+@router.get("/plans", response_model=list[PlanResponse])
+async def list_plans_admin(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """List all plans, active and inactive, with entitlement summaries."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_all_plans_admin(db)
+
+
+@router.post("/plans", response_model=PlanResponse, status_code=status.HTTP_201_CREATED)
+async def create_plan_admin(
+    body: PlanCreateRequest,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Create a subscription plan and optional entitlement rows."""
+    from app.modules.payment.service import payment_service
+    return await payment_service.create_plan(db, body)
+
+
+@router.get("/plans/scope-options")
+async def get_plan_scope_options_admin(
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Catalog selector options used by the plan entitlement admin UI."""
+    from app.modules.payment.repository import payment_repository
+    return await payment_repository.get_plan_scope_options(db)
+
+
+@router.put("/plans/{plan_id}", response_model=PlanResponse)
+async def update_plan_admin(
+    plan_id: int,
+    body: PlanUpdateRequest,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Update subscription plan metadata, pricing, duration, or active status."""
+    from app.modules.payment.service import payment_service
+    return await payment_service.update_plan(db, plan_id, body)
+
+
+@router.post("/plans/{plan_id}/entitlements", response_model=PlanResponse, status_code=status.HTTP_201_CREATED)
+async def add_plan_entitlement_admin(
+    plan_id: int,
+    body: PlanEntitlementRequest,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Add a catalog scope entitlement to a plan."""
+    from app.modules.payment.service import payment_service
+    return await payment_service.add_plan_entitlement(db, plan_id, body)
+
+
+@router.delete("/plans/{plan_id}/entitlements/{entitlement_id}", response_model=PlanResponse)
+async def delete_plan_entitlement_admin(
+    plan_id: int,
+    entitlement_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """Remove a catalog scope entitlement from a plan."""
+    from app.modules.payment.service import payment_service
+    return await payment_service.delete_plan_entitlement(db, plan_id, entitlement_id)
 
 
 @router.post("/subscriptions/{sub_id}/extend")

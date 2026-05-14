@@ -38,11 +38,7 @@ export const AdminSettingsPage = () => {
                 prev.map((s) => (s.key === key ? { ...s, value, updated_at: new Date().toISOString() } : s))
             )
 
-            if (key === 'payment_amount_inr') {
-                showToast(`Price updated to ₹${value}. All upgrade pages now show the new price.`)
-            } else {
-                showToast(`Setting ${key} updated successfully.`)
-            }
+            showToast(`Setting ${key} updated successfully.`)
         } catch (err) {
             setError(`Failed to save ${key}`)
         } finally {
@@ -106,7 +102,7 @@ export const AdminSettingsPage = () => {
             )}
 
             {/* Sections based on ADR spec */}
-            {renderGroup('Pricing Configuration', ['payment_amount_inr', 'access_duration_months'])}
+            {renderGroup('Legacy Payment Defaults', ['access_duration_months'])}
 
             {renderGroup('Free Tier Limits', ['free_tier_exam_id', 'free_tier_max_attempts'])}
 

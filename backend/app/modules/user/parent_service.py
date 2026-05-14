@@ -149,7 +149,7 @@ class ParentService:
         # Check 2: attempt belongs to this child_profile
         attempt = await db.execute(
             text("""
-                SELECT id, status
+                SELECT id, status, exam_id
                 FROM attempts
                 WHERE id = :aid
                 AND child_profile_id = :cid
@@ -166,7 +166,7 @@ class ParentService:
 
         # Check 4: paid tier check (ADR-014)
         ctx = await get_access_context(parent_id, db)
-        include_details = can_see_full_analysis(ctx)
+        include_details = await can_see_full_analysis(ctx, attempt_row["exam_id"], db)
 
         # Check 5: build and return
         return await build_wrong_answers_summary(
@@ -204,7 +204,8 @@ class ParentService:
                     a.grade,
                     e.title_en      AS exam_title_en,
                     e.title_mr      AS exam_title_mr,
-                    e.paper_code
+                    e.paper_code,
+                    a.exam_id
                 FROM attempts a
                 JOIN exams e ON e.id = a.exam_id
                 WHERE a.child_profile_id = :cid
@@ -230,7 +231,7 @@ class ParentService:
 
         # Paid tier check (ADR-014)
         ctx = await get_access_context(parent_id, db)
-        include_details = can_see_full_analysis(ctx)
+        include_details = await can_see_full_analysis(ctx, latest["exam_id"], db)
 
         # Get wrong answers (limit to 5 for dashboard card)
         summary = await build_wrong_answers_summary(

@@ -73,7 +73,8 @@ class AdminRepository:
                     SELECT
                         e.id, e.paper_code, e.set_code,
                         e.title_en, e.title_mr,
-                        e.is_active, e.total_questions,
+                        e.is_active, e.total_questions, e.total_marks,
+                        e.marks_per_question, e.duration_minutes,
                         ev.title_en AS event_title,
                         ev.year AS event_year,
                         ev.std_class AS std_class,
@@ -87,6 +88,24 @@ class AdminRepository:
             )
         ).mappings().all()
         return [dict(row) for row in rows]
+
+    async def update_exam_admin(self, db: AsyncSession, exam_id: int, values: dict) -> dict | None:
+        if not values:
+            rows = await self.list_exams_admin(db)
+            return next((row for row in rows if row["id"] == exam_id), None)
+
+        assignments = [f"{key} = :{key}" for key in values]
+        params = {**values, "exam_id": exam_id}
+        await db.execute(
+            text(f"""
+                UPDATE exams
+                SET {", ".join(assignments)}
+                WHERE id = :exam_id
+            """),
+            params,
+        )
+        rows = await self.list_exams_admin(db)
+        return next((row for row in rows if row["id"] == exam_id), None)
 
     async def get_question_stats(self, db: AsyncSession, exam_id: int) -> list[dict]:
         rows = (

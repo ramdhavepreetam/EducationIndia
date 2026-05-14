@@ -134,10 +134,16 @@ class AnalysisService:
             raise Forbidden("Not authorized to view this report")
 
         # Access control gate (ADR-014)
-        from app.shared.access_control import get_access_context, can_see_full_analysis, get_tier
+        from app.shared.access_control import get_access_context, can_see_full_analysis
         ctx = await get_access_context(user_id, db) if role == "parent" else None
 
-        if role == "parent" and ctx is not None and not can_see_full_analysis(ctx):
+        has_full_access = (
+            role != "parent"
+            or ctx is None
+            or await can_see_full_analysis(ctx, attempt.exam_id, db)
+        )
+
+        if role == "parent" and ctx is not None and not has_full_access:
             return ReportFreeSchema(
                 attempt_id=str(attempt.id),
                 exam_id=attempt.exam_id,
@@ -170,7 +176,7 @@ class AnalysisService:
             topic_scores=attempt.topic_scores or [],
             time_analysis=attempt.time_analysis or {},
             recommendations=attempt.recommendations or [],
-            tier=get_tier(ctx) if role == "parent" and ctx is not None else "paid",
+            tier="paid" if has_full_access else "free",
         )
 
 # singleton

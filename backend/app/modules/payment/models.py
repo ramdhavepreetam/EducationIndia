@@ -35,7 +35,29 @@ class SubscriptionPlan(Base):
     price_inr: Mapped[int] = mapped_column(Integer, nullable=False)
     max_children: Mapped[int] = mapped_column(Integer, server_default="999")
     features: Mapped[dict] = mapped_column(JSONB, server_default="{}")
+    description_en: Mapped[str | None] = mapped_column(Text)
+    description_mr: Mapped[str | None] = mapped_column(Text)
+    display_order: Mapped[int] = mapped_column(Integer, server_default="1")
     is_active: Mapped[bool] = mapped_column(Boolean, server_default="true")
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True), server_default=func.now()
+    )
+
+
+class SubscriptionPlanEntitlement(Base):
+    """Catalog scope rules attached to a subscription plan."""
+    __tablename__ = "subscription_plan_entitlements"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    plan_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("subscription_plans.id", ondelete="CASCADE"), nullable=False
+    )
+    scope_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    board_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("exam_boards.id", ondelete="CASCADE"))
+    category_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("exam_categories.id", ondelete="CASCADE"))
+    std_class: Mapped[int | None] = mapped_column(SmallInteger)
+    event_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("exam_events.id", ondelete="CASCADE"))
+    exam_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("exams.id", ondelete="CASCADE"))
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), server_default=func.now()
     )

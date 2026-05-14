@@ -18,6 +18,9 @@ export const adminApi = {
     unpublishExam: (examId) =>
         apiClient.put(`/api/admin/catalog/exams/${examId}/unpublish`).then(r => r.data),
 
+    updateExam: (examId, data) =>
+        apiClient.patch(`/api/admin/catalog/exams/${examId}`, data).then(r => r.data),
+
     // ── Create new test set (event + Paper I + II) ───────────────────────────
     createEvent: (data) =>
         apiClient.post('/api/admin/catalog/events', data).then(r => r.data),

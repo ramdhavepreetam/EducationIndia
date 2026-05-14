@@ -11,14 +11,83 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 class PaymentRepository:
 
+    _plan_select = """
+        SELECT
+            sp.id,
+            sp.name,
+            sp.duration_months,
+            sp.price_inr,
+            sp.features,
+            sp.description_en,
+            sp.description_mr,
+            sp.display_order,
+            sp.is_active,
+            sp.created_at,
+            COALESCE(
+                jsonb_agg(
+                    jsonb_build_object(
+                        'id', spe.id,
+                        'scope_type', spe.scope_type,
+                        'board_id', spe.board_id,
+                        'category_id', spe.category_id,
+                        'std_class', spe.std_class,
+                        'event_id', spe.event_id,
+                        'exam_id', spe.exam_id,
+                        'label',
+                            CASE
+                                WHEN spe.scope_type = 'all' THEN 'All exams'
+                                WHEN spe.scope_type = 'board' THEN eb.name_en
+                                WHEN spe.scope_type = 'category' THEN ec.name_en
+                                WHEN spe.scope_type = 'std_class' THEN 'Class ' || spe.std_class::text
+                                WHEN spe.scope_type = 'event' THEN ee.title_en
+                                WHEN spe.scope_type = 'exam' THEN ex.title_en
+                                ELSE spe.scope_type
+                            END
+                    )
+                    ORDER BY spe.id
+                ) FILTER (WHERE spe.id IS NOT NULL),
+                '[]'::jsonb
+            ) AS entitlements
+        FROM subscription_plans sp
+        LEFT JOIN subscription_plan_entitlements spe ON spe.plan_id = sp.id
+        LEFT JOIN exam_boards eb ON eb.id = spe.board_id
+        LEFT JOIN exam_categories ec ON ec.id = spe.category_id
+        LEFT JOIN exam_events ee ON ee.id = spe.event_id
+        LEFT JOIN exams ex ON ex.id = spe.exam_id
+    """
+
     async def get_active_plan(self, db: AsyncSession) -> dict | None:
-        result = await db.execute(text("""
-            SELECT id, name, duration_months, price_inr, features
-            FROM subscription_plans
-            WHERE is_active = true
-            ORDER BY id
-            LIMIT 1
+        plans = await self.get_active_plans(db)
+        return plans[0] if plans else None
+
+    async def get_active_plans(self, db: AsyncSession) -> list[dict]:
+        result = await db.execute(text(f"""
+            {self._plan_select}
+            WHERE sp.is_active = true
+            GROUP BY sp.id
+            ORDER BY sp.display_order, sp.id
         """))
+        return [dict(row) for row in result.mappings().all()]
+
+    async def get_all_plans_admin(self, db: AsyncSession) -> list[dict]:
+        result = await db.execute(text(f"""
+            {self._plan_select}
+            GROUP BY sp.id
+            ORDER BY sp.is_active DESC, sp.display_order, sp.id
+        """))
+        return [dict(row) for row in result.mappings().all()]
+
+    async def get_plan_by_id(
+        self, db: AsyncSession, plan_id: int, *, active_only: bool = False
+    ) -> dict | None:
+        where = "WHERE sp.id = :plan_id"
+        if active_only:
+            where += " AND sp.is_active = true"
+        result = await db.execute(text(f"""
+            {self._plan_select}
+            {where}
+            GROUP BY sp.id
+        """), {"plan_id": plan_id})
         row = result.mappings().first()
         return dict(row) if row else None
 
@@ -43,7 +112,12 @@ class PaymentRepository:
 
     async def get_subscription_by_order_id(self, db: AsyncSession, order_id: str) -> dict | None:
         result = await db.execute(
-            text("SELECT * FROM subscriptions WHERE razorpay_order_id = :oid"),
+            text("""
+                SELECT s.*, sp.duration_months, sp.name AS plan_name
+                FROM subscriptions s
+                LEFT JOIN subscription_plans sp ON sp.id = s.plan_id
+                WHERE s.razorpay_order_id = :oid
+            """),
             {"oid": order_id},
         )
         row = result.mappings().first()
@@ -81,6 +155,10 @@ class PaymentRepository:
         return dict(row) if row else None
 
     async def get_active_subscription(self, db: AsyncSession, parent_id: UUID) -> dict | None:
+        subs = await self.get_active_subscriptions(db, parent_id)
+        return subs[0] if subs else None
+
+    async def get_active_subscriptions(self, db: AsyncSession, parent_id: UUID) -> list[dict]:
         result = await db.execute(
             text("""
                 SELECT s.*, sp.name as plan_name
@@ -88,12 +166,10 @@ class PaymentRepository:
                 LEFT JOIN subscription_plans sp ON sp.id = s.plan_id
                 WHERE s.parent_id = :pid AND s.status = 'active' AND s.expires_at > now()
                 ORDER BY s.expires_at DESC
-                LIMIT 1
             """),
             {"pid": str(parent_id)},
         )
-        row = result.mappings().first()
-        return dict(row) if row else None
+        return [dict(row) for row in result.mappings().all()]
 
     async def create_payment(
         self, db: AsyncSession, *, subscription_id: UUID, parent_id: UUID,
@@ -188,6 +264,91 @@ class PaymentRepository:
             """),
             {"val": value, "uid": str(admin_id), "k": key},
         )
+
+    async def create_plan(self, db: AsyncSession, data: dict) -> dict:
+        result = await db.execute(text("""
+            INSERT INTO subscription_plans
+                (name, duration_months, price_inr, features, description_en,
+                 description_mr, display_order, is_active)
+            VALUES
+                (:name, :duration_months, :price_inr, CAST(:features AS jsonb),
+                 :description_en, :description_mr, :display_order, true)
+            RETURNING id
+        """), {
+            "name": data["name"],
+            "duration_months": data["duration_months"],
+            "price_inr": data["price_inr"],
+            "features": data.get("features_json", "{}"),
+            "description_en": data.get("description_en"),
+            "description_mr": data.get("description_mr"),
+            "display_order": data.get("display_order", 1),
+        })
+        plan_id = result.scalar_one()
+        return await self.get_plan_by_id(db, plan_id)
+
+    async def update_plan(self, db: AsyncSession, plan_id: int, data: dict) -> dict | None:
+        if not data:
+            return await self.get_plan_by_id(db, plan_id)
+        assignments = []
+        params = {"plan_id": plan_id}
+        for key, value in data.items():
+            if key == "features_json":
+                assignments.append("features = CAST(:features_json AS jsonb)")
+            else:
+                assignments.append(f"{key} = :{key}")
+            params[key] = value
+        await db.execute(text(f"""
+            UPDATE subscription_plans
+            SET {", ".join(assignments)}
+            WHERE id = :plan_id
+        """), params)
+        return await self.get_plan_by_id(db, plan_id)
+
+    async def add_plan_entitlement(self, db: AsyncSession, plan_id: int, data: dict) -> dict:
+        result = await db.execute(text("""
+            INSERT INTO subscription_plan_entitlements
+                (plan_id, scope_type, board_id, category_id, std_class, event_id, exam_id)
+            VALUES
+                (:plan_id, :scope_type, :board_id, :category_id, :std_class, :event_id, :exam_id)
+            RETURNING id, scope_type, board_id, category_id, std_class, event_id, exam_id
+        """), {
+            "plan_id": plan_id,
+            "scope_type": data["scope_type"],
+            "board_id": data.get("board_id"),
+            "category_id": data.get("category_id"),
+            "std_class": data.get("std_class"),
+            "event_id": data.get("event_id"),
+            "exam_id": data.get("exam_id"),
+        })
+        return dict(result.mappings().first())
+
+    async def delete_plan_entitlement(
+        self, db: AsyncSession, plan_id: int, entitlement_id: int
+    ) -> bool:
+        result = await db.execute(text("""
+            DELETE FROM subscription_plan_entitlements
+            WHERE id = :entitlement_id AND plan_id = :plan_id
+        """), {"entitlement_id": entitlement_id, "plan_id": plan_id})
+        return result.rowcount > 0
+
+    async def get_plan_scope_options(self, db: AsyncSession) -> dict:
+        result = await db.execute(text("""
+            SELECT
+                COALESCE((SELECT jsonb_agg(jsonb_build_object('id', id, 'name_en', name_en, 'short_code', short_code) ORDER BY name_en)
+                          FROM exam_boards), '[]'::jsonb) AS boards,
+                COALESCE((SELECT jsonb_agg(jsonb_build_object('id', ec.id, 'board_id', ec.board_id, 'name_en', ec.name_en) ORDER BY ec.name_en)
+                          FROM exam_categories ec), '[]'::jsonb) AS categories,
+                COALESCE((SELECT jsonb_agg(jsonb_build_object('id', ee.id, 'board_id', ee.board_id, 'category_id', ee.category_id,
+                                                             'title_en', ee.title_en, 'std_class', ee.std_class, 'year', ee.year)
+                                      ORDER BY ee.year DESC, ee.title_en)
+                          FROM exam_events ee), '[]'::jsonb) AS events,
+                COALESCE((SELECT jsonb_agg(jsonb_build_object('id', e.id, 'event_id', e.event_id, 'title_en', e.title_en,
+                                                             'paper_code', e.paper_code, 'set_code', e.set_code)
+                                      ORDER BY e.id DESC)
+                          FROM exams e), '[]'::jsonb) AS exams
+        """))
+        row = result.mappings().first()
+        return dict(row) if row else {"boards": [], "categories": [], "events": [], "exams": []}
 
     async def get_all_subscriptions_admin(
         self, db: AsyncSession, page: int = 1, limit: int = 50

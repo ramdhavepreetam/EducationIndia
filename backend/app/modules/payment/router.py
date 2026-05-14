@@ -17,6 +17,7 @@ from app.database import get_db
 from app.main import limiter
 from app.modules.auth.dependencies import UserIdentity, verify_token
 from app.modules.payment.schemas import (
+    CreateOrderRequest,
     CreateOrderResponse,
     PaymentHistoryRow,
     PlanResponse,
@@ -29,13 +30,13 @@ from app.modules.payment.webhook_handler import handle_webhook
 router = APIRouter()
 
 
-@router.get("/plans", response_model=PlanResponse)
-async def get_plan(db: AsyncSession = Depends(get_db)):
+@router.get("/plans", response_model=list[PlanResponse])
+async def get_plans(db: AsyncSession = Depends(get_db)):
     """
-    Public — returns active plan with price.
+    Public — returns active plans with prices and entitlement summaries.
     No auth required (show price on landing page).
     """
-    return await payment_service.get_active_plan(db)
+    return await payment_service.get_active_plans(db)
 
 
 @router.get("/status", response_model=SubscriptionStatusResponse)
@@ -51,11 +52,12 @@ async def get_status(
 @limiter.limit("5/minute")
 async def create_order(
     request: Request,
+    body: CreateOrderRequest,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
     """Creates a Razorpay order and a pending subscription record."""
-    return await payment_service.create_order(identity.id, db)
+    return await payment_service.create_order(identity.id, db, body)
 
 
 @router.post("/verify", response_model=SubscriptionStatusResponse)

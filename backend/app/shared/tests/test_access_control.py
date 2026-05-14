@@ -20,12 +20,13 @@ from app.shared.access_control import (
 pytestmark = pytest.mark.asyncio
 
 
-def _ctx(is_paid: bool, free_exam_id: int = 1, free_max_attempts: int = 3):
+def _ctx(is_paid: bool, free_exam_id: int = 1, free_max_attempts: int = 3, entitled_exam_ids=None):
     return AccessContext(
         parent_id=uuid4(),
         is_paid=is_paid,
         free_exam_id=free_exam_id,
         free_max_attempts=free_max_attempts,
+        entitled_exam_ids=set(entitled_exam_ids or []),
     )
 
 
@@ -33,7 +34,7 @@ class TestCanStartExam:
 
     async def test_paid_user_can_access_all_exams(self):
         """Paid user can start any exam, including Paper II."""
-        ctx = _ctx(is_paid=True)
+        ctx = _ctx(is_paid=True, entitled_exam_ids={2})
         db = AsyncMock()
         allowed, reason = await can_start_exam(ctx, exam_id=2, child_profile_id=uuid4(), db=db)
         assert allowed is True
@@ -78,15 +79,20 @@ class TestCanStartExam:
 
 class TestAnalysisGates:
 
-    def test_paid_user_sees_full_analysis(self):
-        ctx = _ctx(is_paid=True)
-        assert can_see_full_analysis(ctx) is True
-        assert can_download_pdf(ctx) is True
+    async def test_paid_user_sees_full_analysis(self):
+        ctx = _ctx(is_paid=True, entitled_exam_ids={2})
+        db = AsyncMock()
+        assert await can_see_full_analysis(ctx, 2, db) is True
+        assert await can_download_pdf(ctx, 2, db) is True
 
-    def test_free_user_sees_score_only(self):
+    async def test_free_user_sees_score_only(self):
         ctx = _ctx(is_paid=False)
-        assert can_see_full_analysis(ctx) is False
-        assert can_download_pdf(ctx) is False
+        mock_result = MagicMock()
+        mock_result.all.return_value = []
+        db = AsyncMock()
+        db.execute = AsyncMock(return_value=mock_result)
+        assert await can_see_full_analysis(ctx, 2, db) is False
+        assert await can_download_pdf(ctx, 2, db) is False
 
 
 class TestGetTier:

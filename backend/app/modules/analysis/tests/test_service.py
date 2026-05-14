@@ -44,6 +44,7 @@ def service():
     mock_ctx.is_paid = True
     mock_ctx.free_exam_id = 1
     mock_ctx.free_max_attempts = 3
+    mock_ctx.entitled_exam_ids = {EXAM_ID}
     with patch("app.shared.access_control.get_access_context", AsyncMock(return_value=mock_ctx)):
         yield svc
 

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { usePaymentStore } from '../store/paymentStore'
 import { PlanCard } from '../components/PlanCard'
@@ -7,13 +6,21 @@ import { PaymentButton } from '../components/PaymentButton'
 
 export const UpgradePage = () => {
     const { t } = useTranslation()
-    const navigate = useNavigate()
-    const { plan, loadPlan, isLoading, error } = usePaymentStore()
+    const { plans, plan, loadPlan, isLoading, error } = usePaymentStore()
+    const [selectedPlanId, setSelectedPlanId] = useState(null)
 
     // Make sure we always load the fresh plan pricing
     useEffect(() => {
         loadPlan()
     }, [loadPlan])
+
+    useEffect(() => {
+        if (!selectedPlanId && (plans?.length || 0) > 0) {
+            setSelectedPlanId(plans[0].id)
+        }
+    }, [plans, selectedPlanId])
+
+    const selectedPlan = plans.find(p => p.id === selectedPlanId) || plan
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -43,8 +50,8 @@ export const UpgradePage = () => {
                         {t('common.try_again', 'Try Again')}
                     </button>
                 </div>
-            ) : plan ? (
-                <div className="flex flex-col lg:flex-row gap-8 max-w-5xl mx-auto relative align-start">
+            ) : plans.length > 0 ? (
+                <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto relative align-start">
 
                     {/* Free Tier Features Box */}
                     <div className="flex-1 bg-white rounded-lg border border-gray-200 p-8 shadow-sm">
@@ -80,18 +87,36 @@ export const UpgradePage = () => {
                     </div>
 
                     {/* Premium Plan Card */}
-                    <div className="flex-1 relative">
-                        <div className="absolute top-0 inset-x-0 h-2 bg-blue-600 rounded-t-lg z-10"></div>
-                        <PlanCard plan={plan} />
+                    <div className="flex-[1.5] grid gap-4 md:grid-cols-2">
+                        {plans.map(option => (
+                            <button
+                                type="button"
+                                key={option.id}
+                                onClick={() => setSelectedPlanId(option.id)}
+                                className={`relative text-left rounded-lg transition ${
+                                    selectedPlanId === option.id
+                                        ? 'ring-2 ring-blue-600 ring-offset-2'
+                                        : 'hover:ring-1 hover:ring-blue-200'
+                                }`}
+                            >
+                                {selectedPlanId === option.id && (
+                                    <div className="absolute top-0 inset-x-0 h-2 bg-blue-600 rounded-t-lg z-10"></div>
+                                )}
+                                <PlanCard plan={option} />
+                            </button>
+                        ))}
                     </div>
 
                 </div>
             ) : null}
 
             {/* Checkout Area */}
-            {plan && (
+            {selectedPlan && (
                 <div className="max-w-lg mx-auto mt-16 text-center">
-                    <PaymentButton planId={plan.id} />
+                    <PaymentButton planId={selectedPlan.id} />
+                    <p className="mt-3 text-sm text-gray-500">
+                        Selected plan: <span className="font-semibold text-gray-800">{selectedPlan.name}</span>
+                    </p>
                     <div className="mt-6 flex flex-wrap justify-center gap-4 text-gray-400 text-sm">
                         <span className="flex items-center">
                             <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path></svg>

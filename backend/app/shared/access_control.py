@@ -9,7 +9,7 @@ Usage in a service:
     allowed, reason = await can_start_exam(ctx, exam_id, child_id, db)
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 
 from sqlalchemy import text
@@ -22,6 +22,7 @@ class AccessContext:
     is_paid: bool
     free_exam_id: int
     free_max_attempts: int
+    entitled_exam_ids: set[int] = field(default_factory=set)
 
 
 async def get_access_context(
@@ -51,6 +52,46 @@ async def get_access_context(
     )
 
 
+async def get_accessible_exam_ids(
+    parent_id: UUID,
+    exam_ids: list[int],
+    db: AsyncSession,
+) -> set[int]:
+    """Return exam IDs covered by any active subscription for this parent."""
+    if not exam_ids:
+        return set()
+    result = await db.execute(
+        text("""
+            SELECT DISTINCT e.id
+            FROM exams e
+            JOIN exam_events ev ON ev.id = e.event_id
+            JOIN subscription_plan_entitlements spe ON (
+                spe.scope_type = 'all'
+                OR (spe.scope_type = 'board' AND spe.board_id = ev.board_id)
+                OR (spe.scope_type = 'category' AND spe.category_id = ev.category_id)
+                OR (spe.scope_type = 'std_class' AND spe.std_class = ev.std_class)
+                OR (spe.scope_type = 'event' AND spe.event_id = ev.id)
+                OR (spe.scope_type = 'exam' AND spe.exam_id = e.id)
+            )
+            JOIN subscriptions s ON s.plan_id = spe.plan_id
+            WHERE s.parent_id = :parent_id
+              AND s.status = 'active'
+              AND s.expires_at > now()
+              AND e.id = ANY(:exam_ids)
+        """),
+        {"parent_id": str(parent_id), "exam_ids": exam_ids},
+    )
+    return {int(row[0]) for row in result.all()}
+
+
+async def has_exam_entitlement(
+    parent_id: UUID,
+    exam_id: int,
+    db: AsyncSession,
+) -> bool:
+    return exam_id in await get_accessible_exam_ids(parent_id, [exam_id], db)
+
+
 async def can_start_exam(
     ctx: AccessContext,
     exam_id: int,
@@ -61,7 +102,10 @@ async def can_start_exam(
     Returns (allowed, reason).
     reason is used by the frontend to show the correct UpgradePrompt.
     """
-    if ctx.is_paid:
+    if exam_id in ctx.entitled_exam_ids:
+        return True, ""
+
+    if ctx.is_paid and await has_exam_entitlement(ctx.parent_id, exam_id, db):
         return True, ""
 
     if exam_id != ctx.free_exam_id:
@@ -85,12 +129,14 @@ async def can_start_exam(
     return True, ""
 
 
-def can_see_full_analysis(ctx: AccessContext) -> bool:
-    return ctx.is_paid
+async def can_see_full_analysis(ctx: AccessContext, exam_id: int, db: AsyncSession) -> bool:
+    if exam_id in ctx.entitled_exam_ids:
+        return True
+    return ctx.is_paid and await has_exam_entitlement(ctx.parent_id, exam_id, db)
 
 
-def can_download_pdf(ctx: AccessContext) -> bool:
-    return ctx.is_paid
+async def can_download_pdf(ctx: AccessContext, exam_id: int, db: AsyncSession) -> bool:
+    return await can_see_full_analysis(ctx, exam_id, db)
 
 
 def get_tier(ctx: AccessContext) -> str:

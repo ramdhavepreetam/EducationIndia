@@ -58,6 +58,14 @@ export const useAdminStore = create((set, get) => ({
         }
     },
 
+    updateExam: async (examId, data) => {
+        const updated = await adminApi.updateExam(examId, data)
+        set(state => ({
+            exams: state.exams.map(ex => ex.id === examId ? updated : ex)
+        }))
+        return updated
+    },
+
     // ── Create Test (Event) ───────────────────────────────────────────────────
     createTestLoading: false,
     createTestError: null,

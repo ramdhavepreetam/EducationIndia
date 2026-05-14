@@ -58,16 +58,20 @@ class CatalogService:
         List exams with access flags for a parent (ADR-014).
         Returns dicts with is_accessible and lock_reason fields.
         """
-        from app.shared.access_control import get_access_context
+        from app.shared.access_control import get_access_context, get_accessible_exam_ids
 
         exams = await catalog_repository.list_exams(
             db, board_id=board_id, std_class=std_class, year=year, include_inactive=False,
         )
         ctx = await get_access_context(parent_id, db)
+        entitled_ids = (
+            await get_accessible_exam_ids(parent_id, [exam.id for exam in exams], db)
+            if ctx.is_paid else set()
+        )
 
         result = []
         for exam in exams:
-            is_accessible = ctx.is_paid or (exam.id == ctx.free_exam_id)
+            is_accessible = exam.id in entitled_ids or (exam.id == ctx.free_exam_id)
             result.append({
                 "id": exam.id,
                 "event_id": exam.event_id,

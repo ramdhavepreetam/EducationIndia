@@ -10,6 +10,7 @@ Rules:
 
 import hashlib
 import hmac
+import json
 from datetime import datetime, timezone
 from uuid import UUID
 
@@ -21,7 +22,11 @@ from app.modules.payment.razorpay_client import get_client
 from app.modules.payment.repository import payment_repository
 from app.modules.payment.schemas import (
     CreateOrderResponse,
+    CreateOrderRequest,
+    PlanCreateRequest,
+    PlanEntitlementRequest,
     PlanResponse,
+    PlanUpdateRequest,
     SubscriptionStatusResponse,
     VerifyPaymentRequest,
     PaymentHistoryRow,
@@ -32,22 +37,26 @@ from app.shared.exceptions import BadRequest, NotFound
 class PaymentService:
 
     async def get_active_plan(self, db: AsyncSession) -> PlanResponse:
-        """Returns the active subscription plan with pricing from DB."""
         plan = await payment_repository.get_active_plan(db)
         if not plan:
             raise NotFound("No active subscription plan found")
         return PlanResponse(**plan)
 
+    async def get_active_plans(self, db: AsyncSession) -> list[PlanResponse]:
+        """Returns active subscription plans with entitlement summaries."""
+        plans = await payment_repository.get_active_plans(db)
+        return [PlanResponse(**plan) for plan in plans]
+
     async def create_order(
-        self, parent_id: UUID, db: AsyncSession
+        self, parent_id: UUID, db: AsyncSession, request: CreateOrderRequest
     ) -> CreateOrderResponse:
         """
-        1. Load active plan (price from DB)
+        1. Load selected active plan (price from DB)
         2. Create Razorpay order
         3. Create pending subscription row
         4. Return order details for frontend checkout
         """
-        plan = await payment_repository.get_active_plan(db)
+        plan = await payment_repository.get_plan_by_id(db, request.plan_id, active_only=True)
         if not plan:
             raise NotFound("No active subscription plan found")
 
@@ -111,8 +120,7 @@ class PaymentService:
             return await self.get_status(parent_id, db)
 
         # 3. Calculate expiry
-        duration_str = await payment_repository.get_setting(db, "access_duration_months")
-        duration_months = int(duration_str) if duration_str else 5
+        duration_months = int(sub.get("duration_months") or 5)
         expires_at = datetime.now(timezone.utc) + relativedelta(months=duration_months)
 
         # 4. Activate subscription (conditional UPDATE — returns None if already active,
@@ -142,10 +150,11 @@ class PaymentService:
         self, parent_id: UUID, db: AsyncSession
     ) -> SubscriptionStatusResponse:
         """Active subscription status for a parent. Returns is_active=false if none."""
-        sub = await payment_repository.get_active_subscription(db, parent_id)
-        if not sub:
+        subs = await payment_repository.get_active_subscriptions(db, parent_id)
+        if not subs:
             return SubscriptionStatusResponse(is_active=False)
 
+        sub = subs[0]
         days_remaining = None
         if sub["expires_at"]:
             delta = sub["expires_at"] - datetime.now(timezone.utc)
@@ -157,6 +166,15 @@ class PaymentService:
             days_remaining=days_remaining,
             plan_name=sub.get("plan_name"),
             amount_paid=sub.get("amount_paid_inr"),
+            active_subscriptions=[
+                {
+                    "id": str(row["id"]),
+                    "plan_name": row.get("plan_name"),
+                    "expires_at": row.get("expires_at"),
+                    "amount_paid": row.get("amount_paid_inr"),
+                }
+                for row in subs
+            ],
         )
 
     async def get_payment_history(
@@ -164,6 +182,44 @@ class PaymentService:
     ) -> list[PaymentHistoryRow]:
         rows = await payment_repository.get_payment_history(db, parent_id, page=page, limit=limit)
         return [PaymentHistoryRow(**{**r, "id": str(r["id"])}) for r in rows]
+
+    async def create_plan(self, db: AsyncSession, data: PlanCreateRequest) -> PlanResponse:
+        payload = data.model_dump(exclude={"entitlements"})
+        payload["features_json"] = json.dumps(payload.pop("features") or {})
+        plan = await payment_repository.create_plan(db, payload)
+        for entitlement in data.entitlements:
+            await payment_repository.add_plan_entitlement(
+                db, plan["id"], entitlement.model_dump()
+            )
+        return PlanResponse(**(await payment_repository.get_plan_by_id(db, plan["id"])))
+
+    async def update_plan(
+        self, db: AsyncSession, plan_id: int, data: PlanUpdateRequest
+    ) -> PlanResponse:
+        payload = data.model_dump(exclude_unset=True)
+        if "features" in payload:
+            payload["features_json"] = json.dumps(payload.pop("features") or {})
+        plan = await payment_repository.update_plan(db, plan_id, payload)
+        if not plan:
+            raise NotFound("Plan not found")
+        return PlanResponse(**plan)
+
+    async def add_plan_entitlement(
+        self, db: AsyncSession, plan_id: int, data: PlanEntitlementRequest
+    ) -> PlanResponse:
+        plan = await payment_repository.get_plan_by_id(db, plan_id)
+        if not plan:
+            raise NotFound("Plan not found")
+        await payment_repository.add_plan_entitlement(db, plan_id, data.model_dump())
+        return PlanResponse(**(await payment_repository.get_plan_by_id(db, plan_id)))
+
+    async def delete_plan_entitlement(
+        self, db: AsyncSession, plan_id: int, entitlement_id: int
+    ) -> PlanResponse:
+        deleted = await payment_repository.delete_plan_entitlement(db, plan_id, entitlement_id)
+        if not deleted:
+            raise NotFound("Entitlement not found")
+        return PlanResponse(**(await payment_repository.get_plan_by_id(db, plan_id)))
 
 
 # Module-level singleton

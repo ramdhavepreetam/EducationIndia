@@ -29,6 +29,15 @@ class GrantSubscriptionRequest(BaseModel):
     months: int = Field(default=5, ge=1, le=120)
 
 
+class UpdateExamAdminRequest(BaseModel):
+    title_en: Optional[str] = Field(default=None, min_length=1)
+    title_mr: Optional[str] = None
+    total_questions: Optional[int] = Field(default=None, ge=1, le=300)
+    total_marks: Optional[int] = Field(default=None, ge=1, le=1000)
+    marks_per_question: Optional[int] = Field(default=None, ge=1, le=20)
+    duration_minutes: Optional[int] = Field(default=None, ge=1, le=360)
+
+
 # ── Student dashboard ──────────────────────────────────────────────────────────
 
 class StudentDashboardStats(BaseModel):
@@ -85,6 +94,9 @@ class AdminExamRow(BaseModel):
     title_mr: Optional[str]
     is_active: bool
     total_questions: int              # from schema (expected)
+    total_marks: int
+    marks_per_question: int
+    duration_minutes: int
     question_count: int               # actual count in questions table
     event_title: Optional[str]
     event_year: Optional[int]

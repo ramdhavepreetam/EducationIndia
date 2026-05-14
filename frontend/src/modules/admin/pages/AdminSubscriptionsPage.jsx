@@ -25,6 +25,13 @@ const TXN_STATUS_BADGE = {
 }
 
 const TXN_STATUS_LABEL = { captured: 'Paid', failed: 'Failed', refunded: 'Refunded', created: 'Pending' }
+const SCOPE_TARGET_KEY = {
+    board: 'board_id',
+    category: 'category_id',
+    std_class: 'std_class',
+    event: 'event_id',
+    exam: 'exam_id',
+}
 
 function StatusBadge({ status, map }) {
     return (
@@ -47,6 +54,230 @@ function CopyBtn({ text }) {
                 : <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
             }
         </button>
+    )
+}
+
+function getScopeOptions(scopeType, scopeOptions) {
+    if (scopeType === 'board') return scopeOptions.boards || []
+    if (scopeType === 'category') return scopeOptions.categories || []
+    if (scopeType === 'event') return scopeOptions.events || []
+    if (scopeType === 'exam') return scopeOptions.exams || []
+    if (scopeType === 'std_class') return [{ id: 5, label: 'Class 5' }, { id: 8, label: 'Class 8' }]
+    return []
+}
+
+function optionLabel(scopeType, option) {
+    if (scopeType === 'std_class') return option.label
+    if (scopeType === 'board') return `${option.name_en} (${option.short_code})`
+    if (scopeType === 'category') return option.name_en
+    if (scopeType === 'event') return `${option.title_en} · Class ${option.std_class} · ${option.year}`
+    if (scopeType === 'exam') return `${option.title_en} · ${option.paper_code}-${option.set_code}`
+    return ''
+}
+
+function buildEntitlement(scopeType, targetValue) {
+    const payload = { scope_type: scopeType }
+    if (scopeType !== 'all') payload[SCOPE_TARGET_KEY[scopeType]] = Number(targetValue)
+    return payload
+}
+
+function PlanManager({ plans, scopeOptions, onReload }) {
+    const [planForm, setPlanForm] = useState({
+        name: '',
+        price_inr: 499,
+        duration_months: 5,
+        description_en: '',
+        display_order: 1,
+        scope_type: 'all',
+        target: '',
+    })
+    const [scopeForm, setScopeForm] = useState({
+        plan_id: plans[0]?.id || '',
+        scope_type: 'all',
+        target: '',
+    })
+    const [busy, setBusy] = useState(false)
+    const [message, setMessage] = useState(null)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        if (!scopeForm.plan_id && plans[0]?.id) {
+            setScopeForm(f => ({ ...f, plan_id: plans[0].id }))
+        }
+    }, [plans, scopeForm.plan_id])
+
+    const targetOptions = getScopeOptions(planForm.scope_type, scopeOptions)
+    const addTargetOptions = getScopeOptions(scopeForm.scope_type, scopeOptions)
+
+    const createPlan = async (e) => {
+        e.preventDefault()
+        setBusy(true); setError(null); setMessage(null)
+        try {
+            const entitlement = buildEntitlement(planForm.scope_type, planForm.target)
+            await settingsApi.createPlan({
+                name: planForm.name,
+                price_inr: Number(planForm.price_inr),
+                duration_months: Number(planForm.duration_months),
+                description_en: planForm.description_en || null,
+                display_order: Number(planForm.display_order),
+                features: {},
+                entitlements: [entitlement],
+            })
+            setPlanForm(f => ({ ...f, name: '', description_en: '' }))
+            setMessage('Plan created.')
+            await onReload()
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to create plan')
+        } finally {
+            setBusy(false)
+        }
+    }
+
+    const addScope = async (e) => {
+        e.preventDefault()
+        if (!scopeForm.plan_id) return
+        setBusy(true); setError(null); setMessage(null)
+        try {
+            await settingsApi.addPlanEntitlement(
+                scopeForm.plan_id,
+                buildEntitlement(scopeForm.scope_type, scopeForm.target)
+            )
+            setMessage('Scope added.')
+            await onReload()
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to add scope')
+        } finally {
+            setBusy(false)
+        }
+    }
+
+    const togglePlan = async (plan) => {
+        setBusy(true); setError(null); setMessage(null)
+        try {
+            await settingsApi.updatePlan(plan.id, { is_active: !plan.is_active })
+            setMessage(plan.is_active ? 'Plan deactivated.' : 'Plan activated.')
+            await onReload()
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to update plan')
+        } finally {
+            setBusy(false)
+        }
+    }
+
+    const deleteScope = async (planId, entitlementId) => {
+        setBusy(true); setError(null); setMessage(null)
+        try {
+            await settingsApi.deletePlanEntitlement(planId, entitlementId)
+            setMessage('Scope removed.')
+            await onReload()
+        } catch (err) {
+            setError(err.response?.data?.detail || 'Failed to remove scope')
+        } finally {
+            setBusy(false)
+        }
+    }
+
+    return (
+        <div className="space-y-6">
+            {message && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">{message}</div>}
+            {error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{error}</div>}
+
+            <form onSubmit={createPlan} className="bg-white border border-gray-200 rounded-xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
+                <div className="md:col-span-2">
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Plan Name</label>
+                    <input required value={planForm.name} onChange={e => setPlanForm(f => ({ ...f, name: e.target.value }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="MSCE 8th Access" />
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Price</label>
+                    <input type="number" min="0" value={planForm.price_inr} onChange={e => setPlanForm(f => ({ ...f, price_inr: e.target.value }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm" />
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Months</label>
+                    <input type="number" min="1" value={planForm.duration_months} onChange={e => setPlanForm(f => ({ ...f, duration_months: e.target.value }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm" />
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Scope</label>
+                    <select value={planForm.scope_type} onChange={e => setPlanForm(f => ({ ...f, scope_type: e.target.value, target: '' }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        {['all', 'std_class', 'board', 'category', 'event', 'exam'].map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                </div>
+                {planForm.scope_type !== 'all' && (
+                    <div>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Target</label>
+                        <select required value={planForm.target} onChange={e => setPlanForm(f => ({ ...f, target: e.target.value }))}
+                            className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                            <option value="">Select</option>
+                            {targetOptions.map(o => <option key={o.id} value={o.id}>{optionLabel(planForm.scope_type, o)}</option>)}
+                        </select>
+                    </div>
+                )}
+                <div className="md:col-span-5">
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                    <input value={planForm.description_en} onChange={e => setPlanForm(f => ({ ...f, description_en: e.target.value }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Access for selected exam products" />
+                </div>
+                <button disabled={busy} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Create Plan</button>
+            </form>
+
+            <form onSubmit={addScope} className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-wrap gap-3 items-end">
+                <div className="w-56">
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Add Scope To</label>
+                    <select value={scopeForm.plan_id} onChange={e => setScopeForm(f => ({ ...f, plan_id: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        {plans.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                    </select>
+                </div>
+                <div className="w-40">
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Scope</label>
+                    <select value={scopeForm.scope_type} onChange={e => setScopeForm(f => ({ ...f, scope_type: e.target.value, target: '' }))}
+                        className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                        {['all', 'std_class', 'board', 'category', 'event', 'exam'].map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                </div>
+                {scopeForm.scope_type !== 'all' && (
+                    <div className="min-w-64 flex-1">
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Target</label>
+                        <select required value={scopeForm.target} onChange={e => setScopeForm(f => ({ ...f, target: e.target.value }))}
+                            className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
+                            <option value="">Select</option>
+                            {addTargetOptions.map(o => <option key={o.id} value={o.id}>{optionLabel(scopeForm.scope_type, o)}</option>)}
+                        </select>
+                    </div>
+                )}
+                <button disabled={busy || !scopeForm.plan_id} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Add Scope</button>
+            </form>
+
+            <div className="grid gap-4">
+                {plans.map(plan => (
+                    <div key={plan.id} className="bg-white border border-gray-200 rounded-xl p-5">
+                        <div className="flex justify-between gap-4">
+                            <div>
+                                <h3 className="font-semibold text-gray-900">{plan.name}</h3>
+                                <p className="text-sm text-gray-500">{plan.description_en || 'No description'}</p>
+                                <p className="text-sm text-gray-700 mt-1">{fmtINR(plan.price_inr)} · {plan.duration_months} months</p>
+                            </div>
+                            <button onClick={() => togglePlan(plan)} disabled={busy}
+                                className={`h-9 px-3 rounded-lg text-sm font-medium ${plan.is_active ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
+                                {plan.is_active ? 'Deactivate' : 'Activate'}
+                            </button>
+                        </div>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            {(plan.entitlements || []).length === 0 && <span className="text-xs text-gray-400">No scopes configured</span>}
+                            {(plan.entitlements || []).map(ent => (
+                                <span key={ent.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">
+                                    {ent.label || ent.scope_type}
+                                    <button onClick={() => deleteScope(plan.id, ent.id)} className="text-gray-400 hover:text-red-600">×</button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
     )
 }
 
@@ -343,11 +574,12 @@ function RevenueChart() {
 export const AdminSubscriptionsPage = () => {
     const [subscriptions, setSubscriptions] = useState([])
     const [plans, setPlans]       = useState([])
+    const [scopeOptions, setScopeOptions] = useState({ boards: [], categories: [], events: [], exams: [] })
     const [stats, setStats]       = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError]       = useState(null)
 
-    const [mainTab, setMainTab]   = useState('subscriptions')   // subscriptions | transactions
+    const [mainTab, setMainTab]   = useState('subscriptions')   // subscriptions | plans | transactions
     const [subFilter, setSubFilter] = useState('All')
     const [searchQuery, setSearchQuery] = useState('')
     const [actionLoadingId, setActionLoadingId] = useState(null)
@@ -370,10 +602,11 @@ export const AdminSubscriptionsPage = () => {
         setIsLoading(true)
         setError(null)
         try {
-            const [subsResult, statsResult, plansResult] = await Promise.allSettled([
+            const [subsResult, statsResult, plansResult, scopeOptionsResult] = await Promise.allSettled([
                 settingsApi.fetchSubscriptions(),
                 settingsApi.fetchPaymentStats(),
                 settingsApi.fetchPlans(),
+                settingsApi.fetchPlanScopeOptions(),
             ])
 
             if (subsResult.status === 'fulfilled') {
@@ -392,6 +625,10 @@ export const AdminSubscriptionsPage = () => {
                 const arr = Array.isArray(plansData) ? plansData : plansData?.plans ? plansData.plans : [plansData]
                 setPlans(arr.filter(Boolean))
                 if (arr[0]?.id) setGrantPlanId(arr[0].id)
+            }
+
+            if (scopeOptionsResult.status === 'fulfilled') {
+                setScopeOptions(scopeOptionsResult.value)
             }
         } finally {
             setIsLoading(false)
@@ -524,6 +761,7 @@ export const AdminSubscriptionsPage = () => {
                 <nav className="-mb-px flex space-x-8">
                     {[
                         { key: 'subscriptions', label: 'Subscriptions', count: subscriptions.length },
+                        { key: 'plans',          label: 'Plans',          count: plans.length },
                         { key: 'transactions',  label: 'Transactions',  count: null },
                     ].map(t => (
                         <button
@@ -741,6 +979,10 @@ export const AdminSubscriptionsPage = () => {
                         </div>
                     )}
                 </div>
+            )}
+
+            {mainTab === 'plans' && (
+                <PlanManager plans={plans} scopeOptions={scopeOptions} onReload={loadAll} />
             )}
 
             {/* ── Transactions tab ── */}

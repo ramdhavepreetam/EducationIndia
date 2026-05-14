@@ -17,7 +17,22 @@ export const settingsApi = {
         apiClient.post('/api/admin/subscriptions/grant', { email, plan_id: planId, months }).then(r => r.data),
 
     fetchPlans: () =>
-        apiClient.get('/api/payment/plans').then(r => r.data),
+        apiClient.get('/api/admin/plans').then(r => r.data),
+
+    createPlan: (data) =>
+        apiClient.post('/api/admin/plans', data).then(r => r.data),
+
+    updatePlan: (planId, data) =>
+        apiClient.put(`/api/admin/plans/${planId}`, data).then(r => r.data),
+
+    addPlanEntitlement: (planId, data) =>
+        apiClient.post(`/api/admin/plans/${planId}/entitlements`, data).then(r => r.data),
+
+    deletePlanEntitlement: (planId, entitlementId) =>
+        apiClient.delete(`/api/admin/plans/${planId}/entitlements/${entitlementId}`).then(r => r.data),
+
+    fetchPlanScopeOptions: () =>
+        apiClient.get('/api/admin/plans/scope-options').then(r => r.data),
 
     // Payment analytics
     fetchPaymentStats: () =>

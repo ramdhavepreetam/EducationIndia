@@ -54,3 +54,4 @@ the reversal is safe. Do not add new standalone SQL files outside Alembic.
 - `0002_adr013_014`
 - `0003_multi_select_questions`
 - `0004_security_advisor_hardening`
+- `0005_scoped_subs`

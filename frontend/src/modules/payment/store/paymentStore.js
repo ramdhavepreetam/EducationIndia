@@ -8,6 +8,7 @@ import { useAuthStore } from '@/modules/auth/store/authStore'
  * and completely encapsulating the Razorpay checkout flow.
  */
 export const usePaymentStore = create((set, get) => ({
+    plans: [],
     plan: null,
     status: null,
     lastPayment: null,   // populated after successful payment for receipt display
@@ -20,8 +21,9 @@ export const usePaymentStore = create((set, get) => ({
     loadPlan: async () => {
         set({ isLoading: true, error: null })
         try {
-            const plan = await paymentApi.getPlans()
-            set({ plan, isLoading: false })
+            const plans = await paymentApi.getPlans()
+            const planList = Array.isArray(plans) ? plans : [plans].filter(Boolean)
+            set({ plans: planList, plan: planList[0] || null, isLoading: false })
         } catch (err) {
             set({ error: err.response?.data?.detail || 'Failed to load plan', isLoading: false })
         }
@@ -47,11 +49,15 @@ export const usePaymentStore = create((set, get) => ({
         }
     },
 
-    initiatePayment: async (navigate) => {
+    initiatePayment: async (navigate, planId) => {
         set({ isProcessing: true, error: null })
         try {
+            const selectedPlan = get().plans.find(p => p.id === planId) || get().plan
+            if (!selectedPlan?.id) {
+                throw new Error('Please select a subscription plan.')
+            }
             // 1. Create order on backend
-            const order = await paymentApi.createOrder()
+            const order = await paymentApi.createOrder(selectedPlan.id)
 
             // 2. Get user details for prefill
             const { user } = useAuthStore.getState()
@@ -62,7 +68,7 @@ export const usePaymentStore = create((set, get) => ({
                 amount: order.amount,
                 currency: order.currency,
                 name: 'ScholarPath',
-                description: 'Standard Access Subscription',
+                description: selectedPlan.name,
                 order_id: order.order_id,
                 prefill: {
                     name: user?.full_name || '',
@@ -82,7 +88,8 @@ export const usePaymentStore = create((set, get) => ({
                             isProcessing: false,
                             lastPayment: {
                                 razorpay_payment_id: response.razorpay_payment_id,
-                                amount_inr: get().plan?.price_inr,
+                                amount_inr: selectedPlan.price_inr,
+                                plan_id: selectedPlan.id,
                                 plan_name: result.plan_name,
                                 paid_at: new Date().toISOString(),
                             },
@@ -123,5 +130,5 @@ export const usePaymentStore = create((set, get) => ({
         }
     },
 
-    reset: () => set({ plan: null, status: null, lastPayment: null, history: [], error: null, isLoading: false, isLoadingHistory: false, isProcessing: false }),
+    reset: () => set({ plans: [], plan: null, status: null, lastPayment: null, history: [], error: null, isLoading: false, isLoadingHistory: false, isProcessing: false }),
 }))
