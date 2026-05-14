@@ -9,10 +9,11 @@ Accepts multipart/form-data with:
 Auth: exam_admin or super_admin only (students cannot upload question images).
 """
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.main import limiter
 from app.modules.auth.dependencies import UserIdentity, require_admin
 from app.modules.media.service import media_service
 from app.shared.exceptions import BadRequest
@@ -21,7 +22,9 @@ router = APIRouter()
 
 
 @router.post("/upload")
+@limiter.limit("30/minute")
 async def upload_file(
+    request: Request,
     file: UploadFile = File(...),
     upload_type: str = Form(..., description="question | option | avatar"),
     entity_id: int = Form(0, description="question_id or option_id (0 for avatar)"),

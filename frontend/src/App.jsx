@@ -4,16 +4,17 @@
  * Calls authStore.initialize() once on mount to restore any existing
  * Supabase session and set up the auth state change listener.
  */
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/modules/auth'
 import { ProtectedRoute } from '@/modules/auth'
 import { LoginPage, RegisterPage } from '@/modules/auth'
-import { OnboardingPage, ProfilePage, OnboardingGuard } from '@/modules/user'
+import { OnboardingGuard } from '@/modules/user'
 import AuthLayout from '@/shared/layouts/AuthLayout'
 import AppLayout from '@/shared/layouts/AppLayout'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
 import LandingPage from '@/pages/LandingPage'
+import { AdminRoute } from '@/modules/admin/components/AdminRoute'
 
 /** Returns the correct landing page for a given user profile, based on role.
  *  Shared between AuthRedirect (OAuth callback) and LoginPage (email/password). */
@@ -23,30 +24,103 @@ export function getRoleHome(profile) {
     if (profile?.role === 'parent') return '/parent'
     return '/dashboard'
 }
-import { ExamStartPage, ExamPage, ExamSubmittedPage } from '@/modules/attempt'
-import { ResultPage } from '@/modules/analysis'
-import { StudentDashboardPage } from '@/modules/dashboard'
-import {
-    AdminRoute,
-    AdminDashboardPage,
-    QuestionManagerPage,
-    ExamPublisherPage,
-    CreateTestPage,
-    ImageUploaderPage,
-    StatsPage,
-    AdminSettingsPage,
-    AdminSubscriptionsPage,
-} from '@/modules/admin'
-import {
-    ParentDashboardPage,
-    ChildDetailPage,
-} from '@/modules/parent'
-import {
-    UpgradePage,
-    PaymentSuccessPage,
-    PaymentFailedPage,
-    PaymentHistoryPage,
-} from '@/modules/payment'
+
+const lazyNamed = (loader, exportName) => lazy(() =>
+    loader().then((module) => ({ default: module[exportName] }))
+)
+
+const OnboardingPage = lazy(() => import('@/modules/user/pages/OnboardingPage'))
+const ProfilePage = lazy(() => import('@/modules/user/pages/ProfilePage'))
+
+const ExamStartPage = lazyNamed(
+    () => import('@/modules/attempt/pages/ExamStartPage'),
+    'ExamStartPage'
+)
+const ExamPage = lazyNamed(
+    () => import('@/modules/attempt/pages/ExamPage'),
+    'ExamPage'
+)
+const ExamSubmittedPage = lazyNamed(
+    () => import('@/modules/attempt/pages/ExamSubmittedPage'),
+    'ExamSubmittedPage'
+)
+const ResultPage = lazyNamed(
+    () => import('@/modules/analysis/pages/ResultPage'),
+    'ResultPage'
+)
+const StudentDashboardPage = lazyNamed(
+    () => import('@/modules/dashboard/pages/StudentDashboardPage'),
+    'StudentDashboardPage'
+)
+
+const AdminDashboardPage = lazyNamed(
+    () => import('@/modules/admin/pages/AdminDashboardPage'),
+    'AdminDashboardPage'
+)
+const QuestionManagerPage = lazyNamed(
+    () => import('@/modules/admin/pages/QuestionManagerPage'),
+    'QuestionManagerPage'
+)
+const ExamPublisherPage = lazyNamed(
+    () => import('@/modules/admin/pages/ExamPublisherPage'),
+    'ExamPublisherPage'
+)
+const CreateTestPage = lazyNamed(
+    () => import('@/modules/admin/pages/CreateTestPage'),
+    'CreateTestPage'
+)
+const ImageUploaderPage = lazyNamed(
+    () => import('@/modules/admin/pages/ImageUploaderPage'),
+    'ImageUploaderPage'
+)
+const StatsPage = lazyNamed(
+    () => import('@/modules/admin/pages/StatsPage'),
+    'StatsPage'
+)
+const AdminSettingsPage = lazyNamed(
+    () => import('@/modules/admin/pages/AdminSettingsPage'),
+    'AdminSettingsPage'
+)
+const AdminSubscriptionsPage = lazyNamed(
+    () => import('@/modules/admin/pages/AdminSubscriptionsPage'),
+    'AdminSubscriptionsPage'
+)
+
+const ParentDashboardPage = lazy(() =>
+    import('@/modules/parent/pages/ParentDashboardPage')
+)
+const ChildDetailPage = lazy(() =>
+    import('@/modules/parent/pages/ChildDetailPage')
+)
+
+const UpgradePage = lazyNamed(
+    () => import('@/modules/payment/pages/UpgradePage'),
+    'UpgradePage'
+)
+const PaymentSuccessPage = lazyNamed(
+    () => import('@/modules/payment/pages/PaymentSuccessPage'),
+    'PaymentSuccessPage'
+)
+const PaymentFailedPage = lazyNamed(
+    () => import('@/modules/payment/pages/PaymentFailedPage'),
+    'PaymentFailedPage'
+)
+const PaymentHistoryPage = lazyNamed(
+    () => import('@/modules/payment/pages/PaymentHistoryPage'),
+    'PaymentHistoryPage'
+)
+
+function RouteFallback() {
+    return (
+        <div className="min-h-[40vh] flex items-center justify-center">
+            <div className="w-10 h-10 border-4 border-brand-200 border-t-brand-500 rounded-full animate-spin" />
+        </div>
+    )
+}
+
+function routeChunk(element) {
+    return <Suspense fallback={<RouteFallback />}>{element}</Suspense>
+}
 
 export default function App() {
     const initialize = useAuthStore((s) => s.initialize)
@@ -76,45 +150,45 @@ export default function App() {
                 <Route element={<ProtectedRoute />}>
                     {/* Onboarding uses AuthLayout (no sidebar yet) */}
                     <Route element={<AuthLayout />}>
-                        <Route path="/onboarding" element={<OnboardingPage />} />
+                        <Route path="/onboarding" element={routeChunk(<OnboardingPage />)} />
                     </Route>
 
                     {/* Exam taking flow (full screen, no sidebar) — OnboardingGuard ensures
                         std_class and medium are set before the student enters an exam */}
-                    <Route path="/exam/:examId/start" element={<ErrorBoundary><OnboardingGuard><ExamStartPage /></OnboardingGuard></ErrorBoundary>} />
-                    <Route path="/exam/:examId/attempt" element={<ErrorBoundary><OnboardingGuard><ExamPage /></OnboardingGuard></ErrorBoundary>} />
-                    <Route path="/exam/submitted/:id" element={<ErrorBoundary><OnboardingGuard><ExamSubmittedPage /></OnboardingGuard></ErrorBoundary>} />
+                    <Route path="/exam/:examId/start" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ExamStartPage /></OnboardingGuard>)}</ErrorBoundary>} />
+                    <Route path="/exam/:examId/attempt" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ExamPage /></OnboardingGuard>)}</ErrorBoundary>} />
+                    <Route path="/exam/submitted/:id" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ExamSubmittedPage /></OnboardingGuard>)}</ErrorBoundary>} />
 
                     {/* Exam result analysis */}
-                    <Route path="/attempts/:attemptId/result" element={<ErrorBoundary><OnboardingGuard><ResultPage /></OnboardingGuard></ErrorBoundary>} />
+                    <Route path="/attempts/:attemptId/result" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ResultPage /></OnboardingGuard>)}</ErrorBoundary>} />
 
                     {/* Authenticated app routes — wrapped in AppLayout (sidebar + header) */}
                     <Route element={<AppLayout />}>
-                        <Route path="/dashboard" element={<ErrorBoundary><StudentDashboardPage /></ErrorBoundary>} />
+                        <Route path="/dashboard" element={<ErrorBoundary>{routeChunk(<StudentDashboardPage />)}</ErrorBoundary>} />
                         {/* /exams and /results have no dedicated module yet — redirect to dashboard */}
                         <Route path="/exams" element={<Navigate to="/dashboard" replace />} />
                         <Route path="/results" element={<Navigate to="/dashboard" replace />} />
-                        <Route path="/profile" element={<ErrorBoundary><OnboardingGuard><ProfilePage /></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/profile" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ProfilePage /></OnboardingGuard>)}</ErrorBoundary>} />
 
                         {/* Payment routes — require onboarding */}
-                        <Route path="/upgrade" element={<ErrorBoundary><OnboardingGuard><UpgradePage /></OnboardingGuard></ErrorBoundary>} />
-                        <Route path="/payment/success" element={<ErrorBoundary><OnboardingGuard><PaymentSuccessPage /></OnboardingGuard></ErrorBoundary>} />
-                        <Route path="/payment/failed" element={<ErrorBoundary><OnboardingGuard><PaymentFailedPage /></OnboardingGuard></ErrorBoundary>} />
-                        <Route path="/payment/history" element={<ErrorBoundary><OnboardingGuard><PaymentHistoryPage /></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/upgrade" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><UpgradePage /></OnboardingGuard>)}</ErrorBoundary>} />
+                        <Route path="/payment/success" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><PaymentSuccessPage /></OnboardingGuard>)}</ErrorBoundary>} />
+                        <Route path="/payment/failed" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><PaymentFailedPage /></OnboardingGuard>)}</ErrorBoundary>} />
+                        <Route path="/payment/history" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><PaymentHistoryPage /></OnboardingGuard>)}</ErrorBoundary>} />
 
                         {/* Admin routes — guarded by AdminRoute + per-route ErrorBoundary */}
-                        <Route path="/admin" element={<ErrorBoundary><AdminRoute><AdminDashboardPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/questions" element={<ErrorBoundary><AdminRoute><QuestionManagerPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/publish" element={<ErrorBoundary><AdminRoute><ExamPublisherPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/publish/create" element={<ErrorBoundary><AdminRoute><CreateTestPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/images" element={<ErrorBoundary><AdminRoute><ImageUploaderPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/stats" element={<ErrorBoundary><AdminRoute><StatsPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/settings" element={<ErrorBoundary><AdminRoute><AdminSettingsPage /></AdminRoute></ErrorBoundary>} />
-                        <Route path="/admin/subscriptions" element={<ErrorBoundary><AdminRoute><AdminSubscriptionsPage /></AdminRoute></ErrorBoundary>} />
+                        <Route path="/admin" element={<ErrorBoundary>{routeChunk(<AdminRoute><AdminDashboardPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/questions" element={<ErrorBoundary>{routeChunk(<AdminRoute><QuestionManagerPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/publish" element={<ErrorBoundary>{routeChunk(<AdminRoute><ExamPublisherPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/publish/create" element={<ErrorBoundary>{routeChunk(<AdminRoute><CreateTestPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/images" element={<ErrorBoundary>{routeChunk(<AdminRoute><ImageUploaderPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/stats" element={<ErrorBoundary>{routeChunk(<AdminRoute><StatsPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/settings" element={<ErrorBoundary>{routeChunk(<AdminRoute><AdminSettingsPage /></AdminRoute>)}</ErrorBoundary>} />
+                        <Route path="/admin/subscriptions" element={<ErrorBoundary>{routeChunk(<AdminRoute><AdminSubscriptionsPage /></AdminRoute>)}</ErrorBoundary>} />
 
                         {/* Parent routes — guarded by ParentRoute + OnboardingGuard + per-route ErrorBoundary */}
-                        <Route path="/parent" element={<ErrorBoundary><OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard></ErrorBoundary>} />
-                        <Route path="/parent/children/:studentId" element={<ErrorBoundary><OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard></ErrorBoundary>} />
+                        <Route path="/parent" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>)}</ErrorBoundary>} />
+                        <Route path="/parent/children/:studentId" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>)}</ErrorBoundary>} />
                     </Route>
                 </Route>
             </Routes>
@@ -178,4 +252,3 @@ function ParentRoute({ children }) {
     if (user?.role !== 'parent') return <Navigate to="/dashboard" replace />
     return children
 }
-

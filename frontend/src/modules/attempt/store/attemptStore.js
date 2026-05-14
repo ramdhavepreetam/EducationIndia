@@ -21,7 +21,7 @@ export const useAttemptStore = create((set, get) => ({
         try {
             // Fetch questions (metadata/content)
             const examData = await attemptApi.getQuestions(examId)
-            const deliveryQuestions = await attemptApi.getExamDeliveryQuestions(examId)
+            const deliveryQuestions = await attemptApi.getExamDeliveryQuestions(examId, childProfileId)
 
             // Start attempt
             const attempt = await attemptApi.start(examId, childProfileId)

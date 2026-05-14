@@ -13,19 +13,16 @@ Routes:
 
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import text
 from typing import List
 from uuid import UUID
 
 from app.database import get_db
-from app.modules.auth.dependencies import require_student, require_admin, require_role, UserIdentity
+from app.modules.admin.service import admin_service
+from app.modules.auth.dependencies import require_admin, require_role, UserIdentity
 from app.modules.catalog.service import catalog_service
-from app.modules.attempt.repository import attempt_repository
-from app.modules.attempt.schemas import AttemptSummary
-from app.modules.catalog.schemas import ExamSummaryResponse, PublishExamResponse, EventWithExamsResponse, CreateEventRequest
+from app.modules.catalog.schemas import PublishExamResponse, EventWithExamsResponse, CreateEventRequest
 from app.modules.admin.schemas import (
     StudentDashboardResponse,
-    StudentDashboardStats,
     AdminOverviewStats,
     AdminAttemptRow,
     QuestionStatRow,
@@ -50,83 +47,7 @@ async def get_student_dashboard(
     Get the student dashboard data (orchestrator pattern).
     Aggregates active exams from Catalog and all attempts from Attempt module.
     """
-    from app.modules.user.repository import user_repository
-    from app.shared.exceptions import Forbidden
-
-    target_id = current_user.id
-    if current_user.role == "parent":
-        if not child_id:
-            target_id = None
-        else:
-            from app.modules.user.child_repository import ChildRepository
-            child_repo = ChildRepository()
-            child = await child_repo.get_by_id(child_id, current_user.id, db)
-            if not child:
-                raise Forbidden("Not authorized to view this child's dashboard")
-            target_id = child_id
-
-    exams = await catalog_service.list_exams(db, is_admin=False)
-
-    # Use aggregate SQL for stats (avoids loading all attempts into memory)
-    # and a separate limited query for the recent list.
-    stats = StudentDashboardStats(
-        total_attempts=0, avg_percentage=0.0, best_score=0, exams_completed=0
-    )
-    recent = []
-
-    if target_id is not None:
-        agg_row = (await db.execute(
-            text("""
-                SELECT
-                    COUNT(*)                                    AS total_attempts,
-                    COUNT(DISTINCT CASE WHEN status = 'submitted' THEN exam_id END)
-                                                                AS exams_completed,
-                    COALESCE(MAX(CASE WHEN status = 'submitted' THEN total_score END), 0)
-                                                                AS best_score,
-                    COALESCE(AVG(CASE WHEN status = 'submitted' AND percentage IS NOT NULL
-                                     THEN percentage END), 0)  AS avg_percentage
-                FROM attempts
-                WHERE child_profile_id = :sid
-            """),
-            {"sid": str(target_id)},
-        )).mappings().first()
-
-        if agg_row:
-            stats = StudentDashboardStats(
-                total_attempts=int(agg_row["total_attempts"] or 0),
-                exams_completed=int(agg_row["exams_completed"] or 0),
-                best_score=int(agg_row["best_score"] or 0),
-                avg_percentage=round(float(agg_row["avg_percentage"] or 0), 1),
-            )
-
-        recent_orm = await attempt_repository.get_all_student_attempts(db, target_id, limit=5)
-
-        def _status(a) -> str:
-            return str(a.status.value if hasattr(a.status, "value") else a.status)
-
-        recent = [
-            AttemptSummary(
-                attempt_id=a.id,
-                exam_id=a.exam_id,
-                attempt_number=a.attempt_number,
-                status=_status(a),
-                total_score=a.total_score,
-                total_correct=a.total_correct,
-                total_wrong=a.total_wrong,
-                total_skipped=a.total_skipped,
-                percentage=float(a.percentage) if a.percentage is not None else None,
-                grade=a.grade,
-                started_at=a.started_at,
-                submitted_at=a.submitted_at,
-            )
-            for a in recent_orm
-        ]
-
-    return StudentDashboardResponse(
-        available_exams=exams,
-        recent_attempts=recent,
-        stats=stats,
-    )
+    return await admin_service.get_student_dashboard(db, current_user, child_id)
 
 
 # ── Admin panel endpoints ─────────────────────────────────────────────────────
@@ -139,26 +60,8 @@ async def get_admin_overview(
     """
     Aggregate stats for admin dashboard cards.
     Counts: students, total attempts, active exams, total questions.
-    All queries are simple COUNTs — no business logic.
     """
-    row = (
-        await db.execute(
-            text("""
-                SELECT
-                  (SELECT COUNT(*) FROM user_profiles WHERE role = 'student') AS total_students,
-                  (SELECT COUNT(*) FROM attempts)                              AS total_attempts,
-                  (SELECT COUNT(*) FROM exams WHERE is_active = true)          AS active_exams,
-                  (SELECT COUNT(*) FROM questions)                             AS total_questions
-            """)
-        )
-    ).mappings().first()
-
-    return AdminOverviewStats(
-        total_students=int(row["total_students"]),
-        total_attempts=int(row["total_attempts"]),
-        active_exams=int(row["active_exams"]),
-        total_questions=int(row["total_questions"]),
-    )
+    return await admin_service.get_overview(db)
 
 
 @router.get("/dashboard/attempts/recent", response_model=List[AdminAttemptRow])
@@ -170,31 +73,7 @@ async def get_recent_attempts_all_students(
     Last 20 attempts across all students for the admin recent activity table.
     Joins attempts + user_profiles (name) + exams (title).
     """
-    rows = (
-        await db.execute(
-            text("""
-                SELECT
-                    a.id            AS attempt_id,
-                    COALESCE(a.student_id, a.child_profile_id) AS student_id,
-                    up.full_name    AS student_name,
-                    a.exam_id,
-                    e.title_en      AS exam_title,
-                    a.status,
-                    a.total_score,
-                    a.percentage,
-                    a.grade,
-                    a.started_at,
-                    a.submitted_at
-                FROM attempts a
-                LEFT JOIN user_profiles up ON up.id = COALESCE(a.student_id, a.child_profile_id)
-                LEFT JOIN exams e          ON e.id  = a.exam_id
-                ORDER BY a.started_at DESC
-                LIMIT 20
-            """)
-        )
-    ).mappings().all()
-
-    return [AdminAttemptRow(**dict(r)) for r in rows]
+    return await admin_service.get_recent_attempts(db)
 
 
 @router.get("/catalog/exams", response_model=List[AdminExamRow])
@@ -204,29 +83,8 @@ async def list_all_exams_admin(
 ):
     """
     List ALL exams (active + inactive) with question counts for ExamPublisherPage.
-    Delegates to catalog + a raw count query.
     """
-    rows = (
-        await db.execute(
-            text("""
-                SELECT
-                    e.id, e.paper_code, e.set_code,
-                    e.title_en, e.title_mr,
-                    e.is_active, e.total_questions,
-                    ev.title_en AS event_title,
-                    ev.year     AS event_year,
-                    ev.std_class AS std_class,
-                    COUNT(q.id) AS question_count
-                FROM exams e
-                LEFT JOIN exam_events ev ON ev.id = e.event_id
-                LEFT JOIN questions q    ON q.exam_id = e.id
-                GROUP BY e.id, ev.id
-                ORDER BY e.id
-            """)
-        )
-    ).mappings().all()
-
-    return [AdminExamRow(**dict(r)) for r in rows]
+    return await admin_service.list_exams_admin(db)
 
 
 @router.put("/catalog/exams/{exam_id}/publish", response_model=PublishExamResponse)
@@ -271,33 +129,7 @@ async def get_question_stats(
     Joins question_stats + questions.question_no.
     Sorted by question_no ascending.
     """
-    rows = (
-        await db.execute(
-            text("""
-                SELECT
-                    qs.question_id,
-                    q.question_no,
-                    qs.total_attempts,
-                    qs.correct_count,
-                    qs.wrong_count,
-                    qs.skip_count,
-                    ROUND(qs.avg_time_seconds::numeric, 1) AS avg_time_seconds,
-                    ROUND(qs.actual_difficulty::numeric, 3) AS actual_difficulty,
-                    CASE
-                        WHEN qs.total_attempts > 0
-                        THEN ROUND(qs.correct_count::numeric / qs.total_attempts * 100, 1)
-                        ELSE NULL
-                    END AS correct_pct
-                FROM question_stats qs
-                JOIN questions q ON q.id = qs.question_id
-                WHERE q.exam_id = :exam_id
-                ORDER BY q.question_no
-            """),
-            {"exam_id": exam_id},
-        )
-    ).mappings().all()
-
-    return [QuestionStatRow(**dict(r)) for r in rows]
+    return await admin_service.get_question_stats(db, exam_id)
 
 
 # ── Admin settings & subscription endpoints (ADR-014) ─────────────────────────
@@ -390,8 +222,8 @@ async def list_all_payments(
     _: UserIdentity = Depends(require_admin),
     status: str | None = None,
     search: str | None = None,
-    page: int = 1,
-    limit: int = 50,
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=50, ge=1, le=200),
 ):
     """All payment transactions with optional filters. Admin only."""
     from app.modules.payment.repository import payment_repository

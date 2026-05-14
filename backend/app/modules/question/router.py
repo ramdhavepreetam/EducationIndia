@@ -40,6 +40,10 @@ router = APIRouter()
 @router.get("/", response_model=list[QuestionDeliverySchema])
 async def list_questions(
     exam_id: int = Query(..., description="Exam ID — required"),
+    child_profile_id: UUID | None = Query(
+        None,
+        description="Child profile UUID for parent-created attempts",
+    ),
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
@@ -48,7 +52,13 @@ async def list_questions(
     SECURITY: response NEVER includes correct_option or explanation.
     Returns [] if no questions have been imported yet (exam is valid but empty).
     """
-    return await question_service.get_questions_for_exam(db, exam_id)
+    return await question_service.get_questions_for_exam(
+        db,
+        exam_id,
+        user_id=identity.id,
+        role=identity.role,
+        child_profile_id=child_profile_id,
+    )
 
 
 @router.get("/{question_id}/review", response_model=QuestionReviewSchema)
@@ -90,65 +100,9 @@ async def list_questions_admin(
     """
     List all questions with full admin data (correct_option, hints, stats).
     Requires exam_admin or super_admin role.
-    Single efficient query — eager-loads options + context in one round-trip.
+    Single efficient query — service eager-loads options + context.
     """
-    from app.modules.question.repository import question_repository
-    from app.modules.question.schemas import OptionReviewSchema, ContextSchema
-    from app.modules.question.models import Question, Option, QuestionContext
-    from sqlalchemy import select
-    from sqlalchemy.orm import selectinload
-
-    result_orm = await db.execute(
-        select(Question)
-        .options(
-            selectinload(Question.options),
-            selectinload(Question.context),
-        )
-        .where(Question.exam_id == exam_id)
-        .order_by(Question.question_no)
-    )
-    questions = result_orm.scalars().all()
-
-    result = []
-    for q in questions:
-        opts = [
-            OptionReviewSchema.model_validate(o, from_attributes=True)
-            for o in q.options
-        ]
-        ctx = (
-            ContextSchema.model_validate(q.context, from_attributes=True)
-            if q.context else None
-        )
-        result.append(QuestionAdminSchema(
-            id=q.id,
-            exam_id=q.exam_id,
-            section_id=q.section_id,
-            topic_id=q.topic_id,
-            context_id=q.context_id,
-            question_no=q.question_no,
-            question_type=q.question_type,
-            text_en=q.text_en,
-            text_mr=q.text_mr,
-            question_image_url=q.question_image_url,
-            question_image_alt_en=q.question_image_alt_en,
-            question_image_alt_mr=q.question_image_alt_mr,
-            correct_option=q.correct_option,
-            correct_options=q.correct_options,
-            is_multi_select=q.is_multi_select,
-            explanation_en=q.explanation_en,
-            explanation_mr=q.explanation_mr,
-            hint_en=q.hint_en,
-            hint_mr=q.hint_mr,
-            marks=q.marks,
-            difficulty=q.difficulty,
-            tags=q.tags or [],
-            attempt_count=q.attempt_count,
-            correct_count=q.correct_count,
-            actual_difficulty_ratio=float(q.actual_difficulty_ratio) if q.actual_difficulty_ratio else None,
-            options=opts,
-            context=ctx,
-        ))
-    return result
+    return await question_service.list_admin_questions(db, exam_id)
 
 
 @admin_router.put("/{question_id}", response_model=QuestionAdminSchema)

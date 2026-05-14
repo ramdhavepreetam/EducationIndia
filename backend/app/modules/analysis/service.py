@@ -115,10 +115,10 @@ class AnalysisService:
         if current_status != "submitted":
             raise Forbidden("Report is only available for submitted attempts")
 
-        if role == "student" and attempt.student_id != user_id:
-            raise Forbidden("Not authorized to view this report")
-            
-        if role == "parent":
+        if role == "student":
+            if attempt.student_id != user_id:
+                raise Forbidden("Not authorized to view this report")
+        elif role == "parent":
             # Check parent owns the child profile on this attempt (ADR-013)
             if attempt.child_profile_id:
                 from app.modules.user.child_repository import ChildRepository
@@ -130,12 +130,14 @@ class AnalysisService:
                     raise Forbidden("Not authorized to view this report")
             else:
                 raise Forbidden("Not authorized to view this report")
+        elif role not in ("exam_admin", "super_admin"):
+            raise Forbidden("Not authorized to view this report")
 
         # Access control gate (ADR-014)
         from app.shared.access_control import get_access_context, can_see_full_analysis, get_tier
-        ctx = await get_access_context(user_id, db)
+        ctx = await get_access_context(user_id, db) if role == "parent" else None
 
-        if role == "parent" and not can_see_full_analysis(ctx):
+        if role == "parent" and ctx is not None and not can_see_full_analysis(ctx):
             return ReportFreeSchema(
                 attempt_id=str(attempt.id),
                 exam_id=attempt.exam_id,
@@ -168,7 +170,7 @@ class AnalysisService:
             topic_scores=attempt.topic_scores or [],
             time_analysis=attempt.time_analysis or {},
             recommendations=attempt.recommendations or [],
-            tier=get_tier(ctx) if role == "parent" else "paid",
+            tier=get_tier(ctx) if role == "parent" and ctx is not None else "paid",
         )
 
 # singleton

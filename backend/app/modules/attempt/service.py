@@ -19,7 +19,6 @@ Public interface:
 from datetime import datetime, timezone
 from uuid import UUID
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.attempt.repository import attempt_repository
@@ -83,9 +82,7 @@ class AttemptService:
         # 1.6 Access control gate (ADR-014)
         from app.shared.access_control import get_access_context, can_start_exam as check_start
         ctx = await get_access_context(parent_id, db)
-        allowed, reason = await check_start(
-            ctx, request.exam_id, effective_student_id, db
-        )
+        allowed, reason = await check_start(ctx, request.exam_id, effective_student_id, db)
         if not allowed:
             raise Forbidden(reason)
 

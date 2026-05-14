@@ -14,6 +14,7 @@ Public interface (CLAUDE.md contract):
 
 from uuid import UUID
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.catalog.service import catalog_service
@@ -35,7 +36,12 @@ class QuestionService:
     # ── Public interface (used by other modules) ──────────────────────────────
 
     async def get_questions_for_exam(
-        self, db: AsyncSession, exam_id: int
+        self,
+        db: AsyncSession,
+        exam_id: int,
+        user_id: UUID | None = None,
+        role: str | None = None,
+        child_profile_id: UUID | None = None,
     ) -> list[QuestionDeliverySchema]:
         """
         Return all questions for an exam in delivery format (no correct_option).
@@ -44,7 +50,73 @@ class QuestionService:
         """
         # Raises NotFound if exam doesn't exist or is inactive
         await catalog_service.get_active_exam(db, exam_id)
+        if user_id is not None and role not in ("exam_admin", "super_admin"):
+            await self._assert_exam_delivery_access(
+                db,
+                parent_id=user_id,
+                exam_id=exam_id,
+                child_profile_id=child_profile_id,
+            )
         return await question_repository.fetch_by_exam_id(db, exam_id)
+
+    async def _assert_exam_delivery_access(
+        self,
+        db: AsyncSession,
+        parent_id: UUID,
+        exam_id: int,
+        child_profile_id: UUID | None,
+    ) -> None:
+        """
+        Enforce ADR-014 before returning exam questions.
+        This protects paid exam content even if a client calls /api/questions directly.
+        """
+        learner_id = parent_id
+        if child_profile_id is not None:
+            from app.modules.user.child_repository import child_repository as child_repo
+
+            is_owner = await child_repo.validate_ownership(child_profile_id, parent_id, db)
+            if not is_owner:
+                raise Forbidden("Child profile not found")
+            learner_id = child_profile_id
+
+        ongoing = await db.execute(
+            text("""
+                SELECT 1
+                FROM attempts a
+                LEFT JOIN child_profiles cp ON cp.id = a.child_profile_id
+                WHERE a.exam_id = :exam_id
+                  AND a.status = 'ongoing'
+                  AND (
+                    a.student_id = :parent_id
+                    OR cp.parent_id = :parent_id
+                  )
+                LIMIT 1
+            """),
+            {"parent_id": str(parent_id), "exam_id": exam_id},
+        )
+        if ongoing.scalar() is not None:
+            return
+
+        from app.shared.access_control import get_access_context
+
+        ctx = await get_access_context(parent_id, db)
+        if ctx.is_paid:
+            return
+        if exam_id != ctx.free_exam_id:
+            raise Forbidden("upgrade_required_exam")
+
+        result = await db.execute(
+            text("""
+                SELECT COUNT(*) FROM attempts
+                WHERE (child_profile_id = :learner_id OR student_id = :learner_id)
+                  AND exam_id = :exam_id
+                  AND status IN ('submitted', 'expired')
+            """),
+            {"learner_id": str(learner_id), "exam_id": exam_id},
+        )
+        count = result.scalar() or 0
+        if count >= ctx.free_max_attempts:
+            raise Forbidden("upgrade_required_attempts")
 
     # ── Review (post-exam) ────────────────────────────────────────────────────
 
@@ -71,7 +143,15 @@ class QuestionService:
         if attempt is None:
             raise NotFound("Attempt not found")
 
-        if str(attempt["student_id"]) != str(student_id):
+        if attempt.get("child_profile_id"):
+            from app.modules.user.child_repository import child_repository as child_repo
+
+            is_owner = await child_repo.validate_ownership(
+                attempt["child_profile_id"], student_id, db
+            )
+            if not is_owner:
+                raise Forbidden("This attempt does not belong to your child")
+        elif str(attempt["student_id"]) != str(student_id):
             raise Forbidden("This attempt does not belong to you")
 
         if attempt["status"] != "submitted":
@@ -96,6 +176,12 @@ class QuestionService:
         if question is None:
             raise NotFound(f"Question {question_id} not found")
         return question
+
+    async def list_admin_questions(
+        self, db: AsyncSession, exam_id: int
+    ) -> list[QuestionAdminSchema]:
+        """Return all questions for an exam with full admin data."""
+        return await question_repository.fetch_admin_list(db, exam_id)
 
     async def update_question(
         self,

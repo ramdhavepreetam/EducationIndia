@@ -245,6 +245,21 @@ class QuestionRepository:
         if not q:
             return None
 
+        return self._to_admin_schema(q)
+
+    async def fetch_admin_list(
+        self, db: AsyncSession, exam_id: int
+    ) -> list[QuestionAdminSchema]:
+        """Return all questions for an exam with full admin data."""
+        result = await db.execute(
+            select(Question)
+            .options(selectinload(Question.options), selectinload(Question.context))
+            .where(Question.exam_id == exam_id)
+            .order_by(Question.question_no)
+        )
+        return [self._to_admin_schema(q) for q in result.scalars().all()]
+
+    def _to_admin_schema(self, q: Question) -> QuestionAdminSchema:
         opts_schema = [
             OptionReviewSchema.model_validate(o, from_attributes=True)
             for o in q.options
@@ -280,22 +295,14 @@ class QuestionRepository:
             tags=q.tags or [],
             attempt_count=q.attempt_count,
             correct_count=q.correct_count,
-            actual_difficulty_ratio=float(q.actual_difficulty_ratio) if q.actual_difficulty_ratio else None,
+            actual_difficulty_ratio=(
+                float(q.actual_difficulty_ratio)
+                if q.actual_difficulty_ratio
+                else None
+            ),
             options=opts_schema,
             context=ctx_schema,
         )
-
-    async def fetch_admin_list(
-        self, db: AsyncSession, exam_id: int
-    ) -> list[Question]:
-        """Return all questions for an exam (admin view). ORM objects."""
-        result = await db.execute(
-            select(Question)
-            .options(selectinload(Question.options))
-            .where(Question.exam_id == exam_id)
-            .order_by(Question.question_no)
-        )
-        return list(result.scalars().all())
 
     # ── Attempt status check (cross-module — temp until attempt module built) ─
 
@@ -309,7 +316,7 @@ class QuestionRepository:
         row = (
             await db.execute(
                 text(
-                    "SELECT status, student_id FROM attempts WHERE id = :aid"
+                    "SELECT status, student_id, child_profile_id FROM attempts WHERE id = :aid"
                 ),
                 {"aid": str(attempt_id)},
             )

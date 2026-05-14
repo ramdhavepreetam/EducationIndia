@@ -65,6 +65,7 @@ class MediaService:
         file_bytes = await file.read()
         if len(file_bytes) > _MAX_FILE_SIZE:
             raise BadRequest("File exceeds 5 MB limit")
+        self._validate_image_bytes(file_bytes, file.content_type)
 
         # Look up exam_id for question uploads to build structured folder path
         exam_id: int | None = None
@@ -133,6 +134,22 @@ class MediaService:
         if upload_type == "option":
             return f"options/{entity_id}"
         return "avatars"
+
+    def _validate_image_bytes(self, file_bytes: bytes, content_type: str | None) -> None:
+        """Verify the uploaded bytes match the declared image content type."""
+        signatures = {
+            "image/jpeg": file_bytes.startswith(b"\xff\xd8\xff"),
+            "image/jpg": file_bytes.startswith(b"\xff\xd8\xff"),
+            "image/png": file_bytes.startswith(b"\x89PNG\r\n\x1a\n"),
+            "image/gif": file_bytes.startswith((b"GIF87a", b"GIF89a")),
+            "image/webp": (
+                len(file_bytes) >= 12
+                and file_bytes[:4] == b"RIFF"
+                and file_bytes[8:12] == b"WEBP"
+            ),
+        }
+        if not signatures.get(content_type or "", False):
+            raise BadRequest("Uploaded file content does not match a supported image format")
 
     async def _update_entity_url(
         self, db: AsyncSession, upload_type: str, entity_id: int, url: str

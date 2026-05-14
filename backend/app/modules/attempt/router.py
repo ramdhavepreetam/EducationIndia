@@ -14,10 +14,11 @@ Routes:
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.main import limiter
 from app.modules.auth.dependencies import UserIdentity, verify_token
 from app.modules.attempt.schemas import (
     AttemptResultResponse,
@@ -38,8 +39,10 @@ router = APIRouter()
     status_code=status.HTTP_201_CREATED,
     summary="Start a new exam attempt",
 )
+@limiter.limit("30/minute")
 async def start_exam(
-    request: StartAttemptRequest,
+    request: Request,
+    body: StartAttemptRequest,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
@@ -50,7 +53,7 @@ async def start_exam(
     Returns 409 Conflict if the student already has an ongoing attempt for this exam.
     Returns 404 if the exam is not found or not active.
     """
-    return await attempt_service.start_exam(db, identity.id, request)
+    return await attempt_service.start_exam(db, identity.id, body)
 
 
 @router.get(
@@ -100,9 +103,11 @@ async def get_exam_state(
     response_model=ResponseStateItem,
     summary="Autosave one question response",
 )
+@limiter.limit("180/minute")
 async def save_response(
+    request: Request,
     attempt_id: UUID,
-    request: SaveResponseRequest,
+    body: SaveResponseRequest,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):
@@ -118,7 +123,7 @@ async def save_response(
     Returns 400 if exam timer has expired.
     Returns 403 if attempt is submitted or belongs to another student.
     """
-    return await attempt_service.save_response(db, attempt_id, identity.id, request)
+    return await attempt_service.save_response(db, attempt_id, identity.id, body)
 
 
 @router.post(
@@ -126,7 +131,9 @@ async def save_response(
     response_model=AttemptResultResponse,
     summary="Submit exam and compute score",
 )
+@limiter.limit("10/minute")
 async def submit_exam(
+    request: Request,
     attempt_id: UUID,
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),

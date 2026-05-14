@@ -10,7 +10,7 @@ Endpoints:
   GET   /api/payment/history      → Auth: parent. Payment records.
 """
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -88,8 +88,8 @@ async def webhook(
 
 @router.get("/history", response_model=list[PaymentHistoryRow])
 async def get_history(
-    page: int = 1,
-    limit: int = 50,
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     identity: UserIdentity = Depends(verify_token),
 ):

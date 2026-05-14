@@ -152,3 +152,35 @@ def test_mixed_attempts_correct_percentage():
     assert result["total_skipped"] == 1
     assert result["total_score"] == 2
     assert result["percentage"] == round((2/6)*100, 2)
+
+
+def test_multi_select_answer_counts_as_correct_not_skipped():
+    response = _make_response(None, None, q_no=1)
+    response.is_multi_select = True
+    response.selected_options = [1, 3]
+    response.correct_options = [3, 1]
+
+    total = calculate_total_score([response])
+    sections = calculate_section_scores([response])
+    topics = calculate_topic_scores([response])
+    time = calculate_time_analysis([response])
+
+    assert total["total_correct"] == 1
+    assert total["total_wrong"] == 0
+    assert total["total_skipped"] == 0
+    assert sections[0]["correct"] == 1
+    assert topics[0]["correct"] == 1
+    assert time["skipped_count"] == 0
+
+
+def test_multi_select_wrong_answer_counts_as_wrong_not_skipped():
+    response = _make_response(None, None, q_no=1)
+    response.is_multi_select = True
+    response.selected_options = [1, 2]
+    response.correct_options = [1, 3]
+
+    total = calculate_total_score([response])
+
+    assert total["total_correct"] == 0
+    assert total["total_wrong"] == 1
+    assert total["total_skipped"] == 0

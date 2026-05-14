@@ -96,8 +96,7 @@ media     → Owns: media_files table
             Consumes: Auth (upload permissions)
             RULE: Swap providers via MEDIA_PROVIDER env var only
 
-payment   → Owns: payment_plans, user_subscriptions, payment_orders, payment_logs,
-                   system_settings
+payment   → Owns: subscription_plans, subscriptions, payments, app_settings
             Exposes: PaymentService (Razorpay orders, plan management),
                      AccessControlService.get_access_context(),
                      AccessControlService.can_access_exam()
@@ -479,56 +478,59 @@ referral_code TEXT
 created_at    TIMESTAMPTZ
 ```
 
-### TABLE: payment_plans (ADR-014)
+### TABLE: app_settings (ADR-014)
+```
+key         VARCHAR(100) PK
+value       TEXT NOT NULL
+type        VARCHAR(20) DEFAULT 'string'   -- string, int, boolean
+label       TEXT
+updated_at  TIMESTAMPTZ DEFAULT now()
+updated_by  UUID FK → user_profiles.id
+```
+
+### TABLE: subscription_plans (ADR-014)
 ```
 id              SERIAL PK
-name            VARCHAR(50) NOT NULL
-price_inr       INT NOT NULL           -- price in paise
-duration_days   INT NOT NULL
-max_exams       INT                    -- NULL = unlimited
-features        JSONB DEFAULT '[]'
+name            TEXT NOT NULL
+duration_months SMALLINT DEFAULT 5
+price_inr       INT NOT NULL               -- rupees; Razorpay orders convert to paise
+max_children    INT DEFAULT 999
+features        JSONB DEFAULT '{}'
 is_active       BOOLEAN DEFAULT true
-created_at      TIMESTAMPTZ
+created_at      TIMESTAMPTZ DEFAULT now()
 ```
 
-### TABLE: user_subscriptions (ADR-014)
+### TABLE: subscriptions (ADR-014)
 ```
-id              SERIAL PK
-user_id         UUID FK → user_profiles.id
-plan_id         INT FK → payment_plans.id
-status          VARCHAR(20) DEFAULT 'active'  -- active, expired, cancelled
-started_at      TIMESTAMPTZ
-expires_at      TIMESTAMPTZ
-cancelled_at    TIMESTAMPTZ
-created_at      TIMESTAMPTZ
-```
-
-### TABLE: payment_orders (ADR-014)
-```
-id              SERIAL PK
-user_id         UUID FK → user_profiles.id
-plan_id         INT FK → payment_plans.id
-razorpay_order_id TEXT UNIQUE
-amount_inr      INT NOT NULL
-status          VARCHAR(20) DEFAULT 'created'  -- created, paid, failed
-paid_at         TIMESTAMPTZ
-created_at      TIMESTAMPTZ
+id                  UUID PK DEFAULT gen_random_uuid()
+parent_id           UUID FK → user_profiles.id
+plan_id             INT FK → subscription_plans.id
+status              VARCHAR(20) DEFAULT 'pending'
+                    CHECK (pending, active, expired, cancelled)
+started_at          TIMESTAMPTZ
+expires_at          TIMESTAMPTZ
+razorpay_order_id   TEXT UNIQUE
+razorpay_payment_id TEXT
+amount_paid_inr     INT
+created_at          TIMESTAMPTZ DEFAULT now()
+updated_at          TIMESTAMPTZ DEFAULT now()
 ```
 
-### TABLE: payment_logs (ADR-014)
+### TABLE: payments (ADR-014)
 ```
-id              SERIAL PK
-order_id        INT FK → payment_orders.id
-event_type      VARCHAR(50)
-payload         JSONB
-created_at      TIMESTAMPTZ
-```
-
-### TABLE: system_settings (ADR-014)
-```
-key             VARCHAR(100) PK
-value           TEXT NOT NULL
-updated_at      TIMESTAMPTZ
+id                  UUID PK DEFAULT gen_random_uuid()
+subscription_id     UUID FK → subscriptions.id
+parent_id           UUID FK → user_profiles.id
+amount_inr          INT NOT NULL
+currency            VARCHAR(5) DEFAULT 'INR'
+razorpay_order_id   TEXT
+razorpay_payment_id TEXT UNIQUE
+razorpay_signature  TEXT
+status              VARCHAR(20) DEFAULT 'created'
+                    CHECK (created, captured, failed, refunded)
+paid_at             TIMESTAMPTZ
+failure_reason      TEXT
+created_at          TIMESTAMPTZ DEFAULT now()
 ```
 
 ### VIEWS — Always use these, never raw tables for these purposes

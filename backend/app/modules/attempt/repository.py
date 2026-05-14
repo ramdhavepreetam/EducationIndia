@@ -145,7 +145,7 @@ class AttemptRepository:
         """Return all attempts for a student+exam (any status), newest first."""
         result = await db.execute(
             select(Attempt).where(
-                Attempt.child_profile_id == student_id,
+                (Attempt.child_profile_id == student_id) | (Attempt.student_id == student_id),
                 Attempt.exam_id == exam_id,
             ).order_by(Attempt.attempt_number.desc())
         )
@@ -156,7 +156,7 @@ class AttemptRepository:
     ) -> list[Attempt]:
         """Return all attempts for a student across all exams (any status), newest first."""
         stmt = select(Attempt).where(
-            Attempt.child_profile_id == student_id
+            (Attempt.child_profile_id == student_id) | (Attempt.student_id == student_id)
         ).order_by(Attempt.started_at.desc())
         if limit is not None:
             stmt = stmt.limit(limit)

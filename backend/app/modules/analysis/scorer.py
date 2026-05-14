@@ -35,6 +35,13 @@ def _is_correct(r: ResponseData) -> bool:
     return False
 
 
+def _is_answered(r: ResponseData) -> bool:
+    """A response is answered if it has a single option or any multi-select options."""
+    if getattr(r, "is_multi_select", False):
+        return bool(r.selected_options)
+    return r.selected_option is not None
+
+
 def calculate_total_score(responses: List[ResponseData]) -> Dict[str, Any]:
     total_score = 0
     total_correct = 0
@@ -44,7 +51,7 @@ def calculate_total_score(responses: List[ResponseData]) -> Dict[str, Any]:
 
     for r in responses:
         total_possible_marks += r.marks
-        if r.selected_option is None:
+        if not _is_answered(r):
             total_skipped += 1
         elif _is_correct(r):
             total_correct += 1
@@ -94,7 +101,7 @@ def calculate_section_scores(responses: List[ResponseData]) -> List[Dict[str, An
         sec["total_questions"] += 1
         sec["total_marks"] += r.marks
 
-        if r.selected_option is not None and _is_correct(r):
+        if _is_answered(r) and _is_correct(r):
             sec["correct"] += 1
             sec["score"] += r.marks
             
@@ -126,7 +133,7 @@ def calculate_topic_scores(responses: List[ResponseData]) -> List[Dict[str, Any]
         top = topics[r.topic_id]
         top["total"] += 1
         
-        if r.selected_option is not None and _is_correct(r):
+        if _is_answered(r) and _is_correct(r):
             top["correct"] += 1
 
     result = []
@@ -152,7 +159,7 @@ def calculate_time_analysis(responses: List[ResponseData]) -> Dict[str, Any]:
     valid_times = []
     
     for r in responses:
-        if r.selected_option is None:
+        if not _is_answered(r):
             skipped_count += 1
         if r.time_taken_seconds is not None:
             total_time_seconds += r.time_taken_seconds

@@ -330,11 +330,11 @@ These routes are under `<ProtectedRoute>` (requires auth) but not under `<Onboar
 
 ---
 
-## Documentation Drift (Non-Blocking)
+## Documentation Drift (Resolved)
 
-`CLAUDE.md` documents the payment tables as `payment_plans`, `user_subscriptions`, `payment_orders`, `payment_logs`, and `system_settings`. The actual DB tables (as queried in the code) are `subscription_plans`, `subscriptions`, `payments`, and `app_settings`. The code works — the DB clearly has the real names — but the CLAUDE.md schema section is stale. Anyone reading CLAUDE.md to write a new query will use the wrong table names and hit confusing errors.
+`CLAUDE.md` and `AGENTS.md` now document the actual ADR-014 payment tables used by the code: `subscription_plans`, `subscriptions`, `payments`, and `app_settings`.
 
-**Fix:** Update the "DATABASE Schema" section of CLAUDE.md to reflect the actual table names.
+Historical planning notes under `docs/superpowers/` may still mention pre-ADR-014 table names, but they are not authoritative implementation references.
 
 ---
 

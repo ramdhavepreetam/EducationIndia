@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Any, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 # ── Request schemas ───────────────────────────────────────────────────────────
@@ -40,6 +40,18 @@ class SaveResponseRequest(BaseModel):
     selected_options: Optional[list[int]] = None
     is_marked_review: bool = False
     time_taken_seconds: Optional[int] = Field(None, ge=0)
+
+    @field_validator("selected_options")
+    @classmethod
+    def validate_selected_options(cls, value: Optional[list[int]]) -> Optional[list[int]]:
+        if value is None:
+            return value
+        invalid = [opt for opt in value if opt not in (1, 2, 3, 4)]
+        if invalid:
+            raise ValueError("selected_options values must be between 1 and 4")
+        if len(set(value)) != len(value):
+            raise ValueError("selected_options must not contain duplicates")
+        return value
 
 
 # ── Response state item — palette data per question ───────────────────────────

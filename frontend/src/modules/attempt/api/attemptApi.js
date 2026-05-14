@@ -49,10 +49,12 @@ export const attemptApi = {
     },
 
     /** Fetch exam delivery questions (without correct options) */
-    getExamDeliveryQuestions: async (examId) => {
+    getExamDeliveryQuestions: async (examId, childProfileId) => {
         // Requires question module proxy or direct access via catalog if wired
         // As per ADR, question fetching for delivery goes here or question API.
-        const response = await apiClient.get(`/api/questions/?exam_id=${Number(examId)}`)
+        const params = new URLSearchParams({ exam_id: String(Number(examId)) })
+        if (childProfileId) params.set('child_profile_id', childProfileId)
+        const response = await apiClient.get(`/api/questions/?${params.toString()}`)
         return response.data
     }
 }

@@ -11,8 +11,10 @@ def test_cors_production_url():
     from app.main import app
     from fastapi.middleware.cors import CORSMiddleware
     
-    # Remove existing CORSMiddleware
+    # Remove existing CORSMiddleware and clear the built stack so Starlette allows
+    # the test-specific middleware configuration to be added.
     app.user_middleware = [m for m in app.user_middleware if m.cls != CORSMiddleware]
+    app.middleware_stack = None
     
     # Re-add with updated settings
     app.add_middleware(

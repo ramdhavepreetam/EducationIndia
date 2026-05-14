@@ -67,11 +67,12 @@ async def can_start_exam(
     if exam_id != ctx.free_exam_id:
         return False, "upgrade_required_exam"
 
-    # Count completed attempts for this child on this exam
+    # Count completed attempts for this learner on this exam.
+    # Direct-student attempts use student_id; parent-created child attempts use child_profile_id.
     result = await db.execute(
         text("""
             SELECT COUNT(*) FROM attempts
-            WHERE child_profile_id = :cid
+            WHERE (child_profile_id = :cid OR student_id = :cid)
               AND exam_id = :eid
               AND status IN ('submitted', 'expired')
         """),
