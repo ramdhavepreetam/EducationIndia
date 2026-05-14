@@ -3,13 +3,13 @@
 Alembic is the canonical migration ledger from this point forward.
 
 The original Supabase schema was created before Alembic and is tracked as a
-baseline revision (`0001_baseline_initial_supabase_schema`). For an existing
+baseline revision (`0001_baseline`). For an existing
 database that already has `database/scholarpath_migration.sql` applied, stamp
 the baseline first:
 
 ```bash
 cd backend
-.venv/bin/alembic stamp 0001_baseline_initial_supabase_schema
+.venv/bin/alembic stamp 0001_baseline
 .venv/bin/alembic upgrade head
 ```
 

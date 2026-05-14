@@ -9,7 +9,7 @@ at the baseline revision, then upgraded to the latest tracked migration:
 
 ```bash
 cd backend
-.venv/bin/alembic stamp 0001_baseline_initial_supabase_schema
+.venv/bin/alembic stamp 0001_baseline
 .venv/bin/alembic upgrade head
 ```
 
@@ -23,7 +23,7 @@ For a new Supabase project:
 
 ```bash
 cd backend
-.venv/bin/alembic stamp 0001_baseline_initial_supabase_schema
+.venv/bin/alembic stamp 0001_baseline
 ```
 
 3. Apply the tracked follow-up migrations:
@@ -50,7 +50,7 @@ the reversal is safe. Do not add new standalone SQL files outside Alembic.
 
 ## Current Chain
 
-- `0001_baseline_initial_supabase_schema`
-- `0002_adr013_014_child_profiles_payments`
+- `0001_baseline`
+- `0002_adr013_014`
 - `0003_multi_select_questions`
 - `0004_security_advisor_hardening`

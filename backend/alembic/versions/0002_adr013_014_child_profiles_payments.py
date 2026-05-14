@@ -1,14 +1,14 @@
 """Apply ADR-013 child profiles and ADR-014 payments schema.
 
-Revision ID: 0002_adr013_014_child_profiles_payments
-Revises: 0001_baseline_initial_supabase_schema
+Revision ID: 0002_adr013_014
+Revises: 0001_baseline
 Create Date: 2026-05-13
 """
 
 from alembic_helpers import execute_sql_script, sql_file
 
-revision = "0002_adr013_014_child_profiles_payments"
-down_revision = "0001_baseline_initial_supabase_schema"
+revision = "0002_adr013_014"
+down_revision = "0001_baseline"
 branch_labels = None
 depends_on = None
 

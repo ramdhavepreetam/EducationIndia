@@ -1,6 +1,6 @@
 """Baseline existing initial Supabase schema.
 
-Revision ID: 0001_baseline_initial_supabase_schema
+Revision ID: 0001_baseline
 Revises:
 Create Date: 2026-05-13
 
@@ -12,7 +12,7 @@ the SQL schema section.
 
 from alembic import op
 
-revision = "0001_baseline_initial_supabase_schema"
+revision = "0001_baseline"
 down_revision = None
 branch_labels = None
 depends_on = None
