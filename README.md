@@ -79,9 +79,8 @@ scholarpath/
 │   └── package.json
 ├── database/                 SQL migrations and hardening scripts
 ├── docs/adr/                 Architecture Decision Records
-├── rendered/                 Rendered paper/page image assets used by import tooling
-├── import_*.py               Exam import scripts
-├── bulk_import_*.py          Bulk import helpers
+├── archive/                  Historical one-off seed/import scripts + data (superseded
+│                             by backend/app/modules/question/pdf_importer.py)
 └── AGENTS.md                 Project knowledge file for coding agents
 ```
 
@@ -502,26 +501,26 @@ curl -sS -o /dev/null -w 'frontend:%{http_code}\n' https://scholarpath-app.web.a
 
 ## Exam Data And Import Tooling
 
-The repository contains extraction/render/import helpers for historical MSCE papers and 8th standard 2025 content.
+The **current** way to import a paper is the review-first PDF importer — see
+[`UploadQuestionPDF.md`](UploadQuestionPDF.md) and `backend/app/modules/question/pdf_importer.py`
+(admin endpoint `POST /api/admin/questions/pdf-import`).
 
-Common files:
-
-- `answers_*.json` answer keys
-- `marathi_*.json` Marathi extracted questions
-- `8th_2025_*.json` 8th standard extracted data
-- `render_*.py` PDF/page rendering helpers
-- `import_*_full.py` year import scripts
-- `init_year.py`, `init_8th_2025.py` exam/event setup scripts
-- `bulk_import_8th.py`, `bulk_import_8th_p2.py` bulk import helpers
-- `rendered/` generated page/check images used during extraction
-
-Admin bulk import endpoint:
+For programmatic JSON import there is the admin bulk-import endpoint:
 
 ```text
 POST /api/admin/questions/bulk-import
 ```
 
-This endpoint is admin-protected and replaces an exam's question set through backend validation.
+This endpoint is admin-protected and replaces an exam's question set through backend
+validation. See [`template.json`](template.json) for the payload format.
+
+### Historical helpers (`archive/`)
+
+The one-off extraction/render/import scripts and extracted-data JSON that were used to seed
+the 2017–2025 MSCE papers and 8th-standard 2025 content now live under `archive/` (see
+`archive/README.md`). They are superseded by the PDF importer, unmaintained, and not wired
+into the app. The large rendered page scans are kept locally under `archive/rendered/` and
+are git-ignored.
 
 ## Useful SQL Queries
 
