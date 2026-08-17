@@ -36,7 +36,8 @@ const OptionItem = ({ option, selectedOption, correctOption, language = 'en' }) 
       </span>
       <div className="flex-1 min-w-0">
         {text && (
-          <p className="text-sm text-gray-800 leading-relaxed">{text}</p>
+          /* whitespace-pre-wrap preserves symbol-figure alignment — see QuestionCard */
+          <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{text}</p>
         )}
         {option.image_url && (
           <img

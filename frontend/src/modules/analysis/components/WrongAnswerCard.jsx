@@ -50,7 +50,8 @@ const WrongAnswerCard = ({ item, index }) => {
       <div className="p-4 space-y-3">
         {/* Question text */}
         {questionText && (
-          <p className="text-sm text-gray-800 font-medium leading-relaxed">
+          /* whitespace-pre-wrap preserves symbol-figure alignment — see QuestionCard */
+          <p className="text-sm text-gray-800 font-medium leading-relaxed whitespace-pre-wrap">
             {questionText}
           </p>
         )}

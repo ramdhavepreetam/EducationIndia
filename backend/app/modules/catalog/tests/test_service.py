@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 from app.modules.catalog.models import Exam, ExamBoard
 from app.modules.catalog.service import CatalogService
-from app.shared.exceptions import NotFound
+from app.shared.exceptions import BadRequest, NotFound
 
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -23,7 +23,16 @@ def mock_db():
 
 @pytest.fixture
 def mock_repo():
-    return AsyncMock()
+    repo = AsyncMock()
+    # Default to a healthy paper. Without an explicit value the auto-created
+    # AsyncMock returns a MagicMock whose .get() is truthy, which would read as
+    # "has publish blockers" and block every publish test.
+    repo.get_paper_health.return_value = {
+        "exam_id": 1,
+        "total_questions": 75,
+        "publish_blocker_count": 0,
+    }
+    return repo
 
 
 @pytest.fixture
@@ -205,3 +214,82 @@ class TestPublishExam:
 
         assert result["is_active"] is True
         assert result["exam_id"] == 1
+
+
+class TestPublishHealthGate:
+    """
+    A paper with unanswerable questions must not reach students.
+
+    Guards the defect found on 2026-08-17: exam 16 was live with a question
+    whose correct answer was a blank option, so it could never be answered
+    correctly. publish_blocker_count comes from v_paper_health.
+    """
+
+    async def test_blocks_publish_when_paper_has_blockers(self, service, mock_db):
+        svc, repo = service
+        repo.get_exam_by_id.return_value = make_exam(id=1, is_active=False)
+        repo.get_paper_health.return_value = {
+            "exam_id": 1,
+            "publish_blocker_count": 13,
+        }
+
+        with pytest.raises(BadRequest) as exc:
+            await svc.publish_exam(mock_db, exam_id=1)
+
+        assert "13" in str(exc.value.detail)
+        repo.set_exam_active.assert_not_called()
+
+    async def test_force_overrides_the_gate(self, service, mock_db):
+        svc, repo = service
+        repo.get_exam_by_id.return_value = make_exam(id=1, is_active=False)
+        repo.set_exam_active.return_value = make_exam(id=1, is_active=True)
+        repo.get_paper_health.return_value = {
+            "exam_id": 1,
+            "publish_blocker_count": 13,
+        }
+
+        result = await svc.publish_exam(mock_db, exam_id=1, force=True)
+
+        assert result["is_active"] is True
+        assert result["health"]["publish_blocker_count"] == 13
+        repo.set_exam_active.assert_called_once_with(mock_db, 1, is_active=True)
+
+    async def test_publishes_when_blocker_count_is_zero(self, service, mock_db):
+        svc, repo = service
+        repo.get_exam_by_id.return_value = make_exam(id=1, is_active=False)
+        repo.set_exam_active.return_value = make_exam(id=1, is_active=True)
+        repo.get_paper_health.return_value = {
+            "exam_id": 1,
+            "publish_blocker_count": 0,
+        }
+
+        result = await svc.publish_exam(mock_db, exam_id=1)
+
+        assert result["is_active"] is True
+        repo.set_exam_active.assert_called_once()
+
+    async def test_publishes_when_health_row_is_missing(self, service, mock_db):
+        """A paper with no v_paper_health row (no questions yet) is not blocked."""
+        svc, repo = service
+        repo.get_exam_by_id.return_value = make_exam(id=1, is_active=False)
+        repo.set_exam_active.return_value = make_exam(id=1, is_active=True)
+        repo.get_paper_health.return_value = None
+
+        result = await svc.publish_exam(mock_db, exam_id=1)
+
+        assert result["is_active"] is True
+
+    async def test_unpublish_is_never_gated(self, service, mock_db):
+        """Unpublishing a broken paper must always work — it is the remedy."""
+        svc, repo = service
+        exam = make_exam(id=1, is_active=False)
+        repo.get_exam_by_id.return_value = exam
+        repo.set_exam_active.return_value = exam
+        repo.get_paper_health.return_value = {
+            "exam_id": 1,
+            "publish_blocker_count": 99,
+        }
+
+        result = await svc.unpublish_exam(mock_db, exam_id=1)
+
+        assert result.is_active is False

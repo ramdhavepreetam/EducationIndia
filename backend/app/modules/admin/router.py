@@ -108,16 +108,29 @@ async def admin_update_exam(
 @router.put("/catalog/exams/{exam_id}/publish", response_model=PublishExamResponse)
 async def admin_publish_exam(
     exam_id: int,
+    force: bool = False,
     db: AsyncSession = Depends(get_db),
     _: UserIdentity = Depends(require_admin),
 ):
-    """Publish exam — sets is_active=True. Admin only."""
-    result = await catalog_service.publish_exam(db, exam_id)
+    """
+    Publish exam — sets is_active=True. Admin only.
+
+    Rejects papers containing unanswerable questions (blank correct answer or
+    no stem). Pass ?force=true to override deliberately.
+    """
+    result = await catalog_service.publish_exam(db, exam_id, force=force)
     count = result.get("auto_assigned_count", 0)
+    blockers = (result.get("health") or {}).get("publish_blocker_count", 0) or 0
+    message = f"Exam is now published. Auto-assigned to {count} student(s)."
+    if blockers:
+        message += (
+            f" WARNING: published with force despite {blockers} "
+            "unanswerable question(s)."
+        )
     return PublishExamResponse(
         id=result["exam_id"],
         is_active=result["is_active"],
-        message=f"Exam is now published. Auto-assigned to {count} student(s).",
+        message=message,
     )
 
 
