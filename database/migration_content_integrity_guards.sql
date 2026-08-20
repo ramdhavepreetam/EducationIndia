@@ -88,10 +88,14 @@ SELECT
         WHERE NOT COALESCE(q.is_cancelled, false)
           AND q.question_type IN ('image_only', 'text_image', 'context_image')
           AND q.question_image_url IS NULL
+          AND q.context_id IS NULL
     )                           AS missing_image_count,
     -- question with neither stem text nor stem image
+    -- context-bound questions draw their stem/figure from question_contexts,
+    -- so a bare question row is correct for them (matches questions_stem_present_chk)
     COUNT(DISTINCT q.id) FILTER (
         WHERE NOT COALESCE(q.is_cancelled, false)
+          AND q.context_id IS NULL
           AND COALESCE(q.text_en, '') = ''
           AND COALESCE(q.text_mr, '') = ''
           AND q.question_image_url IS NULL
@@ -119,7 +123,8 @@ SELECT
              AND COALESCE(o.text_en, '') = ''
              AND COALESCE(o.text_mr, '') = ''
              AND o.image_url IS NULL)
-            OR (COALESCE(q.text_en, '') = ''
+            OR (q.context_id IS NULL
+                AND COALESCE(q.text_en, '') = ''
                 AND COALESCE(q.text_mr, '') = ''
                 AND q.question_image_url IS NULL)
           )
