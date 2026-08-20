@@ -1,0 +1,346 @@
+{
+  "__note": "PAPER II example. Section I is Third Language (Marathi) — questions there use question_type 'marathi_only' and have no English version. Section II is the Intelligence Test, where most non-verbal question types live. See question-paper-example.json for the Paper I example.",
+
+  "paper": {
+    "board": "MSCE",
+    "std_class": 5,
+    "year": 2025,
+    "paper_code": "502",
+    "set_code": "A",
+    "medium": "marathi"
+  },
+
+  "contexts": [
+    {
+      "context_type": "poem",
+      "title_en": null,
+      "title_mr": "आई",
+      "content_en": null,
+      "content_mr": "आई म्हणजे मायेचा सागर,\nआई म्हणजे प्रेमाचा आगर,\nतिच्या कुशीत मिळे विसावा,\nतिच्या हातचा घास गोड सारा.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": null,
+      "instruction_mr": "वरील कविता वाचून प्रश्न ४ आणि ५ ची उत्तरे द्या.",
+      "applies_from": 4,
+      "applies_to": 5
+    },
+    {
+      "context_type": "venn_diagram",
+      "title_en": "Venn Diagram",
+      "title_mr": "व्हेन आकृती",
+      "content_en": null,
+      "content_mr": null,
+      "image": "ctx1-venn.png",
+      "image_alt_en": "Three overlapping circles labelled Students, Cricket players and Singers",
+      "image_alt_mr": "विद्यार्थी, क्रिकेटपटू आणि गायक अशी तीन एकमेकांत मिसळणारी वर्तुळे",
+      "instruction_en": "Study the Venn diagram and answer question 40.",
+      "instruction_mr": "व्हेन आकृतीचा अभ्यास करून प्रश्न ४० चे उत्तर द्या.",
+      "applies_from": 40,
+      "applies_to": 40
+    }
+  ],
+
+  "questions": [
+    {
+      "__example": "TYPE 'marathi_only' — Paper II Section I. text_en MUST be null and every option needs text_mr. There is no English version of these questions.",
+      "question_no": 1,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'पुस्तक' या शब्दाचे अनेकवचन काय आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "'पुस्तक' चे अनेकवचन 'पुस्तके' असे होते.",
+      "hint_en": null,
+      "hint_mr": "नपुंसकलिंगी शब्दांचे अनेकवचन आठवा.",
+      "difficulty": "easy",
+      "tags": ["grammar", "marathi"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": "पुस्तक",   "image": null },
+        { "option_no": 2, "text_en": null, "text_mr": "पुस्तके",  "image": null },
+        { "option_no": 3, "text_en": null, "text_mr": "पुस्तकां", "image": null },
+        { "option_no": 4, "text_en": null, "text_mr": "पुस्तकी",  "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'marathi_only' — idioms. Same rules.",
+      "question_no": 2,
+      "section": "Marathi",
+      "topic": "Idioms and Proverbs",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'नाकाने कांदे सोलणे' या वाक्प्रचाराचा अर्थ काय?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "'नाकाने कांदे सोलणे' म्हणजे उगीच बढाई मारणे.",
+      "hint_en": null,
+      "hint_mr": "हा वाक्प्रचार गर्वाशी संबंधित आहे.",
+      "difficulty": "medium",
+      "tags": ["idioms", "marathi"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": "स्वयंपाक करणे",  "image": null },
+        { "option_no": 2, "text_en": null, "text_mr": "रडत बसणे",       "image": null },
+        { "option_no": 3, "text_en": null, "text_mr": "उगीच बढाई मारणे", "image": null },
+        { "option_no": 4, "text_en": null, "text_mr": "मदत करणे",       "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'context_text' with a Marathi poem context. Note text_en is null here because Paper II Section I is Marathi-only, but the type is still context_text (it has stem text of its own).",
+      "question_no": 4,
+      "section": "Marathi",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "कवितेत आईची तुलना कशाशी केली आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "कवितेच्या पहिल्या ओळीत आईला मायेचा सागर म्हटले आहे.",
+      "hint_en": null,
+      "hint_mr": "पहिली ओळ पुन्हा वाचा.",
+      "difficulty": "easy",
+      "tags": ["poetry", "comprehension"],
+      "context_ref": 0,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": "सागराशी", "image": null },
+        { "option_no": 2, "text_en": null, "text_mr": "आकाशाशी", "image": null },
+        { "option_no": 3, "text_en": null, "text_mr": "सूर्याशी", "image": null },
+        { "option_no": 4, "text_en": null, "text_mr": "वृक्षाशी", "image": null }
+      ]
+    },
+
+    {
+      "__example": "MULTI-SELECT ('select TWO'). Set is_multi_select true, leave correct_option null, and list the correct answers in correct_options. Values must be 1-4 with no duplicates. Any question_type may be multi-select.",
+      "question_no": 5,
+      "section": "Marathi",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "कवितेतून आईबद्दलच्या कोणत्या दोन भावना व्यक्त होतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [1, 4],
+      "explanation_en": null,
+      "explanation_mr": "कवितेत माया आणि प्रेम या दोन्ही भावना स्पष्टपणे येतात.",
+      "hint_en": null,
+      "hint_mr": "पहिल्या दोन ओळींकडे लक्ष द्या.",
+      "difficulty": "hard",
+      "tags": ["poetry", "multi-select"],
+      "context_ref": 0,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": "माया",   "image": null },
+        { "option_no": 2, "text_en": null, "text_mr": "राग",    "image": null },
+        { "option_no": 3, "text_en": null, "text_mr": "भीती",   "image": null },
+        { "option_no": 4, "text_en": null, "text_mr": "प्रेम",  "image": null }
+      ]
+    },
+
+    {
+      "__example": "SYMBOL FIGURE — mirror image using Unicode. No image file needed. Preferred for this kind of item.",
+      "question_no": 26,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "text",
+      "text_en": "Which figure comes next in the series?    ◐  ◑  ◒  ?",
+      "text_mr": "मालिकेत पुढील आकृती कोणती?    ◐  ◑  ◒  ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The shaded half rotates 90° clockwise at each step, so ◓ comes next.",
+      "explanation_mr": "छायांकित अर्धा भाग प्रत्येक टप्प्यात ९०° घड्याळाच्या दिशेने फिरतो, म्हणून ◓ पुढे येतो.",
+      "hint_en": "Track which half is shaded.",
+      "hint_mr": "कोणता अर्धा भाग छायांकित आहे ते पहा.",
+      "difficulty": "medium",
+      "tags": ["series", "symbol-figure"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "◓", "text_mr": "◓", "image": null },
+        { "option_no": 2, "text_en": "◐", "text_mr": "◐", "image": null },
+        { "option_no": 3, "text_en": "◑", "text_mr": "◑", "image": null },
+        { "option_no": 4, "text_en": "◒", "text_mr": "◒", "image": null }
+      ]
+    },
+
+    {
+      "__example": "SYMBOL FIGURE, multi-line grid. Use real newlines (\\n) and align columns with spaces — the app preserves the layout.",
+      "question_no": 27,
+      "section": "Intelligence Test",
+      "topic": "Pattern Recognition",
+      "question_type": "text",
+      "text_en": "Study the pattern and find the missing figure.\n\n△  ▽  △\n▽  △  ▽\n△  ▽  ?",
+      "text_mr": "नमुन्याचा अभ्यास करून गहाळ आकृती शोधा.\n\n△  ▽  △\n▽  △  ▽\n△  ▽  ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Triangles alternate direction along every row and column, so the missing figure is △.",
+      "explanation_mr": "प्रत्येक ओळ व स्तंभात त्रिकोण दिशा बदलतात, म्हणून गहाळ आकृती △ आहे.",
+      "hint_en": "Read the third row left to right.",
+      "hint_mr": "तिसरी ओळ डावीकडून उजवीकडे वाचा.",
+      "difficulty": "hard",
+      "tags": ["pattern", "matrix", "symbol-figure"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "▽", "text_mr": "▽", "image": null },
+        { "option_no": 2, "text_en": "△", "text_mr": "△", "image": null },
+        { "option_no": 3, "text_en": "◇", "text_mr": "◇", "image": null },
+        { "option_no": 4, "text_en": "□", "text_mr": "□", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'image_only' — the image IS the question. text_en and text_mr MUST be null, and ALL FOUR options must be images. The wording goes in question_image_alt_*.",
+      "question_no": 28,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": "q28-stem.png",
+      "question_image_alt_en": "Select the mirror image of the given figure",
+      "question_image_alt_mr": "दिलेल्या आकृतीची आरशातील प्रतिमा निवडा",
+      "correct_option": 3,
+      "explanation_en": "A mirror image flips the figure left to right.",
+      "explanation_mr": "आरशातील प्रतिमा आकृती डावीकडून उजवीकडे उलटवते.",
+      "hint_en": "Imagine a mirror on the right-hand side.",
+      "hint_mr": "उजव्या बाजूला आरशाची कल्पना करा.",
+      "difficulty": "medium",
+      "tags": ["mirror-image", "non-verbal"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": null, "image": "q28-opt1.png", "image_alt_en": "Figure rotated 90 degrees",   "image_alt_mr": "आकृती ९० अंश फिरवलेली" },
+        { "option_no": 2, "text_en": null, "text_mr": null, "image": "q28-opt2.png", "image_alt_en": "Figure upside down",          "image_alt_mr": "आकृती उलटी" },
+        { "option_no": 3, "text_en": null, "text_mr": null, "image": "q28-opt3.png", "image_alt_en": "Figure flipped left to right","image_alt_mr": "आकृती डावीकडून उजवीकडे उलटवलेली" },
+        { "option_no": 4, "text_en": null, "text_mr": null, "image": "q28-opt4.png", "image_alt_en": "Figure unchanged",            "image_alt_mr": "आकृती जशीच्या तशी" }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'text_image' — DICE. Always use an image for dice: MSCE dice items show a 3D cube with 2-3 visible faces, which the Unicode die glyphs cannot express.",
+      "question_no": 29,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "text_image",
+      "text_en": "Two views of the same dice are shown. Which number is opposite the face showing 3?",
+      "text_mr": "एकाच फाशाची दोन दृश्ये दाखवली आहेत. ३ असलेल्या पृष्ठभागाच्या विरुद्ध कोणता अंक आहे?",
+      "question_image": "q29-dice.png",
+      "question_image_alt_en": "Two views of one dice. First shows 1 on top, 3 in front, 2 on the right. Second shows 1 on top, 5 in front, 3 on the right.",
+      "question_image_alt_mr": "एकाच फाशाची दोन दृश्ये. पहिल्यात वर १, समोर ३, उजवीकडे २. दुसऱ्यात वर १, समोर ५, उजवीकडे ३.",
+      "correct_option": 3,
+      "explanation_en": "Faces 1, 2 and 5 all appear adjacent to 3, so the opposite face must be 6.",
+      "explanation_mr": "१, २ आणि ५ हे सर्व ३ शेजारी दिसतात, म्हणून विरुद्ध पृष्ठभाग ६ असला पाहिजे.",
+      "hint_en": "List every face you can see next to 3.",
+      "hint_mr": "३ शेजारी दिसणारे सर्व पृष्ठभाग लिहा.",
+      "difficulty": "hard",
+      "tags": ["dice", "spatial"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "2", "text_mr": "२", "image": null },
+        { "option_no": 2, "text_en": "4", "text_mr": "४", "image": null },
+        { "option_no": 3, "text_en": "6", "text_mr": "६", "image": null },
+        { "option_no": 4, "text_en": "5", "text_mr": "५", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'bilingual' — coding/decoding shown in both languages side by side.",
+      "question_no": 30,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "If CAT is written as DBU, how is DOG written?",
+      "text_mr": "जर CAT हे DBU असे लिहिले जाते, तर DOG कसे लिहिले जाईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Each letter moves forward by one: D→E, O→P, G→H.",
+      "explanation_mr": "प्रत्येक अक्षर एकाने पुढे सरकते: D→E, O→P, G→H.",
+      "hint_en": "Compare C with D, A with B.",
+      "hint_mr": "C ची D शी आणि A ची B शी तुलना करा.",
+      "difficulty": "medium",
+      "tags": ["coding", "reasoning"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "EPH", "text_mr": "EPH", "image": null },
+        { "option_no": 2, "text_en": "EPG", "text_mr": "EPG", "image": null },
+        { "option_no": 3, "text_en": "CNF", "text_mr": "CNF", "image": null },
+        { "option_no": 4, "text_en": "FQI", "text_mr": "FQI", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'context_image' — options are images and the question shares the Venn figure in contexts[1].",
+      "question_no": 40,
+      "section": "Intelligence Test",
+      "topic": "Venn Diagrams",
+      "question_type": "context_image",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "The region common to all three circles represents students who both play cricket and sing.",
+      "explanation_mr": "तिन्ही वर्तुळांचा समाईक भाग क्रिकेट खेळणाऱ्या व गाणाऱ्या विद्यार्थ्यांना दर्शवतो.",
+      "hint_en": "Look for the area where all three overlap.",
+      "hint_mr": "तिन्ही वर्तुळे जिथे मिसळतात तो भाग पहा.",
+      "difficulty": "hard",
+      "tags": ["venn", "non-verbal"],
+      "context_ref": 1,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": null, "image": "q40-opt1.png", "image_alt_en": "Only the Students circle shaded",        "image_alt_mr": "फक्त विद्यार्थी वर्तुळ छायांकित" },
+        { "option_no": 2, "text_en": null, "text_mr": null, "image": "q40-opt2.png", "image_alt_en": "Central region of all three shaded",     "image_alt_mr": "तिन्हींचा मधला भाग छायांकित" },
+        { "option_no": 3, "text_en": null, "text_mr": null, "image": "q40-opt3.png", "image_alt_en": "Overlap of two circles only shaded",     "image_alt_mr": "फक्त दोन वर्तुळांचा समाईक भाग छायांकित" },
+        { "option_no": 4, "text_en": null, "text_mr": null, "image": "q40-opt4.png", "image_alt_en": "Area outside all circles shaded",        "image_alt_mr": "सर्व वर्तुळांबाहेरील भाग छायांकित" }
+      ]
+    },
+
+    {
+      "__example": "CANCELLED question — correct_option MUST be null. Options still need content. Use only when the official answer key withdraws the question.",
+      "question_no": 41,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "text",
+      "text_en": "Which one is the odd one out?",
+      "text_mr": "विसंगत कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_cancelled": true,
+      "cancelled_reason": "Cancelled in official answer key — two options were defensible",
+      "explanation_en": null,
+      "explanation_mr": null,
+      "hint_en": null,
+      "hint_mr": null,
+      "difficulty": "medium",
+      "tags": ["odd-one-out", "cancelled"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "Rose",     "text_mr": "गुलाब",  "image": null },
+        { "option_no": 2, "text_en": "Lily",     "text_mr": "कमळ",   "image": null },
+        { "option_no": 3, "text_en": "Mango",    "text_mr": "आंबा",   "image": null },
+        { "option_no": 4, "text_en": "Jasmine",  "text_mr": "जाई",   "image": null }
+      ]
+    }
+  ]
+}
