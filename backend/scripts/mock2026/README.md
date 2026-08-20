@@ -51,6 +51,34 @@ UPDATE options o SET is_correct = true FROM questions q
     AND q.is_multi_select AND o.option_no = ANY(q.correct_options);
 ```
 
+## Image URLs must be absolute
+
+The vendor JSON carries bare filenames. They are stored as absolute URLs
+(`http://localhost:8000/static/mock2026/…`) because the frontend dev server runs
+on a different origin (:5173) than the backend (:8000). A relative
+`/static/…` path resolves against the frontend, which returns `index.html`
+instead of the PNG — the browser then shows a broken-image icon with alt text.
+
+`import_mock_paper.py` handles this via `img()`. Override the host with:
+
+```bash
+BASE_URL=https://your-backend.example.com .venv/bin/python \
+  backend/scripts/mock2026/import_mock_paper.py
+```
+
+To repoint images after the backend moves:
+
+```sql
+UPDATE questions SET question_image_url =
+  replace(question_image_url, 'http://localhost:8000', 'https://NEW-HOST')
+  WHERE exam_id = :exam_id AND question_image_url LIKE 'http://localhost:8000%';
+
+UPDATE options o SET image_url =
+  replace(o.image_url, 'http://localhost:8000', 'https://NEW-HOST')
+  FROM questions q WHERE q.id = o.question_id AND q.exam_id = :exam_id
+    AND o.image_url LIKE 'http://localhost:8000%';
+```
+
 ## Known limitation
 
 The Q8 illustration is programmatic flat-vector art. It is clear and readable,
