@@ -17,11 +17,17 @@ Exit code 0 = valid, 1 = errors found.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import unicodedata
 from collections import Counter
 from pathlib import Path
+
+try:  # Pillow is optional: without it, duplicate detection falls back to raw bytes
+    from PIL import Image
+except ImportError:  # pragma: no cover
+    Image = None
 
 QUESTION_TYPES = {
     "text",
@@ -80,6 +86,35 @@ def content_of(item: dict, *keys: str) -> bool:
     return any((item.get(k) or "").strip() if isinstance(item.get(k), str) else item.get(k) for k in keys)
 
 
+def _duplicate_option_images(
+    images_dir: Path, option_image_sets: dict[int, list[str]]
+) -> list[str]:
+    """Report questions where two option images are byte-identical after decoding."""
+    errors: list[str] = []
+    for qno, names in sorted(option_image_sets.items()):
+        digests: dict[str, list[str]] = {}
+        for name in names:
+            path = images_dir / name
+            if not path.exists():
+                continue
+            try:
+                if Image is None:
+                    raise RuntimeError("Pillow not installed")
+                with Image.open(path) as im:
+                    digest = hashlib.md5(im.convert("RGB").tobytes()).hexdigest()
+            except Exception:
+                digest = hashlib.md5(path.read_bytes()).hexdigest()
+            digests.setdefault(digest, []).append(name)
+        for group in digests.values():
+            if len(group) > 1:
+                errors.append(
+                    f"Q{qno}: options {', '.join(sorted(group))} are the SAME image — "
+                    "the student cannot tell them apart. Usually the stem figure is "
+                    "symmetric under the transform being asked about."
+                )
+    return errors
+
+
 def check(path: Path, images_dir: Path | None, strict: bool) -> list[str]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -134,6 +169,8 @@ def check(path: Path, images_dir: Path | None, strict: bool) -> list[str]:
     # ── questions ────────────────────────────────────────────────────────────
     seen: dict[int, int] = {}
     referenced_images: set[str] = set()
+    # question_no -> [option image filenames], for duplicate-artwork detection
+    option_image_sets: dict[int, list[str]] = {}
 
     for pos, q in enumerate(questions):
         no = q.get("question_no")
@@ -293,6 +330,9 @@ def check(path: Path, images_dir: Path | None, strict: bool) -> list[str]:
             referenced_images.add(stem_img)
             if not content_of(q, "question_image_alt_en", "question_image_alt_mr"):
                 warnings.append(f"{p}: question_image has no alt text")
+        opt_imgs = [o["image"] for o in options if o.get("image")]
+        if len(opt_imgs) > 1:
+            option_image_sets[no] = opt_imgs
         for o in options:
             if o.get("image"):
                 referenced_images.add(o["image"])
@@ -313,6 +353,12 @@ def check(path: Path, images_dir: Path | None, strict: bool) -> list[str]:
         for name in sorted(referenced_images):
             if not (images_dir / name).exists():
                 errors.append(f"Image file not found in {images_dir}: {name}")
+
+        # Two options that render the SAME picture make a question unanswerable —
+        # the student cannot tell them apart, and if one of them is the key the
+        # question is indefensible. Usually means the stem figure is symmetric
+        # under the transform being asked about.
+        errors.extend(_duplicate_option_images(images_dir, option_image_sets))
 
     # ── report ───────────────────────────────────────────────────────────────
     print(f"File      : {path}")
