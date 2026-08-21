@@ -41,11 +41,18 @@ Every question: **exactly 4 options, exactly 1 correct answer, 2 marks, no negat
 }
 ```
 
-- `paper_code` — `"501"` = Paper I, `"502"` = Paper II
+- `paper_code` — `<std><paper number>`: `"501"` = Std 5 Paper I, `"802"` = Std 8 Paper II.
+  Valid codes: `401` `402` `501` `502` `701` `702` `801` `802`.
+  The first digit **must** match `std_class`.
 - `std_class` — `4`, `5`, `7` or `8`
 - `medium` — `"english"` or `"marathi"`
 - `contexts` — shared passages/figures used by more than one question. Empty array `[]` if none.
 - `questions` — all 75, in order.
+
+> MSCE runs two exams: **PUP** (Pre-Upper Primary, currently Std 5, moving to
+> Std 4) and **PSS** (Pre-Secondary, currently Std 8, moving to Std 7).
+> 2025–26 is a transition year with both. The paper structure is identical
+> across all four — only the syllabus depth changes.
 
 ---
 

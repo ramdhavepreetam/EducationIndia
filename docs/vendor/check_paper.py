@@ -33,6 +33,10 @@ QUESTION_TYPES = {
     "bilingual",
 }
 DIFFICULTIES = {"easy", "medium", "hard"}
+# MSCE runs PUP (currently Std 5, moving to Std 4) and PSS (Std 8, moving to Std 7).
+# paper_code is <std><paper number>: 501 = Std 5 Paper I, 802 = Std 8 Paper II.
+STD_CLASSES = {4, 5, 7, 8}
+PAPER_CODES = {f"{s}{p}" for s in STD_CLASSES for p in ("01", "02")}
 CONTEXT_TYPES = {
     "paragraph", "poem", "advertisement", "image", "pictograph",
     "instruction", "venn_diagram", "figure_series", "table", "data_chart",
@@ -104,10 +108,21 @@ def check(path: Path, images_dir: Path | None, strict: bool) -> list[str]:
     if not isinstance(paper, dict):
         errors.append("Missing 'paper' object")
     else:
-        if paper.get("paper_code") not in ("501", "502"):
-            errors.append(f"paper.paper_code must be '501' or '502', got {paper.get('paper_code')!r}")
-        if paper.get("std_class") not in (4, 5, 7, 8):
-            errors.append(f"paper.std_class must be 4, 5, 7 or 8, got {paper.get('std_class')!r}")
+        std = paper.get("std_class")
+        code = paper.get("paper_code")
+        if std not in STD_CLASSES:
+            errors.append(f"paper.std_class must be one of {sorted(STD_CLASSES)}, got {std!r}")
+        if code not in PAPER_CODES:
+            errors.append(
+                f"paper.paper_code must be one of {sorted(PAPER_CODES)}, got {code!r}. "
+                "The first digit is the standard, the last is the paper number "
+                "(e.g. 801 = Std 8 Paper I)."
+            )
+        elif std in STD_CLASSES and not code.startswith(str(std)):
+            errors.append(
+                f"paper.paper_code {code!r} does not match std_class {std} — "
+                f"expected {std}01 or {std}02"
+            )
 
     # ── contexts ─────────────────────────────────────────────────────────────
     for idx, ctx in enumerate(contexts):
