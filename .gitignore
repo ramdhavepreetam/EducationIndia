@@ -81,3 +81,6 @@ backend/scripts/verify_day7.py
 build_logs.txt
 backend/build_logs.txt
 frontend/dist.old_*/
+
+# NervaPack local index/state (chroma db, sqlite memory, history logs)
+.nervapack/

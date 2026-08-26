@@ -1,0 +1,22 @@
+# NervaPack ingest exclusions.
+# .venv, node_modules, __pycache__, .git, dist/build are already hardcoded
+# skips inside nervapack — these are the project-specific extras.
+
+# generated knowledge-graph output (would index itself)
+graphify-out/
+
+# archived one-off scripts and rendered artefacts, not live code
+archive/
+
+# agent scaffolding, not project source
+.agent/
+.agents/
+
+# generated / scratch
+generated/
+uploads/
+.benchmarks/
+
+# vendor sample data and the giant baseline migration dump
+backend/scripts/mock2026/*.json
+database/scholarpath_migration.sql
