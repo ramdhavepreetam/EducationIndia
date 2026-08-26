@@ -1,0 +1,246 @@
+{
+  "_README": {
+    "purpose": "Bulk-import template for POST /api/admin/questions/bulk-import (BulkImportSchema).",
+    "how_to_use": "Fill in exam_id, add shared passages/images to contexts[], add every question to questions[]. Delete this _README block and every _comment field before uploading. Remove any example question types you do not need.",
+    "hard_rules": [
+      "exam_id must be an existing exam. section_id and topic_id must belong to that exam (see GET /api/catalog/exams/{id}).",
+      "Every question needs EXACTLY 4 options with option_no = 1,2,3,4.",
+      "Single-answer: set correct_option (1-4), leave is_multi_select=false, omit correct_options.",
+      "Multi-select: set is_multi_select=true and correct_options=[...] (values 1-4, no duplicates); omit correct_option.",
+      "Cancelled question: is_cancelled=true, cancelled_reason set, and NO correct_option / correct_options.",
+      "context_ref is a 0-based index into the top-level contexts[] array (null = standalone question).",
+      "Valid question_type values: text, text_image, image_only, context_text, context_image, marathi_only, bilingual.",
+      "marks defaults to 2, difficulty defaults to \"medium\" (easy|medium|hard), tags defaults to []."
+    ],
+    "per_type_field_requirements": {
+      "text": "text_en required. All 4 options need text_en.",
+      "text_image": "text_en OR text_mr required, question_image_url required. Options need text in whichever language(s) the stem uses.",
+      "image_only": "text_en AND text_mr must be null. question_image_url OR context_ref required. All 4 options need image_url.",
+      "context_text": "context_ref required, text_en OR text_mr required. All 4 options need text_en.",
+      "context_image": "context_ref required. All 4 options need image_url.",
+      "marathi_only": "text_mr required, text_en must be null. All 4 options need text_mr.",
+      "bilingual": "text_en AND text_mr required. All 4 options need text_en."
+    }
+  },
+
+  "exam_id": 1,
+
+  "contexts": [
+    {
+      "_comment": "Index 0 — a reading passage shared by several context_text questions.",
+      "context_type": "paragraph",
+      "title_en": "A Rainy Day",
+      "title_mr": null,
+      "content_en": "It rained heavily all afternoon. The children stayed indoors and read books...",
+      "content_mr": null,
+      "image_url": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": "Read the passage and answer questions 5 and 6.",
+      "instruction_mr": null,
+      "applies_from": 5,
+      "applies_to": 6,
+      "order_index": 1
+    },
+    {
+      "_comment": "Index 1 — a figure shared by context_image (Intelligence Test) questions.",
+      "context_type": "figure_series",
+      "title_en": null,
+      "title_mr": null,
+      "content_en": null,
+      "content_mr": null,
+      "image_url": "https://cdn.example.com/exams/1/contexts/series7.png",
+      "image_alt_en": "Series of four shapes",
+      "image_alt_mr": null,
+      "instruction_en": "Q7-8: Choose the figure that completes the series.",
+      "instruction_mr": null,
+      "applies_from": 7,
+      "applies_to": 8,
+      "order_index": 2
+    }
+  ],
+
+  "questions": [
+    {
+      "_comment": "TYPE 1 — text: plain question, plain text options.",
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 1,
+      "question_type": "text",
+      "text_en": "Choose the correct synonym of 'happy'.",
+      "text_mr": null,
+      "correct_option": 2,
+      "is_multi_select": false,
+      "marks": 2,
+      "difficulty": "easy",
+      "tags": ["grammar", "synonyms"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "Sad" },
+        { "option_no": 2, "text_en": "Glad" },
+        { "option_no": 3, "text_en": "Angry" },
+        { "option_no": 4, "text_en": "Tired" }
+      ]
+    },
+    {
+      "_comment": "TYPE 2 — text_image: text stem + a figure in the question body.",
+      "section_id": 2,
+      "topic_id": 5,
+      "question_no": 2,
+      "question_type": "text_image",
+      "text_en": "What fraction of the circle is shaded?",
+      "text_mr": null,
+      "question_image_url": "https://cdn.example.com/exams/1/questions/q2.png",
+      "question_image_alt_en": "Circle with one quarter shaded",
+      "correct_option": 3,
+      "is_multi_select": false,
+      "difficulty": "medium",
+      "tags": ["fractions"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "1/2" },
+        { "option_no": 2, "text_en": "1/3" },
+        { "option_no": 3, "text_en": "1/4" },
+        { "option_no": 4, "text_en": "1/5" }
+      ]
+    },
+    {
+      "_comment": "TYPE 3 — image_only: the image IS the question; text_en/text_mr MUST be null; every option is an image.",
+      "section_id": 2,
+      "topic_id": 6,
+      "question_no": 3,
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image_url": "https://cdn.example.com/exams/1/questions/q3_mirror.png",
+      "question_image_alt_en": "Find the mirror image",
+      "correct_option": 1,
+      "is_multi_select": false,
+      "difficulty": "medium",
+      "tags": ["mirror-image"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "image_url": "https://cdn.example.com/exams/1/questions/q3_a.png", "image_alt_en": "Option A" },
+        { "option_no": 2, "image_url": "https://cdn.example.com/exams/1/questions/q3_b.png", "image_alt_en": "Option B" },
+        { "option_no": 3, "image_url": "https://cdn.example.com/exams/1/questions/q3_c.png", "image_alt_en": "Option C" },
+        { "option_no": 4, "image_url": "https://cdn.example.com/exams/1/questions/q3_d.png", "image_alt_en": "Option D" }
+      ]
+    },
+    {
+      "_comment": "TYPE 4 — context_text: belongs to contexts[0]; text options.",
+      "section_id": 1,
+      "topic_id": 2,
+      "question_no": 5,
+      "question_type": "context_text",
+      "text_en": "Where did the children stay during the rain?",
+      "text_mr": null,
+      "correct_option": 1,
+      "is_multi_select": false,
+      "difficulty": "easy",
+      "tags": ["comprehension"],
+      "context_ref": 0,
+      "options": [
+        { "option_no": 1, "text_en": "Indoors" },
+        { "option_no": 2, "text_en": "In the garden" },
+        { "option_no": 3, "text_en": "At school" },
+        { "option_no": 4, "text_en": "On the roof" }
+      ]
+    },
+    {
+      "_comment": "TYPE 5 — context_image: belongs to contexts[1]; image options.",
+      "section_id": 2,
+      "topic_id": 6,
+      "question_no": 7,
+      "question_type": "context_image",
+      "correct_option": 4,
+      "is_multi_select": false,
+      "difficulty": "hard",
+      "tags": ["series"],
+      "context_ref": 1,
+      "options": [
+        { "option_no": 1, "image_url": "https://cdn.example.com/exams/1/questions/q7_a.png", "image_alt_en": "A" },
+        { "option_no": 2, "image_url": "https://cdn.example.com/exams/1/questions/q7_b.png", "image_alt_en": "B" },
+        { "option_no": 3, "image_url": "https://cdn.example.com/exams/1/questions/q7_c.png", "image_alt_en": "C" },
+        { "option_no": 4, "image_url": "https://cdn.example.com/exams/1/questions/q7_d.png", "image_alt_en": "D" }
+      ]
+    },
+    {
+      "_comment": "TYPE 6 — marathi_only: Marathi stem, text_en MUST be null; options in Marathi.",
+      "section_id": 1,
+      "topic_id": 3,
+      "question_no": 26,
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालीलपैकी योग्य विरुद्धार्थी शब्द निवडा: 'मोठा'",
+      "correct_option": 2,
+      "is_multi_select": false,
+      "difficulty": "medium",
+      "tags": ["marathi", "vyakaran"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_mr": "उंच" },
+        { "option_no": 2, "text_mr": "लहान" },
+        { "option_no": 3, "text_mr": "जाड" },
+        { "option_no": 4, "text_mr": "रुंद" }
+      ]
+    },
+    {
+      "_comment": "TYPE 7 — bilingual: EN + MR shown side by side; options carry both languages.",
+      "section_id": 2,
+      "topic_id": 4,
+      "question_no": 40,
+      "question_type": "bilingual",
+      "text_en": "How many sides does a triangle have?",
+      "text_mr": "त्रिकोणाला किती बाजू असतात?",
+      "correct_option": 3,
+      "is_multi_select": false,
+      "difficulty": "easy",
+      "tags": ["geometry"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "1", "text_mr": "१" },
+        { "option_no": 2, "text_en": "2", "text_mr": "२" },
+        { "option_no": 3, "text_en": "3", "text_mr": "३" },
+        { "option_no": 4, "text_en": "4", "text_mr": "४" }
+      ]
+    },
+    {
+      "_comment": "MULTI-SELECT example — is_multi_select=true, correct_options set, no correct_option.",
+      "section_id": 1,
+      "topic_id": 1,
+      "question_no": 41,
+      "question_type": "text",
+      "text_en": "Which of the following are prime numbers? (Select all that apply)",
+      "is_multi_select": true,
+      "correct_options": [1, 3],
+      "difficulty": "hard",
+      "tags": ["numbers"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "2" },
+        { "option_no": 2, "text_en": "4" },
+        { "option_no": 3, "text_en": "7" },
+        { "option_no": 4, "text_en": "9" }
+      ]
+    },
+    {
+      "_comment": "CANCELLED example — is_cancelled=true, cancelled_reason set, NO correct_option/correct_options. Options still required (4).",
+      "section_id": 2,
+      "topic_id": 5,
+      "question_no": 47,
+      "question_type": "text",
+      "text_en": "This question was cancelled in the official answer key.",
+      "is_cancelled": true,
+      "cancelled_reason": "Cancelled in official answer key",
+      "difficulty": "medium",
+      "tags": [],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "Option 1" },
+        { "option_no": 2, "text_en": "Option 2" },
+        { "option_no": 3, "text_en": "Option 3" },
+        { "option_no": 4, "text_en": "Option 4" }
+      ]
+    }
+  ]
+}

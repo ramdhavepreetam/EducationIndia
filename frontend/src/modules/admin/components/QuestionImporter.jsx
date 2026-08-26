@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { useAdminStore } from '../store/adminStore'
+import { PdfExamImporter } from './PdfExamImporter'
 
 // ── CSV utilities ─────────────────────────────────────────────────────────────
 
@@ -269,9 +270,11 @@ export function QuestionImporter() {
     }
 
     return (
-        <div className="max-w-3xl space-y-6">
+        <div className="max-w-5xl space-y-6">
+            <PdfExamImporter />
+
             {/* ── Format + Mode selectors ── */}
-            <div className="bg-white rounded-xl border border-surface-100 shadow-sm p-6 space-y-5">
+            <div className="max-w-3xl bg-white rounded-xl border border-surface-100 shadow-sm p-6 space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {/* Format toggle */}
                     <div>

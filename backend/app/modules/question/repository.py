@@ -224,6 +224,8 @@ class QuestionRepository:
             correct_option=q.correct_option,
             correct_options=q.correct_options,
             is_multi_select=q.is_multi_select,
+            is_cancelled=q.is_cancelled,
+            cancelled_reason=q.cancelled_reason,
             explanation_en=q.explanation_en,
             explanation_mr=q.explanation_mr,
             options=opts_schema,
@@ -259,6 +261,38 @@ class QuestionRepository:
         )
         return [self._to_admin_schema(q) for q in result.scalars().all()]
 
+    async def fetch_import_section_topic_map(
+        self, db: AsyncSession, exam_id: int
+    ) -> list[dict]:
+        """
+        Return section ranges with a default topic for PDF imports.
+        The importer assigns each question to the matching section and first topic.
+        """
+        rows = (
+            await db.execute(
+                text(
+                    """
+                    SELECT
+                        s.id AS section_id,
+                        s.question_from,
+                        s.question_to,
+                        (
+                            SELECT t.id
+                            FROM topics t
+                            WHERE t.section_id = s.id
+                            ORDER BY t.order_index, t.id
+                            LIMIT 1
+                        ) AS topic_id
+                    FROM sections s
+                    WHERE s.exam_id = :exam_id
+                    ORDER BY s.order_index, s.id
+                    """
+                ),
+                {"exam_id": exam_id},
+            )
+        ).mappings().all()
+        return [dict(row) for row in rows if row["topic_id"] is not None]
+
     def _to_admin_schema(self, q: Question) -> QuestionAdminSchema:
         opts_schema = [
             OptionReviewSchema.model_validate(o, from_attributes=True)
@@ -286,6 +320,8 @@ class QuestionRepository:
             correct_option=q.correct_option,
             correct_options=q.correct_options,
             is_multi_select=q.is_multi_select,
+            is_cancelled=q.is_cancelled,
+            cancelled_reason=q.cancelled_reason,
             explanation_en=q.explanation_en,
             explanation_mr=q.explanation_mr,
             hint_en=q.hint_en,
@@ -413,6 +449,8 @@ class QuestionRepository:
                     correct_option=q_item.correct_option,
                     correct_options=q_item.correct_options,
                     is_multi_select=q_item.is_multi_select,
+                    is_cancelled=q_item.is_cancelled,
+                    cancelled_reason=q_item.cancelled_reason,
                     explanation_en=q_item.explanation_en,
                     explanation_mr=q_item.explanation_mr,
                     hint_en=q_item.hint_en,

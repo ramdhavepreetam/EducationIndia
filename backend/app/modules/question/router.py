@@ -11,7 +11,9 @@ SECURITY: router endpoints NEVER return correct_option.
 
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from typing import Literal
+
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -24,6 +26,7 @@ from app.modules.auth.dependencies import (
 from app.modules.question.schemas import (
     BulkImportResult,
     BulkImportSchema,
+    PdfImportResult,
     QuestionAdminSchema,
     QuestionDeliverySchema,
     QuestionReviewSchema,
@@ -139,6 +142,35 @@ async def bulk_import_questions(
     }
     """
     return await question_service.bulk_import(db, import_data)
+
+
+@admin_router.post("/pdf-import", response_model=PdfImportResult)
+async def import_questions_from_pdf(
+    exam_id: int = Form(...),
+    mode: Literal["preview", "apply"] = Form("preview"),
+    language_strategy: Literal["auto", "bilingual", "english", "marathi"] = Form("auto"),
+    answer_set: Literal["A", "B", "C", "D"] = Form("A"),
+    english_question_pdf: UploadFile | None = File(None),
+    marathi_question_pdf: UploadFile | None = File(None),
+    answer_key_pdf: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+    _: UserIdentity = Depends(require_admin),
+):
+    """
+    Import an exam from uploaded PDF question paper(s) plus answer-key PDF.
+    Preview mode extracts and validates only. Apply mode replaces this exam's
+    question rows after a clean extraction.
+    """
+    return await question_service.import_questions_from_pdf(
+        db,
+        exam_id=exam_id,
+        mode=mode,
+        language_strategy=language_strategy,
+        answer_set=answer_set,
+        english_question_pdf=await english_question_pdf.read() if english_question_pdf else None,
+        marathi_question_pdf=await marathi_question_pdf.read() if marathi_question_pdf else None,
+        answer_key_pdf=await answer_key_pdf.read(),
+    )
 
 
 @admin_router.delete("/{question_id}", status_code=204)

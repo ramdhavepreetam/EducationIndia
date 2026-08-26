@@ -15,6 +15,7 @@ export { QuestionEditForm } from './components/QuestionEditForm'
 export { QuestionBrowser } from './components/QuestionBrowser'
 export { QuestionCreatorForm } from './components/QuestionCreatorForm'
 export { QuestionImporter } from './components/QuestionImporter'
+export { PdfExamImporter } from './components/PdfExamImporter'
 export { BulkImportButton } from './components/BulkImportButton'
 export { ImageUploadGrid } from './components/ImageUploadGrid'
 

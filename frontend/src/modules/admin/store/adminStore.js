@@ -149,6 +149,25 @@ export const useAdminStore = create((set, get) => ({
         }
     },
 
+    pdfImportResult: null,
+    pdfImporting: false,
+
+    runPdfImport: async (formData) => {
+        set({ pdfImporting: true, pdfImportResult: null })
+        try {
+            const result = await adminApi.pdfImport(formData)
+            set({ pdfImportResult: result, pdfImporting: false })
+            const examId = Number(formData.get('exam_id'))
+            if (result.mode === 'apply' && get().selectedExamId === examId) {
+                await get().fetchQuestions(examId)
+            }
+            return result
+        } catch (e) {
+            set({ pdfImporting: false })
+            throw e
+        }
+    },
+
     // ── Question stats ────────────────────────────────────────────────────────
     questionStats: [],
     statsLoading: false,
@@ -171,6 +190,7 @@ export const useAdminStore = create((set, get) => ({
         exams: [], examsLoading: false, examsError: null,
         questions: [], selectedExamId: null, questionsLoading: false, questionsError: null,
         bulkImportResult: null, bulkImporting: false,
+        pdfImportResult: null, pdfImporting: false,
         questionStats: [], statsLoading: false, statsError: null, statsExamId: null,
         boards: [], boardsLoading: false,
         createTestLoading: false, createTestError: null,

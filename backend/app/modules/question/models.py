@@ -141,6 +141,8 @@ class Question(Base):
     is_multi_select: Mapped[bool] = mapped_column(Boolean, server_default="false")
     correct_option: Mapped[int | None] = mapped_column(SmallInteger)
     correct_options: Mapped[list[int] | None] = mapped_column(ARRAY(SmallInteger))
+    is_cancelled: Mapped[bool] = mapped_column(Boolean, server_default="false")
+    cancelled_reason: Mapped[str | None] = mapped_column(Text)
     # ^ Never read these fields in exam delivery code paths. See ADR-012.
     # ─────────────────────────────────────────────────────────────────────────
 
