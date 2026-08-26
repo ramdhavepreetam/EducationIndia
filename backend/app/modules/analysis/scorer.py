@@ -14,6 +14,9 @@ def _is_correct(r: ResponseData) -> bool:
       selected_option must be IN the list (either/or).
     - Single-answer (correct_option set): exact equality.
     """
+    if getattr(r, "is_cancelled", False):
+        return False
+
     # 1. Handle strict multi-select (Select Two)
     if getattr(r, 'is_multi_select', False):
         if not r.selected_options or not r.correct_options:
@@ -37,6 +40,8 @@ def _is_correct(r: ResponseData) -> bool:
 
 def _is_answered(r: ResponseData) -> bool:
     """A response is answered if it has a single option or any multi-select options."""
+    if getattr(r, "is_cancelled", False):
+        return False
     if getattr(r, "is_multi_select", False):
         return bool(r.selected_options)
     return r.selected_option is not None
@@ -50,6 +55,8 @@ def calculate_total_score(responses: List[ResponseData]) -> Dict[str, Any]:
     total_possible_marks = 0
 
     for r in responses:
+        if getattr(r, "is_cancelled", False):
+            continue
         total_possible_marks += r.marks
         if not _is_answered(r):
             total_skipped += 1
@@ -84,6 +91,8 @@ def calculate_section_scores(responses: List[ResponseData]) -> List[Dict[str, An
     sections: Dict[int, Dict[str, Any]] = {}
 
     for r in responses:
+        if getattr(r, "is_cancelled", False):
+            continue
         if r.section_id not in sections:
             sections[r.section_id] = {
                 "section_id": r.section_id,
@@ -119,6 +128,8 @@ def calculate_topic_scores(responses: List[ResponseData]) -> List[Dict[str, Any]
     topics: Dict[int, Dict[str, Any]] = {}
     
     for r in responses:
+        if getattr(r, "is_cancelled", False):
+            continue
         if r.topic_id not in topics:
             topics[r.topic_id] = {
                 "topic_id": r.topic_id,

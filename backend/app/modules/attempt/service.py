@@ -38,6 +38,11 @@ from app.modules.catalog.service import catalog_service
 from app.shared.exceptions import BadRequest, Conflict, Forbidden, NotFound
 
 
+def _get_child_repository():
+    from app.modules.user.child_repository import child_repository
+    return child_repository
+
+
 class AttemptService:
 
     # ── Start exam ────────────────────────────────────────────────────────────
@@ -52,9 +57,10 @@ class AttemptService:
         Start a new exam attempt.
 
         Validation sequence:
-          1. Exam must exist and be is_active (raises NotFound otherwise)
-          2. No ongoing attempt already exists for this student+exam
-          3. If assignment_id given: validate assignment exists, is_active,
+          1. Resolve the effective student.
+          2. If an ongoing attempt already exists for this student+exam, resume it.
+          3. For new attempts, exam must exist and be is_active.
+          4. If assignment_id given: validate assignment exists, is_active,
              max_attempts not exceeded, and valid_until not past
 
         Returns full AttemptStateResponse with empty responses list
@@ -62,14 +68,10 @@ class AttemptService:
 
         Raises:
           NotFound if exam doesn't exist or is inactive
-          Conflict if an ongoing attempt already exists
         """
-        # 1. Validate exam is active
-        exam = await catalog_service.get_active_exam(db, request.exam_id)
-
-        # 1.5 Resolve effective student ID
+        # 1. Resolve effective student ID
         if request.child_profile_id is not None:
-            from app.modules.user.child_repository import child_repository as child_repo
+            child_repo = _get_child_repository()
             is_owner = await child_repo.validate_ownership(
                 request.child_profile_id, parent_id, db
             )
@@ -79,28 +81,34 @@ class AttemptService:
         else:
             effective_student_id = parent_id   # caller IS the student
 
-        # 1.6 Access control gate (ADR-014)
+        # 2. Idempotent start/resume.
+        # If the learner already has an ongoing attempt, return that state
+        # instead of raising 409. This keeps repeated Start clicks and refreshes
+        # on the happy path and still preserves one active attempt per exam.
+        # This intentionally works even after an admin unpublishes the exam:
+        # unpublish blocks new starts, but does not strand in-progress attempts.
+        existing = await attempt_repository.get_ongoing_attempt(
+            db, effective_student_id, request.exam_id
+        )
+        if existing is not None:
+            return await self.get_exam_state(db, existing.id, parent_id)
+
+        # 3. Validate exam is active for new attempts only.
+        exam = await catalog_service.get_active_exam(db, request.exam_id)
+
+        # 4. Access control gate (ADR-014). This gates new attempts only;
+        # resuming an already-started attempt must remain possible.
         from app.shared.access_control import get_access_context, can_start_exam as check_start
         ctx = await get_access_context(parent_id, db)
         allowed, reason = await check_start(ctx, request.exam_id, effective_student_id, db)
         if not allowed:
             raise Forbidden(reason)
 
-        # 2. Ensure no duplicate ongoing attempt
-        existing = await attempt_repository.get_ongoing_attempt(
-            db, effective_student_id, request.exam_id
-        )
-        if existing is not None:
-            raise Conflict(
-                f"You already have an ongoing attempt (id: {existing.id}) for this exam. "
-                "Resume it via GET /api/attempts/{attempt_id}/state or submit it first."
-            )
-
-        # 3. Validate assignment if provided
+        # 5. Validate assignment if provided
         if request.assignment_id is not None:
             await self._validate_assignment(db, request.assignment_id, effective_student_id)
 
-        # 4. Create attempt — set student_id for direct flow so DB trigger fires
+        # 6. Create attempt — set student_id for direct flow so DB trigger fires
         attempt_number = await attempt_repository.get_attempt_number(
             db, effective_student_id, request.exam_id
         )
@@ -197,25 +205,28 @@ class AttemptService:
           Forbidden if attempt belongs to another student
         """
         attempt = await self._get_owned_attempt(db, attempt_id, student_id)
+        attempt_response = {
+            "attempt_id": attempt.id,
+            "exam_id": attempt.exam_id,
+            "attempt_number": attempt.attempt_number,
+            "started_at": attempt.started_at,
+        }
 
         # Load exam once — used for both auto-expire check and time remaining
         try:
-            exam = await catalog_service.get_exam(db, attempt.exam_id)
+            exam = await catalog_service.get_exam(db, attempt_response["exam_id"])
             duration_minutes = exam.duration_minutes
         except Exception:
             duration_minutes = 90
 
         # Auto-expire if timer ran out
         current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
-        if current_status == "ongoing":
-            remaining = self._compute_time_remaining(attempt, duration_minutes)
-            if remaining <= 0:
-                attempt = await transition(attempt, "expired", db)
-
-        # Re-read status from (possibly mutated) attempt object
-        current_status = str(attempt.status.value if hasattr(attempt.status, "value") else attempt.status)
-
         time_remaining = self._compute_time_remaining(attempt, duration_minutes)
+        if current_status == "ongoing":
+            if time_remaining <= 0:
+                await transition(attempt, "expired", db)
+                current_status = "expired"
+                time_remaining = 0
 
         responses = await attempt_repository.get_all_responses(db, attempt_id)
         response_items = [
@@ -231,11 +242,11 @@ class AttemptService:
         ]
 
         return AttemptStateResponse(
-            attempt_id=attempt.id,
-            exam_id=attempt.exam_id,
-            attempt_number=attempt.attempt_number,
+            attempt_id=attempt_response["attempt_id"],
+            exam_id=attempt_response["exam_id"],
+            attempt_number=attempt_response["attempt_number"],
             status=current_status,
-            started_at=attempt.started_at,
+            started_at=attempt_response["started_at"],
             time_remaining_seconds=max(0, time_remaining),
             responses=response_items,
         )
@@ -278,7 +289,7 @@ class AttemptService:
         attempt = locked_attempt
         # Re-run ownership check on the locked row
         if attempt.child_profile_id:
-            from app.modules.user.child_repository import child_repository as child_repo
+            child_repo = _get_child_repository()
             is_owner = await child_repo.validate_ownership(
                 attempt.child_profile_id, student_id, db
             )
@@ -373,7 +384,7 @@ class AttemptService:
         if attempt is None:
             raise NotFound(f"Attempt {attempt_id} not found")
         if attempt.child_profile_id:
-            from app.modules.user.child_repository import child_repository as child_repo
+            child_repo = _get_child_repository()
             is_owner = await child_repo.validate_ownership(
                 attempt.child_profile_id, parent_id, db
             )

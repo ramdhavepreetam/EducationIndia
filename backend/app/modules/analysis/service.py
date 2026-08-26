@@ -31,7 +31,8 @@ class AnalysisService:
         query = text("""
             SELECT q.id, q.question_no, q.correct_option, q.correct_options, q.marks,
                    q.topic_id, t.name_en as topic_name_en, t.name_mr as topic_name_mr,
-                   q.section_id, s.section_label, s.subject_en, q.is_multi_select
+                   q.section_id, s.section_label, s.subject_en, q.is_multi_select,
+                   COALESCE(q.is_cancelled, false) AS is_cancelled
             FROM questions q
             JOIN topics t ON q.topic_id = t.id
             JOIN sections s ON q.section_id = s.id
@@ -55,6 +56,7 @@ class AnalysisService:
                 is_multi_select=qd.is_multi_select,
                 correct_option=qd.correct_option,
                 correct_options=list(qd.correct_options) if qd.correct_options else None,
+                is_cancelled=qd.is_cancelled,
                 topic_id=qd.topic_id,
                 topic_name_en=qd.topic_name_en,
                 topic_name_mr=qd.topic_name_mr,
@@ -77,6 +79,7 @@ class AnalysisService:
                     is_multi_select=qd.is_multi_select,
                     correct_option=qd.correct_option,
                     correct_options=list(qd.correct_options) if qd.correct_options else None,
+                    is_cancelled=qd.is_cancelled,
                     topic_id=qd.topic_id,
                     topic_name_en=qd.topic_name_en,
                     topic_name_mr=qd.topic_name_mr,

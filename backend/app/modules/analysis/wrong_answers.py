@@ -58,19 +58,49 @@ async def build_wrong_answers_summary(
         text("""
             SELECT
                 COUNT(CASE
-                    WHEN (r.selected_option IS NOT NULL AND va.is_multi_select = FALSE AND r.selected_option != va.correct_option) OR
-                         (r.selected_options IS NOT NULL AND va.is_multi_select = TRUE AND NOT (r.selected_options @> va.correct_options AND r.selected_options <@ va.correct_options))
+                    WHEN (
+                        va.is_multi_select = false
+                        AND r.selected_option IS NOT NULL
+                        AND (
+                            (va.correct_options IS NOT NULL AND NOT (r.selected_option = ANY(va.correct_options)))
+                            OR (va.correct_options IS NULL AND r.selected_option != va.correct_option)
+                        )
+                    ) OR (
+                        va.is_multi_select = true
+                        AND r.selected_options IS NOT NULL
+                        AND cardinality(r.selected_options) > 0
+                        AND (
+                            va.correct_options IS NULL
+                            OR NOT (
+                                r.selected_options @> va.correct_options
+                                AND r.selected_options <@ va.correct_options
+                            )
+                        )
+                    )
                     THEN 1
                 END) AS total_wrong,
                 COUNT(CASE
-                    WHEN r.selected_option IS NULL AND r.selected_options IS NULL
+                    WHEN (
+                        va.is_multi_select = true
+                        AND (
+                            r.selected_options IS NULL
+                            OR cardinality(r.selected_options) = 0
+                        )
+                    ) OR (
+                        va.is_multi_select = false
+                        AND r.selected_option IS NULL
+                    )
                     THEN 1
                 END) AS total_skipped
-            FROM responses r
+            FROM questions q
             JOIN v_exam_answers va
-              ON va.question_id = r.question_id
+              ON va.question_id = q.id
              AND va.exam_id = :exam_id
-            WHERE r.attempt_id = :attempt_id
+            LEFT JOIN responses r
+              ON r.question_id = q.id
+             AND r.attempt_id = :attempt_id
+            WHERE q.exam_id = :exam_id
+              AND COALESCE(va.is_cancelled, false) = false
         """),
         {"attempt_id": str(attempt_id), "exam_id": exam_id},
     )
@@ -112,9 +142,27 @@ async def build_wrong_answers_summary(
             LEFT JOIN sections s   ON s.id = q.section_id
             LEFT JOIN topics t     ON t.id = q.topic_id
             WHERE r.attempt_id = :attempt_id
+              AND COALESCE(va.is_cancelled, false) = false
               AND (
-                  (r.selected_option IS NOT NULL AND va.is_multi_select = FALSE AND r.selected_option != va.correct_option) OR
-                  (r.selected_options IS NOT NULL AND va.is_multi_select = TRUE AND NOT (r.selected_options @> va.correct_options AND r.selected_options <@ va.correct_options))
+                  (
+                      va.is_multi_select = false
+                      AND r.selected_option IS NOT NULL
+                      AND (
+                          (va.correct_options IS NOT NULL AND NOT (r.selected_option = ANY(va.correct_options)))
+                          OR (va.correct_options IS NULL AND r.selected_option != va.correct_option)
+                      )
+                  ) OR (
+                      va.is_multi_select = true
+                      AND r.selected_options IS NOT NULL
+                      AND cardinality(r.selected_options) > 0
+                      AND (
+                          va.correct_options IS NULL
+                          OR NOT (
+                              r.selected_options @> va.correct_options
+                              AND r.selected_options <@ va.correct_options
+                          )
+                      )
+                  )
               )
             ORDER BY r.question_no ASC
             {limit_clause}

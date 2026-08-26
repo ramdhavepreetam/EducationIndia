@@ -19,6 +19,7 @@ class ResponseData:
     selected_options: Optional[List[int]] = None
     is_multi_select: bool = False
     correct_options: Optional[List[int]] = None  # e.g. [1,3] for "1 OR 3" / "1 AND 3"
+    is_cancelled: bool = False
 
 class FastSlowItem(BaseModel):
     question_no: int

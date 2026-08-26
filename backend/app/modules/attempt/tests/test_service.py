@@ -40,7 +40,9 @@ def mock_db():
 
 @pytest.fixture
 def mock_repo():
-    return AsyncMock()
+    repo = AsyncMock()
+    repo.get_ongoing_attempt.return_value = None
+    return repo
 
 
 @pytest.fixture
@@ -74,7 +76,7 @@ def service(mock_repo, mock_catalog, mock_child_repo):
     with (
         patch("app.modules.attempt.service.attempt_repository", mock_repo),
         patch("app.modules.attempt.service.catalog_service", mock_catalog),
-        patch("app.modules.user.child_repository.ChildRepository", return_value=mock_child_repo),
+        patch("app.modules.attempt.service._get_child_repository", return_value=mock_child_repo),
         patch("app.shared.access_control.get_access_context", AsyncMock(return_value=mock_ctx))
     ):
         yield svc, mock_repo, mock_catalog, mock_child_repo
@@ -138,13 +140,32 @@ class TestStartExam:
         assert result.responses == []
         assert result.time_remaining_seconds == 90 * 60
 
-    async def test_fails_if_ongoing_attempt_exists(self, service, mock_db):
+    async def test_returns_existing_state_if_ongoing_attempt_exists(self, service, mock_db):
         svc, repo, catalog, child_repo = service
-        repo.get_ongoing_attempt.return_value = make_attempt()
+        existing = make_attempt()
+        repo.get_ongoing_attempt.return_value = existing
+        repo.get_attempt_by_id.return_value = existing
+        repo.get_all_responses.return_value = []
 
-        with pytest.raises(Conflict, match="already have an ongoing attempt"):
-            await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
+        result = await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
 
+        assert result.attempt_id == ATTEMPT_ID
+        assert result.status == "ongoing"
+        repo.create_attempt.assert_not_called()
+
+    async def test_returns_existing_state_even_if_exam_is_inactive(self, service, mock_db):
+        svc, repo, catalog, child_repo = service
+        existing = make_attempt()
+        repo.get_ongoing_attempt.return_value = existing
+        repo.get_attempt_by_id.return_value = existing
+        repo.get_all_responses.return_value = []
+        catalog.get_active_exam.side_effect = NotFound("Exam not available")
+
+        result = await svc.start_exam(mock_db, STUDENT_ID, StartAttemptRequest(exam_id=EXAM_ID, child_profile_id=uuid4()))
+
+        assert result.attempt_id == ATTEMPT_ID
+        assert result.status == "ongoing"
+        catalog.get_active_exam.assert_not_called()
         repo.create_attempt.assert_not_called()
 
     async def test_calls_catalog_to_validate_exam(self, service, mock_db):
@@ -220,6 +241,34 @@ class TestSaveResponse:
                     mock_db, ATTEMPT_ID, STUDENT_ID,
                     SaveResponseRequest(question_id=1, selected_option=2)
                 )
+
+
+# ── get_exam_state ───────────────────────────────────────────────────────────
+
+class TestGetExamState:
+    async def test_auto_expire_returns_state_without_reloading_expired_attempt(self, service, mock_db):
+        svc, repo, catalog, child_repo = service
+        old_start = datetime.now(timezone.utc) - timedelta(minutes=91)
+        attempt = make_attempt(started_at=old_start)
+        repo.get_attempt_by_id.return_value = attempt
+        repo.get_all_responses.return_value = []
+
+        async def expire_and_poison(original_attempt, target, db):
+            assert target == "expired"
+            original_attempt.status = "expired"
+
+            def fail_if_reloaded():
+                raise AssertionError("attempt.status was read after transition")
+
+            type(original_attempt).status = property(lambda _self: fail_if_reloaded())
+            return original_attempt
+
+        with patch("app.modules.attempt.service.transition", AsyncMock(side_effect=expire_and_poison)):
+            result = await svc.get_exam_state(mock_db, ATTEMPT_ID, STUDENT_ID)
+
+        assert result.attempt_id == ATTEMPT_ID
+        assert result.status == "expired"
+        assert result.time_remaining_seconds == 0
 
 
 # ── submit_exam ───────────────────────────────────────────────────────────────
