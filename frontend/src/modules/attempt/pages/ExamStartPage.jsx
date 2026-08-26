@@ -8,10 +8,12 @@ export function ExamStartPage() {
     const { examId } = useParams()
     const [searchParams] = useSearchParams()
     const childId = searchParams.get('childId')
+    const attemptId = searchParams.get('attemptId')
     const navigate = useNavigate()
     const [isChecking, setIsChecking] = useState(true)
 
     const startExam = useAttemptStore(s => s.startExam)
+    const resumeExam = useAttemptStore(s => s.resumeExam)
     const currentAttempt = useAttemptStore(s => s.currentAttempt)
     const isLoading = useAttemptStore(s => s.isLoading)
     const error = useAttemptStore(s => s.error)
@@ -23,10 +25,20 @@ export function ExamStartPage() {
     }, [examId])
 
     const handleStart = async () => {
-        if (!examId || !childId) return
+        if (!examId) return
         try {
+            if (attemptId) {
+                await resumeExam(attemptId, examId)
+                navigate(`/exam/${examId}/attempt?attemptId=${attemptId}${childId ? `&childId=${childId}` : ''}`)
+                return
+            }
             await startExam(examId, childId)
-            navigate(`/exam/${examId}/attempt`)
+            const startedAttempt = useAttemptStore.getState().currentAttempt
+            const startedAttemptId = startedAttempt?.attempt_id || startedAttempt?.id
+            const query = startedAttemptId
+                ? `?attemptId=${startedAttemptId}${childId ? `&childId=${childId}` : ''}`
+                : ''
+            navigate(`/exam/${examId}/attempt${query}`)
         } catch (err) {
             // Error is handled by store and displayed below
             if (err.response?.status === 409) {
@@ -98,7 +110,7 @@ export function ExamStartPage() {
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         ) : (
                             <>
-                                {t('exam.startExam')}
+                                {attemptId ? t('dashboard.resume', 'Resume') : t('exam.startExam')}
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                 </svg>

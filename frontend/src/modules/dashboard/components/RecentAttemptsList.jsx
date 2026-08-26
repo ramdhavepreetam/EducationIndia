@@ -48,7 +48,7 @@ export const RecentAttemptsList = ({ attempts }) => {
                         </Link>
                     ) : (
                         <Link
-                            to={`/exam/${attempt.exam_id}/start${selectedChildId ? `?childId=${selectedChildId}` : ''}`}
+                            to={`/exam/${attempt.exam_id}/attempt?attemptId=${attempt.attempt_id}${selectedChildId ? `&childId=${selectedChildId}` : ''}`}
                             className="bg-brand-50 text-brand-700 font-medium text-sm hover:text-brand-800 transition px-4 py-2 rounded-lg hover:bg-brand-100 shrink-0 border border-brand-200"
                         >
                             {t('dashboard.resume', 'Resume')}

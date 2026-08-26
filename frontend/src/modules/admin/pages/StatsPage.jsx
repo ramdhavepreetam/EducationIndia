@@ -2,25 +2,25 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAdminStore } from '../store/adminStore'
 
-const EXAM_OPTIONS = [
-    { id: 1, label: 'Paper I (501)' },
-    { id: 2, label: 'Paper II (502)' },
-]
-
-/**
- * StatsPage — question_stats table for analysis.
- * Sortable columns. Highlights questions with very high difficulty (>0.8).
- * CSV export.
- */
 export function StatsPage() {
     const { t } = useTranslation()
-    const { questionStats, statsLoading, statsError, fetchQuestionStats } = useAdminStore()
-    const [examId, setExamId] = useState(EXAM_OPTIONS[0].id)
+    const { questionStats, statsLoading, statsError, fetchQuestionStats, exams, fetchAllExams } = useAdminStore()
+    const [examId, setExamId] = useState(null)
     const [sortKey, setSortKey] = useState('question_no')
     const [sortDir, setSortDir] = useState('asc')
 
     useEffect(() => {
-        fetchQuestionStats(examId)
+        if (exams.length === 0) fetchAllExams()
+    }, [exams.length, fetchAllExams])
+
+    useEffect(() => {
+        if (!examId && exams.length > 0) {
+            setExamId(exams[0].id)
+        }
+    }, [exams, examId])
+
+    useEffect(() => {
+        if (examId) fetchQuestionStats(examId)
     }, [examId, fetchQuestionStats])
 
     const toggleSort = (key) => {
@@ -82,12 +82,15 @@ export function StatsPage() {
             {/* Toolbar */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
                 <select
-                    value={examId}
+                    value={examId ?? ''}
                     onChange={e => setExamId(Number(e.target.value))}
-                    className="text-sm border border-surface-200 rounded-xl px-4 py-2 text-surface-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white"
+                    disabled={exams.length === 0}
+                    className="text-sm border border-surface-200 rounded-xl px-4 py-2 text-surface-700 font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white disabled:opacity-50"
                 >
-                    {EXAM_OPTIONS.map(ex => (
-                        <option key={ex.id} value={ex.id}>{ex.label}</option>
+                    {exams.map(ex => (
+                        <option key={ex.id} value={ex.id}>
+                            {ex.title_en || `${ex.paper_code}-${ex.set_code}`}
+                        </option>
                     ))}
                 </select>
 

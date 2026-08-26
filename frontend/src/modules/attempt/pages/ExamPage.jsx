@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAttemptStore } from '../store/attemptStore'
 import { useAutoSave } from '../hooks/useAutoSave'
@@ -12,6 +12,8 @@ export function ExamPage() {
     const { t } = useTranslation()
     const { examId } = useParams()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const attemptId = searchParams.get('attemptId')
 
     // Global state
     const currentAttempt = useAttemptStore(s => s.currentAttempt)
@@ -38,16 +40,25 @@ export function ExamPage() {
 
     const { scheduleSave } = useAutoSave()
 
-    // Resume attempt on mount if we don't have it loaded
+    // Resume attempt on mount after refresh if the URL carries attemptId.
+    // Zustand state is memory-only, so a browser refresh loses currentAttempt.
     useEffect(() => {
         const load = async () => {
             if (!currentAttempt && examId) {
-                // No active attempt in store — redirect to /start so user can begin
-                navigate(`/exam/${examId}/start`, { replace: true })
+                if (attemptId) {
+                    await resumeExam(attemptId, examId)
+                    return
+                }
+                // No active attempt and no attemptId in URL — redirect to start.
+                const childId = searchParams.get('childId')
+                const query = childId ? `?childId=${childId}` : ''
+                navigate(`/exam/${examId}/start${query}`, { replace: true })
             }
         }
-        load()
-    }, [currentAttempt, examId, navigate])
+        load().catch(() => {
+            // resumeExam stores the API error; render the error state below.
+        })
+    }, [currentAttempt, examId, attemptId, resumeExam, searchParams, navigate])
 
     // Derive sections for tabs
     const sections = useMemo(() => {
@@ -57,11 +68,21 @@ export function ExamPage() {
             if (q.section_id && !uniqueSections.has(q.section_id)) {
                 uniqueSections.set(q.section_id, {
                     id: q.section_id,
-                    label: q.section_id === 1 ? 'Section I' : 'Section II' // Just an example, normally from backend
+                    minQuestionNo: q.question_no,
+                    maxQuestionNo: q.question_no,
                 })
+            } else if (q.section_id) {
+                const section = uniqueSections.get(q.section_id)
+                section.minQuestionNo = Math.min(section.minQuestionNo, q.question_no)
+                section.maxQuestionNo = Math.max(section.maxQuestionNo, q.question_no)
             }
         })
         return Array.from(uniqueSections.values())
+            .sort((a, b) => a.minQuestionNo - b.minQuestionNo)
+            .map((section, index) => ({
+                ...section,
+                label: index === 0 ? 'Section I' : `Section ${index + 1}`,
+            }))
     }, [questions])
 
     // Set default section tab when questions load
@@ -75,11 +96,37 @@ export function ExamPage() {
         return questions?.find(q => q.question_no === currentQuestionNo)
     }, [questions, currentQuestionNo])
 
-    // Filter palette questions based on active tab
-    const filteredQuestions = useMemo(() => {
-        if (!activeSectionId) return questions
+    // Sync active section tab to the current question's section_id (authoritative source)
+    useEffect(() => {
+        if (currentQuestion?.section_id && currentQuestion.section_id !== activeSectionId) {
+            setActiveSectionId(currentQuestion.section_id)
+        }
+    }, [currentQuestion, activeSectionId])
+
+    // Questions filtered to active section only — drives the palette display
+    const sectionQuestions = useMemo(() => {
+        if (!questions || !activeSectionId) return questions || []
         return questions.filter(q => q.section_id === activeSectionId)
     }, [questions, activeSectionId])
+
+    // First and last question_no across ALL questions (for Prev/Next disabling)
+    const firstQuestionNo = useMemo(() => {
+        if (!questions || questions.length === 0) return 1
+        return Math.min(...questions.map(q => q.question_no))
+    }, [questions])
+
+    const lastQuestionNo = useMemo(() => {
+        if (!questions || questions.length === 0) return 1
+        return Math.max(...questions.map(q => q.question_no))
+    }, [questions])
+
+    const handleSectionChange = (sectionId) => {
+        setActiveSectionId(sectionId)
+        const firstQ = questions?.find(q => q.section_id === sectionId)
+        if (firstQ) {
+            navigateTo(firstQ.question_no)
+        }
+    }
 
     const handleAnswer = (questionNo, questionId, selectedOption) => {
         const isMulti = !!currentQuestion?.is_multi_select
@@ -112,6 +159,28 @@ export function ExamPage() {
             alert('Failed to submit exam: ' + err.message)
             setShowSubmitConfirm(false)
         }
+    }
+
+    if (error && !currentAttempt) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-surface-50 p-4">
+                <div className="max-w-md w-full bg-white rounded-xl border border-red-200 p-6 shadow-sm">
+                    <h1 className="text-lg font-bold text-surface-900 mb-2">
+                        {t('exam.resumeFailed', 'Could not resume exam')}
+                    </h1>
+                    <p className="text-sm text-red-700 bg-red-50 border border-red-100 rounded-lg p-3 mb-4">
+                        {error}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => navigate('/dashboard')}
+                        className="px-4 py-2 bg-brand-600 text-white rounded-lg font-semibold"
+                    >
+                        {t('common.backToDashboard', 'Back to dashboard')}
+                    </button>
+                </div>
+            </div>
+        )
     }
 
     if (isLoading || !currentAttempt) {
@@ -193,8 +262,8 @@ export function ExamPage() {
                             onAnswer={handleAnswer}
                             onMarkReview={handleMarkReview}
                             onNavigate={navigateTo}
-                            isFirst={currentQuestionNo === 1}
-                            isLast={currentQuestionNo === questions?.length}
+                            isFirst={currentQuestionNo === firstQuestionNo}
+                            isLast={currentQuestionNo === lastQuestionNo}
                             language={language}
                         />
                     ) : (
@@ -207,11 +276,11 @@ export function ExamPage() {
                     <SectionTabs
                         sections={sections}
                         activeSectionId={activeSectionId}
-                        onTabChange={setActiveSectionId}
+                        onTabChange={handleSectionChange}
                     />
                     <div className="flex-1 min-h-0">
                         <QuestionPalette
-                            questions={filteredQuestions}
+                            questions={sectionQuestions}
                             onNavigate={navigateTo}
                         />
                     </div>
@@ -231,11 +300,11 @@ export function ExamPage() {
                         <SectionTabs
                             sections={sections}
                             activeSectionId={activeSectionId}
-                            onTabChange={setActiveSectionId}
+                            onTabChange={handleSectionChange}
                         />
                         <div className="flex-1 min-h-0">
                             <QuestionPalette
-                                questions={filteredQuestions}
+                                questions={sectionQuestions}
                                 onNavigate={(qNo) => {
                                     navigateTo(qNo)
                                     setIsSidebarOpen(false) // auto-close on mobile
