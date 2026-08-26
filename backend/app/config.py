@@ -57,6 +57,40 @@ class Settings(BaseSettings):
                 "SECRET_KEY must be at least 32 characters. "
                 "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
             )
+        if not self.DEBUG:
+            missing = [
+                name
+                for name, value in {
+                    "RAZORPAY_KEY_ID": self.RAZORPAY_KEY_ID,
+                    "RAZORPAY_KEY_SECRET": self.RAZORPAY_KEY_SECRET,
+                    "RAZORPAY_WEBHOOK_SECRET": self.RAZORPAY_WEBHOOK_SECRET,
+                }.items()
+                if not value
+            ]
+
+            if self.MEDIA_PROVIDER == "cloudinary" and not self.CLOUDINARY_URL:
+                missing.append("CLOUDINARY_URL")
+            elif self.MEDIA_PROVIDER == "r2":
+                missing.extend(
+                    name
+                    for name, value in {
+                        "R2_ACCOUNT_ID": self.R2_ACCOUNT_ID,
+                        "R2_ACCESS_KEY_ID": self.R2_ACCESS_KEY_ID,
+                        "R2_SECRET_ACCESS_KEY": self.R2_SECRET_ACCESS_KEY,
+                        "R2_BUCKET_NAME": self.R2_BUCKET_NAME,
+                        "R2_PUBLIC_URL": self.R2_PUBLIC_URL,
+                    }.items()
+                    if not value
+                )
+
+            if missing:
+                raise ValueError(
+                    "Production configuration is missing required value(s): "
+                    + ", ".join(sorted(set(missing)))
+                )
+
+            if "localhost" in self.FRONTEND_URL or "127.0.0.1" in self.FRONTEND_URL:
+                raise ValueError("FRONTEND_URL must be a deployed origin when DEBUG=false")
         return self
 
 

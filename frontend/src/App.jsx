@@ -15,6 +15,7 @@ import AppLayout from '@/shared/layouts/AppLayout'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
 import LandingPage from '@/pages/LandingPage'
 import { AdminRoute } from '@/modules/admin/components/AdminRoute'
+import { TeacherRoute } from '@/modules/teacher/components/TeacherRoute'
 
 /** Returns the correct landing page for a given user profile, based on role.
  *  Shared between AuthRedirect (OAuth callback) and LoginPage (email/password). */
@@ -22,6 +23,7 @@ export function getRoleHome(profile) {
     if (!profile?.is_onboarded) return '/onboarding'
     if (['exam_admin', 'super_admin'].includes(profile?.role)) return '/admin'
     if (profile?.role === 'parent') return '/parent'
+    if (profile?.role === 'teacher') return '/teacher'
     return '/dashboard'
 }
 
@@ -91,6 +93,23 @@ const ParentDashboardPage = lazy(() =>
 )
 const ChildDetailPage = lazy(() =>
     import('@/modules/parent/pages/ChildDetailPage')
+)
+
+const TeacherDashboardPage = lazyNamed(
+    () => import('@/modules/teacher/pages/TeacherDashboardPage'),
+    'TeacherDashboardPage'
+)
+const TeacherStudentsPage = lazyNamed(
+    () => import('@/modules/teacher/pages/TeacherStudentsPage'),
+    'TeacherStudentsPage'
+)
+const AssignExamPage = lazyNamed(
+    () => import('@/modules/teacher/pages/AssignExamPage'),
+    'AssignExamPage'
+)
+const StudentResultsPage = lazyNamed(
+    () => import('@/modules/teacher/pages/StudentResultsPage'),
+    'StudentResultsPage'
 )
 
 const UpgradePage = lazyNamed(
@@ -189,6 +208,12 @@ export default function App() {
                         {/* Parent routes — guarded by ParentRoute + OnboardingGuard + per-route ErrorBoundary */}
                         <Route path="/parent" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ParentRoute><ParentDashboardPage /></ParentRoute></OnboardingGuard>)}</ErrorBoundary>} />
                         <Route path="/parent/children/:studentId" element={<ErrorBoundary>{routeChunk(<OnboardingGuard><ParentRoute><ChildDetailPage /></ParentRoute></OnboardingGuard>)}</ErrorBoundary>} />
+
+                        {/* Teacher routes — guarded by TeacherRoute */}
+                        <Route path="/teacher" element={<ErrorBoundary>{routeChunk(<TeacherRoute><TeacherDashboardPage /></TeacherRoute>)}</ErrorBoundary>} />
+                        <Route path="/teacher/students" element={<ErrorBoundary>{routeChunk(<TeacherRoute><TeacherStudentsPage /></TeacherRoute>)}</ErrorBoundary>} />
+                        <Route path="/teacher/assign" element={<ErrorBoundary>{routeChunk(<TeacherRoute><AssignExamPage /></TeacherRoute>)}</ErrorBoundary>} />
+                        <Route path="/teacher/students/:studentId" element={<ErrorBoundary>{routeChunk(<TeacherRoute><StudentResultsPage /></TeacherRoute>)}</ErrorBoundary>} />
                     </Route>
                 </Route>
             </Routes>

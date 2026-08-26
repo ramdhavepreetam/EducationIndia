@@ -125,6 +125,8 @@ class QuestionReviewSchema(BaseModel):
     correct_option: Optional[int]
     correct_options: Optional[list[int]]
     is_multi_select: bool
+    is_cancelled: bool = False
+    cancelled_reason: Optional[str] = None
     explanation_en: Optional[str]
     explanation_mr: Optional[str]
 
@@ -154,6 +156,8 @@ class QuestionAdminSchema(BaseModel):
     correct_option: Optional[int]
     correct_options: Optional[list[int]]
     is_multi_select: bool
+    is_cancelled: bool = False
+    cancelled_reason: Optional[str] = None
     explanation_en: Optional[str]
     explanation_mr: Optional[str]
     hint_en: Optional[str]
@@ -182,6 +186,8 @@ class QuestionUpdateRequest(BaseModel):
     correct_option: Optional[int] = None
     correct_options: Optional[list[int]] = None
     is_multi_select: Optional[bool] = None
+    is_cancelled: Optional[bool] = None
+    cancelled_reason: Optional[str] = None
     explanation_en: Optional[str] = None
     explanation_mr: Optional[str] = None
     hint_en: Optional[str] = None
@@ -239,6 +245,8 @@ class QuestionImportItem(BaseModel):
     correct_option: Optional[int] = None
     correct_options: Optional[list[int]] = None
     is_multi_select: bool = False
+    is_cancelled: bool = False
+    cancelled_reason: Optional[str] = None
     explanation_en: Optional[str] = None
     explanation_mr: Optional[str] = None
     hint_en: Optional[str] = None
@@ -272,3 +280,34 @@ class BulkImportResult(BaseModel):
     inserted: int
     skipped: int
     errors: list[str] = []
+
+
+class PdfImportPreviewQuestionSchema(BaseModel):
+    """One extracted question row from PDF import preview/apply."""
+    question_no: int
+    question_type: str
+    correct_option: Optional[int]
+    is_cancelled: bool = False
+    cancelled_reason: Optional[str] = None
+    text_en: Optional[str] = None
+    text_mr: Optional[str] = None
+    options_en: list[str] = []
+    options_mr: list[str] = []
+    warnings: list[str] = []
+
+
+class PdfImportResult(BaseModel):
+    """Response from admin PDF question-paper + answer-key import."""
+    exam_id: int
+    mode: str
+    language_strategy: str
+    answer_set: str
+    question_count: int
+    importable_count: int
+    key_count: int
+    cancelled_questions: list[int] = []
+    warnings: list[str] = []
+    errors: list[str] = []
+    inserted: int = 0
+    skipped: int = 0
+    preview: list[PdfImportPreviewQuestionSchema] = []

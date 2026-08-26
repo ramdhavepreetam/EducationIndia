@@ -64,14 +64,17 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # ── CORS ──────────────────────────────────────────────────────────────────────
 # In production, replace with the deployed Firebase Hosting frontend URL.
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+_origins = [settings.FRONTEND_URL]
+if settings.DEBUG:
+    _origins.extend([
         "http://localhost:5173",   # Vite dev server (default)
         "http://localhost:5174",   # Vite dev server (fallback port)
         "http://localhost:3000",   # alternative dev port
-        settings.FRONTEND_URL,     # Production / staging URL
-    ],
+    ])
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,10 +94,9 @@ async def health():
     return {"status": "ok", "version": settings.APP_VERSION}
 
 
-# ── Module routers (uncomment as each module is built) ───────────────────────
+# ── Module routers ───────────────────────────────────────────────────────────
 # Follow ADR-002: each module registers its own router here — one line per module.
-#
-# from app.modules.auth.router import router as auth_router
+# (auth is a dependency-only module — Supabase handles login, so it has no router.)
 from app.modules.user.router import router as user_router
 from app.modules.user.parent_router import router as parent_router
 from app.modules.user.child_router import router as child_router
@@ -105,8 +107,8 @@ from app.modules.analysis.router import router as analysis_router
 from app.modules.media.router import router as media_router
 from app.modules.admin.router import router as admin_router
 from app.modules.payment.router import router as payment_router
-#
-# app.include_router(auth_router,           prefix="/api/auth",            tags=["auth"])
+from app.modules.teacher.router import router as teacher_router
+
 app.include_router(user_router,            prefix="/api/users",           tags=["users"])
 app.include_router(parent_router,          prefix="/api/parent",          tags=["parent"])
 app.include_router(child_router)
@@ -118,6 +120,7 @@ app.include_router(analysis_router,        prefix="/api/analysis",        tags=[
 app.include_router(media_router,           prefix="/api/media",           tags=["media"])
 app.include_router(admin_router,           prefix="/api/admin",           tags=["admin"])
 app.include_router(payment_router,         prefix="/api/payment",         tags=["payment"])
+app.include_router(teacher_router,         prefix="/api/teacher",         tags=["teacher"])
 
 # ── Static file serving (local media provider) ────────────────────────────────
 # In production with Cloudinary, this mount is still harmless (empty dir).

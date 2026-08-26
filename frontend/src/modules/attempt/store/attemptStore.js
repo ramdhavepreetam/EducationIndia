@@ -179,8 +179,9 @@ export const useAttemptStore = create((set, get) => ({
         const { currentAttempt, submitExam } = get()
         if (currentAttempt) {
             console.log("Timer expired! Auto-submitting...")
-            if (currentAttempt.id) {
-                await submitExam(currentAttempt.id)
+            const attemptId = currentAttempt.attempt_id || currentAttempt.id
+            if (attemptId) {
+                await submitExam(attemptId)
             }
         }
     },

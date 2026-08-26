@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.main import limiter
-from app.modules.auth.dependencies import UserIdentity, verify_token
+from app.modules.auth.dependencies import UserIdentity, require_parent
 from app.modules.payment.schemas import (
     CreateOrderRequest,
     CreateOrderResponse,
@@ -42,7 +42,7 @@ async def get_plans(db: AsyncSession = Depends(get_db)):
 @router.get("/status", response_model=SubscriptionStatusResponse)
 async def get_status(
     db: AsyncSession = Depends(get_db),
-    identity: UserIdentity = Depends(verify_token),
+    identity: UserIdentity = Depends(require_parent),
 ):
     """Returns the calling parent's subscription status."""
     return await payment_service.get_status(identity.id, db)
@@ -54,7 +54,7 @@ async def create_order(
     request: Request,
     body: CreateOrderRequest,
     db: AsyncSession = Depends(get_db),
-    identity: UserIdentity = Depends(verify_token),
+    identity: UserIdentity = Depends(require_parent),
 ):
     """Creates a Razorpay order and a pending subscription record."""
     return await payment_service.create_order(identity.id, db, body)
@@ -66,7 +66,7 @@ async def verify_payment(
     request: Request,
     body: VerifyPaymentRequest,
     db: AsyncSession = Depends(get_db),
-    identity: UserIdentity = Depends(verify_token),
+    identity: UserIdentity = Depends(require_parent),
 ):
     """Verifies Razorpay signature and activates subscription."""
     return await payment_service.verify_and_activate(identity.id, body, db)
@@ -93,7 +93,7 @@ async def get_history(
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
-    identity: UserIdentity = Depends(verify_token),
+    identity: UserIdentity = Depends(require_parent),
 ):
     """Returns the calling parent's payment history. Paginated (default 50/page)."""
     return await payment_service.get_payment_history(identity.id, db, page=page, limit=limit)

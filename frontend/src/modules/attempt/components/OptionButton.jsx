@@ -47,7 +47,8 @@ export default function OptionButton({
 
             <div className="flex-1">
                 {text && (
-                    <span className={`text-base ${isSelected ? 'text-brand-900 font-medium' : 'text-surface-700'}`}>
+                    /* whitespace-pre-wrap preserves symbol-figure alignment — see QuestionCard */
+                    <span className={`text-base whitespace-pre-wrap ${isSelected ? 'text-brand-900 font-medium' : 'text-surface-700'}`}>
                         {text}
                     </span>
                 )}

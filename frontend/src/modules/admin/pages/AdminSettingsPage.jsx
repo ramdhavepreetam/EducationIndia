@@ -52,8 +52,8 @@ export const AdminSettingsPage = () => {
         if (groupSettings.length === 0) return null
 
         return (
-            <div className="mb-10 bg-white shadow-sm border border-gray-200 rounded-xl px-6 py-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-100">{title}</h2>
+            <div className="mb-10 bg-white shadow-sm border border-surface-100 rounded-xl px-6 py-4">
+                <h2 className="text-xl font-bold text-surface-900 mb-6 pb-2 border-b border-surface-100">{title}</h2>
                 <div className="space-y-2">
                     {groupSettings.map((s) => (
                         <SettingRow key={s.key} setting={s} onSave={handleSave} isSaving={savingKey === s.key} />
@@ -75,7 +75,7 @@ export const AdminSettingsPage = () => {
         <div className="max-w-4xl mx-auto px-4 py-8 relative">
             {/* Toast Notification */}
             {toastMessage && (
-                <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center gap-3 animate-fade-in-up">
+                <div className="fixed bottom-4 right-4 bg-surface-900 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center gap-3">
                     <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                     {toastMessage}
                 </div>
@@ -83,21 +83,21 @@ export const AdminSettingsPage = () => {
 
             <div className="flex justify-between items-center mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 leading-tight">System Settings</h1>
-                    <p className="text-gray-500 mt-1 text-sm">Real-time configuration for the ScholarPath platform.</p>
+                    <h1 className="text-2xl font-bold text-surface-900 leading-tight">System Settings</h1>
+                    <p className="text-surface-500 mt-1 text-sm">Real-time configuration for the ScholarPath platform.</p>
                 </div>
                 <button
                     onClick={loadSettings}
-                    className="text-sm px-4 py-2 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+                    className="text-sm px-4 py-2 text-surface-600 bg-surface-100 hover:bg-surface-200 rounded-lg transition"
                 >
                     Refresh All
                 </button>
             </div>
 
             {error && (
-                <div className="mb-8 bg-red-50 text-red-700 p-4 rounded-lg flex items-center justify-between">
+                <div className="mb-8 bg-red-50 text-red-700 p-4 rounded-xl border border-red-100 flex items-center justify-between">
                     <span>{error}</span>
-                    <button onClick={() => setError(null)} className="text-red-500 hover:text-red-800">Dismiss</button>
+                    <button onClick={() => setError(null)} className="text-red-500 hover:text-red-800 text-sm">Dismiss</button>
                 </div>
             )}
 
@@ -106,9 +106,9 @@ export const AdminSettingsPage = () => {
 
             {renderGroup('Free Tier Limits', ['free_tier_exam_id', 'free_tier_max_attempts'])}
 
-            <div className="mb-10 bg-white shadow-sm border border-gray-200 rounded-xl px-6 py-4">
-                <div className="flex justify-between items-start mb-6 pb-2 border-b border-gray-100">
-                    <h2 className="text-xl font-bold text-gray-900">Payment Gateway</h2>
+            <div className="mb-10 bg-white shadow-sm border border-surface-100 rounded-xl px-6 py-4">
+                <div className="flex justify-between items-start mb-6 pb-2 border-b border-surface-100">
+                    <h2 className="text-xl font-bold text-surface-900">Payment Gateway</h2>
                 </div>
 
                 <div className="bg-orange-50 border-l-4 border-orange-400 p-4 mb-6">
@@ -135,7 +135,7 @@ export const AdminSettingsPage = () => {
 
             {renderGroup('App Configuration', ['app_name', 'support_email', 'maintenance_mode', 'allow_registrations'])}
 
-            <div className="mt-8 text-center text-xs text-gray-400">
+            <div className="mt-8 text-center text-xs text-surface-400">
                 ScholarPath Admin Control Panel
             </div>
         </div>

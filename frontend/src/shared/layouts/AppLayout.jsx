@@ -18,7 +18,9 @@ export default function AppLayout() {
     const { loadStatus } = usePaymentStore()
 
     const isAdmin = ['exam_admin', 'super_admin'].includes(user?.role)
+    const isSuperAdmin = user?.role === 'super_admin'
     const isParent = user?.role === 'parent'
+    const isTeacher = user?.role === 'teacher'
 
     useEffect(() => {
         if (!isParent) return
@@ -49,15 +51,59 @@ export default function AppLayout() {
         navigate('/login', { replace: true })
     }
 
-    const navItems = isAdmin ? [
-        { to: '/admin', label: t('nav.dashboard', 'Dashboard'), icon: DashboardIcon },
-        { to: '/admin/questions', label: 'Questions', icon: ExamsIcon },
-        { to: '/admin/publish', label: 'Publish Exams', icon: ResultsIcon },
-        { to: '/admin/subscriptions', label: 'Subscriptions', icon: SubscriptionsIcon },
-        { to: '/admin/settings', label: 'Settings', icon: SettingsIcon },
-        { to: '/admin/stats', label: 'Stats', icon: ProfileIcon },
-        { to: '/admin/images', label: 'Images', icon: AdminIcon },
-    ] : isParent ? [
+    // Admin nav groups — super_admin sees Finance + Platform; exam_admin sees Content only
+    const adminNavGroups = isAdmin ? [
+        {
+            label: 'Overview',
+            items: [
+                { to: '/admin', label: 'Dashboard', icon: DashboardIcon },
+            ],
+        },
+        {
+            label: 'Content',
+            items: [
+                { to: '/admin/questions', label: 'Question Bank', icon: ExamsIcon },
+                { to: '/admin/publish', label: 'Publish Exams', icon: ResultsIcon },
+                { to: '/admin/images', label: 'Media Library', icon: AdminIcon },
+                { to: '/admin/stats', label: 'Question Stats', icon: ProfileIcon },
+            ],
+        },
+        ...(isSuperAdmin ? [{
+            label: 'Finance',
+            items: [
+                { to: '/admin/subscriptions', label: 'Subscriptions', icon: SubscriptionsIcon },
+            ],
+        }, {
+            label: 'Platform',
+            items: [
+                { to: '/admin/settings', label: 'Settings', icon: SettingsIcon },
+            ],
+        }] : []),
+    ] : []
+
+    const teacherNavGroups = isTeacher ? [
+        {
+            label: 'Overview',
+            items: [
+                { to: '/teacher', label: 'Dashboard', icon: DashboardIcon },
+            ],
+        },
+        {
+            label: 'Students',
+            items: [
+                { to: '/teacher/students', label: 'My Students', icon: ProfileIcon },
+                { to: '/teacher/assign', label: 'Assign Exam', icon: ExamsIcon },
+            ],
+        },
+        {
+            label: 'Account',
+            items: [
+                { to: '/profile', label: 'Profile', icon: SettingsIcon },
+            ],
+        },
+    ] : []
+
+    const navItems = isParent ? [
         { to: '/parent', label: 'Dashboard', icon: DashboardIcon },
         { to: '/payment/history', label: 'Payment History', icon: SubscriptionsIcon },
         { to: '/profile', label: t('nav.profile', 'Profile'), icon: SettingsIcon },
@@ -90,23 +136,56 @@ export default function AppLayout() {
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 p-4 space-y-1">
-                    {navItems.map((item) => (
-                        <NavLink
-                            key={item.to}
-                            to={item.to}
-                            onClick={closeMobileMenu}
-                            className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                    ? 'bg-brand-50 text-brand-700'
-                                    : 'text-surface-500 hover:bg-surface-50 hover:text-surface-700'
-                                }`
-                            }
-                        >
-                            <item.icon />
-                            {item.label}
-                        </NavLink>
-                    ))}
+                <nav className="flex-1 p-4 overflow-y-auto">
+                    {(isAdmin || isTeacher) ? (
+                        <div className="space-y-5">
+                            {(isAdmin ? adminNavGroups : teacherNavGroups).map((group) => (
+                                <div key={group.label}>
+                                    <p className="px-4 mb-1 text-[10px] font-bold uppercase tracking-widest text-surface-300">
+                                        {group.label}
+                                    </p>
+                                    <div className="space-y-0.5">
+                                        {group.items.map((item) => (
+                                            <NavLink
+                                                key={item.to}
+                                                to={item.to}
+                                                end={item.to === '/admin' || item.to === '/teacher'}
+                                                onClick={closeMobileMenu}
+                                                className={({ isActive }) =>
+                                                    `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                                                        ? 'bg-brand-50 text-brand-700'
+                                                        : 'text-surface-500 hover:bg-surface-50 hover:text-surface-700'
+                                                    }`
+                                                }
+                                            >
+                                                <item.icon />
+                                                {item.label}
+                                            </NavLink>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="space-y-1">
+                            {navItems.map((item) => (
+                                <NavLink
+                                    key={item.to}
+                                    to={item.to}
+                                    onClick={closeMobileMenu}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                                            ? 'bg-brand-50 text-brand-700'
+                                            : 'text-surface-500 hover:bg-surface-50 hover:text-surface-700'
+                                        }`
+                                    }
+                                >
+                                    <item.icon />
+                                    {item.label}
+                                </NavLink>
+                            ))}
+                        </div>
+                    )}
                 </nav>
 
                 {/* User section */}

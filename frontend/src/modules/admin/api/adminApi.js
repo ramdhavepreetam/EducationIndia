@@ -42,6 +42,11 @@ export const adminApi = {
     bulkImport: (payload) =>
         apiClient.post('/api/admin/questions/bulk-import', payload).then(r => r.data),
 
+    pdfImport: (formData) =>
+        apiClient.post('/api/admin/questions/pdf-import', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        }).then(r => r.data),
+
     // ── Question stats ─────────────────────────────────────────────────────────
     getQuestionStats: (examId) =>
         apiClient.get('/api/admin/questions/stats', { params: { exam_id: examId } }).then(r => r.data),

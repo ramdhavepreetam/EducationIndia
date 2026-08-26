@@ -75,13 +75,19 @@ export default function QuestionCard({
 
                 {/* Question Text & Media */}
                 <div className="mb-8 space-y-4">
+                    {/*
+                      whitespace-pre-wrap keeps line breaks and column alignment in
+                      symbol-drawn figures (series grids, matrices, Venn layouts).
+                      Without it HTML collapses newlines to single spaces and a
+                      3x3 pattern renders as one meaningless row.
+                    */}
                     {showEn && textEn && (
-                        <p className={`text-lg text-surface-800 leading-relaxed ${isBilingual ? 'font-medium' : ''}`}>
+                        <p className={`text-lg text-surface-800 leading-relaxed whitespace-pre-wrap ${isBilingual ? 'font-medium' : ''}`}>
                             {textEn}
                         </p>
                     )}
                     {showMr && textMr && (
-                        <p className={`text-lg text-surface-800 leading-relaxed ${isBilingual ? 'text-surface-600 mt-2' : ''}`}>
+                        <p className={`text-lg text-surface-800 leading-relaxed whitespace-pre-wrap ${isBilingual ? 'text-surface-600 mt-2' : ''}`}>
                             {textMr}
                         </p>
                     )}

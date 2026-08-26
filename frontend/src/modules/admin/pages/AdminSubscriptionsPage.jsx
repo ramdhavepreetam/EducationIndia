@@ -14,14 +14,14 @@ const SUB_STATUS_BADGE = {
     free:      'bg-blue-100 text-blue-800 border-blue-200',
     expired:   'bg-red-100 text-red-800 border-red-200',
     pending:   'bg-yellow-100 text-yellow-800 border-yellow-200',
-    cancelled: 'bg-gray-100 text-gray-800 border-gray-200',
+    cancelled: 'bg-surface-100 text-surface-800 border-surface-200',
 }
 
 const TXN_STATUS_BADGE = {
     captured: 'bg-green-100 text-green-800',
     failed:   'bg-red-100 text-red-800',
     refunded: 'bg-orange-100 text-orange-800',
-    created:  'bg-gray-100 text-gray-600',
+    created:  'bg-surface-100 text-surface-600',
 }
 
 const TXN_STATUS_LABEL = { captured: 'Paid', failed: 'Failed', refunded: 'Refunded', created: 'Pending' }
@@ -46,7 +46,7 @@ function CopyBtn({ text }) {
     return (
         <button
             onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000) }}
-            className="ml-1 text-gray-400 hover:text-gray-600"
+            className="ml-1 text-surface-400 hover:text-surface-600"
             title="Copy"
         >
             {copied
@@ -182,24 +182,24 @@ function PlanManager({ plans, scopeOptions, onReload }) {
             {message && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">{message}</div>}
             {error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{error}</div>}
 
-            <form onSubmit={createPlan} className="bg-white border border-gray-200 rounded-xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
+            <form onSubmit={createPlan} className="bg-white border border-surface-200 rounded-xl p-5 grid grid-cols-1 md:grid-cols-6 gap-3 items-end">
                 <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Plan Name</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Plan Name</label>
                     <input required value={planForm.name} onChange={e => setPlanForm(f => ({ ...f, name: e.target.value }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="MSCE 8th Access" />
                 </div>
                 <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Price</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Price</label>
                     <input type="number" min="0" value={planForm.price_inr} onChange={e => setPlanForm(f => ({ ...f, price_inr: e.target.value }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm" />
                 </div>
                 <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Months</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Months</label>
                     <input type="number" min="1" value={planForm.duration_months} onChange={e => setPlanForm(f => ({ ...f, duration_months: e.target.value }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm" />
                 </div>
                 <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Scope</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Scope</label>
                     <select value={planForm.scope_type} onChange={e => setPlanForm(f => ({ ...f, scope_type: e.target.value, target: '' }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                         {['all', 'std_class', 'board', 'category', 'event', 'exam'].map(s => <option key={s} value={s}>{s}</option>)}
@@ -207,7 +207,7 @@ function PlanManager({ plans, scopeOptions, onReload }) {
                 </div>
                 {planForm.scope_type !== 'all' && (
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Target</label>
+                        <label className="block text-xs font-medium text-surface-600 mb-1">Target</label>
                         <select required value={planForm.target} onChange={e => setPlanForm(f => ({ ...f, target: e.target.value }))}
                             className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                             <option value="">Select</option>
@@ -216,7 +216,7 @@ function PlanManager({ plans, scopeOptions, onReload }) {
                     </div>
                 )}
                 <div className="md:col-span-5">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Description</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Description</label>
                     <input value={planForm.description_en} onChange={e => setPlanForm(f => ({ ...f, description_en: e.target.value }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Access for selected exam products" />
                 </div>
@@ -225,14 +225,14 @@ function PlanManager({ plans, scopeOptions, onReload }) {
 
             <form onSubmit={addScope} className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-wrap gap-3 items-end">
                 <div className="w-56">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Add Scope To</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Add Scope To</label>
                     <select value={scopeForm.plan_id} onChange={e => setScopeForm(f => ({ ...f, plan_id: Number(e.target.value) }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                         {plans.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
                 </div>
                 <div className="w-40">
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Scope</label>
+                    <label className="block text-xs font-medium text-surface-600 mb-1">Scope</label>
                     <select value={scopeForm.scope_type} onChange={e => setScopeForm(f => ({ ...f, scope_type: e.target.value, target: '' }))}
                         className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                         {['all', 'std_class', 'board', 'category', 'event', 'exam'].map(s => <option key={s} value={s}>{s}</option>)}
@@ -240,7 +240,7 @@ function PlanManager({ plans, scopeOptions, onReload }) {
                 </div>
                 {scopeForm.scope_type !== 'all' && (
                     <div className="min-w-64 flex-1">
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Target</label>
+                        <label className="block text-xs font-medium text-surface-600 mb-1">Target</label>
                         <select required value={scopeForm.target} onChange={e => setScopeForm(f => ({ ...f, target: e.target.value }))}
                             className="w-full px-3 py-2 border rounded-lg text-sm bg-white">
                             <option value="">Select</option>
@@ -253,12 +253,12 @@ function PlanManager({ plans, scopeOptions, onReload }) {
 
             <div className="grid gap-4">
                 {plans.map(plan => (
-                    <div key={plan.id} className="bg-white border border-gray-200 rounded-xl p-5">
+                    <div key={plan.id} className="bg-white border border-surface-200 rounded-xl p-5">
                         <div className="flex justify-between gap-4">
                             <div>
-                                <h3 className="font-semibold text-gray-900">{plan.name}</h3>
-                                <p className="text-sm text-gray-500">{plan.description_en || 'No description'}</p>
-                                <p className="text-sm text-gray-700 mt-1">{fmtINR(plan.price_inr)} · {plan.duration_months} months</p>
+                                <h3 className="font-semibold text-surface-900">{plan.name}</h3>
+                                <p className="text-sm text-surface-500">{plan.description_en || 'No description'}</p>
+                                <p className="text-sm text-surface-700 mt-1">{fmtINR(plan.price_inr)} · {plan.duration_months} months</p>
                             </div>
                             <button onClick={() => togglePlan(plan)} disabled={busy}
                                 className={`h-9 px-3 rounded-lg text-sm font-medium ${plan.is_active ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
@@ -266,11 +266,11 @@ function PlanManager({ plans, scopeOptions, onReload }) {
                             </button>
                         </div>
                         <div className="mt-4 flex flex-wrap gap-2">
-                            {(plan.entitlements || []).length === 0 && <span className="text-xs text-gray-400">No scopes configured</span>}
+                            {(plan.entitlements || []).length === 0 && <span className="text-xs text-surface-400">No scopes configured</span>}
                             {(plan.entitlements || []).map(ent => (
-                                <span key={ent.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">
+                                <span key={ent.id} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-100 text-surface-700 text-xs">
                                     {ent.label || ent.scope_type}
-                                    <button onClick={() => deleteScope(plan.id, ent.id)} className="text-gray-400 hover:text-red-600">×</button>
+                                    <button onClick={() => deleteScope(plan.id, ent.id)} className="text-surface-400 hover:text-red-600">×</button>
                                 </span>
                             ))}
                         </div>
@@ -288,7 +288,7 @@ function StatCard({ label, value, sub, accent }) {
         green:  'bg-green-50 border-green-200 text-green-700',
         purple: 'bg-purple-50 border-purple-200 text-purple-700',
         red:    'bg-red-50 border-red-200 text-red-700',
-        gray:   'bg-gray-50 border-gray-200 text-gray-700',
+        gray:   'bg-surface-50 border-surface-200 text-surface-700',
     }
     return (
         <div className={`rounded-xl border p-5 ${colours[accent] || colours.gray}`}>
@@ -345,7 +345,7 @@ function ParentPaymentsDrawer({ parentId, parentName, onClose }) {
                                     <td className="px-4 py-2">
                                         {r.razorpay_payment_id
                                             ? <span className="flex items-center font-mono">{r.razorpay_payment_id}<CopyBtn text={r.razorpay_payment_id} /></span>
-                                            : <span className="text-gray-400">—</span>}
+                                            : <span className="text-surface-400">—</span>}
                                     </td>
                                     <td className="px-4 py-2">
                                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${TXN_STATUS_BADGE[r.status] || TXN_STATUS_BADGE.created}`}>
@@ -416,7 +416,7 @@ function TransactionsTab() {
                         <button
                             key={s}
                             onClick={() => { setStatusFilter(s); setPage(1) }}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${statusFilter === s ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${statusFilter === s ? 'bg-surface-900 text-white border-surface-900' : 'bg-white text-surface-600 border-surface-300 hover:bg-surface-50'}`}
                         >
                             {s === 'all' ? 'All' : TXN_STATUS_LABEL[s] || s}
                         </button>
@@ -428,13 +428,13 @@ function TransactionsTab() {
                             value={searchInput}
                             onChange={e => setSearchInput(e.target.value)}
                             placeholder="Search parent name / email..."
-                            className="pl-3 pr-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 w-56"
+                            className="pl-3 pr-3 py-1.5 border border-surface-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 w-56"
                         />
-                        <button type="submit" className="px-3 py-1.5 bg-gray-100 border border-gray-300 rounded-lg text-sm hover:bg-gray-200">Search</button>
+                        <button type="submit" className="px-3 py-1.5 bg-surface-100 border border-surface-300 rounded-lg text-sm hover:bg-surface-200">Search</button>
                     </form>
                     <button
                         onClick={exportCSV}
-                        className="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 flex items-center gap-1.5"
+                        className="px-3 py-1.5 bg-white border border-surface-300 rounded-lg text-sm font-medium text-surface-700 hover:bg-surface-50 flex items-center gap-1.5"
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         CSV
@@ -443,17 +443,17 @@ function TransactionsTab() {
             </div>
 
             {/* Table */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
                 {loading ? (
                     <div className="flex justify-center py-16">
                         <div className="animate-spin h-8 w-8 border-b-2 border-blue-600 rounded-full" />
                     </div>
                 ) : rows.length === 0 ? (
-                    <div className="text-center py-16 text-gray-400 text-sm">No transactions found.</div>
+                    <div className="text-center py-16 text-surface-400 text-sm">No transactions found.</div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="min-w-full text-sm divide-y divide-gray-100">
-                            <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        <table className="min-w-full text-sm divide-y divide-surface-100">
+                            <thead className="bg-surface-50 text-xs font-semibold text-surface-500 uppercase tracking-wide">
                                 <tr>
                                     <th className="px-5 py-3 text-left">Date</th>
                                     <th className="px-5 py-3 text-left">Parent</th>
@@ -463,25 +463,25 @@ function TransactionsTab() {
                                     <th className="px-5 py-3 text-left">Status</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100">
+                            <tbody className="divide-y divide-surface-100">
                                 {rows.map(r => (
-                                    <tr key={r.id} className="hover:bg-gray-50">
-                                        <td className="px-5 py-3 whitespace-nowrap text-gray-600">
+                                    <tr key={r.id} className="hover:bg-surface-50">
+                                        <td className="px-5 py-3 whitespace-nowrap text-surface-600">
                                             {fmtDate(r.paid_at || r.created_at)}
                                         </td>
                                         <td className="px-5 py-3">
-                                            <p className="font-medium text-gray-900">{r.parent_name || '—'}</p>
-                                            <p className="text-xs text-gray-500">{r.parent_email}</p>
+                                            <p className="font-medium text-surface-900">{r.parent_name || '—'}</p>
+                                            <p className="text-xs text-surface-500">{r.parent_email}</p>
                                         </td>
-                                        <td className="px-5 py-3 font-semibold text-gray-900 whitespace-nowrap">
+                                        <td className="px-5 py-3 font-semibold text-surface-900 whitespace-nowrap">
                                             {fmtINR(r.amount_inr)}
                                         </td>
                                         <td className="px-5 py-3">
                                             {r.razorpay_payment_id
-                                                ? <span className="flex items-center font-mono text-xs text-gray-600">{r.razorpay_payment_id}<CopyBtn text={r.razorpay_payment_id} /></span>
-                                                : <span className="text-gray-400">—</span>}
+                                                ? <span className="flex items-center font-mono text-xs text-surface-600">{r.razorpay_payment_id}<CopyBtn text={r.razorpay_payment_id} /></span>
+                                                : <span className="text-surface-400">—</span>}
                                         </td>
-                                        <td className="px-5 py-3 font-mono text-xs text-gray-500">
+                                        <td className="px-5 py-3 font-mono text-xs text-surface-500">
                                             {r.razorpay_order_id
                                                 ? <span className="flex items-center">{r.razorpay_order_id.slice(0, 18)}…<CopyBtn text={r.razorpay_order_id} /></span>
                                                 : '—'}
@@ -503,12 +503,12 @@ function TransactionsTab() {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+            <div className="flex justify-between items-center mt-4 text-sm text-surface-500">
                 <span>{rows.length} records on this page</span>
                 <div className="flex gap-2">
-                    <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1 border rounded-lg disabled:opacity-40 hover:bg-gray-50">Prev</button>
+                    <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1 border rounded-lg disabled:opacity-40 hover:bg-surface-50">Prev</button>
                     <span className="px-3 py-1">Page {page}</span>
-                    <button disabled={rows.length < LIMIT} onClick={() => setPage(p => p + 1)} className="px-3 py-1 border rounded-lg disabled:opacity-40 hover:bg-gray-50">Next</button>
+                    <button disabled={rows.length < LIMIT} onClick={() => setPage(p => p + 1)} className="px-3 py-1 border rounded-lg disabled:opacity-40 hover:bg-surface-50">Next</button>
                 </div>
             </div>
         </div>
@@ -534,13 +534,13 @@ function RevenueChart() {
     }, [months])
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-6">
+        <div className="bg-white rounded-xl border border-surface-200 shadow-sm p-5 mb-6">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-gray-700">Monthly Revenue</h3>
+                <h3 className="text-sm font-semibold text-surface-700">Monthly Revenue</h3>
                 <select
                     value={months}
                     onChange={e => setMonths(Number(e.target.value))}
-                    className="text-xs border border-gray-300 rounded-lg px-2 py-1 bg-white"
+                    className="text-xs border border-surface-300 rounded-lg px-2 py-1 bg-white"
                 >
                     <option value={3}>Last 3 months</option>
                     <option value={6}>Last 6 months</option>
@@ -552,7 +552,7 @@ function RevenueChart() {
                     <div className="animate-spin h-6 w-6 border-b-2 border-blue-600 rounded-full" />
                 </div>
             ) : data.length === 0 ? (
-                <p className="text-center text-gray-400 text-sm py-10">No revenue data yet.</p>
+                <p className="text-center text-surface-400 text-sm py-10">No revenue data yet.</p>
             ) : (
                 <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 8 }}>
@@ -706,12 +706,12 @@ export const AdminSubscriptionsPage = () => {
             {/* Page header */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Payments & Subscriptions</h1>
-                    <p className="text-sm text-gray-500 mt-1">Revenue overview, transactions, and subscription management.</p>
+                    <h1 className="text-3xl font-bold text-surface-900">Payments & Subscriptions</h1>
+                    <p className="text-sm text-surface-500 mt-1">Revenue overview, transactions, and subscription management.</p>
                 </div>
                 <button
                     onClick={loadAll}
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition self-start"
+                    className="px-4 py-2 bg-white border border-surface-300 rounded-lg text-sm font-medium text-surface-700 hover:bg-surface-50 transition self-start"
                 >
                     Refresh
                 </button>
@@ -721,7 +721,7 @@ export const AdminSubscriptionsPage = () => {
             {isLoading ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     {[...Array(4)].map((_, i) => (
-                        <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />
+                        <div key={i} className="h-24 bg-surface-100 rounded-xl animate-pulse" />
                     ))}
                 </div>
             ) : stats && (
@@ -757,7 +757,7 @@ export const AdminSubscriptionsPage = () => {
             <RevenueChart />
 
             {/* ── Main tab navigation ── */}
-            <div className="border-b border-gray-200 mb-6">
+            <div className="border-b border-surface-200 mb-6">
                 <nav className="-mb-px flex space-x-8">
                     {[
                         { key: 'subscriptions', label: 'Subscriptions', count: subscriptions.length },
@@ -770,12 +770,12 @@ export const AdminSubscriptionsPage = () => {
                             className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                                 mainTab === t.key
                                     ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    : 'border-transparent text-surface-500 hover:text-surface-700 hover:border-surface-300'
                             }`}
                         >
                             {t.label}
                             {t.count != null && (
-                                <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600">{t.count}</span>
+                                <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-surface-100 text-surface-600">{t.count}</span>
                             )}
                         </button>
                     ))}
@@ -794,8 +794,8 @@ export const AdminSubscriptionsPage = () => {
                                     onClick={() => setSubFilter(tab)}
                                     className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
                                         subFilter === tab
-                                            ? 'bg-gray-900 text-white border-gray-900'
-                                            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                                            ? 'bg-surface-900 text-white border-surface-900'
+                                            : 'bg-white text-surface-600 border-surface-300 hover:bg-surface-50'
                                     }`}
                                 >
                                     {tab}
@@ -819,9 +819,9 @@ export const AdminSubscriptionsPage = () => {
                                     placeholder="Search parent/email..."
                                     value={searchQuery}
                                     onChange={e => setSearchQuery(e.target.value)}
-                                    className="pl-8 pr-4 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 w-56"
+                                    className="pl-8 pr-4 py-1.5 border border-surface-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500 w-56"
                                 />
-                                <svg className="absolute left-2.5 top-2 h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="absolute left-2.5 top-2 h-4 w-4 text-surface-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                                 </svg>
                             </div>
@@ -841,34 +841,34 @@ export const AdminSubscriptionsPage = () => {
                             <h3 className="text-sm font-semibold text-blue-900 mb-4">Grant Subscription Access</h3>
                             <form onSubmit={handleGrant} className="flex flex-wrap items-end gap-4">
                                 <div className="flex-1 min-w-[200px]">
-                                    <label className="block text-xs font-medium text-gray-700 mb-1">Parent Email</label>
+                                    <label className="block text-xs font-medium text-surface-700 mb-1">Parent Email</label>
                                     <input
                                         type="email" required value={grantEmail}
                                         onChange={e => setGrantEmail(e.target.value)}
                                         placeholder="parent@email.com"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500"
+                                        className="w-full px-3 py-2 border border-surface-300 rounded-lg text-sm focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
                                 <div className="w-48">
-                                    <label className="block text-xs font-medium text-gray-700 mb-1">Plan</label>
+                                    <label className="block text-xs font-medium text-surface-700 mb-1">Plan</label>
                                     <select
                                         value={grantPlanId}
                                         onChange={e => setGrantPlanId(Number(e.target.value))}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                                        className="w-full px-3 py-2 border border-surface-300 rounded-lg text-sm bg-white"
                                     >
                                         {plans.map(p => <option key={p.id} value={p.id}>{p.name} — ₹{p.price_inr}</option>)}
                                         {plans.length === 0 && <option>No plans</option>}
                                     </select>
                                 </div>
                                 <div className="w-32">
-                                    <label className="block text-xs font-medium text-gray-700 mb-1">Duration</label>
+                                    <label className="block text-xs font-medium text-surface-700 mb-1">Duration</label>
                                     <div className="flex items-center gap-1">
                                         <input
                                             type="number" min={1} max={24} value={grantMonths}
                                             onChange={e => setGrantMonths(Number(e.target.value))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                            className="w-full px-3 py-2 border border-surface-300 rounded-lg text-sm"
                                         />
-                                        <span className="text-xs text-gray-500 whitespace-nowrap">months</span>
+                                        <span className="text-xs text-surface-500 whitespace-nowrap">months</span>
                                     </div>
                                 </div>
                                 <button
@@ -891,18 +891,18 @@ export const AdminSubscriptionsPage = () => {
                             <div className="animate-spin h-8 w-8 border-b-2 border-blue-600 rounded-full" />
                         </div>
                     ) : filteredSubs.length === 0 ? (
-                        <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200">
-                            <p className="text-gray-500 text-sm">
+                        <div className="text-center py-16 bg-white rounded-xl border border-dashed border-surface-200">
+                            <p className="text-surface-500 text-sm">
                                 {subscriptions.length === 0
                                     ? 'No parent accounts found yet.'
                                     : 'No records matching current filters.'}
                             </p>
                         </div>
                     ) : (
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                        <div className="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
                             <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200 text-sm">
-                                    <thead className="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                <table className="min-w-full divide-y divide-surface-200 text-sm">
+                                    <thead className="bg-surface-50 text-xs font-semibold text-surface-500 uppercase tracking-wide">
                                         <tr>
                                             <th className="px-5 py-3 text-left">Parent</th>
                                             <th className="px-5 py-3 text-left">Plan</th>
@@ -913,25 +913,25 @@ export const AdminSubscriptionsPage = () => {
                                             <th className="px-5 py-3 text-right">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-100">
+                                    <tbody className="divide-y divide-surface-100">
                                         {filteredSubs.map(sub => (
                                             <React.Fragment key={sub.id || sub.parent_id}>
-                                                <tr className="hover:bg-gray-50">
+                                                <tr className="hover:bg-surface-50">
                                                     <td className="px-5 py-3">
-                                                        <p className="font-medium text-gray-900">{sub.parent_name || 'Unknown'}</p>
-                                                        <p className="text-xs text-gray-500">{sub.parent_email || 'No email'}</p>
-                                                        <p className="text-xs text-gray-400 font-mono">{sub.parent_id?.split('-')[0]}…</p>
+                                                        <p className="font-medium text-surface-900">{sub.parent_name || 'Unknown'}</p>
+                                                        <p className="text-xs text-surface-500">{sub.parent_email || 'No email'}</p>
+                                                        <p className="text-xs text-surface-400 font-mono">{sub.parent_id?.split('-')[0]}…</p>
                                                     </td>
-                                                    <td className="px-5 py-3 text-gray-700">{sub.plan_name || (sub.status === 'free' ? 'Free Tier' : 'Standard')}</td>
-                                                    <td className="px-5 py-3 font-semibold text-gray-900">{fmtINR(sub.amount_paid_inr)}</td>
+                                                    <td className="px-5 py-3 text-surface-700">{sub.plan_name || (sub.status === 'free' ? 'Free Tier' : 'Standard')}</td>
+                                                    <td className="px-5 py-3 font-semibold text-surface-900">{fmtINR(sub.amount_paid_inr)}</td>
                                                     <td className="px-5 py-3">
                                                         <StatusBadge status={sub.status} map={SUB_STATUS_BADGE} />
                                                     </td>
-                                                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{fmtDate(sub.started_at)}</td>
-                                                    <td className="px-5 py-3 text-gray-500 whitespace-nowrap">{fmtDate(sub.expires_at)}</td>
+                                                    <td className="px-5 py-3 text-surface-500 whitespace-nowrap">{fmtDate(sub.started_at)}</td>
+                                                    <td className="px-5 py-3 text-surface-500 whitespace-nowrap">{fmtDate(sub.expires_at)}</td>
                                                     <td className="px-5 py-3 text-right">
                                                         {sub.id && actionLoadingId === sub.id ? (
-                                                            <span className="text-gray-400 text-xs">Processing…</span>
+                                                            <span className="text-surface-400 text-xs">Processing…</span>
                                                         ) : (
                                                             <div className="flex justify-end gap-1.5 flex-wrap">
                                                                 <button

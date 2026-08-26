@@ -1,0 +1,3743 @@
+{
+  "paper": {
+    "board": "MSCE",
+    "std_class": 5,
+    "year": 2026,
+    "paper_code": "502",
+    "set_code": "A",
+    "medium": "marathi"
+  },
+  "contexts": [
+    {
+      "context_type": "paragraph",
+      "title_en": null,
+      "title_mr": "कर्मयोगी संत गाडगे महाराज",
+      "content_en": null,
+      "content_mr": "संत गाडगे महाराज हे महाराष्ट्रातील एक महान समाजसुधारक व संत होते. हातात झाडू आणि डोक्यावर खापराचे गाडगे घेऊन त्यांनी गावोगावी फिरून स्वच्छतेचा प्रसार केला. ते लोकांना सांगत, 'देव मंदिरात नसून भुकेलेल्या, दुःखी आणि अनाथ माणसांच्या सेवेत आहे.' त्यांनी स्वतःच्या हाताने घाण साफ करून लोकांना श्रमाचे महत्त्व पटवून दिले. शिक्षण, स्वच्छता आणि अंधश्रद्धा निर्मूलन यांवर त्यांनी आयुष्यभर भर दिला. त्यांच्या कीर्तनाला हजारो लोक उपस्थित राहत असत.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": null,
+      "instruction_mr": "खालील उतारा वाचून प्रश्न १ ते ३ ची उत्तरे द्या.",
+      "applies_from": 1,
+      "applies_to": 3
+    },
+    {
+      "context_type": "poem",
+      "title_en": null,
+      "title_mr": "माझा बळीराजा",
+      "content_en": null,
+      "content_mr": "काळ्या मातीत मातीत, घाम गाळतो शेतकरी,\nधान्य पिकवून साऱ्या जगाची, भूक भागवतो बळीराजा.\nऊन, वारा, पाऊस सोसून, राबतो दिवस-रात्र शेतात,\nत्याच्या कष्टानेच येते, समृद्धी आपल्या घरात.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": null,
+      "instruction_mr": "खालील कविता वाचून प्रश्न ४ आणि ५ ची उत्तरे द्या.",
+      "applies_from": 4,
+      "applies_to": 5
+    },
+    {
+      "context_type": "venn_diagram",
+      "title_en": "Venn Diagram - Students, Players and Singers",
+      "title_mr": "व्हेन आकृती - विद्यार्थी, खेळाडू व गायक",
+      "content_en": null,
+      "content_mr": null,
+      "image": "ctx2-venn.png",
+      "image_alt_en": "Three overlapping circles labelled Students, Players and Singers with numbers in regions.",
+      "image_alt_mr": "विद्यार्थी, खेळाडू आणि गायक अशी तीन एकमेकांत छेदणारी वर्तुळे ज्यात संख्या दर्शविल्या आहेत.",
+      "instruction_en": "Study the Venn diagram and answer questions 55 to 57.",
+      "instruction_mr": "व्हेन आकृतीचा अभ्यास करून प्रश्न ५५ ते ५७ ची उत्तरे द्या.",
+      "applies_from": 55,
+      "applies_to": 57
+    }
+  ],
+  "questions": [
+    {
+      "question_no": 1,
+      "section": "Marathi",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "संत गाडगे महाराजांच्या मते खरा देव कोठे आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "उताऱ्यात स्पष्ट सांगितले आहे की देव भुकेलेल्या, दुःखी आणि अनाथ माणसांच्या सेवेत आहे.",
+      "hint_en": null,
+      "hint_mr": "उताऱ्यातील महाराजांचे विचार वाचा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "reading-comprehension"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "मोठमोठ्या मंदिरांत",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "जंगलात आणि गुहांमध्ये",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "दुःखी व अनाथ माणसांच्या सेवेत",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "फक्त तीर्थक्षेत्रांवर",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 2,
+      "section": "Marathi",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "संत गाडगे महाराजांनी आयुष्यभर कोणत्या गोष्टींवर विशेष भर दिला?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "शिक्षणाचा प्रसार, स्वच्छता आणि अंधश्रद्धा निर्मूलन यांवर त्यांनी आयुष्यभर भर दिला.",
+      "hint_en": null,
+      "hint_mr": "उताऱ्यातील शेवटच्या ओळी पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "reading-comprehension"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "व्यापार आणि संपत्ती गोळा करणे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "शिक्षण, स्वच्छता आणि अंधश्रद्धा निर्मूलन",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "फक्त स्वतःचा आराम",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "नवीन मंदिरे बांधणे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 3,
+      "section": "Marathi",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "उताऱ्यात आलेल्या 'प्रसार' या शब्दाचा योग्य अर्थ कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "'प्रसार करणे' म्हणजे सर्वत्र पसरवणे किंवा प्रचार करणे.",
+      "hint_en": null,
+      "hint_mr": "शब्दाचा योग्य समानार्थी अर्थ आठवा.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "vocabulary"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "प्रचार किंवा फैलाव करणे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "गोंधळ घालणे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "थांबवणे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "नष्ट करणे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 4,
+      "section": "Marathi",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "कवितेनुसार साऱ्या जगाची भूक कोण भागवतो?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": null,
+      "explanation_mr": "कवितेत म्हटले आहे: 'धान्य पिकवून साऱ्या जगाची, भूक भागवतो बळीराजा'.",
+      "hint_en": null,
+      "hint_mr": "कवितेची दुसरी ओळ वाचा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "poetry"
+      ],
+      "context_ref": 1,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "दुकानदार",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "व्यापारी",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "सैनिक",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "शेतकरी (बळीराजा)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 5,
+      "section": "Marathi",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": null,
+      "text_mr": "कवितेतून शेतकऱ्याचे कोणते दोन गुण प्रकर्षाने जाणवतात? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": null,
+      "explanation_mr": "शेतकरी अत्यंत कष्टाळू आणि संकटांना न घाबरता ऊन-पाऊस सोसणारा सहनशील आहे.",
+      "hint_en": null,
+      "hint_mr": "तिसऱ्या ओळीतील 'ऊन, वारा, पाऊस सोसून' यावर लक्ष द्या.",
+      "difficulty": "hard",
+      "tags": [
+        "marathi",
+        "poetry",
+        "multi-select"
+      ],
+      "context_ref": 1,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "कष्टाळू वृत्ती",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "आळशीपणा",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "सहनशीलता",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "स्वार्थीपणा",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 6,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'सूर्य' या शब्दाचा योग्य समानार्थी शब्द खालीलपैकी कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "'सूर्य' या शब्दाचे समानार्थी शब्द भास्कर, रवी, भानू, दिनकर हे आहेत.",
+      "hint_en": null,
+      "hint_mr": "सूर्याचे दुसरे नाव आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "synonyms"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "शशी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "भास्कर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "निशा",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "पवन",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 7,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'आदर' या शब्दाचा योग्य विरुद्धार्थी शब्द कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "'आदर' या शब्दाचा विरुद्धार्थी शब्द 'अनादर' हा आहे.",
+      "hint_en": null,
+      "hint_mr": "आदर शब्दाला 'अन' हा उपसर्ग लागतो.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "antonyms"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "सादर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "निरादर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "अनादर",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "अपमान",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 8,
+      "section": "Marathi",
+      "topic": "Idioms and Proverbs",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'हातभार लावणे' या वाक्प्रचाराचा अचूक अर्थ कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "'हातभार लावणे' म्हणजे कोणत्याही कामात मदत करणे.",
+      "hint_en": null,
+      "hint_mr": "कामात सहकार्य करणे असा अर्थ होतो.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "idioms"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "मदत करणे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "हात धुणे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "वजन उचलणे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "टाळ्या वाजवणे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 9,
+      "section": "Marathi",
+      "topic": "Idioms and Proverbs",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "पुढील म्हण पूर्ण करा: 'अति तिथे _______'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": null,
+      "explanation_mr": "'अति तिथे माती' ही प्रचलित मराठी म्हण आहे.",
+      "hint_en": null,
+      "hint_mr": "कोणत्याही गोष्टीचा अतिरेक वाईट असतो या अर्थाची म्हण.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "proverbs"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "पाणी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "दगड",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "धुळी",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "माती",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 10,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'वारा' या शब्दाचे दोन समानार्थी शब्द कोणते? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        4
+      ],
+      "explanation_en": null,
+      "explanation_mr": "'पवन' आणि 'अनिल' हे दोन्ही शब्द वाऱ्याचे समानार्थी शब्द आहेत.",
+      "hint_en": null,
+      "hint_mr": "समीर, पवन, अनिल हे वाऱ्याचे समानार्थी शब्द आहेत.",
+      "difficulty": "hard",
+      "tags": [
+        "marathi",
+        "synonyms",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "जल",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "पवन",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "अनल",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "अनिल",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 11,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "जहाजांच्या समूहाला काय म्हणतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "जहाजांचा 'काफिला' असतो.",
+      "hint_en": null,
+      "hint_mr": "समूहदर्शक शब्द आठवा.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "group-names"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "काफिला",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "ताफा",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "कळप",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "घोस",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 12,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "सिंहाच्या पिल्लाला काय म्हणतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "सिंहाच्या पिल्लाला 'छावा' म्हणतात. वाघाच्या पिल्लाला 'बछडा' म्हणतात.",
+      "hint_en": null,
+      "hint_mr": "प्राण्यांचे पिल्लूदर्शक शब्द आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "young-ones"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "शावक",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "पाडस",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "छावा",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "शिंगरू",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 13,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील वाक्यातील 'नाम' ओळखा:\n'रोहन दररोज नियमितपणे अभ्यास करतो.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "'रोहन' हे व्यक्तीचे नाव असल्याने ते नाम (Noun) आहे.",
+      "hint_en": null,
+      "hint_mr": "व्यक्तीचे किंवा वस्तूचे नाव शोधा.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "parts-of-speech"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "रोहन",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "दररोज",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "नियमितपणे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "करतो",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 14,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील वाक्यातील 'सर्वनाम' ओळखा:\n'आम्ही काल ऐतिहासिक किल्ला पाहायला गेलो होतो.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "नामाऐवजी वापरलेला शब्द 'आम्ही' हे प्रथम पुरुषी सर्वनाम आहे.",
+      "hint_en": null,
+      "hint_mr": "नामाऐवजी येणारा शब्द ओळखा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "pronouns"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "काल",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "आम्ही",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "किल्ला",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "गेलो",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 15,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील वाक्यातील 'विशेषण' ओळखा:\n'बागेमध्ये लालभडक गुलाब उमलले आहेत.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "'लालभडक' हा शब्द गुलाबाबद्दल विशेष माहिती सांगतो, म्हणून ते विशेषण आहे.",
+      "hint_en": null,
+      "hint_mr": "गुलाबाचा रंग किंवा गुण दर्शवणारा शब्द.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "adjectives"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "बागेमध्ये",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "गुलाब",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "लालभडक",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "उमलले",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 16,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील वाक्यातील 'क्रियापद' कोणते?\n'शारदाने सुंदर चित्र काढले.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": null,
+      "explanation_mr": "वाक्याचा अर्थ पूर्ण करणारा क्रियावाचक शब्द 'काढले' हे क्रियापद आहे.",
+      "hint_en": null,
+      "hint_mr": "वाक्याचा शेवट करणारा कृतीदर्शक शब्द.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "verbs"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "शारदाने",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "सुंदर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "चित्र",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "काढले",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 17,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'मोर' या शब्दाचे विरुद्ध लिंगी रूप कोणते?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "'मोर' चे स्त्रीलिंगी रूप 'लांडोर' असे होते.",
+      "hint_en": null,
+      "hint_mr": "मोराची मादी ओळखा.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "gender"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "लांडोर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "मोरी",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "मोरणी",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "चिमणी",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 18,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'झाड' या शब्दाचे योग्य अनेकवचन रूप निवडा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "'एक झाड - अनेक झाडे'.",
+      "hint_en": null,
+      "hint_mr": "नपुंसकलिंगी नामाचे अनेकवचन.",
+      "difficulty": "easy",
+      "tags": [
+        "marathi",
+        "singular-plural"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "झाडा",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "झाडांना",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "झाडे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "झाडो",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 19,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील वाक्याचा काळ ओळखा:\n'अमेय मैदानात फुटबॉल खेळत होता.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "'खेळत होता' हे भूतकाळातील चालू किंवा अपूर्ण क्रिया दर्शवते (अपूर्ण/चालू भूतकाळ).",
+      "hint_en": null,
+      "hint_mr": "भूतकाळात क्रिया चालू असल्याचे दर्शवले आहे.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "tenses"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "साधा वर्तमानकाळ",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "अपूर्ण भूतकाळ (चालू भूतकाळ)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "पूर्ण भविष्यकाळ",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "साधा भूतकाळ",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 20,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'शाब्बास तुम्ही सर्वांनी खूप छान यश मिळवले' या वाक्यात 'शाब्बास' या शब्दानंतर कोणते विरामचिन्ह येईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "'शाब्बास' हा उद्गारवाचक शब्द असल्याने त्यानंतर उद्गारवाचक चिन्ह (!) येते.",
+      "hint_en": null,
+      "hint_mr": "प्रशंसा किंवा भावना व्यक्त करणाऱ्या शब्दानंतरचे चिन्ह.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "punctuation"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "उद्गारवाचक चिन्ह (!)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "प्रश्नचिन्ह (?)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "पूर्णविराम (.)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "अर्धविराम (;)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 21,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालीलपैकी कोणते दोन शब्द 'नपुंसकलिंगी' आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": null,
+      "explanation_mr": "'ते पुस्तक' आणि 'ते झाड' हे दोन्ही शब्द नपुंसकलिंगी आहेत ('तो फळा' पुल्लिंगी, 'ती वही' स्त्रीलिंगी).",
+      "hint_en": null,
+      "hint_mr": "'ते' हे सर्वनाम लावून पहा.",
+      "difficulty": "hard",
+      "tags": [
+        "marathi",
+        "gender",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "पुस्तक",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "फळा",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "झाड",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "वही",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 22,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील विस्कळीत शब्दांची योग्य मांडणी करून तयार होणारे अर्थपूर्ण वाक्य कोणते?\n'मुले / खेळतात / मैदानावर / संध्याकाळी'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": null,
+      "explanation_mr": "योग्य वाक्य: 'मुले संध्याकाळी मैदानावर खेळतात.'",
+      "hint_en": null,
+      "hint_mr": "कर्ता + काळ/स्थळ + कर्म + क्रियापद असा क्रम जुळवा.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "sentence-formation"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "खेळतात मुले संध्याकाळी मैदानावर.",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "मैदानावर खेळतात संध्याकाळी मुले.",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "संध्याकाळी खेळतात मैदानावर मुले.",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "मुले संध्याकाळी मैदानावर खेळतात.",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 23,
+      "section": "Marathi",
+      "topic": "Grammar",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "'तू गावाहून कधी परत येणार आहेस?' या वाक्याचा प्रकार कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": null,
+      "explanation_mr": "वाक्यात प्रश्न विचारलेला असल्याने ते प्रश्नार्थी वाक्य (Interrogative) आहे.",
+      "hint_en": null,
+      "hint_mr": "शेवटी प्रश्नचिन्ह (?) आले आहे.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "sentence-types"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "विधानार्थी वाक्य",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "आज्ञार्थी वाक्य",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "प्रश्नार्थी वाक्य",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "उद्गारार्थी वाक्य",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 24,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील पर्यायांमधून अचूक शुद्ध शब्द कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": null,
+      "explanation_mr": "'आशीर्वाद' हे शुद्धलेखन नियमानुसार योग्य रूप आहे (श ला दीर्घ वेलांटी व वा वर रफार).",
+      "hint_en": null,
+      "hint_mr": "वेलांटी आणि रफार काळजीपूर्वक पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "marathi",
+        "spelling"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "आशिरवाद",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "आशीर्वाद",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "आर्शिवाद",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "अशिर्वाद",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 25,
+      "section": "Marathi",
+      "topic": "Vocabulary",
+      "question_type": "marathi_only",
+      "text_en": null,
+      "text_mr": "खालील शब्द अकारविल्हे (वर्णानुक्रमे) लावल्यास कोणता शब्द दुसऱ्या क्रमांकावर येईल?\n'कमळ, कपाट, कढई, कलश'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": null,
+      "explanation_mr": "अकारविल्हे क्रम: १. कढई, २. कमळ, ३. कलश, ४. कपाट (किंवा कढई -> कमळ -> कलश -> कपाट). दुसऱ्या क्रमांकावर 'कमळ' येतो.",
+      "hint_en": null,
+      "hint_mr": "व्यंजनांचा क्रम: क, ख, ग, घ, ..., ढ, ..., म, ल, प.",
+      "difficulty": "hard",
+      "tags": [
+        "marathi",
+        "alphabetical-order"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": "कमळ",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": "कढई",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": "कलश",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": "कपाट",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 26,
+      "section": "Intelligence Test",
+      "topic": "Analogy",
+      "question_type": "bilingual",
+      "text_en": "India : New Delhi :: Maharashtra : ?",
+      "text_mr": "भारत : नवी दिल्ली :: महाराष्ट्र : ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "New Delhi is the capital of India; Mumbai is the capital of Maharashtra.",
+      "explanation_mr": "भारताची राजधानी नवी दिल्ली आहे; महाराष्ट्राची राजधानी मुंबई आहे.",
+      "hint_en": "Capital city relationship.",
+      "hint_mr": "राजधानीचा संबंध ओळखा.",
+      "difficulty": "easy",
+      "tags": [
+        "analogy",
+        "word-analogy"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Pune",
+          "text_mr": "पुणे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Nagpur",
+          "text_mr": "नागपूर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Mumbai",
+          "text_mr": "मुंबई",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Nashik",
+          "text_mr": "नाशिक",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 27,
+      "section": "Intelligence Test",
+      "topic": "Analogy",
+      "question_type": "bilingual",
+      "text_en": "7 : 49 :: 9 : ?",
+      "text_mr": "७ : ४९ :: ९ : ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "7² = 49; similarly, 9² = 81.",
+      "explanation_mr": "७ चा वर्ग ४९; त्याचप्रमाणे ९ चा वर्ग ८१.",
+      "hint_en": "Square the first number.",
+      "hint_mr": "पहिल्या संख्येचा वर्ग करा.",
+      "difficulty": "easy",
+      "tags": [
+        "analogy",
+        "number-analogy"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "72",
+          "text_mr": "७२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "81",
+          "text_mr": "८१",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "90",
+          "text_mr": "९०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "63",
+          "text_mr": "६३",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 28,
+      "section": "Intelligence Test",
+      "topic": "Analogy",
+      "question_type": "bilingual",
+      "text_en": "ACE : BDF :: GIK : ?",
+      "text_mr": "ACE : BDF :: GIK : ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Each letter moves +1 forward: A->B, C->D, E->F. So G->H, I->J, K->L = HJL.",
+      "explanation_mr": "प्रत्येक अक्षर १ ने पुढे सरकते: G->H, I->J, K->L = HJL.",
+      "hint_en": "Shift each letter by +1.",
+      "hint_mr": "प्रत्येक अक्षर १ ने पुढे न्या.",
+      "difficulty": "medium",
+      "tags": [
+        "analogy",
+        "letter-analogy"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "HJL",
+          "text_mr": "HJL",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "HKL",
+          "text_mr": "HKL",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "IKM",
+          "text_mr": "IKM",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "FHJ",
+          "text_mr": "FHJ",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 29,
+      "section": "Intelligence Test",
+      "topic": "Analogy",
+      "question_type": "bilingual",
+      "text_en": "8 : 64 :: 6 : ? (Choose two correct options based on two different logical rules)",
+      "text_mr": "८ : ६४ :: ६ : ? (दोन वेगवेगळ्या नियमांनुसार येणारे दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        4
+      ],
+      "explanation_en": "Rule 1 (Square): 8²=64, so 6²=36. Rule 2 (Cube of half): 8=(4)³=64, 6=(6/2)³=3³=27 or 8×8=64, 6×36=216. 36 and 216 are valid.",
+      "explanation_mr": "नियम १ (वर्ग): ६² = ३६. नियम २ (६ चा घन): ६³ = २१६. म्हणून ३६ व २१६ दोन्ही अचूक आहेत.",
+      "hint_en": "Think of square and cube relationships.",
+      "hint_mr": "वर्ग आणि घन या नियमांचा विचार करा.",
+      "difficulty": "hard",
+      "tags": [
+        "analogy",
+        "number-analogy",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "36",
+          "text_mr": "३६",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "48",
+          "text_mr": "४८",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "30",
+          "text_mr": "३०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "216",
+          "text_mr": "२१६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 30,
+      "section": "Intelligence Test",
+      "topic": "Analogy",
+      "question_type": "text",
+      "text_en": "△ : ▽ :: ◐ : ?",
+      "text_mr": "△ : ▽ :: ◐ : ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "△ is vertically flipped to ▽; ◐ (shaded left) when flipped horizontally/laterally becomes ◑ (shaded right).",
+      "explanation_mr": "त्रिकोणाची उलटी दिशा केली आहे; डावा भाग छायांकित असलेल्या ◐ चा उलट भाग ◑ होईल.",
+      "hint_en": "Look at the opposite orientation.",
+      "hint_mr": "विरुद्ध बाजूची सावली पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "analogy",
+        "symbol-figure"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "◓",
+          "text_mr": "◓",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "◑",
+          "text_mr": "◑",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "◒",
+          "text_mr": "◒",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "●",
+          "text_mr": "●",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 31,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "bilingual",
+      "text_en": "Which of the following figures is the odd one out?",
+      "text_mr": "खालीलपैकी विसंगत पद (Odd one out) कोणते?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "Square, Rectangle, and Triangle are polygons made of straight line segments, whereas a Circle is curved with no vertices.",
+      "explanation_mr": "चौरस, आयत आणि त्रिकोण हे सरळ रेषाखंडांनी बनलेले बहुभुज आहेत, तर वर्तुळाला कडा व शिरोबिंदू नसतात.",
+      "hint_en": "Check straight sides versus curved boundary.",
+      "hint_mr": "रेषाखंड आणि वक्र सीमा यांतील फरक पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "odd-one-out",
+        "classification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Square",
+          "text_mr": "चौरस",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Rectangle",
+          "text_mr": "आयात",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Triangle",
+          "text_mr": "त्रिकोण",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Circle",
+          "text_mr": "वर्तुळ",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 32,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "bilingual",
+      "text_en": "Find the odd number out from the given set: 27, 64, 125, 144.",
+      "text_mr": "दिलेल्या संख्यांमधून विसंगत संख्या ओळखा: २७, ६४, १२५, १४४.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "27 (3³), 64 (4³), and 125 (5³) are perfect cubes. 144 is a perfect square (12²) but not a cube.",
+      "explanation_mr": "२७ (३³), ६४ (४³), १२५ (५³) या घन संख्या आहेत, तर १४४ ही घन संख्या नाही (तो १२ चा वर्ग आहे).",
+      "hint_en": "Check for cube numbers.",
+      "hint_mr": "घन संख्या तपासा.",
+      "difficulty": "easy",
+      "tags": [
+        "odd-one-out",
+        "number-classification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "27",
+          "text_mr": "२७",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "64",
+          "text_mr": "६४",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "125",
+          "text_mr": "१२५",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "144",
+          "text_mr": "१४४",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 33,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "text",
+      "text_en": "Find the odd figure out from the following options.",
+      "text_mr": "खालील आकृत्यांमधून विसंगत आकृती ओळखा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "◐, ◑, and ◒ are all half-shaded circles, whereas △ is a hollow triangle.",
+      "explanation_mr": "◐, ◑, व ◒ ही अर्धी छायांकित वर्तुळे आहेत, तर △ हा त्रिकोण आहे.",
+      "hint_en": "Look at shape family and shading.",
+      "hint_mr": "आकार आणि छायांकित भाग तपासा.",
+      "difficulty": "easy",
+      "tags": [
+        "odd-one-out",
+        "symbol-figure"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "◐",
+          "text_mr": "◐",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "◑",
+          "text_mr": "◑",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "◒",
+          "text_mr": "◒",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "△",
+          "text_mr": "△",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 34,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "bilingual",
+      "text_en": "Find the odd letter out: A, E, I, K",
+      "text_mr": "विसंगत अक्षर ओळखा: A, E, I, K",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "A, E, and I are English vowels, whereas K is a consonant.",
+      "explanation_mr": "A, E आणि I हे तिन्ही स्वर (Vowels) आहेत, तर K हे व्यंजन (Consonant) आहे.",
+      "hint_en": "Recall English vowels (A, E, I, O, U).",
+      "hint_mr": "इंग्रजी स्वर आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "odd-one-out",
+        "letter-classification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "A",
+          "text_mr": "A",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "E",
+          "text_mr": "E",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "I",
+          "text_mr": "I",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "K",
+          "text_mr": "K",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 35,
+      "section": "Intelligence Test",
+      "topic": "Odd One Out",
+      "question_type": "bilingual",
+      "text_en": "Which two numbers are prime numbers among the given set? (Choose two correct options)\n39, 43, 51, 67",
+      "text_mr": "दिलेल्या संख्यांमधून कोणत्या दोन मूळ संख्या आहेत? (दोन अचूक पर्याय निवडा)\n३९, ४३, ५१, ६७",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        4
+      ],
+      "explanation_en": "43 and 67 are prime numbers (39 = 3 × 13, 51 = 3 × 17 are composite).",
+      "explanation_mr": "४३ आणि ६७ या मूळ संख्या आहेत (३९ व ५१ ला ३ ने भाग जातो).",
+      "hint_en": "Check divisibility by 3.",
+      "hint_mr": "३ ची कसोटी लावून संयुक्त संख्या वगळा.",
+      "difficulty": "hard",
+      "tags": [
+        "odd-one-out",
+        "prime-numbers",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "39",
+          "text_mr": "३९",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "43",
+          "text_mr": "४३",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "51",
+          "text_mr": "५१",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "67",
+          "text_mr": "६७",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 36,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "Find the next number in the series: 12, 19, 26, 33, ?",
+      "text_mr": "संख्या मालिकेत प्रश्नचिन्हाच्या जागी कोणती संख्या येईल?\n१२, १९, २६, ३३, ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Constant difference of +7: 33 + 7 = 40.",
+      "explanation_mr": "प्रत्येक संख्येत ७ मिळवले आहेत: ३३ + ७ = ४०.",
+      "hint_en": "Add 7 to the previous number.",
+      "hint_mr": "प्रत्येक संख्येत ७ चा फरक आहे.",
+      "difficulty": "easy",
+      "tags": [
+        "series-completion",
+        "number-series"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "40",
+          "text_mr": "४०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "41",
+          "text_mr": "४१",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "39",
+          "text_mr": "३९",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "42",
+          "text_mr": "४२",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 37,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "What is the next number in the series: 2, 5, 10, 17, 26, ?",
+      "text_mr": "संख्या मालिकेतील पुढील पद शोधा:\n२, ५, १०, १७, २६, ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "Pattern is n² + 1: 1²+1=2, 2²+1=5, 3²+1=10, 4²+1=17, 5²+1=26, 6²+1=37.",
+      "explanation_mr": "नियम: वर्गात १ मिळवला आहे (६² + १ = ३६ + १ = ३७).",
+      "hint_en": "Difference is increasing consecutive odd numbers (+3, +5, +7, +9, +11).",
+      "hint_mr": "फरक विषम संख्यांनी वाढत आहे (+३, +५, +७, +९, +११).",
+      "difficulty": "medium",
+      "tags": [
+        "series-completion",
+        "square-series"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "35",
+          "text_mr": "३५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "36",
+          "text_mr": "३६",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "37",
+          "text_mr": "३७",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "38",
+          "text_mr": "३८",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 38,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "Find the missing number in the series: 3, 7, 15, 31, 63, ?",
+      "text_mr": "मालिकेतील पुढील संख्या शोधा:\n३, ७, १५, ३१, ६३, ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Pattern: ×2 + 1: 3×2+1=7, 7×2+1=15, 15×2+1=31, 31×2+1=63, 63×2+1=127.",
+      "explanation_mr": "नियम: दुप्पट करून १ मिळवणे (६३ × २ + १ = १२६ + १ = १२७).",
+      "hint_en": "Multiply by 2 and add 1.",
+      "hint_mr": "संख्येची दुप्पट करून १ मिळवा.",
+      "difficulty": "medium",
+      "tags": [
+        "series-completion",
+        "multiplication-series"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "125",
+          "text_mr": "१२५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "127",
+          "text_mr": "१२७",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "126",
+          "text_mr": "१२६",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "129",
+          "text_mr": "१२९",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 39,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "text",
+      "text_en": "Which figure comes next in the series?\n◐   ◑   ◒   ?",
+      "text_mr": "मालिकेत पुढील आकृती कोणती येईल?\n◐   ◑   ◒   ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The shaded half rotates 90° clockwise at each step, so ◓ comes next.",
+      "explanation_mr": "छायांकित भाग घड्याळाच्या दिशेने ९०° फिरत असल्याने ◓ पुढे येईल.",
+      "hint_en": "Track the rotation of the shaded hemisphere.",
+      "hint_mr": "छायांकित अर्ध्या भागाचे फिरणे पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "series-completion",
+        "symbol-figure"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "◓",
+          "text_mr": "◓",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "◐",
+          "text_mr": "◐",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "◑",
+          "text_mr": "◑",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "●",
+          "text_mr": "●",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 40,
+      "section": "Intelligence Test",
+      "topic": "Pattern Recognition",
+      "question_type": "text",
+      "text_en": "Study the pattern matrix and find the missing figure:\n\n△   ▽   △\n▽   △   ▽\n△   ▽   ?",
+      "text_mr": "नमुन्याचा अभ्यास करून गहाळ आकृती शोधा:\n\n△   ▽   △\n▽   △   ▽\n△   ▽   ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Triangles alternate direction along every row and column, so the bottom-right figure is △.",
+      "explanation_mr": "प्रत्येक ओळ व स्तंभात त्रिकोणाची दिशा आलटून-पालटून बदलत असल्याने शेवटी △ येईल.",
+      "hint_en": "Read along the third row.",
+      "hint_mr": "तिसऱ्या ओळीचा क्रम पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "pattern-recognition",
+        "matrix-pattern"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "▽",
+          "text_mr": "▽",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "△",
+          "text_mr": "△",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "◇",
+          "text_mr": "◇",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "□",
+          "text_mr": "□",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 41,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "Identify the incorrect / wrong term in the following cube series:\n8, 27, 64, 100, 216",
+      "text_mr": "खालील घन संख्यांच्या मालिकेतील चुकीचे पद ओळखा:\n८, २७, ६४, १००, २१६",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "2³=8, 3³=27, 4³=64, 5³=125 (not 100), 6³=216. 100 is the wrong term.",
+      "explanation_mr": "२³=८, ३³=२७, ४³=६४, ५³=१२५ असायला हवे होते. १०० हे चुकीचे पद आहे.",
+      "hint_en": "Check 5³ value.",
+      "hint_mr": "५ चा घन १२५ असतो.",
+      "difficulty": "medium",
+      "tags": [
+        "series-completion",
+        "wrong-term"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "8",
+          "text_mr": "८",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "27",
+          "text_mr": "२७",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "64",
+          "text_mr": "६४",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "100",
+          "text_mr": "१००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 42,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "Find the next letter in the series: Z, X, V, T, ?",
+      "text_mr": "अक्षरमालिकेतील पुढील अक्षर शोधा:\nZ, X, V, T, ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Letters move backwards by 2: Z(-2)->X(-2)->V(-2)->T(-2)->R.",
+      "explanation_mr": "अक्षरे २ ने मागे जात आहेत: T च्या मागे २ अक्षरे R येतो.",
+      "hint_en": "Step backwards by 2 letters in the alphabet.",
+      "hint_mr": "२ अक्षरे मागे जा.",
+      "difficulty": "easy",
+      "tags": [
+        "series-completion",
+        "letter-series"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "S",
+          "text_mr": "S",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "R",
+          "text_mr": "R",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Q",
+          "text_mr": "Q",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "P",
+          "text_mr": "P",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 43,
+      "section": "Intelligence Test",
+      "topic": "Series Completion",
+      "question_type": "bilingual",
+      "text_en": "In the alternating dual series 4, 10, 8, 15, 12, 20, ?, ?, which two numbers complete the series? (Choose two correct options)",
+      "text_mr": "४, १०, ८, १५, १२, २०, ?, ? या मिश्र मालिकेत पुढील दोन संख्या कोणत्या येतील? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "Series 1: 4 (+4) -> 8 (+4) -> 12 (+4) -> 16. Series 2: 10 (+5) -> 15 (+5) -> 20 (+5) -> 25. The two terms are 16 and 25.",
+      "explanation_mr": "मालिकेत दोन उपमालिका आहेत: ४, ८, १२, १६ (+४) आणि १०, १५, २०, २५ (+५). म्हणून १६ व २५ हे दोन पर्याय अचूक आहेत.",
+      "hint_en": "Separate odd-position terms (+4) and even-position terms (+5).",
+      "hint_mr": "विषम आणि सम स्थानावरील संख्यांचे दोन स्वतंत्र गट करा.",
+      "difficulty": "hard",
+      "tags": [
+        "series-completion",
+        "dual-series",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "16",
+          "text_mr": "१६",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "18",
+          "text_mr": "१८",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "25",
+          "text_mr": "२५",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "24",
+          "text_mr": "२४",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 44,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "In a code language, if CAT is written as DBU, how is DOG written in that same code?",
+      "text_mr": "एका सांकेतिक भाषेत CAT हा शब्द DBU असा लिहिला जातो, तर DOG हा शब्द कसा लिहिला जाईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Each letter is shifted forward by 1: D->E, O->P, G->H = EPH.",
+      "explanation_mr": "प्रत्येक अक्षर १ ने पुढे सरकते: D->E, O->P, G->H = EPH.",
+      "hint_en": "Move each letter forward by 1.",
+      "hint_mr": "प्रत्येक अक्षर एकाने पुढे न्या.",
+      "difficulty": "easy",
+      "tags": [
+        "coding-decoding",
+        "letter-shift"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "EPH",
+          "text_mr": "EPH",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "EPG",
+          "text_mr": "EPG",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "CNF",
+          "text_mr": "CNF",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "FQI",
+          "text_mr": "FQI",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 45,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "In a specific code, RED is written as 18-5-4. How will BLUE be written?",
+      "text_mr": "एका सांकेतिक भाषेत RED हा शब्द 18-5-4 असा लिहिला जातो, तर BLUE हा शब्द कसा लिहिला जाईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Letter positions: B=2, L=12, U=21, E=5 -> 2-12-21-5.",
+      "explanation_mr": "अक्षरांचे इंग्रजी वर्णमालेतील स्थान: B=२, L=१२, U=२१, E=५ -> 2-12-21-5.",
+      "hint_en": "Use the standard A=1 to Z=26 number ranks.",
+      "hint_mr": "वर्णमालेतील अक्षरांचे क्रमांक वापरा.",
+      "difficulty": "medium",
+      "tags": [
+        "coding-decoding",
+        "alphabet-numbers"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "2-11-21-5",
+          "text_mr": "2-11-21-5",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "2-12-21-5",
+          "text_mr": "2-12-21-5",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "2-12-20-5",
+          "text_mr": "2-12-20-5",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "3-12-21-5",
+          "text_mr": "3-12-21-5",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 46,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "If 'Water' is called 'Food', 'Food' is called 'Tree', and 'Tree' is called 'Sky', where do fruits grow?",
+      "text_mr": "जर 'पाण्या'ला 'अन्न' म्हटले, 'अन्ना'ला 'झाड' म्हटले आणि 'झाडा'ला 'आकाश' म्हटले, तर फळे कशावर येतील?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "Fruits grow on 'Tree', and 'Tree' is called 'Sky' in this code.",
+      "explanation_mr": "फळे झाडावर येतात आणि झाडाला 'आकाश' म्हटले आहे, म्हणून फळे 'आकाशा'वर येतील.",
+      "hint_en": "Find what trees are called in the given code.",
+      "hint_mr": "झाडाला काय म्हटले आहे ते पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "coding-decoding",
+        "word-substitution"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Water",
+          "text_mr": "पाणी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Food",
+          "text_mr": "अन्न",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Tree",
+          "text_mr": "झाड",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Sky",
+          "text_mr": "आकाश",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 47,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "In a reverse-alphabet code where A=Z, B=Y, C=X, how is 'BOY' written?",
+      "text_mr": "उलट वर्णमालेच्या सांकेतिक भाषेत (A=Z, B=Y, C=X) 'BOY' हा शब्द कसा लिहिला जाईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "B corresponds to Y, O corresponds to L, Y corresponds to B -> YLB.",
+      "explanation_mr": "B ची विरुद्ध जोडी Y, O ची L, आणि Y ची B आहे, म्हणून BOY = YLB.",
+      "hint_en": "Opposite letter pairs sum to 27.",
+      "hint_mr": "विरुद्ध जोड्यांचे स्थान (A-Z, B-Y) आठवा.",
+      "difficulty": "medium",
+      "tags": [
+        "coding-decoding",
+        "reverse-alphabet"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "YOB",
+          "text_mr": "YOB",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "XLA",
+          "text_mr": "XLA",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "YLB",
+          "text_mr": "YLB",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "ZLA",
+          "text_mr": "ZLA",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 48,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "In a symbol code: ★ = 5, ▲ = 3, ◆ = 2. Which two equations are correct? (Choose two correct options)",
+      "text_mr": "चिन्हांच्या सांकेतिक भाषेत: ★ = ५, ▲ = ३, ◆ = २. तर कोणती दोन समीकरणे सत्य आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        3
+      ],
+      "explanation_en": "Option 2: ★ + ▲ × ◆ = 5 + (3 × 2) = 11. Option 3: ★ × ◆ - ▲ = (5 × 2) - 3 = 7. Both are correct.",
+      "explanation_mr": "पर्याय २: ५ + (३ × २) = ११. पर्याय ३: (५ × २) - ३ = ७. ही दोन्ही समीकरणे बरोबर आहेत.",
+      "hint_en": "Substitute values and apply BODMAS.",
+      "hint_mr": "चिन्हांची किंमत ठेवून कंचेभागुबेव नियमाने सोडवा.",
+      "difficulty": "hard",
+      "tags": [
+        "coding-decoding",
+        "symbol-code",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "★ + ▲ + ◆ = 12",
+          "text_mr": "★ + ▲ + ◆ = १२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "★ + ▲ × ◆ = 11",
+          "text_mr": "★ + ▲ × ◆ = ११",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "★ × ◆ - ▲ = 7",
+          "text_mr": "★ × ◆ - ▲ = ७",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "★ × ▲ = 16",
+          "text_mr": "★ × ▲ = १६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 49,
+      "section": "Intelligence Test",
+      "topic": "Coding and Decoding",
+      "question_type": "bilingual",
+      "text_en": "Select the correct set of letters to complete the rhythmic pattern: a b _ a b _ a b b _",
+      "text_mr": "लयबद्ध अक्षर मांडणी पूर्ण करण्यासाठी योग्य अक्षर गट निवडा:\na b _ a b _ a b b _",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Repeating group is 'a b b': a b [b] / a b [b] / a b b [a] or [b, b, a].",
+      "explanation_mr": "'a b b' हा गट तीन वेळा पुनरावृत्त होतो: a b b / a b b / a b b (b, b, b किंवा b, b, a).",
+      "hint_en": "Look for groups of 3 repeating letters 'abb'.",
+      "hint_mr": "तीन-तीन अक्षरांचे गट पाडून लय ओळखा.",
+      "difficulty": "medium",
+      "tags": [
+        "coding-decoding",
+        "rhythmic-series"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "b, b, b",
+          "text_mr": "b, b, b",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "a, b, a",
+          "text_mr": "a, b, a",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "b, a, b",
+          "text_mr": "b, a, b",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "a, a, b",
+          "text_mr": "a, a, b",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 50,
+      "section": "Intelligence Test",
+      "topic": "Direction and Position",
+      "question_type": "bilingual",
+      "text_en": "A boy is facing East. If he turns 90° clockwise to his right, which direction is he facing now?",
+      "text_mr": "एका मुलाचे तोंड पूर्वेकडे आहे. तो उजवीकडे ९० अंशात वळल्यास त्याचे तोंड आता कोणत्या दिशेला असेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "Facing East and turning 90° right points to the South direction.",
+      "explanation_mr": "पूर्वेकडून उजवीकडे ९०° वळल्यास दक्षिण दिशा येते.",
+      "hint_en": "East -> Right 90° -> South.",
+      "hint_mr": "मुख्य दिशांचे घड्याळाच्या दिशेने चक्र आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "direction-and-position",
+        "cardinal-directions"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "North",
+          "text_mr": "उत्तर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "West",
+          "text_mr": "पश्चिम",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "South",
+          "text_mr": "दक्षिण",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "North-East",
+          "text_mr": "ईशान्य",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 51,
+      "section": "Intelligence Test",
+      "topic": "Direction and Position",
+      "question_type": "bilingual",
+      "text_en": "Rohan walked 40 metres North, then turned right and walked 30 metres. What is his shortest straight distance from the starting point?",
+      "text_mr": "रोहन उत्तरेकडे ४० मीटर चालत गेला, नंतर उजवीकडे वळून ३० मीटर चालला. तर तो सुरुवातीच्या ठिकाणापासून सरळ किती अंतरावर आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Using Pythagoras theorem: √(40² + 30²) = √(1600 + 900) = √2500 = 50 metres.",
+      "explanation_mr": "पायथागोरस सिद्धांतानुसार: √(४०² + ३०²) = √(१६०० + ९००) = √२५०० = ५० मीटर.",
+      "hint_en": "Apply Pythagoras theorem: √(a² + b²).",
+      "hint_mr": "काटकोन त्रिकोणात कर्णाची लांबी शोधा.",
+      "difficulty": "medium",
+      "tags": [
+        "direction-and-position",
+        "distance-pythagoras"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "70 metres",
+          "text_mr": "७० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "50 metres",
+          "text_mr": "५० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "45 metres",
+          "text_mr": "४५ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "60 metres",
+          "text_mr": "६० मीटर",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 52,
+      "section": "Intelligence Test",
+      "topic": "Direction and Position",
+      "question_type": "bilingual",
+      "text_en": "Five friends A, B, C, D, E are sitting in a row facing North. C is sitting in the exact middle. A and B are at the two ends. Who is in the middle?",
+      "text_mr": "A, B, C, D, E हे पाच मित्र उत्तरेकडे तोंड करून एका रांगेत बसले आहेत. C बरोबर मध्यभागी बसला आहे. तर मध्यभागी बसलेला मित्र कोणता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "As given in the statement, C is in the exact middle position.",
+      "explanation_mr": "प्रश्नात दिलेल्या माहितीनुसार C हा बरोबर मध्यभागी आहे.",
+      "hint_en": "Read the statement carefully.",
+      "hint_mr": "दिलेली माहिती काळजीपूर्वक वाचा.",
+      "difficulty": "easy",
+      "tags": [
+        "direction-and-position",
+        "linear-seating"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "A",
+          "text_mr": "A",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "B",
+          "text_mr": "B",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "C",
+          "text_mr": "C",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "D",
+          "text_mr": "D",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 53,
+      "section": "Intelligence Test",
+      "topic": "Direction and Position",
+      "question_type": "bilingual",
+      "text_en": "In a row of 45 students, Rohit ranks 18th from the left end. What is his rank from the right end?",
+      "text_mr": "४५ विद्यार्थ्यांच्या रांगेत रोहितचा डावीकडून १८ वा क्रमांक आहे, तर त्याचा उजवीकडून कितवा क्रमांक असेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Rank from right = Total - Rank from left + 1 = 45 - 18 + 1 = 28th.",
+      "explanation_mr": "उजवीकडून क्रमांक = एकूण विद्यार्थी - डावीकडून क्रमांक + १ = ४५ - १८ + १ = २८ वा.",
+      "hint_en": "Formula: Total - Left + 1.",
+      "hint_mr": "सूत्र: एकूण - डावीकडून स्थान + १.",
+      "difficulty": "medium",
+      "tags": [
+        "direction-and-position",
+        "ranking"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "27th",
+          "text_mr": "२७ वा",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "28th",
+          "text_mr": "२८ वा",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "29th",
+          "text_mr": "२९ वा",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "26th",
+          "text_mr": "२६ वा",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 54,
+      "section": "Intelligence Test",
+      "topic": "Direction and Position",
+      "question_type": "bilingual",
+      "text_en": "Six children are sitting around a circular table facing the centre. P is sitting opposite to S. Q is sitting to the immediate right of P. Who is sitting opposite to Q?",
+      "text_mr": "सहा मुले वर्तुळाकार टेबलाभोवती केंद्राकडे तोंड करून बसली आहेत. P च्या समोर S बसला आहे. Q हा P च्या लगतच्या उजव्या बाजूला बसला असल्यास Q च्या समोर कोण बसला असेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "In a 6-seat circle, the person opposite to P's right (Q) is S's left (T).",
+      "explanation_mr": "६ जागांच्या वर्तुळात P च्या उजवीकडील व्यक्तीच्या समोर S च्या डावीकडील व्यक्ती येते.",
+      "hint_en": "Draw a 6-seat circle and place P and S opposite each other.",
+      "hint_mr": "वर्तुळ काढून जागा निश्चित करा.",
+      "difficulty": "medium",
+      "tags": [
+        "direction-and-position",
+        "circular-seating"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "P",
+          "text_mr": "P",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "S",
+          "text_mr": "S",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Person opposite P",
+          "text_mr": "P च्या समोरील व्यक्ती",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Person to immediate left of S",
+          "text_mr": "S च्या लगतच्या डावीकडील व्यक्ती",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 55,
+      "section": "Intelligence Test",
+      "topic": "Venn Diagrams",
+      "question_type": "context_text",
+      "text_en": "According to the Venn diagram, how many individuals are BOTH Players and Singers?",
+      "text_mr": "व्हेन आकृतीनुसार खेळाडू आणि गायक या दोन्ही गटांत असणाऱ्यांची एकूण संख्या किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "The overlapping region between Players and Singers has 12 + 6 = 18 individuals.",
+      "explanation_mr": "खेळाडू आणि गायक या दोन्ही वर्तुळांच्या सामाईक भागात १२ + ६ = १८ व्यक्ती आहेत.",
+      "hint_en": "Look at the intersection of Players circle and Singers circle.",
+      "hint_mr": "खेळाडू व गायक या दोन्ही वर्तुळांचा सामाईक भाग पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "venn-diagrams",
+        "data-extraction"
+      ],
+      "context_ref": 2,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "12",
+          "text_mr": "१२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "6",
+          "text_mr": "६",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "18",
+          "text_mr": "१८",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "24",
+          "text_mr": "२४",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 56,
+      "section": "Intelligence Test",
+      "topic": "Venn Diagrams",
+      "question_type": "context_text",
+      "text_en": "How many individuals in the Venn diagram are Students ONLY (neither players nor singers)?",
+      "text_mr": "व्हेन आकृतीनुसार फक्त विद्यार्थी असणाऱ्यांची (जे खेळाडू किंवा गायक नाहीत) संख्या किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The unshaded Students-only portion contains 35 individuals.",
+      "explanation_mr": "फक्त विद्यार्थी असलेल्या स्वतंत्र भागात ३५ ही संख्या दर्शवली आहे.",
+      "hint_en": "Look at the region exclusive to the Students circle.",
+      "hint_mr": "फक्त विद्यार्थी वर्तुळातील स्वतंत्र भाग पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "venn-diagrams",
+        "exclusive-group"
+      ],
+      "context_ref": 2,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "35",
+          "text_mr": "३५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "20",
+          "text_mr": "२०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "15",
+          "text_mr": "१५",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "50",
+          "text_mr": "५०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 57,
+      "section": "Intelligence Test",
+      "topic": "Venn Diagrams",
+      "question_type": "context_image",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Option 2 correctly shades the central intersection region representing individuals who are Students, Players, and Singers simultaneously.",
+      "explanation_mr": "पर्याय २ मध्ये तिन्ही वर्तुळांचा सामाईक मध्यवर्ती भाग अचूकपणे छायांकित केला आहे.",
+      "hint_en": "Identify the region shared by all 3 circles.",
+      "hint_mr": "तिन्ही वर्तुळांचा सामाईक भाग निवडा.",
+      "difficulty": "hard",
+      "tags": [
+        "venn-diagrams",
+        "non-verbal-venn"
+      ],
+      "context_ref": 2,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q57-opt1.png",
+          "image_alt_en": "Only outer students circle shaded",
+          "image_alt_mr": "फक्त विद्यार्थी वर्तुळ छायांकित"
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q57-opt2.png",
+          "image_alt_en": "Central intersection of all three circles shaded",
+          "image_alt_mr": "तिन्ही वर्तुळांचा सामाईक मध्य भाग छायांकित"
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q57-opt3.png",
+          "image_alt_en": "Two circles overlap shaded",
+          "image_alt_mr": "दोन वर्तुळांचा सामाईक भाग छायांकित"
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q57-opt4.png",
+          "image_alt_en": "Area outside all circles shaded",
+          "image_alt_mr": "वर्तुळाबाहेरील भाग छायांकित"
+        }
+      ]
+    },
+    {
+      "question_no": 58,
+      "section": "Intelligence Test",
+      "topic": "Venn Diagrams",
+      "question_type": "bilingual",
+      "text_en": "Which Venn diagram representation correctly shows the relationship between: State, District, Taluka?",
+      "text_mr": "राज्य, जिल्हा आणि तालुका यांमधील अचूक संबंध कोणत्या व्हेन आकृतीने स्पष्ट होतो?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Taluka is inside District, and District is inside State -> Three concentric circles.",
+      "explanation_mr": "तालुका हा जिल्ह्यात आणि जिल्हा हा राज्यात येतो, म्हणून तीन एककेंद्री वर्तुळे (Concentric Circles) हा अचूक संबंध आहे.",
+      "hint_en": "Think of smaller administrative regions inside larger ones.",
+      "hint_mr": "लहान घटक मोठ्या घटकाच्या अंतर्गत येतो.",
+      "difficulty": "medium",
+      "tags": [
+        "venn-diagrams",
+        "logical-classification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Three concentric circles (one inside another)",
+          "text_mr": "तीन एकमेकांत सामावलेली एककेंद्री वर्तुळे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Three separate mutually exclusive circles",
+          "text_mr": "तीन पूर्णपणे स्वतंत्र वर्तुळे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Two overlapping circles inside a third",
+          "text_mr": "दोन छेदणारी वर्तुळे तिसऱ्यामध्ये",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Three overlapping circles",
+          "text_mr": "तीन एकमेकांना छेदणारी वर्तुळे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 59,
+      "section": "Intelligence Test",
+      "topic": "Number Puzzles",
+      "question_type": "bilingual",
+      "text_en": "In a number square puzzle, the central number is the sum of four corner numbers. If corners are 14, 26, 35, and 25, what is the central number?",
+      "text_mr": "एका चौरस कोड्यात मध्यभागी असलेली संख्या चार कोपऱ्यांतील संख्यांची बेरीज आहे. कोपऱ्यांतील संख्या १४, २६, ३५ आणि २५ असल्यास मधली संख्या कोणती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Sum = 14 + 26 + 35 + 25 = 100.",
+      "explanation_mr": "बेरीज = १४ + २६ + ३५ + २५ = १००.",
+      "hint_en": "Add all four corner numbers.",
+      "hint_mr": "चारही संख्यांची बेरीज करा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-puzzles",
+        "square-puzzle"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "90",
+          "text_mr": "९०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "100",
+          "text_mr": "१००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "110",
+          "text_mr": "११०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "95",
+          "text_mr": "९५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 60,
+      "section": "Intelligence Test",
+      "topic": "Number Puzzles",
+      "question_type": "bilingual",
+      "text_en": "In a 3×3 magic square, every row, column, and diagonal sums to 15. If the first row contains 8, 1, 6, and second row contains 3, 5, 7, what number must be in the centre of the bottom row (4, ?, 2)?",
+      "text_mr": "एका ३×३ च्या जादुई चौरसात प्रत्येक ओळ व स्तंभाची बेरीज १५ आहे. पहिल्या ओळीत ८, १, ६ आणि दुसऱ्या ओळीत ३, ५, ७ आहेत. तर शेवटच्या ओळीतील मधला अंक कोणता असेल (४, ?, २)?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "Bottom row: 4 + ? + 2 = 15 -> ? = 15 - 6 = 9.",
+      "explanation_mr": "तिसरी ओळ: ४ + ? + २ = १५ -> ? = १५ - ६ = ९.",
+      "hint_en": "Row sum is 15: 15 - (4 + 2).",
+      "hint_mr": "१५ मधून ४ व २ ची बेरीज वजा करा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-puzzles",
+        "magic-square"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "5",
+          "text_mr": "५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "7",
+          "text_mr": "७",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "8",
+          "text_mr": "८",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "9",
+          "text_mr": "९",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 61,
+      "section": "Intelligence Test",
+      "topic": "Number Puzzles",
+      "question_type": "bilingual",
+      "text_en": "In a triangle puzzle, the top number equals (Bottom Left × Bottom Right) - 4. If bottom numbers are 9 and 7, what is the top number?",
+      "text_mr": "एका त्रिकोणी कोड्यात वरील संख्या = (तळातील डावी संख्या × तळातील उजवी संख्या) - ४. तळातील संख्या ९ व ७ असल्यास वरील संख्या कोणती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Top number = (9 × 7) - 4 = 63 - 4 = 59.",
+      "explanation_mr": "वरील संख्या = (९ × ७) - ४ = ६३ - ४ = ५९.",
+      "hint_en": "Multiply 9 by 7 and subtract 4.",
+      "hint_mr": "९ व ७ चा गुणाकार करून ४ वजा करा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-puzzles",
+        "triangle-puzzle"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "59",
+          "text_mr": "५९",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "63",
+          "text_mr": "६३",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "67",
+          "text_mr": "६७",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "55",
+          "text_mr": "५५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 62,
+      "section": "Intelligence Test",
+      "topic": "Number Puzzles",
+      "question_type": "bilingual",
+      "text_en": "If Δ + □ = 25 and Δ - □ = 7, what are the values of Δ and □? (Choose two correct options)",
+      "text_mr": "जर Δ + □ = २५ आणि Δ - □ = ७, तर Δ आणि □ च्या किमती कोणत्या? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "Adding equations: 2Δ = 32 -> Δ = 16. Then □ = 25 - 16 = 9. So Δ=16 and □=9.",
+      "explanation_mr": "दोन्ही समीकरणांची बेरीज: २Δ = ३२ -> Δ = १६. म्हणून □ = २५ - १६ = ९. Δ=१६ व □=९ हे दोन पर्याय अचूक आहेत.",
+      "hint_en": "Add the equations to find Δ, then substitute to find □.",
+      "hint_mr": "दोन्ही समीकरणांची बेरीज करून Δ ची किंमत काढा.",
+      "difficulty": "hard",
+      "tags": [
+        "number-puzzles",
+        "simultaneous-equations",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Δ = 16",
+          "text_mr": "Δ = १६",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Δ = 18",
+          "text_mr": "Δ = १८",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "□ = 9",
+          "text_mr": "□ = ९",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "□ = 8",
+          "text_mr": "□ = ८",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 63,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "Father's age is 4 times his son's age. If the sum of their present ages is 50 years, what is the father's present age?",
+      "text_mr": "वडिलांचे आजचे वय मुलाच्या वयाच्या ४ पट आहे. दोघांच्या आजच्या वयांची बेरीज ५० वर्षे असल्यास, वडिलांचे आजचे वय किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Son's age = x. Father's age = 4x. x + 4x = 50 -> 5x = 50 -> x = 10 years. Father's age = 4 × 10 = 40 years.",
+      "explanation_mr": "मुलाचे वय = x, वडिलांचे = ४x. ५x = ५० -> x = १०. वडिलांचे वय = ४ × १० = ४० वर्षे.",
+      "hint_en": "Divide 50 by (1 + 4) = 5 to find son's age.",
+      "hint_mr": "५० ला ५ ने भागून मुलाचे वय काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "logic-and-reasoning",
+        "age-problems"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "35 years",
+          "text_mr": "३५ वर्षे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "40 years",
+          "text_mr": "४० वर्षे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "45 years",
+          "text_mr": "४५ वर्षे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "30 years",
+          "text_mr": "३० वर्षे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 64,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "In a large triangle divided by two vertical lines from the top vertex to the base, how many total triangles are formed?",
+      "text_mr": "एका मोठ्या त्रिकोणाच्या शिरोबिंदूतून पायावर २ सरळ रेषा काढल्यास एकूण किती त्रिकोण तयार होतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "3 single triangles + 2 double triangles + 1 large triangle = 1 + 2 + 3 = 6 triangles.",
+      "explanation_mr": "पायावर ३ भाग तयार होतात: १ + २ + ३ = एकूण ६ त्रिकोण.",
+      "hint_en": "Formula for n base parts: n(n+1)/2 = 3(4)/2 = 6.",
+      "hint_mr": "१ + २ + ३ या सूत्राने त्रिकोण मोजा.",
+      "difficulty": "hard",
+      "tags": [
+        "logic-and-reasoning",
+        "figure-counting"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "3",
+          "text_mr": "३",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "5",
+          "text_mr": "५",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "6",
+          "text_mr": "६",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "7",
+          "text_mr": "७",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 65,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "bilingual",
+      "text_en": "Which of the following is the correct water image of the letter 'E'?",
+      "text_mr": "'E' या इंग्रजी अक्षराची पाण्यातील अचूक प्रतिमा कोणती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The letter 'E' has horizontal symmetry, so its vertical reflection (water image) is identical to 'E'.",
+      "explanation_mr": "'E' हे अक्षर आडव्या अक्षात सममित असल्याने त्याची पाण्यातील प्रतिमा 'E' अशीच दिसते.",
+      "hint_en": "Flip 'E' vertically upside down.",
+      "hint_mr": "अक्षराची वरची व खालची बाजू उलटून पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "mirror-and-water-images",
+        "water-image"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "E",
+          "text_mr": "E",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Ǝ",
+          "text_mr": "Ǝ",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "M",
+          "text_mr": "M",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "W",
+          "text_mr": "W",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 66,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": "q66-stem.png",
+      "question_image_alt_en": "Select the mirror image of the asymmetric geometric figure with vertical mirror on the right.",
+      "question_image_alt_mr": "उजव्या बाजूला आरसा ठेवला असता दिलेल्या आकृतीची आरशातील प्रतिमा निवडा.",
+      "correct_option": 3,
+      "explanation_en": "Option 3 shows the correct horizontal lateral reflection across the vertical plane mirror.",
+      "explanation_mr": "पर्याय ३ मध्ये आकृतीची डावी व उजवी बाजू अचूकपणे उलटलेली दिसते.",
+      "hint_en": "Reflect left-to-right.",
+      "hint_mr": "डावीकडून उजवीकडे आरशातील प्रतिमा पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "mirror-and-water-images",
+        "mirror-image",
+        "non-verbal"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q66-opt1.png",
+          "image_alt_en": "Figure rotated 90 degrees",
+          "image_alt_mr": "९० अंश फिरवलेली आकृती"
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q66-opt2.png",
+          "image_alt_en": "Figure inverted vertically",
+          "image_alt_mr": "उलटी आकृती"
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q66-opt3.png",
+          "image_alt_en": "Figure flipped horizontally left to right",
+          "image_alt_mr": "अचूक आरशातील प्रतिमा"
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q66-opt4.png",
+          "image_alt_en": "Figure unchanged",
+          "image_alt_mr": "मूळ आकृती"
+        }
+      ]
+    },
+    {
+      "question_no": 67,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": "q67-stem.png",
+      "question_image_alt_en": "Select the water image (vertical reflection across horizontal water surface below) of the given figure.",
+      "question_image_alt_mr": "खालील पाण्याच्या पृष्ठभागावर दिलेल्या आकृतीची पाण्यातील प्रतिमा निवडा.",
+      "correct_option": 2,
+      "explanation_en": "Water image flips the top and bottom of the figure while maintaining left-right orientation.",
+      "explanation_mr": "पाण्यातील प्रतिमेत वरची व खालची बाजू उलट होते, पण डावी-उजवी बाजू तशीच राहते.",
+      "hint_en": "Flip top to bottom.",
+      "hint_mr": "वरची बाजू खाली उलटून पहा.",
+      "difficulty": "hard",
+      "tags": [
+        "mirror-and-water-images",
+        "water-image",
+        "non-verbal"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q67-opt1.png",
+          "image_alt_en": "Figure unchanged",
+          "image_alt_mr": "मूळ आकृती"
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q67-opt2.png",
+          "image_alt_en": "Figure inverted top to bottom",
+          "image_alt_mr": "अचूक पाण्यातील प्रतिमा"
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q67-opt3.png",
+          "image_alt_en": "Figure flipped horizontally",
+          "image_alt_mr": "आरशातील प्रतिमा"
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q67-opt4.png",
+          "image_alt_en": "Figure rotated 180 degrees",
+          "image_alt_mr": "१८० अंश फिरवलेली"
+        }
+      ]
+    },
+    {
+      "question_no": 68,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "bilingual",
+      "text_en": "A wall clock shows 3:00. What time will be seen in the mirror reflection of this clock?",
+      "text_mr": "एका भिंतीवरील घड्याळात ३:०० वाजले आहेत. आरशातील प्रतिमेत त्या घड्याळात किती वाजलेले दिसतील?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "Mirror time = 12:00 - 3:00 = 9:00.",
+      "explanation_mr": "आरशातील वेळ = १२:०० - ३:०० = ९:००.",
+      "hint_en": "Subtract clock time from 12:00.",
+      "hint_mr": "१२ मधून ३ वजा करा.",
+      "difficulty": "easy",
+      "tags": [
+        "mirror-and-water-images",
+        "clock-mirror"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "3:00",
+          "text_mr": "३:००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "6:00",
+          "text_mr": "६:००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "12:00",
+          "text_mr": "१२:००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "9:00",
+          "text_mr": "९:००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 69,
+      "section": "Intelligence Test",
+      "topic": "Mirror and Water Images",
+      "question_type": "bilingual",
+      "text_en": "Which two capital English letters remain unchanged in BOTH mirror image and water image? (Choose two correct options)\nH, P, O, F",
+      "text_mr": "आरशातील आणि पाण्यातील अशा दोन्ही प्रतिमांमध्ये कोणती दोन इंग्रजी कॅपिटल अक्षरे जशीच्या तशी राहतात? (दोन अचूक पर्याय निवडा)\nH, P, O, F",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "'H' and 'O' have both horizontal and vertical symmetry, so they look identical in mirror and water images.",
+      "explanation_mr": "'H' आणि 'O' ही अक्षरे दोन्ही अक्षांवर सममित असल्याने त्यांच्या दोन्ही प्रतिमा मूळ अक्षरासारख्याच दिसतात.",
+      "hint_en": "Look for letters with double symmetry.",
+      "hint_mr": "उभी व आडवी दोन्ही सममिती असणारी अक्षरे शोधा.",
+      "difficulty": "hard",
+      "tags": [
+        "mirror-and-water-images",
+        "symmetry",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "H",
+          "text_mr": "H",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "P",
+          "text_mr": "P",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "O",
+          "text_mr": "O",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "F",
+          "text_mr": "F",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 70,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "text_image",
+      "text_en": "Two views of the same standard die are shown. Which number is on the face opposite to 3?",
+      "text_mr": "एकाच फाशाची दोन दृश्ये दाखवली आहेत. ३ अंक असलेल्या पृष्ठभागाच्या विरुद्ध पृष्ठावर कोणता अंक असेल?",
+      "question_image": "q70-dice2.png",
+      "question_image_alt_en": "Two views of one die: View (i) shows top 3, front 1, right 2. View (ii) shows top 3, front 4, right 5.",
+      "question_image_alt_mr": "फाशाची दोन दृश्ये: पहिल्यात वर ३, समोर १, उजवीकडे २. दुसऱ्यात वर ३, समोर ४, उजवीकडे ५.",
+      "correct_option": 4,
+      "explanation_en": "Faces 1, 2, 4, 5 are all adjacent to 3. Therefore, the opposite face is 6.",
+      "explanation_mr": "१, २, ४, ५ हे चारही पृष्ठभाग ३ च्या शेजारी आहेत. म्हणून ३ च्या विरुद्ध पृष्ठभागावर ६ हा अंक असेल.",
+      "hint_en": "List all numbers seen adjacent to 3.",
+      "hint_mr": "३ शेजारी दिसणारे सर्व अंक वगळा.",
+      "difficulty": "medium",
+      "tags": [
+        "logic-and-reasoning",
+        "spatial",
+        "dice"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "1",
+          "text_mr": "१",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "2",
+          "text_mr": "२",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "4",
+          "text_mr": "४",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "6",
+          "text_mr": "६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 71,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "Pointing to a boy in a photograph, Priya said, 'He is the only son of my father.' How is the boy related to Priya?",
+      "text_mr": "एका छायाचित्रातील मुलाकडे बोट दाखवून प्रिया म्हणाली, 'तो माझ्या वडिलांचा एकुलता एक मुलगा आहे.' तर त्या मुलाचे प्रियाशी नाते काय?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The only son of Priya's father is Priya's brother.",
+      "explanation_mr": "प्रियाच्या वडिलांचा एकुलता एक मुलगा म्हणजे प्रियाचा 'भाऊ' होय.",
+      "hint_en": "Father's son is a brother.",
+      "hint_mr": "वडिलांचा मुलगा म्हणजे स्वतःचा भाऊ.",
+      "difficulty": "easy",
+      "tags": [
+        "logic-and-reasoning",
+        "blood-relations"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Brother",
+          "text_mr": "भाऊ",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Father",
+          "text_mr": "वडील",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Uncle",
+          "text_mr": "काका",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Cousin",
+          "text_mr": "चुलत भाऊ",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 72,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "If yesterday was Tuesday, which day of the week will it be 4 days after tomorrow?",
+      "text_mr": "काल जर मंगळवार होता, तर उद्यानंतरच्या ४ थ्या दिवशी कोणता वार असेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Yesterday = Tuesday -> Today = Wednesday -> Tomorrow = Thursday. 4 days after Thursday: Friday(1), Saturday(2), Sunday(3), Monday(4). It will be Monday.",
+      "explanation_mr": "काल मंगळवार -> आज बुधवार -> उद्या गुरुवार. गुरुवारनंतर ४ दिवस = सोमवार.",
+      "hint_en": "Determine today's day first (Wednesday), then tomorrow (Thursday), then add 4 days.",
+      "hint_mr": "आधी आजचा वार काढून पुढे ४ दिवस मोजा.",
+      "difficulty": "medium",
+      "tags": [
+        "logic-and-reasoning",
+        "calendar-logic"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Sunday",
+          "text_mr": "रविवार",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Monday",
+          "text_mr": "सोमवार",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Tuesday",
+          "text_mr": "मंगळवार",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Saturday",
+          "text_mr": "शनिवार",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 73,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "Statements: (1) All roses are flowers. (2) All flowers are beautiful.\nConclusion: Which conclusion logically follows?",
+      "text_mr": "विधाने: (१) सर्व गुलाब फुले आहेत. (२) सर्व फुले सुंदर आहेत.\nनिष्कर्ष: यावरून कोणता निष्कर्ष योग्य निघतो?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Since all roses are flowers and all flowers are beautiful, all roses must be beautiful.",
+      "explanation_mr": "सर्व गुलाब फुले आणि सर्व फुले सुंदर असल्याने 'सर्व गुलाब सुंदर आहेत' हा निष्कर्ष निघतो.",
+      "hint_en": "Apply transitive logical deduction.",
+      "hint_mr": "विधानांचा परस्पर संबंध जोडा.",
+      "difficulty": "medium",
+      "tags": [
+        "logic-and-reasoning",
+        "syllogism"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "All roses are beautiful",
+          "text_mr": "सर्व गुलाब सुंदर आहेत",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "No rose is beautiful",
+          "text_mr": "कोणताही गुलाब सुंदर नाही",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "All beautiful things are roses",
+          "text_mr": "सर्व सुंदर गोष्टी गुलाब आहेत",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Flowers are not roses",
+          "text_mr": "फुले गुलाब नसतात",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 74,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "Premise: 'Every triangle has exactly 3 sides and the sum of all its interior angles is 180°.' Which two conclusions are strictly TRUE? (Choose two correct options)",
+      "text_mr": "विधान: 'प्रत्येक त्रिकोणाला ३ बाजू असतात आणि त्याच्या सर्व अंतरकोनांची बेरीज १८०° असते.' यावरून कोणती दोन विधाने सत्य आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "A triangle cannot have 4 sides, and a polygon with sum of angles 180° is a triangle.",
+      "explanation_mr": "त्रिकोणाला ४ बाजू असू शकत नाहीत आणि १८०° कोन असणारा बहुभुज त्रिकोणच असतो.",
+      "hint_en": "Recall basic geometric properties of triangles.",
+      "hint_mr": "त्रिकोणाचे गुणधर्म आठवा.",
+      "difficulty": "hard",
+      "tags": [
+        "logic-and-reasoning",
+        "deductive-logic",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "No triangle has 4 sides",
+          "text_mr": "कोणत्याही त्रिकोणाला ४ बाजू नसतात",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "A square is a type of triangle",
+          "text_mr": "चौरस हा त्रिकोणाचा प्रकार आहे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "A figure with 3 sides has sum of interior angles 180°",
+          "text_mr": "३ बाजू असलेल्या आकृतीच्या कोनांची बेरीज १८०° असते",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Triangles have 5 angles",
+          "text_mr": "त्रिकोणाला ५ कोन असतात",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 75,
+      "section": "Intelligence Test",
+      "topic": "Logic and Reasoning",
+      "question_type": "bilingual",
+      "text_en": "Among five students: Amar is taller than Bharat but shorter than Chetan. Dinesh is taller than Chetan. Eknath is shorter than Bharat. Who is the tallest among all five?",
+      "text_mr": "पाच विद्यार्थ्यांमध्ये: अमर भरतपेक्षा उंच पण चेतनपेक्षा बुटका आहे. दिनेश चेतनपेक्षा उंच आहे. एकनाथ भरतपेक्षा बुटका आहे. तर या सर्वांमध्ये सर्वात उंच कोण आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "Order from tallest to shortest: Dinesh > Chetan > Amar > Bharat > Eknath. Dinesh is the tallest.",
+      "explanation_mr": "उंचीनुसार क्रम: दिनेश > चेतन > अमर > भरत > एकनाथ. दिनेश सर्वात उंच आहे.",
+      "hint_en": "Arrange the friends in decreasing order of height.",
+      "hint_mr": "उंचीनुसार उतरता क्रम लावा: दिनेश > चेतन > अमर...",
+      "difficulty": "hard",
+      "tags": [
+        "logic-and-reasoning",
+        "height-comparison"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Amar",
+          "text_mr": "अमर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Bharat",
+          "text_mr": "भरत",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Chetan",
+          "text_mr": "चेतन",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Dinesh",
+          "text_mr": "दिनेश",
+          "image": null
+        }
+      ]
+    }
+  ]
+}

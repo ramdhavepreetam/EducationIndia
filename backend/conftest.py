@@ -14,7 +14,9 @@ import os
 # Set dummy values before ANY app import happens.
 # pytest picks this up as a plugin during collection.
 os.environ.setdefault("DATABASE_URL", "postgresql+asyncpg://test:test@localhost/test")
+os.environ.setdefault("SECRET_KEY", "test-secret-key-for-scholarpath-32chars")
 os.environ.setdefault("SUPABASE_URL", "https://test.supabase.co")
 os.environ.setdefault("SUPABASE_JWT_SECRET", "test-jwt-secret-for-tests-only")
 os.environ.setdefault("SUPABASE_SERVICE_KEY", "test-service-key")
+os.environ.setdefault("FRONTEND_URL", "http://localhost:5173")
 os.environ.setdefault("DEBUG", "true")

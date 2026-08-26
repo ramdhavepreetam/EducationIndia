@@ -1,0 +1,7 @@
+export { TeacherDashboardPage } from './pages/TeacherDashboardPage'
+export { TeacherStudentsPage } from './pages/TeacherStudentsPage'
+export { AssignExamPage } from './pages/AssignExamPage'
+export { StudentResultsPage } from './pages/StudentResultsPage'
+export { TeacherRoute } from './components/TeacherRoute'
+export { useTeacherStore } from './store/teacherStore'
+export { teacherApi } from './api/teacherApi'

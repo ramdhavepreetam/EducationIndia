@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.catalog.models import Exam, ExamBoard
 from app.modules.catalog.repository import catalog_repository
-from app.shared.exceptions import NotFound
+from app.shared.exceptions import BadRequest, NotFound
 
 
 class CatalogService:
@@ -112,14 +112,37 @@ class CatalogService:
 
     # ── Admin operations ──────────────────────────────────────────────────────
 
-    async def publish_exam(self, db: AsyncSession, exam_id: int) -> dict:
+    async def publish_exam(
+        self, db: AsyncSession, exam_id: int, *, force: bool = False
+    ) -> dict:
         """
         Set is_active=True on an exam, making it visible to students.
         Also auto-assigns the exam to all students of the matching grade.
         Admin only — router enforces require_admin.
-        Returns: {"exam_id", "is_active", "auto_assigned_count"}
+
+        Refuses to publish a paper with content defects that make questions
+        unanswerable (blank correct answer, or no stem at all). A 2026-08-17
+        audit found 375 such questions across the bank, two of them on a paper
+        that was live. Pass force=True to publish anyway — the caller then owns
+        the decision, and the blocker count is reported back either way.
+
+        Returns: {"exam_id", "is_active", "auto_assigned_count", "health"}
         """
         exam = await self.get_exam(db, exam_id)
+
+        health = await catalog_repository.get_paper_health(db, exam_id)
+        blockers = (health or {}).get("publish_blocker_count", 0) or 0
+        if blockers and not force:
+            raise BadRequest(
+                f"Exam {exam_id} has {blockers} unanswerable question(s) and cannot "
+                "be published. These have a blank correct answer or no question "
+                "text at all, so students cannot answer them correctly. "
+                "Fix the content, or cancel the affected questions "
+                "(is_cancelled=true) to drop them from scoring. "
+                "Inspect with: SELECT * FROM v_paper_health WHERE exam_id = "
+                f"{exam_id}. Publish anyway with force=true."
+            )
+
         await catalog_repository.set_exam_active(db, exam_id, is_active=True)
         await db.commit()   # always commit is_active=True regardless of auto-assignment
 
@@ -130,7 +153,12 @@ class CatalogService:
         if std_class in (5, 8):
             auto_count = await self.auto_assign_exam_to_grade(db, exam_id, std_class)
 
-        return {"exam_id": exam_id, "is_active": True, "auto_assigned_count": auto_count}
+        return {
+            "exam_id": exam_id,
+            "is_active": True,
+            "auto_assigned_count": auto_count,
+            "health": health,
+        }
 
     async def unpublish_exam(self, db: AsyncSession, exam_id: int) -> Exam:
         """

@@ -25,6 +25,9 @@ httpx==0.27.0
 aiofiles==23.2.1               # async file I/O for local media provider
 cloudinary==1.40.0             # Cloudinary media provider
 aioboto3==13.1.0               # async S3-compatible client for Cloudflare R2
+PyMuPDF==1.24.5                # PDF text extraction + page/image crop rendering
+numpy==1.26.4                  # deterministic answer-key image table parsing
+opencv-python-headless==4.10.0.84  # answer-key grid/digit extraction without OCR service
 
 # ── Payment ───────────────────────────────────────────────────
 razorpay==1.4.2                # Razorpay payment gateway

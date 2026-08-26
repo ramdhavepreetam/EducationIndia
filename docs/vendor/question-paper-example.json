@@ -1,0 +1,343 @@
+{
+  "paper": {
+    "board": "MSCE",
+    "std_class": 5,
+    "year": 2025,
+    "paper_code": "501",
+    "set_code": "A",
+    "medium": "english"
+  },
+
+  "contexts": [
+    {
+      "context_type": "paragraph",
+      "title_en": "The Clever Crow",
+      "title_mr": "हुशार कावळा",
+      "content_en": "A thirsty crow found a pitcher with very little water at the bottom. He could not reach it. He picked up pebbles one by one and dropped them into the pitcher. Slowly the water rose to the top and the crow drank happily.",
+      "content_mr": "एका तहानलेल्या कावळ्याला एक माठ सापडला ज्यात तळाशी थोडेसे पाणी होते. त्याला ते गाठता येत नव्हते. त्याने एक एक करून खडे उचलून माठात टाकले. हळूहळू पाणी वर आले आणि कावळ्याने आनंदाने पाणी प्याले.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": "Read the passage and answer questions 2 and 3.",
+      "instruction_mr": "उतारा वाचून प्रश्न २ आणि ३ ची उत्तरे द्या.",
+      "applies_from": 2,
+      "applies_to": 3
+    },
+    {
+      "context_type": "figure_series",
+      "title_en": "Figure Series",
+      "title_mr": "आकृती मालिका",
+      "content_en": null,
+      "content_mr": null,
+      "image": "ctx1-series.png",
+      "image_alt_en": "A row of four squares; in each step a dot moves one corner clockwise",
+      "image_alt_mr": "चार चौरसांची रांग; प्रत्येक टप्प्यात बिंदू घड्याळाच्या दिशेने एक कोपरा सरकतो",
+      "instruction_en": "Study the figure series and answer question 30.",
+      "instruction_mr": "आकृती मालिकेचा अभ्यास करून प्रश्न ३० चे उत्तर द्या.",
+      "applies_from": 30,
+      "applies_to": 30
+    }
+  ],
+
+  "questions": [
+    {
+      "__example": "TYPE 'text' — plain text stem and options. The most common type.",
+      "question_no": 1,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Which of the following letters make a meaningful word?",
+      "text_mr": "खालीलपैकी कोणती अक्षरे अर्थपूर्ण शब्द बनवतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "'Exercise' is the only correctly spelled word among the options.",
+      "explanation_mr": "'Exercise' हा पर्यायांमधील एकमेव योग्य शब्द आहे.",
+      "hint_en": "Say each option aloud and check the spelling.",
+      "hint_mr": "प्रत्येक पर्याय मोठ्याने वाचा आणि शुद्धलेखन तपासा.",
+      "difficulty": "easy",
+      "tags": ["spelling", "vocabulary"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "Excercise", "text_mr": "Excercise", "image": null },
+        { "option_no": 2, "text_en": "Excersize", "text_mr": "Excersize", "image": null },
+        { "option_no": 3, "text_en": "Exercise",  "text_mr": "Exercise",  "image": null },
+        { "option_no": 4, "text_en": "Exersize",  "text_mr": "Exersize",  "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'context_text' — belongs to contexts[0]. context_ref is 0-based.",
+      "question_no": 2,
+      "section": "English",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": "Why could the crow not drink the water at first?",
+      "text_mr": "कावळ्याला सुरुवातीला पाणी का पिता आले नाही?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "The passage says the water was at the bottom and he could not reach it.",
+      "explanation_mr": "उताऱ्यात म्हटले आहे की पाणी तळाशी होते आणि त्याला ते गाठता येत नव्हते.",
+      "hint_en": "Re-read the second sentence.",
+      "hint_mr": "दुसरे वाक्य पुन्हा वाचा.",
+      "difficulty": "easy",
+      "tags": ["comprehension"],
+      "context_ref": 0,
+      "options": [
+        { "option_no": 1, "text_en": "The water was dirty",           "text_mr": "पाणी घाण होते",               "image": null },
+        { "option_no": 2, "text_en": "The pitcher was broken",        "text_mr": "माठ फुटला होता",             "image": null },
+        { "option_no": 3, "text_en": "He was not thirsty",            "text_mr": "त्याला तहान लागली नव्हती",    "image": null },
+        { "option_no": 4, "text_en": "The water was too low to reach","text_mr": "पाणी गाठण्यास खूप खाली होते", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'context_text' again — a second question sharing the same passage.",
+      "question_no": 3,
+      "section": "English",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": "What does the story tell us about the crow?",
+      "text_mr": "गोष्ट कावळ्याबद्दल काय सांगते?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Using pebbles to raise the water shows cleverness.",
+      "explanation_mr": "पाणी वर आणण्यासाठी खड्यांचा वापर हुशारी दर्शवतो.",
+      "hint_en": "Think about what he did, not what he said.",
+      "hint_mr": "त्याने काय केले याचा विचार करा.",
+      "difficulty": "medium",
+      "tags": ["comprehension", "inference"],
+      "context_ref": 0,
+      "options": [
+        { "option_no": 1, "text_en": "He was lazy",   "text_mr": "तो आळशी होता",  "image": null },
+        { "option_no": 2, "text_en": "He was clever", "text_mr": "तो हुशार होता", "image": null },
+        { "option_no": 3, "text_en": "He was angry",  "text_mr": "तो रागावला होता","image": null },
+        { "option_no": 4, "text_en": "He was afraid", "text_mr": "तो घाबरला होता","image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'bilingual' — shown in both languages side by side.",
+      "question_no": 26,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "What is ¾ + ⅚ + ⅝ ?",
+      "text_mr": "¾ + ⅚ + ⅝ किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "LCM of 4, 6 and 8 is 24. 18/24 + 20/24 + 15/24 = 53/24 = 2 5/24.",
+      "explanation_mr": "४, ६ आणि ८ चा लसावि २४ आहे. १८/२४ + २०/२४ + १५/२४ = ५३/२४ = २ ५/२४.",
+      "hint_en": "Find the LCM of the denominators first.",
+      "hint_mr": "आधी छेदांचा लसावि काढा.",
+      "difficulty": "hard",
+      "tags": ["fractions", "addition"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "1 5/24", "text_mr": "१ ५/२४", "image": null },
+        { "option_no": 2, "text_en": "2 1/24", "text_mr": "२ १/२४", "image": null },
+        { "option_no": 3, "text_en": "53/48",  "text_mr": "५३/४८",  "image": null },
+        { "option_no": 4, "text_en": "2 5/24", "text_mr": "२ ५/२४", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'text_image' — GEOMETRY. Needs a real image: labelled vertices and a shaded region cannot be drawn with symbols. IMPORTANT: the image shows ONLY the figure, never the question text or the options.",
+      "question_no": 27,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "text_image",
+      "text_en": "Look at the figure. What is the area of the shaded region in square cm?",
+      "text_mr": "आकृती पहा. छायांकित भागाचे क्षेत्रफळ चौरस सेंमी मध्ये किती आहे?",
+      "question_image": "q27-figure.png",
+      "question_image_alt_en": "A rectangle 8 cm by 5 cm with a 3 cm by 2 cm shaded rectangle inside it",
+      "question_image_alt_mr": "८ सेंमी बाय ५ सेंमी आयत ज्यात ३ सेंमी बाय २ सेंमी छायांकित आयत आहे",
+      "correct_option": 2,
+      "explanation_en": "Shaded area = 3 × 2 = 6 square cm.",
+      "explanation_mr": "छायांकित क्षेत्रफळ = ३ × २ = ६ चौरस सेंमी.",
+      "hint_en": "Area of a rectangle = length × breadth.",
+      "hint_mr": "आयताचे क्षेत्रफळ = लांबी × रुंदी.",
+      "difficulty": "medium",
+      "tags": ["geometry", "area"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "5",  "text_mr": "५",  "image": null },
+        { "option_no": 2, "text_en": "6",  "text_mr": "६",  "image": null },
+        { "option_no": 3, "text_en": "10", "text_mr": "१०", "image": null },
+        { "option_no": 4, "text_en": "40", "text_mr": "४०", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'text_image' — DICE. Always use an image for dice: MSCE dice questions show a 3D cube with 2-3 visible faces, which the Unicode die glyphs cannot express.",
+      "question_no": 28,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "text_image",
+      "text_en": "Two views of the same dice are shown. Which number is opposite the face showing 3?",
+      "text_mr": "एकाच फाशाची दोन दृश्ये दाखवली आहेत. ३ असलेल्या पृष्ठभागाच्या विरुद्ध कोणता अंक आहे?",
+      "question_image": "q28-dice.png",
+      "question_image_alt_en": "Two views of one dice. First shows 1 on top, 3 in front, 2 on the right. Second shows 1 on top, 5 in front, 3 on the right.",
+      "question_image_alt_mr": "एकाच फाशाची दोन दृश्ये. पहिल्यात वर १, समोर ३, उजवीकडे २. दुसऱ्यात वर १, समोर ५, उजवीकडे ३.",
+      "correct_option": 3,
+      "explanation_en": "Faces 1, 2 and 5 all appear adjacent to 3, so the opposite face must be 6.",
+      "explanation_mr": "१, २ आणि ५ हे सर्व ३ शेजारी दिसतात, म्हणून विरुद्ध पृष्ठभाग ६ असला पाहिजे.",
+      "hint_en": "List every face you can see next to 3.",
+      "hint_mr": "३ शेजारी दिसणारे सर्व पृष्ठभाग लिहा.",
+      "difficulty": "hard",
+      "tags": ["dice", "spatial"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "2", "text_mr": "२", "image": null },
+        { "option_no": 2, "text_en": "4", "text_mr": "४", "image": null },
+        { "option_no": 3, "text_en": "6", "text_mr": "६", "image": null },
+        { "option_no": 4, "text_en": "5", "text_mr": "५", "image": null }
+      ]
+    },
+
+    {
+      "__example": "SYMBOL FIGURE, single line — no image needed at all. Preferred for series and pattern items.",
+      "question_no": 29,
+      "section": "Mathematics",
+      "topic": "Data Handling",
+      "question_type": "text",
+      "text_en": "Which figure comes next in the series?    ◐  ◑  ◒  ?",
+      "text_mr": "मालिकेत पुढील आकृती कोणती?    ◐  ◑  ◒  ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The shaded half rotates 90° clockwise at each step, so ◓ comes next.",
+      "explanation_mr": "छायांकित अर्धा भाग प्रत्येक टप्प्यात ९०° घड्याळाच्या दिशेने फिरतो, म्हणून ◓ पुढे येतो.",
+      "hint_en": "Track which half is shaded.",
+      "hint_mr": "कोणता अर्धा भाग छायांकित आहे ते पहा.",
+      "difficulty": "medium",
+      "tags": ["series", "symbol-figure"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "◓", "text_mr": "◓", "image": null },
+        { "option_no": 2, "text_en": "◐", "text_mr": "◐", "image": null },
+        { "option_no": 3, "text_en": "◑", "text_mr": "◑", "image": null },
+        { "option_no": 4, "text_en": "◒", "text_mr": "◒", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'context_image' — options are images sharing the figure in contexts[1].",
+      "question_no": 30,
+      "section": "Mathematics",
+      "topic": "Data Handling",
+      "question_type": "context_image",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The dot advances one corner clockwise each step, so it lands bottom-left.",
+      "explanation_mr": "बिंदू प्रत्येक टप्प्यात एक कोपरा पुढे सरकतो, म्हणून तो तळाशी डावीकडे येतो.",
+      "hint_en": "Track only the dot.",
+      "hint_mr": "फक्त बिंदू पहा.",
+      "difficulty": "hard",
+      "tags": ["series", "non-verbal"],
+      "context_ref": 1,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": null, "image": "q30-opt1.png", "image_alt_en": "Square with dot at bottom-left",  "image_alt_mr": "तळाशी डावीकडे बिंदू असलेला चौरस" },
+        { "option_no": 2, "text_en": null, "text_mr": null, "image": "q30-opt2.png", "image_alt_en": "Square with dot at top-left",     "image_alt_mr": "वरती डावीकडे बिंदू असलेला चौरस" },
+        { "option_no": 3, "text_en": null, "text_mr": null, "image": "q30-opt3.png", "image_alt_en": "Square with dot at top-right",    "image_alt_mr": "वरती उजवीकडे बिंदू असलेला चौरस" },
+        { "option_no": 4, "text_en": null, "text_mr": null, "image": "q30-opt4.png", "image_alt_en": "Square with dot in the centre",   "image_alt_mr": "मध्यभागी बिंदू असलेला चौरस" }
+      ]
+    },
+
+    {
+      "__example": "SYMBOL FIGURE, MULTI-LINE grid. Use real newlines (\\n in JSON) and align columns with spaces. Layout is preserved by the app.",
+      "question_no": 31,
+      "section": "Mathematics",
+      "topic": "Algebra",
+      "question_type": "text",
+      "text_en": "Study the pattern and find the missing figure.\n\n△  ▽  △\n▽  △  ▽\n△  ▽  ?",
+      "text_mr": "नमुन्याचा अभ्यास करून गहाळ आकृती शोधा.\n\n△  ▽  △\n▽  △  ▽\n△  ▽  ?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Triangles alternate direction along every row and column, so the missing figure is △.",
+      "explanation_mr": "प्रत्येक ओळ व स्तंभात त्रिकोण दिशा बदलतात, म्हणून गहाळ आकृती △ आहे.",
+      "hint_en": "Read the third row left to right.",
+      "hint_mr": "तिसरी ओळ डावीकडून उजवीकडे वाचा.",
+      "difficulty": "hard",
+      "tags": ["pattern", "matrix", "symbol-figure"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "▽", "text_mr": "▽", "image": null },
+        { "option_no": 2, "text_en": "△", "text_mr": "△", "image": null },
+        { "option_no": 3, "text_en": "◇", "text_mr": "◇", "image": null },
+        { "option_no": 4, "text_en": "□", "text_mr": "□", "image": null }
+      ]
+    },
+
+    {
+      "__example": "TYPE 'image_only' — the image IS the question. text_en and text_mr MUST be null, and ALL FOUR options must be images. Wording goes in question_image_alt_*.",
+      "question_no": 32,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": "q32-stem.png",
+      "question_image_alt_en": "Select the mirror image of the given figure",
+      "question_image_alt_mr": "दिलेल्या आकृतीची आरशातील प्रतिमा निवडा",
+      "correct_option": 3,
+      "explanation_en": "A mirror image flips the figure left to right.",
+      "explanation_mr": "आरशातील प्रतिमा आकृती डावीकडून उजवीकडे उलटवते.",
+      "hint_en": "Imagine a mirror on the right-hand side.",
+      "hint_mr": "उजव्या बाजूला आरशाची कल्पना करा.",
+      "difficulty": "medium",
+      "tags": ["mirror-image", "non-verbal"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": null, "text_mr": null, "image": "q32-opt1.png", "image_alt_en": "Figure rotated 90 degrees",  "image_alt_mr": "आकृती ९० अंश फिरवलेली" },
+        { "option_no": 2, "text_en": null, "text_mr": null, "image": "q32-opt2.png", "image_alt_en": "Figure upside down",         "image_alt_mr": "आकृती उलटी" },
+        { "option_no": 3, "text_en": null, "text_mr": null, "image": "q32-opt3.png", "image_alt_en": "Figure flipped left to right","image_alt_mr": "आकृती डावीकडून उजवीकडे उलटवलेली" },
+        { "option_no": 4, "text_en": null, "text_mr": null, "image": "q32-opt4.png", "image_alt_en": "Figure unchanged",           "image_alt_mr": "आकृती जशीच्या तशी" }
+      ]
+    },
+
+    {
+      "__example": "CANCELLED question — correct_option MUST be null. Options still need content.",
+      "question_no": 33,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "text",
+      "text_en": "Which of the following measures is equal to one quintal?",
+      "text_mr": "खालीलपैकी कोणते माप एका क्विंटलएवढे आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_cancelled": true,
+      "cancelled_reason": "Cancelled in official answer key — two options were correct",
+      "explanation_en": null,
+      "explanation_mr": null,
+      "hint_en": null,
+      "hint_mr": null,
+      "difficulty": "medium",
+      "tags": ["measurement", "cancelled"],
+      "context_ref": null,
+      "options": [
+        { "option_no": 1, "text_en": "10 kg",   "text_mr": "१० किलो",   "image": null },
+        { "option_no": 2, "text_en": "100 kg",  "text_mr": "१०० किलो",  "image": null },
+        { "option_no": 3, "text_en": "1000 kg", "text_mr": "१००० किलो", "image": null },
+        { "option_no": 4, "text_en": "50 kg",   "text_mr": "५० किलो",   "image": null }
+      ]
+    }
+
+  ]
+}

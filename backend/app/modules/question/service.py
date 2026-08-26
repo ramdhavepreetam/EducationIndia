@@ -18,11 +18,14 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.catalog.service import catalog_service
+from app.modules.media.service import _get_provider
 from app.modules.question.importer import validate_question_import
 from app.modules.question.repository import question_repository
 from app.modules.question.schemas import (
     BulkImportResult,
     BulkImportSchema,
+    PdfImportPreviewQuestionSchema,
+    PdfImportResult,
     QuestionAdminSchema,
     QuestionDeliverySchema,
     QuestionReviewSchema,
@@ -281,6 +284,181 @@ class QuestionService:
             skipped=len(import_data.questions) - inserted,
             errors=errors,
         )
+
+    async def import_questions_from_pdf(
+        self,
+        db: AsyncSession,
+        *,
+        exam_id: int,
+        mode: str,
+        language_strategy: str,
+        answer_set: str,
+        english_question_pdf: bytes | None,
+        marathi_question_pdf: bytes | None,
+        answer_key_pdf: bytes,
+    ) -> PdfImportResult:
+        """
+        Build/import questions from uploaded question paper PDFs and answer key.
+        Preview mode never writes. Apply mode writes only when extraction has no
+        row-level errors.
+        """
+        from app.modules.question.pdf_importer import build_pdf_import_payload
+
+        await catalog_service.get_exam(db, exam_id)
+        section_topic_map = await question_repository.fetch_import_section_topic_map(db, exam_id)
+        if not section_topic_map:
+            raise BadRequest("Exam has no sections/topics. Create or clone exam structure before PDF import.")
+
+        build = build_pdf_import_payload(
+            exam_id=exam_id,
+            language_strategy=language_strategy,  # type: ignore[arg-type]
+            answer_set=answer_set,  # type: ignore[arg-type]
+            english_question_pdf=english_question_pdf,
+            marathi_question_pdf=marathi_question_pdf,
+            answer_key_pdf=answer_key_pdf,
+            section_topic_map=section_topic_map,
+        )
+
+        inserted = 0
+        skipped = 0
+        errors = list(build.errors)
+        if mode == "apply":
+            if errors or build.payload is None:
+                raise BadRequest(
+                    "PDF import has extraction errors. Run preview and fix the source/mode first: "
+                    + "; ".join(errors[:5])
+                    + (" ..." if len(errors) > 5 else "")
+                )
+            result = await self.bulk_import(db, build.payload)
+            inserted = result.inserted
+            skipped = result.skipped
+            errors.extend(result.errors)
+            if not errors and build.question_image_assets:
+                upload_errors = await self._upload_pdf_question_assets(
+                    db,
+                    exam_id=exam_id,
+                    question_image_assets=build.question_image_assets,
+                )
+                errors.extend(upload_errors)
+
+        return PdfImportResult(
+            exam_id=exam_id,
+            mode=mode,
+            language_strategy=language_strategy,
+            answer_set=answer_set,
+            question_count=len(build.preview),
+            importable_count=sum(1 for item in build.preview if not item.warnings),
+            key_count=build.key_count,
+            cancelled_questions=build.cancelled_questions,
+            warnings=build.warnings,
+            errors=errors,
+            inserted=inserted,
+            skipped=skipped,
+            preview=[
+                PdfImportPreviewQuestionSchema(
+                    question_no=item.question_no,
+                    question_type=item.question_type,
+                    correct_option=item.correct_option,
+                    is_cancelled=item.is_cancelled,
+                    cancelled_reason=item.cancelled_reason,
+                    text_en=item.text_en,
+                    text_mr=item.text_mr,
+                    options_en=item.options_en,
+                    options_mr=item.options_mr,
+                    warnings=item.warnings,
+                )
+                for item in build.preview
+            ],
+        )
+
+    async def _upload_pdf_question_assets(
+        self,
+        db: AsyncSession,
+        *,
+        exam_id: int,
+        question_image_assets: dict[int, bytes],
+    ) -> list[str]:
+        """Upload PDF-rendered question crops and replace pending URLs."""
+        if not question_image_assets:
+            return []
+
+        rows = (
+            await db.execute(
+                text(
+                    """
+                    SELECT id, question_no
+                    FROM questions
+                    WHERE exam_id = :exam_id
+                    """
+                ),
+                {"exam_id": exam_id},
+            )
+        ).mappings().all()
+        needed_q_nos = set(question_image_assets)
+        id_by_q_no = {
+            int(row["question_no"]): int(row["id"])
+            for row in rows
+            if int(row["question_no"]) in needed_q_nos
+        }
+        provider = _get_provider()
+        errors: list[str] = []
+        has_media_files = bool(
+            (
+                await db.execute(
+                    text("SELECT to_regclass('public.media_files') IS NOT NULL")
+                )
+            ).scalar_one()
+        )
+
+        for q_no, image_bytes in question_image_assets.items():
+            question_id = id_by_q_no.get(q_no)
+            if question_id is None:
+                errors.append(f"Q{q_no}: inserted question row not found for image upload")
+                continue
+            filename = f"q{q_no}.png"
+            folder = f"exams/{exam_id}/questions/{question_id}"
+            try:
+                storage_key, public_url = await provider.upload(
+                    file_bytes=image_bytes,
+                    filename=filename,
+                    folder=folder,
+                    content_type="image/png",
+                )
+                if has_media_files:
+                    from app.modules.media.models import MediaFile
+
+                    record = MediaFile(
+                        uploaded_by=None,
+                        file_type="question",
+                        original_filename=filename,
+                        storage_key=storage_key,
+                        file_url=public_url,
+                        content_type="image/png",
+                        file_size=len(image_bytes),
+                    )
+                    db.add(record)
+                await db.execute(
+                    text(
+                        """
+                        UPDATE questions
+                        SET question_image_url = :url,
+                            question_image_alt_en = COALESCE(question_image_alt_en, :alt_en),
+                            question_image_alt_mr = COALESCE(question_image_alt_mr, :alt_mr)
+                        WHERE id = :question_id
+                        """
+                    ),
+                    {
+                        "url": public_url,
+                        "alt_en": f"Question {q_no} figure",
+                        "alt_mr": f"Question {q_no} figure",
+                        "question_id": question_id,
+                    },
+                )
+            except Exception as exc:
+                errors.append(f"Q{q_no}: failed to upload PDF image crop: {exc}")
+
+        await db.flush()
+        return errors
 
 
 # Module-level singleton — import this in router.py and other modules

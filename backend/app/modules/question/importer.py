@@ -13,9 +13,11 @@ Question type rules:
   marathi_only  → text_mr required, text_en must be None
   bilingual     → both text_en and text_mr required
 
-All types:
+All non-cancelled questions:
   - single-answer: correct_option must be 1-4
   - multi-select: correct_options must contain 1-4 values from option numbers
+
+All types:
   - exactly 4 options required
   - image_only options: all 4 must have image_url
   - text/bilingual options: all 4 must have text_en
@@ -35,7 +37,10 @@ def validate_question_import(q: QuestionImportItem) -> list[str]:
 
     # ── Universal rules ───────────────────────────────────────────────────────
 
-    if q.is_multi_select:
+    if q.is_cancelled:
+        if q.correct_option is not None or q.correct_options:
+            errors.append(f"{prefix}: cancelled questions must not have correct answers")
+    elif q.is_multi_select:
         if not q.correct_options:
             errors.append(f"{prefix}: multi-select questions require correct_options")
         else:
@@ -72,11 +77,11 @@ def validate_question_import(q: QuestionImportItem) -> list[str]:
         _validate_text_options(q, errors, prefix)
 
     elif qtype == "text_image":
-        if not q.text_en:
-            errors.append(f"{prefix}: text_image type requires text_en")
+        if not q.text_en and not q.text_mr:
+            errors.append(f"{prefix}: text_image type requires text_en or text_mr")
         if not q.question_image_url:
             errors.append(f"{prefix}: text_image type requires question_image_url")
-        _validate_text_options(q, errors, prefix)
+        _validate_language_text_options(q, errors, prefix)
 
     elif qtype == "image_only":
         if q.text_en is not None:
@@ -139,6 +144,16 @@ def _validate_text_options(
                 f"{prefix}: option {opt.option_no} requires text_en "
                 f"(question type is '{q.question_type}')"
             )
+
+
+def _validate_language_text_options(
+    q: QuestionImportItem, errors: list[str], prefix: str
+) -> None:
+    """Validate option text for whichever language columns this question uses."""
+    if q.text_en:
+        _validate_text_options(q, errors, prefix)
+    if q.text_mr and not q.text_en:
+        _validate_marathi_options(q, errors, prefix)
 
 
 def _validate_marathi_options(

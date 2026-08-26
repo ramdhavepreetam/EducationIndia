@@ -5,7 +5,7 @@ CLAUDE.md rule: services call repository, never execute queries directly.
 Routers call services, never call repository directly.
 """
 
-from sqlalchemy import select, update as sa_update
+from sqlalchemy import select, text, update as sa_update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -70,6 +70,7 @@ class CatalogRepository:
         result = await db.execute(
             select(Exam)
             .options(
+                selectinload(Exam.event),
                 selectinload(Exam.sections).selectinload(Section.topics)
             )
             .where(Exam.id == exam_id)
@@ -87,6 +88,31 @@ class CatalogRepository:
         )
         await db.flush()
         return await self.get_exam_by_id(db, exam_id)
+
+    async def get_paper_health(self, db: AsyncSession, exam_id: int) -> dict | None:
+        """
+        Read one row from v_paper_health (added 2026-08-17).
+
+        publish_blocker_count counts questions that cannot be answered correctly:
+        a blank correct answer, or no stem at all. Any value above zero means the
+        paper must not go live. Returns None when the exam has no row.
+        """
+        row = (
+            await db.execute(
+                text(
+                    """
+                    SELECT exam_id, total_questions, cancelled_questions,
+                           missing_image_count, missing_stem_count,
+                           blank_option_count, blank_correct_answer_count,
+                           publish_blocker_count
+                    FROM v_paper_health
+                    WHERE exam_id = :exam_id
+                    """
+                ),
+                {"exam_id": exam_id},
+            )
+        ).mappings().first()
+        return dict(row) if row else None
 
 
     async def create_event(

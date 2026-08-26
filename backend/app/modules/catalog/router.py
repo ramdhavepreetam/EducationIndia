@@ -98,6 +98,7 @@ async def get_exam(
 @router.put("/exams/{exam_id}/publish", response_model=PublishExamResponse)
 async def publish_exam(
     exam_id: int,
+    force: bool = False,
     db: AsyncSession = Depends(get_db),
     _: UserIdentity = Depends(require_admin),
 ):
@@ -106,10 +107,18 @@ async def publish_exam(
     Admin only (exam_admin or super_admin role required).
     Returns 404 if exam_id does not exist.
     Returns 403 if caller is not an admin.
+    Returns 400 if the paper contains unanswerable questions (?force=true overrides).
     """
-    result = await catalog_service.publish_exam(db, exam_id)
+    result = await catalog_service.publish_exam(db, exam_id, force=force)
+    blockers = (result.get("health") or {}).get("publish_blocker_count", 0) or 0
+    message = "Exam is now published and visible to students."
+    if blockers:
+        message += (
+            f" WARNING: published with force despite {blockers} "
+            "unanswerable question(s)."
+        )
     return PublishExamResponse(
         id=result["exam_id"],
         is_active=result["is_active"],
-        message=f"Exam is now published and visible to students.",
+        message=message,
     )

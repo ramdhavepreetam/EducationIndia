@@ -154,6 +154,25 @@ def test_mixed_attempts_correct_percentage():
     assert result["percentage"] == round((2/6)*100, 2)
 
 
+def test_cancelled_question_is_excluded_from_score_denominator():
+    correct = _make_response(2, 2, marks=2, q_no=1)
+    cancelled = _make_response(None, None, marks=2, q_no=2)
+    cancelled.is_cancelled = True
+
+    total = calculate_total_score([correct, cancelled])
+    sections = calculate_section_scores([correct, cancelled])
+    topics = calculate_topic_scores([correct, cancelled])
+
+    assert total["total_score"] == 2
+    assert total["total_correct"] == 1
+    assert total["total_wrong"] == 0
+    assert total["total_skipped"] == 0
+    assert total["percentage"] == 100.0
+    assert sections[0]["total_questions"] == 1
+    assert sections[0]["total_marks"] == 2
+    assert topics[0]["total"] == 1
+
+
 def test_multi_select_answer_counts_as_correct_not_skipped():
     response = _make_response(None, None, q_no=1)
     response.is_multi_select = True

@@ -1,0 +1,3733 @@
+{
+  "paper": {
+    "board": "MSCE",
+    "std_class": 5,
+    "year": 2026,
+    "paper_code": "501",
+    "set_code": "A",
+    "medium": "english"
+  },
+  "contexts": [
+    {
+      "context_type": "paragraph",
+      "title_en": "The Brave Honeybee",
+      "title_mr": "शूर मधमाशी",
+      "content_en": "In a lush green forest, a small honeybee named Buzzy worked tirelessly from dawn to dusk collecting nectar. One afternoon, a fierce gust of wind blew away the protective roof of their hive. While other bees panicked, Buzzy quickly organized the young worker bees. Together, they gathered tree resin and wax to repair the damaged honeycomb before the evening rain arrived. The Queen Bee praised Buzzy for showing great courage, leadership, and presence of mind in an emergency.",
+      "content_mr": "एका दाट हिरव्यागार जंगलात, बझी नावाची एक लहान मधमाशी सकाळपासून संध्याकाळपर्यंत मध गोळा करण्याचे काम अविरतपणे करत असे. एका दुपारी, वाऱ्याच्या जोरदार झोक्याने त्यांच्या पोळ्याचे संरक्षणात्मक छत उडवून लावले. इतर मधमाश्या घाबरल्या असताना, बझीने पटकन तरुण कामकरी मधमाश्यांना एकत्र केले. संध्याकाळचा पाऊस सुरू होण्यापूर्वी त्यांनी झाडाचा डिंक आणि मेण गोळा करून खराब झालेले पोळे दुरुस्त केले. राणी मधमाशीने बझीच्या धैर्याची, नेतृत्वाची आणि समयसूचकतेची प्रशंसा केली.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": "Read the passage and answer questions 1 to 3.",
+      "instruction_mr": "उतारा वाचून प्रश्न १ ते ३ ची उत्तरे द्या.",
+      "applies_from": 1,
+      "applies_to": 3
+    },
+    {
+      "context_type": "poem",
+      "title_en": "The Whispering Trees",
+      "title_mr": "गुणगुणणारी झाडे",
+      "content_en": "They give us shade when sun is high,\nThey reach their green arms to the sky.\nThey shelter birds with songs so sweet,\nAnd drop ripe fruit beneath our feet.\nA friend to all, they stand so tall,\nAnd ask for nothing back at all.",
+      "content_mr": "उन्हात देतात सावली छान,\nआभाळाला भिडतात हिरवे रान.\nपक्ष्यांना देतात गोड गाणी,\nगोड फळे देतात दाणी दाणी.\nसर्वांचे मित्र ते उभे राहती,\nकशाचीही अपेक्षा न करिती.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": "Read the poem and answer questions 4 and 5.",
+      "instruction_mr": "कविता वाचून प्रश्न ४ आणि ५ ची उत्तरे द्या.",
+      "applies_from": 4,
+      "applies_to": 5
+    },
+    {
+      "context_type": "advertisement",
+      "title_en": "Grand Children Book Fair 2026",
+      "title_mr": "भव्य बाल पुस्तक प्रदर्शन २०२६",
+      "content_en": "★ PUNE BOOK FESTIVAL ★\nVenue: Balgandharva Kalapasar, JM Road, Pune\nDates: October 10 to October 15, 2026 (10:00 AM to 8:00 PM)\nSpecial Attraction: Flat 30% discount on Science & Mathematics Storybooks!\nFree entry for school students with valid ID card.",
+      "content_mr": "★ पुणे पुस्तक महोत्सव ★\nस्थळ: बालगंधर्व कलादालन, जे.एम. रोड, पुणे\nदिनांक: १० ऑक्टोबर ते १५ ऑक्टोबर २०२६ (सकाळी १०:०० ते रात्री ८:००)\nविशेष आकर्षण: विज्ञान आणि गणिताच्या गोष्टींच्या पुस्तकांवर ३०% सवलत!\nवैध ओळखपत्र असलेल्या शालेय विद्यार्थ्यांसाठी मोफत प्रवेश.",
+      "image": null,
+      "image_alt_en": null,
+      "image_alt_mr": null,
+      "instruction_en": "Read the advertisement and answer questions 6 and 7.",
+      "instruction_mr": "जाहिरात वाचून प्रश्न ६ आणि ७ ची उत्तरे द्या.",
+      "applies_from": 6,
+      "applies_to": 7
+    },
+    {
+      "context_type": "pictograph",
+      "title_en": "Trees Planted by School Clubs",
+      "title_mr": "शालेय समित्यांनी लावलेली झाडे",
+      "content_en": "Eco Club: 🌲 🌲 🌲 🌲\nScience Club: 🌲 🌲 🌲\nSports Club: 🌲 🌲 🌲 🌲 🌲\n(Scale: 1 tree symbol 🌲 = 25 trees planted)",
+      "content_mr": "पर्यावरण समिती: 🌲 🌲 🌲 🌲\nविज्ञान समिती: 🌲 🌲 🌲\nक्रीडा समिती: 🌲 🌲 🌲 🌲 🌲\n(प्रमाण: १ झाडाचे चिन्ह 🌲 = २५ लावलेली झाडे)",
+      "image": null,
+      "image_alt_en": "Pictograph showing tree plantation count across three school clubs with scale 1 tree = 25 trees",
+      "image_alt_mr": "तीन शालेय समित्यांनी लावलेल्या झाडांचा चित्रलेख, प्रमाण १ चिन्ह = २५ झाडे",
+      "instruction_en": "Study the pictograph and answer question 74.",
+      "instruction_mr": "चित्रलेखाचा अभ्यास करून प्रश्न ७४ चे उत्तर द्या.",
+      "applies_from": 74,
+      "applies_to": 74
+    }
+  ],
+  "questions": [
+    {
+      "question_no": 1,
+      "section": "English",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": "Why did Buzzy quickly organize the young worker bees?",
+      "text_mr": "बझीने तरुण कामकरी मधमाश्यांना त्वरित का एकत्र केले?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Buzzy organized the bees to gather resin and wax to repair the damaged honeycomb before the rain arrived.",
+      "explanation_mr": "पाऊस येण्यापूर्वी खराब झालेले पोळे दुरुस्त करण्यासाठी बझीने मधमाश्यांना एकत्र केले.",
+      "hint_en": "Look at what happened after the wind blew away the hive roof.",
+      "hint_mr": "छत उडून गेल्यावर काय झाले ते पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "comprehension",
+        "detail-retrieval"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "To fly away to another forest",
+          "text_mr": "दुसऱ्या जंगलात उडून जाण्यासाठी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "To repair the damaged honeycomb before rain",
+          "text_mr": "पावसापूर्वी खराब झालेले पोळे दुरुस्त करण्यासाठी",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "To search for sweet flowers",
+          "text_mr": "गोड फुलांचा शोध घेण्यासाठी",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "To celebrate with the Queen Bee",
+          "text_mr": "राणी मधमाशीसोबत आनंद साजरा करण्यासाठी",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 2,
+      "section": "English",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": "Which word in the passage means 'hard-working without stopping'?",
+      "text_mr": "उताऱ्यातील कोणत्या शब्दाचा अर्थ 'न थांबता सतत काम करणारी' असा होतो?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "'Tirelessly' means working continuously without getting tired.",
+      "explanation_mr": "'Tirelessly' म्हणजे अथकपणे किंवा सतत काम करणे.",
+      "hint_en": "Check the description of Buzzy's daily routine in the first sentence.",
+      "hint_mr": "पहिल्या वाक्यातील वर्णन पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "comprehension",
+        "vocabulary"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Panicked",
+          "text_mr": "Panicked",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Fierce",
+          "text_mr": "Fierce",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Tirelessly",
+          "text_mr": "Tirelessly",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Protective",
+          "text_mr": "Protective",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 3,
+      "section": "English",
+      "topic": "Reading Comprehension",
+      "question_type": "context_text",
+      "text_en": "What main quality did the Queen Bee praise in Buzzy?",
+      "text_mr": "राणी मधमाशीने बझीच्या कोणत्या मुख्य गुणाची प्रशंसा केली?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The Queen Bee praised Buzzy for showing courage, leadership, and presence of mind during an emergency.",
+      "explanation_mr": "राणी मधमाशीने संकटसमयी दाखवलेल्या धैर्य, नेतृत्व आणि समयसूचकतेची प्रशंसा केली.",
+      "hint_en": "Read the concluding sentence of the passage.",
+      "hint_mr": "उताऱ्याचे शेवटचे वाक्य वाचा.",
+      "difficulty": "medium",
+      "tags": [
+        "comprehension",
+        "inference"
+      ],
+      "context_ref": 0,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Courage, leadership, and presence of mind",
+          "text_mr": "धैर्य, नेतृत्व आणि समयसूचकता",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Speed of flying in strong wind",
+          "text_mr": "वाऱ्यात वेगाने उडण्याचा वेग",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Collecting the sweetest nectar",
+          "text_mr": "सर्वात गोड मध गोळा करणे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Making the largest hive",
+          "text_mr": "सर्वात मोठे पोळे बनवणे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 4,
+      "section": "English",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": "According to the poem, what do trees provide to birds?",
+      "text_mr": "कवितेनुसार झाडे पक्ष्यांना काय देतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "The poem states: 'They shelter birds with songs so sweet', meaning they give shelter to birds.",
+      "explanation_mr": "कवितेत स्पष्ट म्हटले आहे की झाडे पक्ष्यांना निवारा (shelter) देतात.",
+      "hint_en": "Look at the third line of the poem.",
+      "hint_mr": "कवितेची तिसरी ओळ पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "poetry",
+        "factual"
+      ],
+      "context_ref": 1,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Golden cages",
+          "text_mr": "सोन्याचे पिंजरे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Sweet nectar",
+          "text_mr": "गोड मध",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Warm clothes",
+          "text_mr": "उबदार कपडे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Shelter",
+          "text_mr": "निवारा / आश्रय",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 5,
+      "section": "English",
+      "topic": "Poetry",
+      "question_type": "context_text",
+      "text_en": "Which two qualities of trees are described in the poem? (Choose two correct options)",
+      "text_mr": "कवितेत झाडांचे कोणते दोन गुण वर्णन केले आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "The poem shows that trees are friendly to all and selfless as they ask for nothing in return.",
+      "explanation_mr": "झाडे सर्वांचे मित्र आहेत आणि निस्वार्थीपणे कशाचीही अपेक्षा करत नाहीत.",
+      "hint_en": "Look at the last two lines: 'A friend to all... And ask for nothing back'.",
+      "hint_mr": "शेवटच्या दोन ओळी वाचा.",
+      "difficulty": "hard",
+      "tags": [
+        "poetry",
+        "multi-select"
+      ],
+      "context_ref": 1,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "They are friendly to all",
+          "text_mr": "ते सर्वांचे मित्र आहेत",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "They are proud and selfish",
+          "text_mr": "ते गर्विष्ठ आणि स्वार्थी आहेत",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "They give selflessly without asking for return",
+          "text_mr": "ते कशाचीही अपेक्षा न करता निस्वार्थीपणे देतात",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "They demand gold in exchange",
+          "text_mr": "ते मोबदल्यात सोने मागतात",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 6,
+      "section": "English",
+      "topic": "Advertisement Reading",
+      "question_type": "context_text",
+      "text_en": "What special discount is offered on Science & Mathematics Storybooks?",
+      "text_mr": "विज्ञान आणि गणिताच्या गोष्टींच्या पुस्तकांवर किती सवलत दिली आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "The advertisement mentions 'Flat 30% discount on Science & Mathematics Storybooks'.",
+      "explanation_mr": "जाहिरातीत ३०% सवलतीचा स्पष्ट उल्लेख आहे.",
+      "hint_en": "Check the 'Special Attraction' section.",
+      "hint_mr": "'विशेष आकर्षण' ओळ वाचा.",
+      "difficulty": "easy",
+      "tags": [
+        "advertisement",
+        "factual"
+      ],
+      "context_ref": 2,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "20%",
+          "text_mr": "२०%",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "30%",
+          "text_mr": "३०%",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "50%",
+          "text_mr": "५०%",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "10%",
+          "text_mr": "१०%",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 7,
+      "section": "English",
+      "topic": "Advertisement Reading",
+      "question_type": "context_text",
+      "text_en": "What must a school student show to get free entry into the book fair?",
+      "text_mr": "पुस्तक महोत्सवात मोफत प्रवेश मिळवण्यासाठी शालेय विद्यार्थ्याने काय दाखवणे आवश्यक आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "The advertisement specifies free entry for students carrying a valid ID card.",
+      "explanation_mr": "वैध ओळखपत्र (Valid ID card) असलेल्या विद्यार्थ्यांसाठी मोफत प्रवेश आहे.",
+      "hint_en": "Check the last line of the advertisement.",
+      "hint_mr": "जाहिरातीची शेवटची ओळ पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "advertisement",
+        "comprehension"
+      ],
+      "context_ref": 2,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "A cinema ticket",
+          "text_mr": "सिनेमाचे तिकीट",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "A recommendation letter",
+          "text_mr": "शिफारस पत्र",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "A valid school ID card",
+          "text_mr": "वैध शालेय ओळखपत्र",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "A library membership receipt",
+          "text_mr": "वाचनालय पावती",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 8,
+      "section": "English",
+      "topic": "Picture Comprehension",
+      "question_type": "text_image",
+      "text_en": "Look at the picture. What are the school children doing in the garden?",
+      "text_mr": "चित्र पहा. बागेत शालेय मुले कोणती कृती करत आहेत?",
+      "question_image": "q8-picture.png",
+      "question_image_alt_en": "A group of cheerful school children planting tree saplings and watering them in a garden.",
+      "question_image_alt_mr": "बागेत आनंदाने झाडांची रोपे लावणारी आणि त्यांना पाणी घालणारी शालेय मुले.",
+      "correct_option": 1,
+      "explanation_en": "The children are shown planting saplings and nurturing green trees.",
+      "explanation_mr": "मुले रोपे लावून त्यांची निगा राखत आहेत.",
+      "hint_en": "Observe the tools, saplings, and watering cans in the picture.",
+      "hint_mr": "चित्रातील झाडांची रोपे आणि पाण्याची बादली पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "picture-comprehension",
+        "environmental"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Planting tree saplings",
+          "text_mr": "झाडांची रोपे लावणे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Playing football",
+          "text_mr": "फुटबॉल खेळणे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Cutting down trees",
+          "text_mr": "झाडे तोडणे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Buying groceries",
+          "text_mr": "किराणा सामान खरेदी करणे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 9,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Which of the following sets of words is arranged in correct alphabetical order?",
+      "text_mr": "खालीलपैकी कोणता शब्दसमूह योग्य वर्णानुक्रमे (A-Z) मांडलेला आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "In alphabetical order: Basket (Ba), Bloom (Bl), Brave (Br), Bright (Bri).",
+      "explanation_mr": "वर्णानुक्रमानुसार: Basket -> Bloom -> Brave -> Bright असा क्रम येतो.",
+      "hint_en": "Compare the first two to three letters of each word.",
+      "hint_mr": "शब्दांची पहिली २-३ अक्षरे तपासा.",
+      "difficulty": "easy",
+      "tags": [
+        "vocabulary",
+        "alphabetical-order"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Bright, Brave, Bloom, Basket",
+          "text_mr": "Bright, Brave, Bloom, Basket",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Basket, Bloom, Brave, Bright",
+          "text_mr": "Basket, Bloom, Brave, Bright",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Brave, Basket, Bright, Bloom",
+          "text_mr": "Brave, Basket, Bright, Bloom",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Bloom, Bright, Basket, Brave",
+          "text_mr": "Bloom, Bright, Basket, Brave",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 10,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Select the correctly spelled word from the given alternatives.",
+      "text_mr": "दिलेल्या पर्यायांमधून योग्य शुद्धलेखन असलेला शब्द निवडा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "'Necessary' is the correct spelling (N-E-C-E-S-S-A-R-Y).",
+      "explanation_mr": "'Necessary' हे योग्य स्पेलिंग आहे.",
+      "hint_en": "Remember: one 'c' and double 's'.",
+      "hint_mr": "एका 'c' आणि दोन 's' चे स्पेलिंग आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "vocabulary",
+        "spelling"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Necesary",
+          "text_mr": "Necesary",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Neccesary",
+          "text_mr": "Neccesary",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Neccessary",
+          "text_mr": "Neccessary",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Necessary",
+          "text_mr": "Necessary",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 11,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Choose the correct antonym for the underlined word:\nThe king was very generous to the poor villagers.",
+      "text_mr": "अधोरेखित शब्दासाठी योग्य विरुद्धार्थी शब्द निवडा:\nThe king was very generous to the poor villagers.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "'Miserly' (or stingy) is the antonym of 'generous' (giving/kind).",
+      "explanation_mr": "'Generous' (उदार) चा विरुद्धार्थी शब्द 'Miserly' (कंजूष) आहे.",
+      "hint_en": "'Generous' means willing to give freely; find the opposite.",
+      "hint_mr": "उदार शब्दाचा उलट अर्थ शोधा.",
+      "difficulty": "medium",
+      "tags": [
+        "vocabulary",
+        "antonyms"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Miserly",
+          "text_mr": "Miserly",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Kind",
+          "text_mr": "Kind",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Helpful",
+          "text_mr": "Helpful",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Noble",
+          "text_mr": "Noble",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 12,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Select the correct collective noun to fill in the blank:\nA _______ of wolves was howling in the dark forest.",
+      "text_mr": "रिकाम्या जागेसाठी योग्य समूहदर्शक शब्द (Collective Noun) निवडा:\nA _______ of wolves was howling in the dark forest.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "A group of wolves is called a 'pack'.",
+      "explanation_mr": "लांडग्यांच्या समूहाला 'pack' म्हणतात.",
+      "hint_en": "Lions form a 'pride', cattle a 'herd', and wolves a 'pack'.",
+      "hint_mr": "प्राण्यांचे समूहदर्शक शब्द आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "vocabulary",
+        "collective-nouns"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "flock",
+          "text_mr": "flock",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "herd",
+          "text_mr": "herd",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "pack",
+          "text_mr": "pack",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "pride",
+          "text_mr": "pride",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 13,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Which two words sound exactly the same (homophones)? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणते दोन शब्द समान उच्चार असणारे (Homophones) आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        3
+      ],
+      "explanation_en": "'Pair' (a set of two) and 'Pear' (a fruit) have the exact same pronunciation.",
+      "explanation_mr": "'Pair' आणि 'Pear' चा उच्चार एकसारखाच होतो.",
+      "hint_en": "Say each word out loud to identify matching sounds.",
+      "hint_mr": "प्रत्येक शब्दाचा उच्चार मोठ्याने करून पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "vocabulary",
+        "homophones",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Pure",
+          "text_mr": "Pure",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Pair",
+          "text_mr": "Pair",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Pear",
+          "text_mr": "Pear",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Poor",
+          "text_mr": "Poor",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 14,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Choose the one-word substitution for:\n'A person who designs buildings and houses.'",
+      "text_mr": "'A person who designs buildings and houses' या शब्दसमूहासाठी एक शब्द निवडा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "An architect is someone who designs buildings.",
+      "explanation_mr": "इमारतींची रचना व नकाशे तयार करणाऱ्या व्यक्तीला 'Architect' (वास्तुविशारद) म्हणतात.",
+      "hint_en": "A carpenter works with wood; an author writes books; an architect designs buildings.",
+      "hint_mr": "इमारतींचे नकाशे तयार करणारा.",
+      "difficulty": "medium",
+      "tags": [
+        "vocabulary",
+        "one-word-substitution"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Sculptor",
+          "text_mr": "Sculptor",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Architect",
+          "text_mr": "Architect",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Carpenter",
+          "text_mr": "Carpenter",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Mechanic",
+          "text_mr": "Mechanic",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 15,
+      "section": "English",
+      "topic": "Vocabulary",
+      "question_type": "text",
+      "text_en": "Rearrange the jumbled letters to make a meaningful word related to peace:\nS I L E N C E",
+      "text_mr": "खालील विस्कळीत अक्षरांपासून शांततेशी संबंधित अर्थपूर्ण शब्द तयार करा:\nS I L E N C E",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The letters S-I-L-E-N-C-E form the word 'SILENCE'.",
+      "explanation_mr": "दिलेली अक्षरे जुळवून 'SILENCE' हा अर्थपूर्ण शब्द तयार होतो.",
+      "hint_en": "Opposite of noise.",
+      "hint_mr": "आवाजाच्या विरुद्ध शब्द.",
+      "difficulty": "hard",
+      "tags": [
+        "vocabulary",
+        "word-puzzle"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "SILENCE",
+          "text_mr": "SILENCE",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "SCIENCE",
+          "text_mr": "SCIENCE",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "SINCERE",
+          "text_mr": "SINCERE",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "SCENERY",
+          "text_mr": "SCENERY",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 16,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Identify the part of speech of the underlined word:\nShe ran quickly to catch the school bus.",
+      "text_mr": "अधोरेखित शब्दाची जात (Part of Speech) ओळखा:\nShe ran quickly to catch the school bus.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "'Quickly' describes the action verb 'ran', so it is an adverb.",
+      "explanation_mr": "'Quickly' हा शब्द 'ran' या क्रियेबद्दल अधिक माहिती देतो, म्हणून ते Adverb (क्रियाविशेषण) आहे.",
+      "hint_en": "Words ending in '-ly' that describe how an action is done are adverbs.",
+      "hint_mr": "कृती कशी घडली हे सांगणारा शब्द.",
+      "difficulty": "easy",
+      "tags": [
+        "grammar",
+        "parts-of-speech"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Noun",
+          "text_mr": "Noun (नाम)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Adjective",
+          "text_mr": "Adjective (विशेषण)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Adverb",
+          "text_mr": "Adverb (क्रियाविशेषण)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Pronoun",
+          "text_mr": "Pronoun (सर्वनाम)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 17,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Select the correct plural form of the word 'Ox'.",
+      "text_mr": "'Ox' या शब्दाचे योग्य अनेकवचन (Plural form) निवडा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "The irregular plural form of 'Ox' is 'Oxen'.",
+      "explanation_mr": "'Ox' चे अनेकवचन 'Oxen' असे होते.",
+      "hint_en": "It is an irregular plural ending in '-en'.",
+      "hint_mr": "अनियमित अनेकवचनाचा नियम आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "grammar",
+        "singular-plural"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Oxes",
+          "text_mr": "Oxes",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Oxen",
+          "text_mr": "Oxen",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Oxies",
+          "text_mr": "Oxies",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Oxens",
+          "text_mr": "Oxens",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 18,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Fill in the blank with the correct preposition:\nThe curious puppy crawled _______ the wooden fence.",
+      "text_mr": "योग्य शब्दयोगी अव्यय (Preposition) वापरून वाक्य पूर्ण करा:\nThe curious puppy crawled _______ the wooden fence.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "'Under' indicates moving beneath the fence.",
+      "explanation_mr": "कुत्र्याचे पिल्लू कुंपणाच्या खालून गेले, म्हणून 'under' योग्य आहे.",
+      "hint_en": "Think about passing beneath an object.",
+      "hint_mr": "एखाद्या वस्तूच्या खालून जाणे.",
+      "difficulty": "easy",
+      "tags": [
+        "grammar",
+        "prepositions"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "under",
+          "text_mr": "under",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "between",
+          "text_mr": "between",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "above",
+          "text_mr": "above",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "at",
+          "text_mr": "at",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 19,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Identify the tense of the following sentence:\n'The children are playing cricket in the ground.'",
+      "text_mr": "खालील वाक्याचा काळ (Tense) ओळखा:\n'The children are playing cricket in the ground.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "'are playing' represents the Present Continuous Tense.",
+      "explanation_mr": "'are + playing (verb+ing)' हे चालू वर्तमानकाळ (Present Continuous Tense) दर्शवते.",
+      "hint_en": "Helping verb 'are' + verb with '-ing' shows ongoing present action.",
+      "hint_mr": "चालू क्रिया दर्शवणारा काळ.",
+      "difficulty": "medium",
+      "tags": [
+        "grammar",
+        "tenses"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Simple Past Tense",
+          "text_mr": "Simple Past Tense (साधा भूतकाळ)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Simple Present Tense",
+          "text_mr": "Simple Present Tense (साधा वर्तमानकाळ)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Present Continuous Tense",
+          "text_mr": "Present Continuous Tense (चालू वर्तमानकाळ)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Past Perfect Tense",
+          "text_mr": "Past Perfect Tense (पूर्ण भूतकाळ)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 20,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Choose the correct article to fill in the blank:\nMr. Kulkarni is _______ honest and hardworking teacher.",
+      "text_mr": "रिकाम्या जागेसाठी योग्य उपपद (Article) निवडा:\nMr. Kulkarni is _______ honest and hardworking teacher.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "'Honest' begins with a silent 'h' and a vowel sound /ɒ/, so 'an' is used.",
+      "explanation_mr": "'Honest' चा उच्चार स्वराने (vowel sound) सुरू होतो, म्हणून 'an' वापरले जाते.",
+      "hint_en": "Listen to the starting vowel sound of 'honest'.",
+      "hint_mr": "'Honest' चा उच्चार स्वराप्रमाणे होतो.",
+      "difficulty": "medium",
+      "tags": [
+        "grammar",
+        "articles"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "a",
+          "text_mr": "a",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "an",
+          "text_mr": "an",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "the",
+          "text_mr": "the",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "no article",
+          "text_mr": "no article",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 21,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Which two punctuation marks are missing in the sentence?\n'Hurrah we won the trophy' (Choose two correct options)",
+      "text_mr": "दिलेल्या वाक्यात कोणती दोन विरामचिन्हे आवश्यक आहेत?\n'Hurrah we won the trophy' (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        4
+      ],
+      "explanation_en": "'Hurrah' needs an exclamation mark (!) after it, and the sentence ends with a full stop (.).",
+      "explanation_mr": "'Hurrah!' नंतर उद्गारवाचक चिन्ह (!) आणि शेवटी पूर्णविराम (.) आवश्यक आहे.",
+      "hint_en": "An interjection requires an exclamation mark, and an assertive sentence ends with a period.",
+      "hint_mr": "उद्गारवाचक शब्द व वाक्याचा शेवट तपासा.",
+      "difficulty": "medium",
+      "tags": [
+        "grammar",
+        "punctuation",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Exclamation mark (!)",
+          "text_mr": "Exclamation mark (!)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Question mark (?)",
+          "text_mr": "Question mark (?)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Semicolon (;)",
+          "text_mr": "Semicolon (;)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Full stop (.)",
+          "text_mr": "Full stop (.)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 22,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Choose the correct conjunction to join the clauses:\nRohan missed the school bus _______ he woke up late.",
+      "text_mr": "वाक्य जोडण्यासाठी योग्य उभयान्वयी अव्यय (Conjunction) निवडा:\nRohan missed the school bus _______ he woke up late.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "'Because' indicates the reason for missing the bus.",
+      "explanation_mr": "बस चुकण्याचे कारण दर्शवण्यासाठी 'because' वापरले जाते.",
+      "hint_en": "Look for the word expressing reason.",
+      "hint_mr": "कारण दर्शवणारा शब्द शोधा.",
+      "difficulty": "easy",
+      "tags": [
+        "grammar",
+        "conjunctions"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "because",
+          "text_mr": "because",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "but",
+          "text_mr": "but",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "or",
+          "text_mr": "or",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "so that",
+          "text_mr": "so that",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 23,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Select the correct comparative degree of the adjective 'Good'.",
+      "text_mr": "'Good' या विशेषणाचे योग्य तुलनात्मक रूप (Comparative degree) निवडा.",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Degrees of 'Good' are: Good (Positive) -> Better (Comparative) -> Best (Superlative).",
+      "explanation_mr": "'Good' चे तुलनात्मक रूप 'Better' आहे.",
+      "hint_en": "Good -> ? -> Best.",
+      "hint_mr": "विशेषणांची तीन रूपे आठवा.",
+      "difficulty": "easy",
+      "tags": [
+        "grammar",
+        "degrees-of-comparison"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Gooder",
+          "text_mr": "Gooder",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Better",
+          "text_mr": "Better",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Best",
+          "text_mr": "Best",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "More good",
+          "text_mr": "More good",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 24,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Rearrange the jumbled parts to form a meaningful sentence:\nP: the peacock | Q: danced gracefully | R: in the rain | S: yesterday",
+      "text_mr": "अर्थपूर्ण वाक्य तयार करण्यासाठी खालील भागांची योग्य मांडणी करा:\nP: the peacock | Q: danced gracefully | R: in the rain | S: yesterday",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 4,
+      "explanation_en": "'The peacock danced gracefully in the rain yesterday' is the correct meaningful order (P - Q - R - S).",
+      "explanation_mr": "योग्य क्रम: P - Q - R - S (The peacock danced gracefully in the rain yesterday).",
+      "hint_en": "Subject (P) + Verb/Adverb (Q) + Place (R) + Time (S).",
+      "hint_mr": "कर्ता + क्रियापद + स्थळ + वेळ असा क्रम जुळवा.",
+      "difficulty": "hard",
+      "tags": [
+        "grammar",
+        "sentence-ordering"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Q - P - S - R",
+          "text_mr": "Q - P - S - R",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "S - R - Q - P",
+          "text_mr": "S - R - Q - P",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "R - Q - P - S",
+          "text_mr": "R - Q - P - S",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "P - Q - R - S",
+          "text_mr": "P - Q - R - S",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 25,
+      "section": "English",
+      "topic": "Grammar",
+      "question_type": "text",
+      "text_en": "Identify the type of the following sentence:\n'Please pass me the salt shaker.'",
+      "text_mr": "खालील वाक्याचा प्रकार ओळखा:\n'Please pass me the salt shaker.'",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "A sentence expressing a request or command is an Imperative sentence.",
+      "explanation_mr": "विनंती किंवा आज्ञा दर्शवणारे वाक्य हे Imperative (आज्ञार्थी) वाक्य असते.",
+      "hint_en": "The word 'Please' indicates a polite request.",
+      "hint_mr": "'Please' हा शब्द विनंती दर्शवतो.",
+      "difficulty": "medium",
+      "tags": [
+        "grammar",
+        "sentence-types"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Assertive Sentence",
+          "text_mr": "Assertive Sentence (विधानार्थी)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Imperative Sentence",
+          "text_mr": "Imperative Sentence (आज्ञार्थी)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Interrogative Sentence",
+          "text_mr": "Interrogative Sentence (प्रश्नार्थक)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Exclamatory Sentence",
+          "text_mr": "Exclamatory Sentence (उद्गारार्थी)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 26,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "What is the value of the Roman numeral expression CLXXVI - LXIV in Roman numerals?",
+      "text_mr": "CLXXVI - LXIV या रोमन संख्याचिन्हांच्या पदावलीचे उत्तर रोमन संख्याचिन्हात काय येईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "CLXXVI = 176, LXIV = 64. 176 - 64 = 112 = CXII.",
+      "explanation_mr": "CLXXVI = १७६, LXIV = ६४. १७६ - ६४ = ११२ = CXII.",
+      "hint_en": "Convert each Roman numeral into international digits first.",
+      "hint_mr": "आधी रोमन अंकांचे आंतरराष्ट्रीय अंकात रूपांतर करा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "roman-numerals"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "CXII",
+          "text_mr": "CXII",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "CXXII",
+          "text_mr": "CXXII",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "XCII",
+          "text_mr": "XCII",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "CXIV",
+          "text_mr": "CXIV",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 27,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "In the number 74,37,215, what is the difference between the place values of the two '7' digits?",
+      "text_mr": "७४,३७,२१५ या संख्येतील दोन्ही '७' च्या स्थानिक किमतींमधील फरक किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Place value of first 7 is 70,00,000 and second 7 is 7,000. Difference = 70,00,000 - 7,000 = 69,93,000.",
+      "explanation_mr": "पहिल्या ७ ची स्थानिक किंमत ७०,००,००० व दुसऱ्या ७ ची ७,००० आहे. फरक = ६९,९३,०००.",
+      "hint_en": "Subtract 7,000 from 70,00,000.",
+      "hint_mr": "दोन्ही ७ ची स्थाने ओळखून वजाबाकी करा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "place-value"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "69,93,000",
+          "text_mr": "६९,९३,०००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "69,30,000",
+          "text_mr": "६९,३०,०००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "70,07,000",
+          "text_mr": "७०,०७,०००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "69,99,300",
+          "text_mr": "६९,९९,३००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 28,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Using the digits 3, 0, 8, 5, 2, 9 only once each, what is the largest 6-digit odd number that can be formed?",
+      "text_mr": "३, ०, ८, ५, २, ९ हे सर्व अंक प्रत्येकी एकदाच वापरून तयार होणारी सर्वात मोठी ६-अंकी विषम संख्या कोणती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Placing 3 at the units place and remaining digits in descending order gives 9,85,203.",
+      "explanation_mr": "एकक स्थानी ३ ठेवून इतर अंक उतरत्या क्रमाने मांडल्यास ९,८५,२०३ ही संख्या मिळते.",
+      "hint_en": "Keep the smallest odd digit at the units place.",
+      "hint_mr": "एकक स्थानी लहान विषम अंक ठेवा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "largest-smallest-numbers"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "9,85,320",
+          "text_mr": "९,८५,३२०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "9,85,203",
+          "text_mr": "९,८५,२०३",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "9,85,023",
+          "text_mr": "९,८५,०२३",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "9,83,502",
+          "text_mr": "९,८३,५०२",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 29,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Which two numbers from the following are prime numbers between 70 and 90? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणत्या दोन संख्या ७० ते ९० दरम्यानच्या मूळ संख्या आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        4
+      ],
+      "explanation_en": "73 and 83 are prime numbers. 77 is divisible by 7 and 11, and 87 is divisible by 3.",
+      "explanation_mr": "७३ आणि ८३ या मूळ संख्या आहेत. ७७ ला ७ ने आणि ८७ ला ३ ने भाग जातो.",
+      "hint_en": "Check divisibility for 3, 7, and 11.",
+      "hint_mr": "३, ७ आणि ११ च्या विभाज्यतेच्या कसोट्या तपासा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "prime-numbers",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "77",
+          "text_mr": "७७",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "73",
+          "text_mr": "७३",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "87",
+          "text_mr": "८७",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "83",
+          "text_mr": "८३",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 30,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "In the International Number System, a factory produced 'Forty-five million six hundred thousand' LED bulbs. How is this written in the Indian Number System?",
+      "text_mr": "आंतरराष्ट्रीय संख्यालेखन पद्धतीनुसार एका कारखान्याने '४५ मिलियन ६०० थाउजंड' दिवे तयार केले. ही संख्या भारतीय संख्यालेखन पद्धतीत कशी लिहाल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "45,600,000 in Indian notation is 4,56,00,000, which is '4 Crore 56 Lakh'.",
+      "explanation_mr": "४५,६००,००० म्हणजे भारतीय पद्धतीत ४,५६,००,००० (४ कोटी ५६ लाख) होय.",
+      "hint_en": "10 million = 1 crore, so 45 million = 4.5 crore.",
+      "hint_mr": "१० दशलक्ष = १ कोटी हे सूत्र वापरा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "international-system"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "45 Crore 60 Lakh",
+          "text_mr": "४५ कोटी ६० लाख",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4 Crore 56 Lakh",
+          "text_mr": "४ कोटी ५६ लाख",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "45 Lakh 60 Thousand",
+          "text_mr": "४५ लाख ६० हजार",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4 Crore 5 Lakh 60 Thousand",
+          "text_mr": "४ कोटी ५ लाख ६० हजार",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 31,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Which of the following pairs is a pair of twin prime numbers?",
+      "text_mr": "खालीलपैकी कोणती जोडमूळ संख्यांची (Twin Primes) जोडी आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "(41, 43) are two prime numbers having a difference of 2, so they are twin primes.",
+      "explanation_mr": "४१ आणि ४३ या दोन्ही मूळ संख्या असून त्यांतील फरक २ चा आहे, म्हणून ती जोडमूळ संख्यांची जोडी आहे.",
+      "hint_en": "Twin prime numbers are two primes with a difference of exactly 2.",
+      "hint_mr": "ज्या दोन मूळ संख्यांमध्ये २ चा फरक असतो त्या जोडमूळ संख्या असतात.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "twin-primes"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "(41, 43)",
+          "text_mr": "(४१, ४३)",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "(51, 53)",
+          "text_mr": "(५१, ५३)",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "(31, 37)",
+          "text_mr": "(३१, ३७)",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "(67, 71)",
+          "text_mr": "(६७, ७१)",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 32,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Subtract: 8,54,320 - 3,78,564 = ?",
+      "text_mr": "८,५४,३२० - ३,७८,५६४ = किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "8,54,320 - 3,78,564 = 4,75,756.",
+      "explanation_mr": "८,५४,३२० मधून ३,७८,५६४ वजा केल्यास ४,७५,७५६ मिळतात.",
+      "hint_en": "Perform standard subtraction column by column with borrowing.",
+      "hint_mr": "हातच्याची वजाबाकी काळजीपूर्वक करा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "subtraction"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4,75,756",
+          "text_mr": "४,७५,७५६",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4,76,756",
+          "text_mr": "४,७६,७५६",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "5,75,756",
+          "text_mr": "५,७५,७५६",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4,75,856",
+          "text_mr": "४,७५,८५६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 33,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Multiply: 2,456 × 320 = ?",
+      "text_mr": "२,४५६ × ३२० = किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "2,456 × 320 = 7,85,920.",
+      "explanation_mr": "२,४५६ × ३२० चा गुणाकार ७,८५,९२० येतो.",
+      "hint_en": "Multiply 2456 by 32 and append 0.",
+      "hint_mr": "२४५६ ला ३२ ने गुणून शेवटी ० लावा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "multiplication"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "7,85,920",
+          "text_mr": "७,८५,९२०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "7,86,920",
+          "text_mr": "७,८६,९२०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "7,75,920",
+          "text_mr": "७,७५,९२०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "6,85,920",
+          "text_mr": "६,८५,९२०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 34,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "In a division problem, the divisor is 45, the quotient is 128, and the remainder is 17. What is the dividend?",
+      "text_mr": "एका भागाकारात भाजक ४५, भागाकार १२८ आणि बाकी १७ आहे, तर भाज्य संख्या कोणती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Dividend = (Divisor × Quotient) + Remainder = (45 × 128) + 17 = 5,760 + 17 = 5,777.",
+      "explanation_mr": "भाज्य = (भाजक × भागाकार) + बाकी = (४५ × १२८) + १७ = ५,७६० + १७ = ५,७७७.",
+      "hint_en": "Formula: Dividend = (Divisor × Quotient) + Remainder.",
+      "hint_mr": "सूत्र: भाज्य = (भाजक × भागाकार) + बाकी.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "division-rule"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "5,760",
+          "text_mr": "५,७६०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "5,777",
+          "text_mr": "५,७७७",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "5,787",
+          "text_mr": "५,७८७",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "5,800",
+          "text_mr": "५,८००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 35,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Simplify the expression: 64 ÷ 8 × 5 + (35 - 15) ÷ 4 = ?",
+      "text_mr": "पदावली सोडवा: ६४ ÷ ८ × ५ + (३५ - १५) ÷ ४ = किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Follow BODMAS: (35-15) = 20. Then 64 ÷ 8 = 8. 8 × 5 = 40. 20 ÷ 4 = 5. Finally, 40 + 5 = 45.",
+      "explanation_mr": "कंस सोडवा: (३५-१५)=२०. भागाकार व गुणाकार: ६४÷८=८, ८×५=४०, २०÷४=५. बेरीज: ४०+५=४५.",
+      "hint_en": "Perform Bracket -> Division -> Multiplication -> Addition.",
+      "hint_mr": "कंचेभागुबेव या क्रमाने पदावली सोडवा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "bodmas"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "45",
+          "text_mr": "४५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "25",
+          "text_mr": "२५",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "50",
+          "text_mr": "५०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "35",
+          "text_mr": "३५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 36,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "A school purchased 25 desks at ₹1,850 each and 50 chairs at ₹650 each. What was the total expenditure incurred by the school?",
+      "text_mr": "एका शाळेने प्रत्येकी ₹१,८५० प्रमाणे २५ बाकडी आणि प्रत्येकी ₹६५० प्रमाणे ५० खुर्च्या खरेदी केल्या. तर शाळेचा एकूण खर्च किती झाला?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Cost of desks = 25 × 1,850 = ₹46,250. Cost of chairs = 50 × 650 = ₹32,500. Total = 46,250 + 32,500 = ₹78,750.",
+      "explanation_mr": "बाकड्यांचा खर्च = २५ × १,८५० = ₹४६,२५०. खुर्च्यांचा खर्च = ५० × ६५० = ₹३२,५००. एकूण = ₹७८,७५०.",
+      "hint_en": "Calculate cost of desks and chairs separately and add them.",
+      "hint_mr": "दोन्ही वस्तूंचा स्वतंत्र खर्च काढून त्यांची बेरीज करा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "word-problems"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "₹78,750",
+          "text_mr": "₹७८,७५०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "₹76,500",
+          "text_mr": "₹७६,५००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "₹82,250",
+          "text_mr": "₹८२,२५०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "₹74,750",
+          "text_mr": "₹७४,७५०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 37,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "What is the Lowest Common Multiple (LCM) of the numbers 24, 36, and 60?",
+      "text_mr": "२४, ३६ आणि ६० या संख्यांचा लसावि (LCM) किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Prime factors: 24 = 2³ × 3, 36 = 2² × 3², 60 = 2² × 3 × 5. LCM = 2³ × 3² × 5 = 8 × 9 × 5 = 360.",
+      "explanation_mr": "२४, ३६ व ६० चे मूळ अवयव पाडून लसावि = २³ × ३² × ५ = ३६० मिळतो.",
+      "hint_en": "Find prime factors and take highest powers of all prime factors.",
+      "hint_mr": "मूळ अवयव पाडून लसावि काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "lcm-hcf"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "180",
+          "text_mr": "१८०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "360",
+          "text_mr": "३६०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "720",
+          "text_mr": "७२०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "120",
+          "text_mr": "१२०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 38,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Which two of the following numbers are completely divisible by both 4 and 9? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणत्या दोन संख्यांना ४ आणि ९ या दोन्ही संख्यांनी पूर्ण भाग जातो? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        4
+      ],
+      "explanation_en": "A number divisible by both 4 and 9 must be divisible by 36. 252 (252÷36=7) and 576 (576÷36=16) are both divisible by 36.",
+      "explanation_mr": "४ व ९ ने भाग जाण्यासाठी संख्या ३६ ने विभाज्य असावी लागते. २५२ आणि ५७६ या दोन्ही संख्यांना ४ व ९ ने पूर्ण भाग जातो.",
+      "hint_en": "Check if last 2 digits are divisible by 4 and sum of digits is divisible by 9.",
+      "hint_mr": "४ आणि ९ च्या विभाज्यतेच्या कसोट्या लावा.",
+      "difficulty": "hard",
+      "tags": [
+        "number-system",
+        "divisibility",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "252",
+          "text_mr": "२५२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "342",
+          "text_mr": "३४२",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "414",
+          "text_mr": "४१४",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "576",
+          "text_mr": "५७६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 39,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "What is the value of 4,78,648 rounded off to the nearest thousand?",
+      "text_mr": "४,७८,६४८ या संख्येचे नजीकच्या हजारापर्यंतचे सन्निकट मूल्य (Rounding off) किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "The hundreds digit is 6 (which is ≥ 5), so 4,78,648 rounds up to 4,79,000.",
+      "explanation_mr": "शतक स्थानी ६ (५ किंवा त्याहून मोठा) असल्याने संख्या ४,७९,००० अशी सन्निकट होते.",
+      "hint_en": "Check the hundreds place digit: if 5 or more, round up.",
+      "hint_mr": "शतक स्थानचा अंक ५ किंवा अधिक असेल तर पुढील हजार घ्या.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "rounding-off"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4,78,000",
+          "text_mr": "४,७८,०००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4,79,000",
+          "text_mr": "४,७९,०००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "4,80,000",
+          "text_mr": "४,८०,०००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4,78,600",
+          "text_mr": "४,७८,६००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 40,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "The sum of three consecutive natural numbers is 204. What is the product of the smallest and largest of these three numbers?",
+      "text_mr": "तीन क्रमवार नैसर्गिक संख्यांची बेरीज २०४ आहे. तर त्यांपैकी सर्वात लहान व सर्वात मोठ्या संख्येचा गुणाकार किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Middle number = 204 ÷ 3 = 68. The three numbers are 67, 68, 69. Product of smallest and largest = 67 × 69 = 4,623.",
+      "explanation_mr": "मधली संख्या = २०४ ÷ ३ = ६८. संख्या: ६७, ६८, ६९. गुणाकार = ६७ × ६९ = ४,६२३.",
+      "hint_en": "Divide the sum by 3 to find the middle number.",
+      "hint_mr": "बेरजेला ३ ने भागून मधली संख्या शोधा.",
+      "difficulty": "medium",
+      "tags": [
+        "number-system",
+        "consecutive-numbers"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4,623",
+          "text_mr": "४,६२३",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4,556",
+          "text_mr": "४,५५६",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "4,692",
+          "text_mr": "४,६९२",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4,489",
+          "text_mr": "४,४८९",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 41,
+      "section": "Mathematics",
+      "topic": "Number System",
+      "question_type": "bilingual",
+      "text_en": "Which of the following mathematical statements is ALWAYS TRUE?",
+      "text_mr": "खालीलपैकी कोणते गणितीय विधान नेहमी सत्य आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "The product of two odd numbers is always an odd number (e.g. 3 × 5 = 15).",
+      "explanation_mr": "दोन विषम संख्यांचा गुणाकार नेहमी विषम संख्याच असतो (उदा. ३ × ५ = १५).",
+      "hint_en": "Test simple small numbers for each option.",
+      "hint_mr": "लहान संख्यांचे उदाहरण घेऊन तपासा.",
+      "difficulty": "easy",
+      "tags": [
+        "number-system",
+        "properties"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "The product of two odd numbers is always odd",
+          "text_mr": "दोन विषम संख्यांचा गुणाकार नेहमी विषम संख्या असतो",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "The sum of two odd numbers is always odd",
+          "text_mr": "दोन विषम संख्यांची बेरीज नेहमी विषम संख्या असते",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "The difference of two even numbers is always odd",
+          "text_mr": "दोन सम संख्यांची वजाबाकी नेहमी विषम संख्या असते",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "All prime numbers are odd numbers",
+          "text_mr": "सर्व मूळ संख्या विषम संख्या असतात",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 42,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Which of the following is an improper fraction (अंशाधिक अपूर्णांक)?",
+      "text_mr": "खालीलपैकी कोणता अंशाधिक अपूर्णांक (Improper Fraction) आहे?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "In an improper fraction, the numerator is greater than or equal to the denominator. 11/7 is improper.",
+      "explanation_mr": "ज्या अपूर्णांकाचा अंश छेदापेक्षा मोठा असतो त्याला अंशाधिक अपूर्णांक म्हणतात (११/७).",
+      "hint_en": "Look for numerator > denominator.",
+      "hint_mr": "अंश छेदापेक्षा मोठा असणारा अपूर्णांक पहा.",
+      "difficulty": "easy",
+      "tags": [
+        "fractions",
+        "classification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "5/9",
+          "text_mr": "५/९",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "11/7",
+          "text_mr": "११/७",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "3/8",
+          "text_mr": "३/८",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "2/5",
+          "text_mr": "२/५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 43,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Reduce the fraction 48/72 to its simplest / lowest irreducible form.",
+      "text_mr": "४८/७२ या अपूर्णांकाचे संक्षिप्त / अतिसंक्षिप्त रूप कोणते?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "Dividing numerator and denominator by their HCF 24: (48÷24) / (72÷24) = 2/3.",
+      "explanation_mr": "अंश व छेदाला २४ ने भागल्यास २/३ हे संक्षिप्त रूप मिळते.",
+      "hint_en": "Divide both numbers by 24.",
+      "hint_mr": "मसाविने अंश व छेदाला भागा.",
+      "difficulty": "easy",
+      "tags": [
+        "fractions",
+        "simplification"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4/6",
+          "text_mr": "४/६",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "3/4",
+          "text_mr": "३/४",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "2/3",
+          "text_mr": "२/३",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "6/9",
+          "text_mr": "६/९",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 44,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Solve the mixed fraction expression: 3 ½ + 2 ¼ - 1 ⅜ = ?",
+      "text_mr": "पूर्णांकयुक्त अपूर्णांक पदावली सोडवा: ३ ½ + २ ¼ - १ ⅜ = किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Converting to improper: 7/2 + 9/4 - 11/8 = (28 + 18 - 11) / 8 = 35/8 = 4 ⅜.",
+      "explanation_mr": "अपूर्णांकात रूपांतर: ७/२ + ९/४ - ११/८ = (२८ + १८ - ११)/८ = ३५/८ = ४ ⅜.",
+      "hint_en": "Find the common denominator 8 first.",
+      "hint_mr": "समान छेद ८ करून क्रिया करा.",
+      "difficulty": "easy",
+      "tags": [
+        "fractions",
+        "mixed-fractions"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4 ⅛",
+          "text_mr": "४ ⅛",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4 ⅜",
+          "text_mr": "४ ⅜",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "3 ⅞",
+          "text_mr": "३ ⅞",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "5 ¼",
+          "text_mr": "५ ¼",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 45,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Out of 720 students studying in a primary school, ⅝ of the students are boys. How many girls are there in the school?",
+      "text_mr": "एका प्राथमिक शाळेतील ७२० विद्यार्थ्यांपैकी ⅝ मुले आहेत, तर शाळेत मुलींची संख्या किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Fraction of girls = 1 - 5/8 = 3/8. Number of girls = 720 × (3/8) = 90 × 3 = 270 girls.",
+      "explanation_mr": "मुलींचा भाग = १ - ⅝ = ⅜. मुलींची संख्या = ७२० × (⅜) = २७०.",
+      "hint_en": "Find 3/8 of 720.",
+      "hint_mr": "७२० च्या ⅜ भाग काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "fractions",
+        "word-problems"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "450",
+          "text_mr": "४५०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "270",
+          "text_mr": "२७०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "320",
+          "text_mr": "३२०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "240",
+          "text_mr": "२४०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 46,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Which of the following shows the fractions ¾, ⅚, 7/12, ⅔ arranged in descending order?",
+      "text_mr": "¾, ⅚, ७/१२, ⅔ हे अपूर्णांक उतरत्या क्रमाने मांडल्यास कोणता पर्याय योग्य ठरेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Converting to common denominator 12: 5/6 (10/12) > 3/4 (9/12) > 2/3 (8/12) > 7/12.",
+      "explanation_mr": "समान छेद १२ केल्यास: ⅚ (१०/१२) > ¾ (९/१२) > ⅔ (८/१२) > ७/१२ असा उतरता क्रम येतो.",
+      "hint_en": "Convert all denominators to LCM 12.",
+      "hint_mr": "सर्व अपूर्णांकांचा छेद १२ करा.",
+      "difficulty": "hard",
+      "tags": [
+        "fractions",
+        "ordering"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "⅚, ¾, ⅔, 7/12",
+          "text_mr": "⅚, ¾, ⅔, ७/१२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "¾, ⅚, 7/12, ⅔",
+          "text_mr": "¾, ⅚, ७/१२, ⅔",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "7/12, ⅔, ¾, ⅚",
+          "text_mr": "७/१२, ⅔, ¾, ⅚",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "⅚, ⅔, ¾, 7/12",
+          "text_mr": "⅚, ⅔, ¾, ७/१२",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 47,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "Which two options are equivalent to the decimal number 0.75? (Choose two correct options)",
+      "text_mr": "०.७५ या दशांश अपूर्णांकाशी समान असणारे कोणते दोन पर्याय आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        3
+      ],
+      "explanation_en": "0.75 = 75/100 and reducing gives 3/4.",
+      "explanation_mr": "०.७५ म्हणजे ७५/१०० किंवा संक्षिप्त रूपात ३/४ होय.",
+      "hint_en": "Convert 0.75 into a vulgar fraction.",
+      "hint_mr": "०.७५ ला व्यवहारी अपूर्णांकात बदला.",
+      "difficulty": "medium",
+      "tags": [
+        "fractions",
+        "decimals",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "7/5",
+          "text_mr": "७/५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "¾",
+          "text_mr": "¾",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "75/100",
+          "text_mr": "७५/१००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "½",
+          "text_mr": "½",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 48,
+      "section": "Mathematics",
+      "topic": "Fractions",
+      "question_type": "bilingual",
+      "text_en": "A tailor had a roll of cloth measuring 28.5 metres. He stitched 6 shirts, using 2.35 metres of cloth for each shirt. How much cloth is left with him?",
+      "text_mr": "एका शिंप्याकडे २८.५ मीटर कापड होते. त्याने प्रत्येकी २.३५ मीटर कापड वापरून ६ शर्ट शिवले. तर त्याच्याकडे किती मीटर कापड शिल्लक राहिले?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Cloth used = 6 × 2.35 = 14.10 metres. Cloth left = 28.50 - 14.10 = 14.40 metres.",
+      "explanation_mr": "वापरलेले कापड = ६ × २.३५ = १४.१० मीटर. शिल्लक कापड = २८.५० - १४.१० = १४.४० मीटर.",
+      "hint_en": "Multiply 6 by 2.35 and subtract from 28.5.",
+      "hint_mr": "एकूण वापरातून शिल्लक काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "fractions",
+        "decimals-word-problems"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "14.4 m",
+          "text_mr": "१४.४ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "14.1 m",
+          "text_mr": "१४.१ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "12.4 m",
+          "text_mr": "१२.४ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "15.2 m",
+          "text_mr": "१५.२ मीटर",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 49,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "bilingual",
+      "text_en": "Convert 7 kilometres 85 metres into metres.",
+      "text_mr": "७ किलोमीटर ८५ मीटरचे मीटरमध्ये रूपांतर किती होईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "1 km = 1,000 m. So 7 km 85 m = 7,000 + 85 = 7,085 metres.",
+      "explanation_mr": "१ किमी = १००० मी. म्हणून ७ किमी ८५ मी = ७००० + ८५ = ७,०८५ मीटर.",
+      "hint_en": "1 km = 1000 m.",
+      "hint_mr": "१ किमी = १००० मीटर हे सूत्र वापरा.",
+      "difficulty": "easy",
+      "tags": [
+        "weights-and-measures",
+        "length-conversion"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "7,850 m",
+          "text_mr": "७,८५० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "7,085 m",
+          "text_mr": "७,०८५ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "785 m",
+          "text_mr": "७८५ मीटर",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "70,085 m",
+          "text_mr": "७०,०८५ मीटर",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 50,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "bilingual",
+      "text_en": "How many millilitres are there in 4 ¾ litres?",
+      "text_mr": "४ ¾ लिटर म्हणजे किती मिलिलिटर?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "4 ¾ L = 4.75 L = 4.75 × 1,000 = 4,750 mL.",
+      "explanation_mr": "४ ¾ लिटर = ४.७५ लिटर = ४,७५० मिलिलिटर.",
+      "hint_en": "1 litre = 1000 ml and ¾ litre = 750 ml.",
+      "hint_mr": "१ लिटर = १००० मिली व पाऊण लिटर = ७५० मिली.",
+      "difficulty": "easy",
+      "tags": [
+        "weights-and-measures",
+        "capacity"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "4,250 mL",
+          "text_mr": "४,२५० मिली",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "4,500 mL",
+          "text_mr": "४,५०० मिली",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "4,750 mL",
+          "text_mr": "४,७५० मिली",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4,075 mL",
+          "text_mr": "४,०७५ मिली",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 51,
+      "section": "Mathematics",
+      "topic": "Calendar and Clock",
+      "question_type": "bilingual",
+      "text_en": "If Maharashtra Day (1st May) was on Friday in a leap year, on which day of the week was Independence Day (15th August) in the same year?",
+      "text_mr": "एका लीप वर्षात महाराष्ट्र दिन (१ मे) शुक्रवारी आला असल्यास, त्याच वर्षी स्वातंत्र्य दिन (१५ ऑगस्ट) कोणत्या वारी येईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Days: May (30 left) + June (30) + July (31) + August (15) = 106 days. 106 ÷ 7 = 15 weeks + 1 odd day. Friday + 1 = Saturday.",
+      "explanation_mr": "दिवस: मे (३०) + जून (३०) + जुलै (३१) + ऑगस्ट (१५) = १०६ दिवस. १०६ ÷ ७ बाकी १. शुक्रवार + १ = शनिवार.",
+      "hint_en": "Count total days between May 1 and August 15 and find the remainder divided by 7.",
+      "hint_mr": "एकूण दिवसांना ७ ने भागून जास्तीचे दिवस काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "calendar-and-clock",
+        "calendar-reasoning"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Friday",
+          "text_mr": "शुक्रवार",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Saturday",
+          "text_mr": "शनिवार",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Sunday",
+          "text_mr": "रविवार",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Thursday",
+          "text_mr": "गुरुवार",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 52,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "bilingual",
+      "text_en": "How many 25-paise coins make ₹175?",
+      "text_mr": "२५ पैशांची किती नाणी मिळून ₹१७५ होतील?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "₹1 = 4 coins of 25 paise. So ₹175 = 175 × 4 = 700 coins.",
+      "explanation_mr": "₹१ मध्ये २५ पैशांची ४ नाणी असतात. म्हणून १७५ × ४ = ७०० नाणी.",
+      "hint_en": "Multiply the rupee amount by 4.",
+      "hint_mr": "रुपयांना ४ ने गुणा.",
+      "difficulty": "medium",
+      "tags": [
+        "weights-and-measures",
+        "currency"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "350",
+          "text_mr": "३५०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "700",
+          "text_mr": "७००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "500",
+          "text_mr": "५००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "875",
+          "text_mr": "८७५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 53,
+      "section": "Mathematics",
+      "topic": "Time and Distance",
+      "question_type": "bilingual",
+      "text_en": "A state transport bus travels at a uniform speed of 48 km/hr. How much distance will it cover in 3 hours and 30 minutes?",
+      "text_mr": "एक एसटी बस ताशी ४८ किमी या समान वेगाने धावते. तर ती बस ३ तास ३० मिनिटांत किती अंतर पार करेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Time = 3.5 hours. Distance = Speed × Time = 48 × 3.5 = 168 km.",
+      "explanation_mr": "वेळ = ३.५ तास. अंतर = वेग × वेळ = ४८ × ३.५ = १६८ किमी.",
+      "hint_en": "Distance = Speed × Time.",
+      "hint_mr": "अंतर = वेग × वेळ हे सूत्र वापरा.",
+      "difficulty": "medium",
+      "tags": [
+        "time-and-distance",
+        "speed-formula"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "144 km",
+          "text_mr": "१४४ किमी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "168 km",
+          "text_mr": "१६८ किमी",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "192 km",
+          "text_mr": "१९२ किमी",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "156 km",
+          "text_mr": "१५६ किमी",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 54,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "A rectangular playground is 60 metres long and 40 metres wide. A wire fence is to be put around it with 4 rounds of wire. What is the total length of wire required?",
+      "text_mr": "एका आयताकृती क्रीडांगणाची लांबी ६० मीटर व रुंदी ४० मीटर आहे. त्याभोवती ४ पदरी तारेचे कुंपण घालण्यासाठी एकूण किती लांबीची तार लागेल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "Perimeter = 2 × (60 + 40) = 200 m. Wire required for 4 rounds = 4 × 200 = 800 metres.",
+      "explanation_mr": "आयताची परिमिती = २ × (६० + ४०) = २०० मीटर. ४ फेऱ्यांसाठी आवश्यक तार = ४ × २०० = ८०० मीटर.",
+      "hint_en": "Perimeter = 2 × (Length + Breadth), then multiply by 4.",
+      "hint_mr": "परिमिती काढून तिला ४ ने गुणा.",
+      "difficulty": "hard",
+      "tags": [
+        "geometry",
+        "perimeter"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "400 m",
+          "text_mr": "४०० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "600 m",
+          "text_mr": "६०० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "800 m",
+          "text_mr": "८०० मीटर",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "1,000 m",
+          "text_mr": "१००० मीटर",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 55,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "The side of a square assembly hall is 16 metres. Square tiles of side 40 cm are to be paved on the floor. How many such tiles are required?",
+      "text_mr": "एका चौरसाकृती सभागृहाची बाजू १६ मीटर आहे. त्या सभागृहाच्या जमिनीवर बसवण्यासाठी ४० सेमी बाजू असलेल्या किती चौरसाकृती फरश्या लागतील?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Hall area = 1600 cm × 1600 cm = 25,60,000 sq cm. Tile area = 40 × 40 = 1600 sq cm. Tiles = 25,60,000 ÷ 1600 = 1,600 tiles.",
+      "explanation_mr": "सभागृहाचे क्षेत्रफळ = १६०० × १६०० = २५,६०,००० चौ सेमी. फरशीचे क्षेत्रफळ = ४० × ४० = १६०० चौ सेमी. फरश्या = २५,६०,००० ÷ १६०० = १,६००.",
+      "hint_en": "Convert 16 m to 1600 cm before calculating area.",
+      "hint_mr": "मीटरचे सेंटीमीटरमध्ये रूपांतर करून क्षेत्रफळ काढा.",
+      "difficulty": "hard",
+      "tags": [
+        "geometry",
+        "area-tiles"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "1,600",
+          "text_mr": "१,६००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "800",
+          "text_mr": "८००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "3,200",
+          "text_mr": "३,२००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "400",
+          "text_mr": "४००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 56,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "bilingual",
+      "text_en": "Which two of the following values are equal to 3.5 metric tonnes? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणती दोन मूल्ये ३.५ मेट्रिक टन या वजनाएवढी आहेत? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "1 metric tonne = 1,000 kg = 10 quintals. So 3.5 tonnes = 3,500 kg and 35 quintals.",
+      "explanation_mr": "१ मेट्रिक टन = १००० किलो = १० क्विंटल. म्हणून ३.५ टन = ३,५०० किलो व ३५ क्विंटल.",
+      "hint_en": "1 metric tonne = 1000 kg and 1 quintal = 100 kg.",
+      "hint_mr": "१ टन = १००० किलो आणि १ क्विंटल = १०० किलो.",
+      "difficulty": "hard",
+      "tags": [
+        "weights-and-measures",
+        "mass-units",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "3,500 kg",
+          "text_mr": "३,५०० किग्रॅ",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "350 kg",
+          "text_mr": "३५० किग्रॅ",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "35 quintals",
+          "text_mr": "३५ क्विंटल",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "35,000 grams",
+          "text_mr": "३५,००० ग्रॅम",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 57,
+      "section": "Mathematics",
+      "topic": "Calendar and Clock",
+      "question_type": "bilingual",
+      "text_en": "An express train leaves Mumbai at 08:20 hours and reaches Nagpur at 22:05 hours on the same day. What is the total travel duration of the journey?",
+      "text_mr": "एक जलद गाडी मुंबईहून सकाळी ०८:२० वाजता सुटते आणि त्याच दिवशी रात्री २२:०५ वाजता नागपूरला पोहोचते. तर प्रवासाचा एकूण वेळ किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "From 08:20 to 22:05: 22:05 - 08:20 = (21:65 - 08:20) = 13 hours 45 minutes.",
+      "explanation_mr": "२२:०५ मधून ०८:२० वजा करण्यासाठी २१ तास ६५ मिनिटे - ०८:२० = १३ तास ४५ मिनिटे.",
+      "hint_en": "Borrow 1 hour as 60 minutes.",
+      "hint_mr": "१ तासाचे ६० मिनिटे उसणे घ्या.",
+      "difficulty": "medium",
+      "tags": [
+        "calendar-and-clock",
+        "24-hour-clock"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "13 hours 45 minutes",
+          "text_mr": "१३ तास ४५ मिनिटे",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "14 hours 25 minutes",
+          "text_mr": "१४ तास २५ मिनिटे",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "13 hours 15 minutes",
+          "text_mr": "१३ तास १५ मिनिटे",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "14 hours 45 minutes",
+          "text_mr": "१४ तास ४५ मिनिटे",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 58,
+      "section": "Mathematics",
+      "topic": "Weights and Measures",
+      "question_type": "bilingual",
+      "text_en": "In a stationery store, pencils are packed in boxes. How many total pencils are there in 3 gross and 5 dozen pencils?",
+      "text_mr": "एका दुकानात ३ ग्रॉस आणि ५ डझन पेन्सिली आहेत, तर एकूण पेन्सिलींची संख्या किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "1 gross = 144 pencils, 1 dozen = 12 pencils. Total = (3 × 144) + (5 × 12) = 432 + 60 = 492 pencils.",
+      "explanation_mr": "१ ग्रॉस = १४४, १ डझन = १२. एकूण = (३ × १४४) + (५ × १२) = ४३२ + ६० = ४९२ पेन्सिली.",
+      "hint_en": "1 gross = 12 dozen = 144 items.",
+      "hint_mr": "१ ग्रॉस = १४४ नग आणि १ डझन = १२ नग.",
+      "difficulty": "easy",
+      "tags": [
+        "weights-and-measures",
+        "gross-dozen"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "492",
+          "text_mr": "४९२",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "420",
+          "text_mr": "४२०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "512",
+          "text_mr": "५१२",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "468",
+          "text_mr": "४६८",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 59,
+      "section": "Mathematics",
+      "topic": "Percentages",
+      "question_type": "bilingual",
+      "text_en": "What is 45% of ₹1,600?",
+      "text_mr": "₹१,६०० चे ४५% किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "45% of 1,600 = (45/100) × 1,600 = 45 × 16 = ₹720.",
+      "explanation_mr": "१,६०० × (४५/१००) = १६ × ४५ = ₹७२०.",
+      "hint_en": "Multiply 16 by 45.",
+      "hint_mr": "१६ ला ४५ ने गुणा.",
+      "difficulty": "easy",
+      "tags": [
+        "percentages",
+        "percentage-calculation"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "₹680",
+          "text_mr": "₹६८०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "₹720",
+          "text_mr": "₹७२०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "₹740",
+          "text_mr": "₹७४०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "₹760",
+          "text_mr": "₹७६०",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 60,
+      "section": "Mathematics",
+      "topic": "Profit and Loss",
+      "question_type": "bilingual",
+      "text_en": "A merchant bought a sack of wheat for ₹2,400 and sold it for ₹2,850. How much profit did he make?",
+      "text_mr": "एका व्यापाऱ्याने गव्हाचे एक पोते ₹२,४०० ला खरेदी करून ₹२,८५० ला विकले. तर त्याला किती नफा झाला?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Profit = Selling Price - Cost Price = 2,850 - 2,400 = ₹450.",
+      "explanation_mr": "नफा = विक्री किंमत - खरेदी किंमत = २,८५० - २,४०० = ₹४५०.",
+      "hint_en": "Profit = SP - CP.",
+      "hint_mr": "नफा = विक्री - खरेदी.",
+      "difficulty": "easy",
+      "tags": [
+        "profit-and-loss",
+        "basic-profit"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "₹450",
+          "text_mr": "₹४५०",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "₹350",
+          "text_mr": "₹३५०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "₹550",
+          "text_mr": "₹५५०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "₹400",
+          "text_mr": "४००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 61,
+      "section": "Mathematics",
+      "topic": "Profit and Loss",
+      "question_type": "bilingual",
+      "text_en": "Suresh purchased a study table for ₹1,500, spent ₹100 on transportation, and then sold it for ₹1,920. What was his profit percentage?",
+      "text_mr": "सुरेशने एक अभ्यास टेबल ₹१,५०० ला विकत घेतले, वाहतुकीसाठी ₹१०० खर्च केले आणि नंतर ते ₹१,९२० ला विकले. तर त्याला शेकडा किती नफा झाला?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Total Cost Price = 1,500 + 100 = ₹1,600. Profit = 1,920 - 1,600 = ₹320. Profit % = (320 / 1,600) × 100 = 20%.",
+      "explanation_mr": "एकूण खरेदी = १५०० + १०० = ₹१,६००. नफा = १९२० - १६०० = ₹३२०. शेकडा नफा = (३२०/१६००) × १०० = २०%.",
+      "hint_en": "Add transportation to cost price before finding profit percentage.",
+      "hint_mr": "वाहतूक खर्च खरेदी किमतीत मिळवून एकूण खरेदी काढा.",
+      "difficulty": "medium",
+      "tags": [
+        "profit-and-loss",
+        "profit-percentage"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "15%",
+          "text_mr": "१५%",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "20%",
+          "text_mr": "२०%",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "25%",
+          "text_mr": "२५%",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "18%",
+          "text_mr": "१८%",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 62,
+      "section": "Mathematics",
+      "topic": "Simple Interest",
+      "question_type": "bilingual",
+      "text_en": "Find the simple interest on a principal sum of ₹15,000 deposited in a nationalised bank at 9% per annum for 4 years.",
+      "text_mr": "एका राष्ट्रीयीकृत बँकेत द.सा.द.शे. ९ दराने ₹१५,००० मुद्दलाचे ४ वर्षांचे सरळव्याज किती होईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Simple Interest = (P × R × N) / 100 = (15,000 × 9 × 4) / 100 = 150 × 36 = ₹5,400.",
+      "explanation_mr": "सरळव्याज = (म × द × क) / १०० = (१५,००० × ९ × ४) / १०० = ₹५,४००.",
+      "hint_en": "Formula: I = (P × R × N) / 100.",
+      "hint_mr": "व्याज = (म × द × क) / १०० हे सूत्र वापरा.",
+      "difficulty": "hard",
+      "tags": [
+        "simple-interest",
+        "interest-calculation"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "₹4,500",
+          "text_mr": "₹४,५००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "₹5,400",
+          "text_mr": "₹५,४००",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "₹6,000",
+          "text_mr": "₹६,०००",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "₹5,200",
+          "text_mr": "₹५,२००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 63,
+      "section": "Mathematics",
+      "topic": "Simple Interest",
+      "question_type": "bilingual",
+      "text_en": "A farmer borrowed a sum of ₹12,000 from a rural co-operative bank. After 3 years, he returned a total amount of ₹15,600. What was the rate of simple interest per annum?",
+      "text_mr": "एका शेतकऱ्याने ग्रामीण विकास बँकेतून ₹१२,००० कर्ज घेतले. ३ वर्षांनंतर त्याने ₹१५,६०० रास परत केली, तर व्याजाचा दर (द.सा.द.शे.) किती होता?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Interest = Amount - Principal = 15,600 - 12,000 = ₹3,600. Rate = (I × 100) / (P × N) = (3,600 × 100) / (12,000 × 3) = 3,60,000 / 36,000 = 10%.",
+      "explanation_mr": "व्याज = १५,६०० - १२,००० = ₹३,६००. दर = (व्याज × १००) / (मुद्दल × मुदत) = (३६०० × १००) / (१२००० × ३) = १०%.",
+      "hint_en": "Find interest first by subtracting principal from amount.",
+      "hint_mr": "रास मधून मुद्दल वजा करून व्याज काढा.",
+      "difficulty": "hard",
+      "tags": [
+        "simple-interest",
+        "rate-of-interest"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "8%",
+          "text_mr": "८%",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "10%",
+          "text_mr": "१०%",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "12%",
+          "text_mr": "१२%",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "9%",
+          "text_mr": "९%",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 64,
+      "section": "Mathematics",
+      "topic": "Algebra",
+      "question_type": "bilingual",
+      "text_en": "If the cost of 15 geometry boxes is ₹1,125, what will be the cost of 24 such geometry boxes?",
+      "text_mr": "१५ कंपास पेट्यांची किंमत ₹१,१२५ असल्यास, अशा २४ कंपास पेट्यांची एकूण किंमत किती होईल?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Cost of 1 box = 1,125 ÷ 15 = ₹75. Cost of 24 boxes = 24 × 75 = ₹1,800.",
+      "explanation_mr": "१ कंपास पेटीची किंमत = १,१२५ ÷ १५ = ₹७५. २४ पेट्यांची किंमत = २४ × ७५ = ₹१,८००.",
+      "hint_en": "Use the Unitary Method: find the cost of 1 item first.",
+      "hint_mr": "एका वस्तूची किंमत काढून २४ ने गुणा.",
+      "difficulty": "medium",
+      "tags": [
+        "algebra",
+        "unitary-method"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "₹1,800",
+          "text_mr": "₹१,८००",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "₹1,650",
+          "text_mr": "₹१,६५०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "₹1,950",
+          "text_mr": "₹१,९५०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "₹1,725",
+          "text_mr": "₹१,७२५",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 65,
+      "section": "Mathematics",
+      "topic": "Profit and Loss",
+      "question_type": "bilingual",
+      "text_en": "Which two of the following conditions represent a financial LOSS in a transaction? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणत्या दोन अटी व्यवहारातील तोटा (Loss) दर्शवतात? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        2,
+        4
+      ],
+      "explanation_en": "Loss occurs when Cost Price > Selling Price, and Loss = Cost Price - Selling Price.",
+      "explanation_mr": "खरेदी किंमत विक्री किमतीपेक्षा जास्त असल्यास तोटा होतो आणि तोटा = खरेदी किंमत - विक्री किंमत.",
+      "hint_en": "Recall the definitions and formula for Loss.",
+      "hint_mr": "तोट्याची व्याख्या व सूत्र आठवा.",
+      "difficulty": "medium",
+      "tags": [
+        "profit-and-loss",
+        "loss-conditions",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Selling Price > Cost Price",
+          "text_mr": "विक्री किंमत > खरेदी किंमत",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Cost Price > Selling Price",
+          "text_mr": "खरेदी किंमत > विक्री किंमत",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Profit = Selling Price - Cost Price",
+          "text_mr": "नफा = विक्री किंमत - खरेदी किंमत",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Loss = Cost Price - Selling Price",
+          "text_mr": "तोटा = खरेदी किंमत - विक्री किंमत",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 66,
+      "section": "Mathematics",
+      "topic": "Percentages",
+      "question_type": "bilingual",
+      "text_en": "In a scholarship practice examination with a maximum of 800 marks, Meena scored 648 marks. What percentage of marks did she obtain?",
+      "text_mr": "८०० गुणांच्या एका शिष्यवृत्ती सराव परीक्षेत मीनाला ६४८ गुण मिळाले. तर तिला किती टक्के गुण मिळाले?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Percentage = (648 / 800) × 100 = 648 ÷ 8 = 81%.",
+      "explanation_mr": "टक्केवारी = (६४८ / ८००) × १०० = ६४८ ÷ ८ = ८१%.",
+      "hint_en": "Divide 648 by 8.",
+      "hint_mr": "६४८ ला ८ ने भागा.",
+      "difficulty": "hard",
+      "tags": [
+        "percentages",
+        "percentage-score"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "78%",
+          "text_mr": "७८%",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "81%",
+          "text_mr": "८१%",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "82.5%",
+          "text_mr": "८२.५%",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "80%",
+          "text_mr": "८०%",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 67,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "Which of the following angle measures represents an Obtuse Angle (विशालकोन)?",
+      "text_mr": "खालीलपैकी कोणते कोनाचे माप विशालकोन (Obtuse Angle) दर्शवते?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 3,
+      "explanation_en": "An obtuse angle is strictly greater than 90° and less than 180°. 125° is an obtuse angle.",
+      "explanation_mr": "९०° पेक्षा मोठा व १८०° पेक्षा लहान असणाऱ्या कोनाला विशालकोन म्हणतात (१२५°).",
+      "hint_en": "Angle measure strictly between 90° and 180°.",
+      "hint_mr": "९०° ते १८०° दरम्यानचा कोन.",
+      "difficulty": "easy",
+      "tags": [
+        "geometry",
+        "angles"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "75°",
+          "text_mr": "७५°",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "90°",
+          "text_mr": "९०°",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "125°",
+          "text_mr": "१२५°",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "180°",
+          "text_mr": "१८०°",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 68,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "In a circle, if the length of the diameter is 15.6 cm, what is the length of its radius?",
+      "text_mr": "एका वर्तुळाचा व्यास १५.६ सेमी असल्यास, त्या वर्तुळाच्या त्रिज्येची लांबी किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "Radius = Diameter ÷ 2 = 15.6 ÷ 2 = 7.8 cm.",
+      "explanation_mr": "त्रिज्या = व्यास ÷ २ = १५.६ ÷ २ = ७.८ सेमी.",
+      "hint_en": "Radius is half of diameter.",
+      "hint_mr": "त्रिज्या ही व्यासाच्या निम्मी असते.",
+      "difficulty": "easy",
+      "tags": [
+        "geometry",
+        "circle-radius"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "7.8 cm",
+          "text_mr": "७.८ सेमी",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "31.2 cm",
+          "text_mr": "३१.२ सेमी",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "8.2 cm",
+          "text_mr": "८.२ सेमी",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "7.3 cm",
+          "text_mr": "७.३ सेमी",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 69,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "How many faces, vertices, and edges does a standard solid rectangular cuboid (इष्टिकाचिती) have?",
+      "text_mr": "इष्टिकाचितीला (Cuboid) एकूण किती पृष्ठे, शिरोबिंदू व कडा असतात?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 1,
+      "explanation_en": "A cuboid has 6 rectangular faces, 8 vertices, and 12 straight edges.",
+      "explanation_mr": "इष्टिकाचितीला ६ पृष्ठे, ८ शिरोबिंदू आणि १२ कडा असतात.",
+      "hint_en": "Think of a standard brick or matchbox.",
+      "hint_mr": "विटेचा किंवा काडेपेटीचा आकार आठवा.",
+      "difficulty": "medium",
+      "tags": [
+        "geometry",
+        "3d-shapes"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "6 faces, 8 vertices, 12 edges",
+          "text_mr": "६ पृष्ठे, ८ शिरोबिंदू, १२ कडा",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "8 faces, 6 vertices, 12 edges",
+          "text_mr": "८ पृष्ठे, ६ शिरोबिंदू, १२ कडा",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "6 faces, 12 vertices, 8 edges",
+          "text_mr": "६ पृष्ठे, १२ शिरोबिंदू, ८ कडा",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "4 faces, 4 vertices, 6 edges",
+          "text_mr": "४ पृष्ठे, ४ शिरोबिंदू, ६ कडा",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 70,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "text_image",
+      "text_en": "Look at the geometric figure. Which pair of line segments is perpendicular (लंब) to each other?",
+      "text_mr": "आकृती पहा. खालीलपैकी कोणती रेषाखंडांची जोडी एकमेकांना लंब (Perpendicular) आहे?",
+      "question_image": "q70-geom.png",
+      "question_image_alt_en": "A rectangle ABCD with a perpendicular line segment PQ drawn from point P to side BC forming a 90 degree right angle symbol.",
+      "question_image_alt_mr": "ABCD आयत ज्यामध्ये बाजू BC वर PQ हा लंब रेषाखंड ९० अंशाच्या चिन्हासह दर्शविला आहे.",
+      "correct_option": 1,
+      "explanation_en": "Line segment PQ forms a right angle (90°) with side BC, making them perpendicular.",
+      "explanation_mr": "रेषाखंड PQ हा बाजू BC ला काटकोनात (९०°) छेदतो, म्हणून ते परस्परांना लंब आहेत.",
+      "hint_en": "Look for the square right-angle symbol.",
+      "hint_mr": "काटकोनाचे चिन्ह पहा.",
+      "difficulty": "medium",
+      "tags": [
+        "geometry",
+        "perpendicular-lines"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Segment PQ and Side BC",
+          "text_mr": "रेषाखंड PQ आणि बाजू BC",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Side AB and Side CD",
+          "text_mr": "बाजू AB आणि बाजू CD",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Diagonal AC and Side AD",
+          "text_mr": "कर्ण AC आणि बाजू AD",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Side BC and Side AD",
+          "text_mr": "बाजू BC आणि बाजू AD",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 71,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "image_only",
+      "text_en": null,
+      "text_mr": null,
+      "question_image": "q71-stem.png",
+      "question_image_alt_en": "Select the mirror image of the given asymmetric geometric polygon with vertical mirror on the right.",
+      "question_image_alt_mr": "उजव्या बाजूला आरसा ठेवला असता दिलेल्या बहुभुजाकृतीची आरशातील प्रतिमा निवडा.",
+      "correct_option": 3,
+      "explanation_en": "A vertical plane mirror reflects the figure with complete left-to-right lateral inversion.",
+      "explanation_mr": "आरशातील प्रतिमेमध्ये डावी व उजवी बाजू अदलाबदल होते.",
+      "hint_en": "Flip the figure horizontally across the vertical axis.",
+      "hint_mr": "आकृतीची डावी-उजवी बाजू उलटवून पहा.",
+      "difficulty": "hard",
+      "tags": [
+        "geometry",
+        "mirror-image",
+        "non-verbal"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q71-opt1.png",
+          "image_alt_en": "Figure rotated 90 degrees clockwise",
+          "image_alt_mr": "आकृती ९० अंश फिरवलेली"
+        },
+        {
+          "option_no": 2,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q71-opt2.png",
+          "image_alt_en": "Figure inverted vertically upside down",
+          "image_alt_mr": "आकृती पाण्यातील प्रतिमेसारखी उलटी"
+        },
+        {
+          "option_no": 3,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q71-opt3.png",
+          "image_alt_en": "Figure horizontally flipped left to right",
+          "image_alt_mr": "आकृतीची अचूक आरशातील प्रतिमा"
+        },
+        {
+          "option_no": 4,
+          "text_en": null,
+          "text_mr": null,
+          "image": "q71-opt4.png",
+          "image_alt_en": "Figure identical to stem without reflection",
+          "image_alt_mr": "मूळ आकृती तशीच"
+        }
+      ]
+    },
+    {
+      "question_no": 72,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "text_image",
+      "text_en": "Two views of the same standard six-sided die are shown. Which number is on the face opposite to 4?",
+      "text_mr": "एकाच प्रमाणित घनाकृती फाशाची दोन दृश्ये दाखवली आहेत. ४ अंक असलेल्या पृष्ठभागाच्या विरुद्ध पृष्ठावर कोणता अंक असेल?",
+      "question_image": "q72-dice.png",
+      "question_image_alt_en": "Two 3D views of a die: First view shows top 4, front 2, right 3. Second view shows top 4, front 5, right 6.",
+      "question_image_alt_mr": "फाशाची दोन दृश्ये: पहिल्यात वर ४, समोर २, उजवीकडे ३. दुसऱ्यात वर ४, समोर ५, उजवीकडे ६.",
+      "correct_option": 1,
+      "explanation_en": "Faces 2, 3, 5, and 6 are all adjacent to face 4. Therefore, the only remaining opposite face is 1.",
+      "explanation_mr": "२, ३, ५ आणि ६ हे चारही पृष्ठभाग ४ च्या शेजारील पृष्ठभागांवर आहेत. म्हणून ४ च्या विरुद्ध पृष्ठभागावर १ हा अंक असेल.",
+      "hint_en": "List all numbers that appear adjacent to 4.",
+      "hint_mr": "४ च्या शेजारी दिसणारे सर्व अंक वगळा.",
+      "difficulty": "hard",
+      "tags": [
+        "geometry",
+        "spatial",
+        "dice"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "1",
+          "text_mr": "१",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "2",
+          "text_mr": "२",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "5",
+          "text_mr": "५",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "6",
+          "text_mr": "६",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 73,
+      "section": "Mathematics",
+      "topic": "Geometry",
+      "question_type": "bilingual",
+      "text_en": "Which two quadrilaterals have all four sides of equal length? (Choose two correct options)",
+      "text_mr": "खालीलपैकी कोणत्या दोन चौकोनांच्या चारही बाजू समान लांबीच्या असतात? (दोन अचूक पर्याय निवडा)",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": null,
+      "is_multi_select": true,
+      "correct_options": [
+        1,
+        3
+      ],
+      "explanation_en": "A Square and a Rhombus both have all four sides equal in length.",
+      "explanation_mr": "चौरस आणि समभुज चौकोन या दोन्ही चौकोनांच्या चारही बाजूंची लांबी समान असते.",
+      "hint_en": "Recall properties of square, rectangle, rhombus, and trapezium.",
+      "hint_mr": "चौरस व समभुज चौकोनाचे गुणधर्म आठवा.",
+      "difficulty": "hard",
+      "tags": [
+        "geometry",
+        "quadrilaterals",
+        "multi-select"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "Square",
+          "text_mr": "चौरस",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "Rectangle",
+          "text_mr": "आयात",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "Rhombus",
+          "text_mr": "समभुज चौकोन",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "Trapezium",
+          "text_mr": "समलंब चौकोन",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 74,
+      "section": "Mathematics",
+      "topic": "Data Handling",
+      "question_type": "context_text",
+      "text_en": "According to the pictograph, how many more trees did the Sports Club plant than the Science Club?",
+      "text_mr": "चित्रलेखाचा अभ्यास करून सांगा: क्रीडा समितीने विज्ञान समितीपेक्षा किती जास्त झाडे लावली?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Scale: 1 tree symbol = 25 trees. Sports Club = 5 symbols = 125 trees. Science Club = 3 symbols = 75 trees. Difference = 125 - 75 = 50 trees.",
+      "explanation_mr": "प्रमाण: १ चिन्ह = २५ झाडे. क्रीडा समिती = ५ × २५ = १२५. विज्ञान समिती = ३ × २५ = ७५. फरक = १२५ - ७५ = ५० झाडे.",
+      "hint_en": "Find the difference in symbols (5 - 3 = 2) and multiply by 25.",
+      "hint_mr": "चिन्हांच्या फरकाला २५ ने गुणा.",
+      "difficulty": "medium",
+      "tags": [
+        "data-handling",
+        "pictograph"
+      ],
+      "context_ref": 3,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "25",
+          "text_mr": "२५",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "50",
+          "text_mr": "५०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "75",
+          "text_mr": "७५",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "100",
+          "text_mr": "१००",
+          "image": null
+        }
+      ]
+    },
+    {
+      "question_no": 75,
+      "section": "Mathematics",
+      "topic": "Algebra",
+      "question_type": "bilingual",
+      "text_en": "Study the mathematical symbol puzzle:\n□ + □ + ○ = 26\n□ + ○ = 18\nWhat is the value of □ × ○ ?",
+      "text_mr": "चिन्हांचे गणितीय कोडे सोडवा:\n□ + □ + ○ = २६\n□ + ○ = १८\nतर □ × ○ चे मूल्य किती?",
+      "question_image": null,
+      "question_image_alt_en": null,
+      "question_image_alt_mr": null,
+      "correct_option": 2,
+      "explanation_en": "Subtracting second equation from first: □ = 26 - 18 = 8. Then ○ = 18 - 8 = 10. Therefore, □ × ○ = 8 × 10 = 80.",
+      "explanation_mr": "पहिल्या समीकरणातून दुसरे वजा केल्यास: □ = २६ - १८ = ८. म्हणून ○ = १८ - ८ = १०. गुणाकार □ × ○ = ८ × १० = ८०.",
+      "hint_en": "Find □ first by comparing the two equations.",
+      "hint_mr": "दोन्ही समीकरणांची वजाबाकी करून आधी चौकोनाची किंमत काढा.",
+      "difficulty": "hard",
+      "tags": [
+        "algebra",
+        "symbol-puzzle"
+      ],
+      "context_ref": null,
+      "options": [
+        {
+          "option_no": 1,
+          "text_en": "64",
+          "text_mr": "६४",
+          "image": null
+        },
+        {
+          "option_no": 2,
+          "text_en": "80",
+          "text_mr": "८०",
+          "image": null
+        },
+        {
+          "option_no": 3,
+          "text_en": "90",
+          "text_mr": "९०",
+          "image": null
+        },
+        {
+          "option_no": 4,
+          "text_en": "72",
+          "text_mr": "७२",
+          "image": null
+        }
+      ]
+    }
+  ]
+}

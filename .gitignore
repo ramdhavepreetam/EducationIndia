@@ -50,6 +50,7 @@ id_ed25519
 # Local caches
 *.sqlite3
 *.db
+generated/
 
 # Graphify generated artifacts
 graphify-out/
@@ -59,6 +60,16 @@ frontend/src/graphify-out/
 
 # Old build artifacts
 frontend/dist.old_61744/
+frontend/dist-codex/
+
+# Rendered exam scans — large binary artifacts kept only in the local working
+# tree (under archive/rendered/), never committed
+rendered/
+archive/rendered/
+
+# Loose extracted data at the repo root — real data belongs in archive/data/ or the DB
+/answers_*.json
+/marathi_*.json
 
 # Firebase deploy cache
 frontend/.firebase/
@@ -70,3 +81,6 @@ backend/scripts/verify_day7.py
 build_logs.txt
 backend/build_logs.txt
 frontend/dist.old_*/
+
+# NervaPack local index/state (chroma db, sqlite memory, history logs)
+.nervapack/
